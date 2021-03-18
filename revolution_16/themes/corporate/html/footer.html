@@ -1,0 +1,63 @@
+
+   <footer class="bd-footer">
+      <div class="footer-blurb">
+         <div class="container-fluid">
+            <div class="row">
+               <div class="col-sm-5 footer-blurb-item">
+                  <h3><span class="glyphicon glyphicon-fire"></span> Premier Titre</h3>
+                  <p>!sc_infos!
+                  <br />!sc_infos_else!
+                  <br />!msg_foot!
+                  </p>
+               </div>
+               <div class="col-sm-4 footer-blurb-item">
+                  <h3><span class="glyphicon glyphicon-cloud-upload"></span> Second Titre</h3>
+                  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut mollis commodo nunc, ut viverra nisi malesuada non. Donec quam mauris, finibus sed imperdiet id, semper id velit. </p>
+                  <p><a class="btn btn-light" href="#">Bouton-light</a></p>
+               </div>
+               <div class="col-sm-3 footer-blurb-item">
+                  <h3><span class="glyphicon glyphicon-leaf"></span> Troisième Titre</h3>
+                  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut mollis commodo nunc, ut viverra nisi malesuada non. Donec quam mauris, finibus sed imperdiet id, semper id velit. Proin vestibulum mollis nulla vel dignissim. Aliquam vestibulum posuere metus sit amet pulvinar.</p>
+                  <p><a class="btn btn-light" href="#">Bouton-light</a></p>
+               </div>
+            </div><!-- /.row -->
+         </div>
+      </div>
+      <div class="small-print">
+         <div class="container">
+            <p><a href="#">Exemple Lien 1</a> | <a href="#">Lien 2</a> | <a href="#">Contact</a></p>
+            <p>Copyright &copy; Example.com 2015 </p>
+         </div>
+      </div>
+      <script type="text/javascript" src="assets/js/jquery.translate.js"></script>
+      <script type="text/javascript" src="assets/js/npds-dicotransl.js"></script>
+      <script type="text/javascript">
+         //<![CDATA[
+         $(document).ready(function(){
+            var translator = $('body').translate({lang: "fr", t: dict});
+            translator.lang("<?php echo language_iso(1,'',0); ?>");
+            $('.plusdecontenu').click(function(){
+               var $this = $(this);
+               $this.toggleClass('plusdecontenu');
+               if($this.hasClass('plusdecontenu')){
+                  $this.text(translator.get('Plus de contenu'));
+               } else {
+                  $this.text(translator.get('Moins de contenu'));
+               }
+            });
+            if (matchMedia) {
+               const mq = window.matchMedia("(max-width: 991px)");
+               mq.addListener(WidthChange);
+               WidthChange(mq);
+            }
+            function WidthChange(mq) {
+               if (mq.matches) {
+                  $("#col_LB, #col_RB").removeClass("show")
+               } else {
+                  $("#col_LB, #col_RB").addClass("show")
+               }
+            }
+         });
+         //]]
+      </script>
+   </footer>

@@ -1,0 +1,73 @@
+<html>
+   <head>
+      <meta charset="utf-8">
+      <title>Administration - Geoloc</title>
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <link rel="stylesheet" href="/assets/shared/bootstrap/dist/css/bootstrap.min.css" />
+      <link rel="stylesheet" href="/assets/shared/font-awesome/css/font-awesome.min.css" />
+   </head>
+   <body>
+      <div class="container">
+         <h4>Paramètres système</h4>
+         
+         <h5>Champ de table pour latitude et longitude</h5>
+         <p>
+         Présentent les champs disponibles dans la base de données pour le stockage des latitudes et longitudes des membres du site. </p>
+         <h5>Géolocalisation des IP</h5>
+         <p>
+         Cette option permet d'activer ou de désactiver :<br />
+          - le stockage dans la base de donnée des IP des visiteurs,leur géolocalisation le nombre de visites et leur position de visite sur le site<br />
+          - l'affichage de ces données dans l'interface<br />
+          cette option peut ralentir un peu le site et stocker au fil du temps beaucoup de données dans la base. Vous pouvez à tout moment vider la base.<br />
+         </p>
+         <p>
+         Comment ça marche :<br />
+         Le géoréférencement de l'ip est fourni par différents fournisseurs et vient compléter la base de données du site. <br />
+         On utilise 4 fournisseurs de geolocalisation d'ip :<br />
+         <a href="https://ipapi.co" target="_blank">https://ipapi.co</a> ==> max 1000 requêtes par jour, 30 000 par mois<br />
+         <a href="https://api.ipdata.co" target="_blank">https://api.ipdata.co</a> => necessite une clef d'api  ==> max 1 500 requêtes par jour<br />
+         <a href="https://extreme-ip-lookup.com" target="_blank">https://extreme-ip-lookup.com</a> ==> max 20 requêtes par minute, 50 000 par mois<br />
+         <a href="http://ip-api.com" target="_blank">http://ip-api.com</a> ==> max 150 requêtes par minute (banissement)<br />
+         Tous ces fournisseurs ont une limite d'utilisation gratuite d'ou leur nombre pour pouvoir assurer un fonctionnement continu restant dans la gratuité...<br />
+         </p>
+          
+         <h5>Clef d'API Ipdata</h5>
+         <p>
+         Cette clef est facultative elle permet d'utiliser les données de ipdata.co vous pouvez l'obtenir ici :<br />
+         <a href="https://ipdata.co/sign-up.html" target="_blank">https://ipdata.co/sign-up.html</a>
+         </p>
+          
+         <h4>Interface carte</h4>
+         
+         <p>L'utilisation de ce module peut nécessiter des clefs d'api.<br />
+         
+         <a href="https://developers.google.com/maps/documentation/geocoding/get-api-key?hl=fr" target="_blank">https://developers.google.com/maps/documentation/geocoding/get-api-key?hl=fr</a>
+         
+         <br />
+         <span class="text-danger">Le module est livré avec une clef générique que vous devez donc remplacer !..</span>
+         </p>
+         
+         
+         <h5>Type de carte</h5>
+         <p>Vous pouvez définir ici le type d'affichage de la carte par défaut, en fonction des fournisseurs à votre disposition</p>
+         <ul>
+            <li>Plan (OpenStreetMap)</li>
+            <li>Plan (Bing maps)</li>
+            <li>Satellite (Bing maps)</li>
+            <li>Satellite et label (Bing maps)</li>
+         </ul>
+
+         <h5>Unité des coordonnées</h5>
+         
+         <p>Permet de définir l'affichage par défaut des coordonées</p>
+            <ul>
+               <li>dms : degrés minutes secondes (ex : 52°28' 58" S | 9°29' 32" E)</li>
+               <li>dd : degrés décimaux (ex : 63.391522 | 146.953125) </li>
+            </ul>
+
+         <h4>Interface bloc</h4>
+         <p></p>
+         <center><img src="/assets/images/admin/manuels.gif" alt="logo du manuel" /></center>
+      </div>
+   </body>
+</html>
