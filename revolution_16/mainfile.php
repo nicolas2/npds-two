@@ -11,16 +11,11 @@
 /* it under the terms of the GNU General Public License as published by */
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
-include("lib/grab_globals.php");
-include("config/config.php");
-include("lib/multi-langue.php");
-include("language/$language/lang-$language.php");
-include("lib/cache/cache.class.php");
-if ($mysql_i==1)
-   include("lib/database/mysqli.php");
-else 
-   include("lib/database/mysql.php");
-include("lib/metalang/metalang.php");
+include("vendor/autoload.php");
+
+include("boot/bootstrap.php");
+
+
 
 #autodoc Mysql_Connexion() : Connexion plus détaillée ($mysql_p=true => persistente connexion) - Attention : le type de SGBD n'a pas de lien avec le nom de cette fontion
 function Mysql_Connexion() {
@@ -41,13 +36,18 @@ if ($mysql_i==1)
    mysqli_set_charset($dblink,"utf8mb4");
 else 
    mysql_set_charset($dblink,"utf8mb4");
-$mainfile=1;
+
+//$mainfile=1;
+
 require_once("admin/auth.inc.php");
 if (isset($user)) $cookie=cookiedecode($user);
+
 session_manage();
 $tab_langue=make_tab_langue();
+
 global $meta_glossaire;
 $meta_glossaire=charg_metalang();
+
 if (function_exists("date_default_timezone_set")) date_default_timezone_set("Europe/Paris");
 /****************/
 
@@ -3447,4 +3447,47 @@ function getOptimalBcryptCostParameter($pass, $AlgoCrypt, $min_ms=250) {
          return $i;
    }
 }
+
+function passwordCryptType($pass) {
+    $AlgoCrypt = PASSWORD_BCRYPT;
+    $min_ms = 250;
+    $options = ['cost' => getOptimalBcryptCostParameter($pass, $AlgoCrypt, $min_ms)];
+    $hashpass = password_hash($pass, $AlgoCrypt, $options);
+    $newPass = crypt($pass, $hashpass);
+
+    return $newPass;  
+}
+
+function newPassBcrypt($pass, $dbpass, $uname, $connexion) {
+   global $NPDS_Prefix;
+   if (password_verify($pass, $dbpass) or strcmp($pass, $dbpass)==0 ) {
+
+      $newPass = passwordCryptType($pass);
+
+      if ($connexion === 'user') {
+         if(!password_verify($newPass, $dbpass) or strcmp($pass, $dbpass)!=0 ) {
+            sql_query("UPDATE ".$NPDS_Prefix."users SET pass='$newPass' WHERE uname='$uname'");
+         }
+               
+         $result = sql_query("SELECT pass FROM ".$NPDS_Prefix."users WHERE uname = '$uname'");
+         if (sql_num_rows($result)==1)
+            $setinfo = sql_fetch_assoc($result);
+
+         $dbpass = $setinfo['pass'];
+      } elseif ($connexion === 'admin') {
+         if(!password_verify($newPass, $dbpass) or strcmp($pass, $dbpass)!=0 ) {
+            sql_query("UPDATE ".$NPDS_Prefix."authors SET pwd='$newPass' WHERE aid='$uname'");
+         }
+               
+         $result = sql_query("SELECT pwd FROM ".$NPDS_Prefix."authors WHERE aid = '$uname'");
+         if (sql_num_rows($result)==1)
+            $setinfo2 = sql_fetch_assoc($result);
+
+         $dbpass = $setinfo2['pwd'];            
+      }
+   }
+
+   return array($newPass, $dbpass);   
+}
+
 ?>

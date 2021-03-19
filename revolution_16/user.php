@@ -244,7 +244,7 @@ function confirmNewUser($uname, $name, $email, $user_avatar, $user_occ, $user_fr
 }
 
 function finishNewUser($uname, $name, $email, $user_avatar, $user_occ, $user_from, $user_intrest, $user_sig, $user_viewemail, $pass,$user_lnl, $C1,$C2,$C3,$C4,$C5,$C6,$C7,$C8,$M1,$M2,$T1,$T2,$B1) {
-   global $NPDS_Prefix, $makepass, $system, $adminmail, $sitename, $AutoRegUser, $memberpass, $gmt, $NPDS_Key, $nuke_url;
+   global $NPDS_Prefix, $makepass, $adminmail, $sitename, $AutoRegUser, $memberpass, $gmt, $NPDS_Key, $nuke_url;
 
    if(!isset($_SERVER['HTTP_REFERER'])) {
       Ecr_Log('security','Ghost form in user.php registration. => NO REFERER','');
@@ -266,18 +266,10 @@ function finishNewUser($uname, $name, $email, $user_avatar, $user_occ, $user_fro
          $makepass=makepass();
       else
          $makepass=$pass;
-      if ($system == 1) {
-         $AlgoCrypt = PASSWORD_BCRYPT;
-         $min_ms = 250;
-         $options = ['cost' => getOptimalBcryptCostParameter($makepass, $AlgoCrypt, $min_ms)];
-         $hashpass = password_hash($makepass, $AlgoCrypt, $options);
-         $cryptpass = crypt($makepass, $hashpass);
-         $hashkey = 1;
-      } else {
-         $cryptpass=$makepass;
-         $hashkey = 0;
-      }
-      $result = sql_query("INSERT INTO ".$NPDS_Prefix."users VALUES (NULL,'$name','$uname','$email','','','$user_avatar','$user_regdate','$user_occ','$user_from','$user_intrest','$user_sig','$user_viewemail','','','$cryptpass', '$hashkey', '10','','0','0','0','','0','','$Default_Theme+$Default_Skin','10','0','0','1','0','','','$user_lnl')");      
+      
+      $cryptpass = passwordCryptType($makepass);
+
+      $result = sql_query("INSERT INTO ".$NPDS_Prefix."users VALUES (NULL,'$name','$uname','$email','','','$user_avatar','$user_regdate','$user_occ','$user_from','$user_intrest','$user_sig','$user_viewemail','','','$cryptpass', '10','','0','0','0','','0','','$Default_Theme+$Default_Skin','10','0','0','1','0','','','$user_lnl')");      
 
       list($usr_id) = sql_fetch_row(sql_query("SELECT uid FROM ".$NPDS_Prefix."users WHERE uname='$uname'"));
       $result = sql_query("INSERT INTO ".$NPDS_Prefix."users_extend VALUES ('$usr_id','$C1','$C2','$C3','$C4','$C5','$C6','$C7','$C8','$M1','$M2','$T1','$T2', '$B1')");
@@ -290,7 +282,7 @@ function finishNewUser($uname, $name, $email, $user_avatar, $user_occ, $user_fro
       else
          $result = sql_query("INSERT INTO ".$NPDS_Prefix."users_status VALUES ('$usr_id','0','$attach','0','1','0','')");
       if ($result) {
-         if($memberpass or $system==1) { //à revoir
+         if($memberpass) { 
             echo '
             <h2>'.translate("Utilisateur").'</h2>
             <hr />
@@ -876,7 +868,7 @@ function valid_password ($code) {
 }
 
 function update_password ($code, $passwd) {
-    global $system, $NPDS_Prefix;
+    global $NPDS_Prefix;
     $ibid=explode("#fpwd#",$code);
     $uname=urlencode(decrypt($ibid[0]));
     $result = sql_query("SELECT email,pass FROM ".$NPDS_Prefix."users WHERE uname='$uname'");
@@ -888,18 +880,9 @@ function update_password ($code, $passwd) {
           if ((time()-$ibid[2])<86400) {
              // le mot de passe est-il identique
              if ($ibid[1]==$passwd) {
-                if ($system == 1) {
-                  $AlgoCrypt = PASSWORD_BCRYPT;
-                  $min_ms = 250;
-                  $options = ['cost' => getOptimalBcryptCostParameter($ibid[1], $AlgoCrypt, $min_ms),];
-                  $hashpass = password_hash($ibid[1], $AlgoCrypt, $options);
-                  $cryptpass = crypt($ibid[1], $hashpass);
-                  $hashkey = 1;
-                } else {
-                   $cryptpass=$ibid[1];
-                   $hashkey = 0;
-               }
-                sql_query("UPDATE ".$NPDS_Prefix."users SET pass='$cryptpass', hashkey='$hashkey' WHERE uname='$uname'");
+               $cryptpass = passwordCryptType($ibid[1]);
+
+                sql_query("UPDATE ".$NPDS_Prefix."users SET pass='$cryptpass' WHERE uname='$uname'");
 
                 message_pass('<div class="alert alert-success lead text-center"><a class="alert-link" href="user.php"><i class="fa fa-exclamation mr-2"></i>'.translate ("Mot de passe mis à jour. Merci de vous re-connecter").'<i class="fas fa-sign-in-alt fa-lg ml-2"></i></a></div>');
                 Ecr_Log('security', 'Lost_password_update OK : '.$uname, '');
@@ -932,9 +915,9 @@ function docookie($setuid, $setuname, $setpass, $setstorynum, $setumode, $setuor
 }
 
 function login($uname, $pass) {
-   global $NPDS_Prefix, $setinfo, $system;
+   global $NPDS_Prefix, $setinfo;
 
-   $result = sql_query("SELECT pass, hashkey, uid, uname, storynum, umode, uorder, thold, noscore, ublockon, theme, commentmax, user_langue FROM ".$NPDS_Prefix."users WHERE uname = '$uname'");
+   $result = sql_query("SELECT pass, uid, uname, storynum, umode, uorder, thold, noscore, ublockon, theme, commentmax, user_langue FROM ".$NPDS_Prefix."users WHERE uname = '$uname'");
    if (sql_num_rows($result)==1) {
       $setinfo = sql_fetch_assoc($result);
       $result = sql_query("SELECT open FROM ".$NPDS_Prefix."users_status WHERE uid='".$setinfo['uid']."'");
@@ -946,64 +929,16 @@ function login($uname, $pass) {
       $dbpass = $setinfo['pass'];
       $pass = utf8_decode($pass);
 
-      if ($system == 1) {
-         if ( password_verify($pass, $dbpass) or (strcmp($dbpass, $pass)==0)) {
-            if(!$setinfo['hashkey']) {
-               $AlgoCrypt = PASSWORD_BCRYPT;
-               $min_ms = 250;
-               $options = ['cost' => getOptimalBcryptCostParameter($pass, $AlgoCrypt, $min_ms)];
-               $hashpass = password_hash($pass, $AlgoCrypt, $options);
-               $pass = crypt($pass, $hashpass);
+      list($newpass, $newdbpass) = newPassBcrypt($pass, $dbpass, $uname, 'user');
 
-               sql_query("UPDATE ".$NPDS_Prefix."users SET pass='$pass', hashkey='1' WHERE uname='$uname'");
-
-               $result = sql_query("SELECT pass, hashkey, uid, uname, storynum, umode, uorder, thold, noscore, ublockon, theme, commentmax, user_langue FROM ".$NPDS_Prefix."users WHERE uname = '$uname'");
-               if (sql_num_rows($result)==1)
-                  $setinfo = sql_fetch_assoc($result);
-
-               $dbpass = $setinfo['pass'];
-               $scryptPass = crypt($dbpass, $hashpass);
-            }
-         }
-      } else {
-         $passwd = crypt($pass, $dbpass);
-         if (strcmp($dbpass, $passwd)==0) {
-            if(!$setinfo['hashkey']) {
-               sql_query("UPDATE ".$NPDS_Prefix."users SET pass='$pass', hashkey='0' WHERE uname='$uname'");
-
-               $result = sql_query("SELECT pass, hashkey, uid, uname, storynum, umode, uorder, thold, noscore, ublockon, theme, commentmax, user_langue FROM ".$NPDS_Prefix."users WHERE uname = '$uname'");
-               if (sql_num_rows($result)==1)
-                  $setinfo = sql_fetch_assoc($result);
-
-               $dbpass = $setinfo['pass'];
-            }
-         }
+      if(password_verify(urldecode($pass), $dbpass) 
+         or password_verify(urldecode($pass), $newdbpass)
+      )
+         docookie($setinfo['uid'], $setinfo['uname'], $newdbpass, $setinfo['storynum'], $setinfo['umode'], $setinfo['uorder'], $setinfo['thold'], $setinfo['noscore'], $setinfo['ublockon'], $setinfo['theme'], $setinfo['commentmax'], $setinfo['user_langue']);      
+      else {
+         Header("Location: user.php?stop=1");
+         return;
       }
-
-      if($system == 1) {
-         if(password_verify(urldecode($pass), $dbpass) or password_verify($pass, $dbpass))
-            $CryptpPWD = $dbpass;
-         elseif (password_verify($dbpass, $scryptPass) or strcmp($dbpass, $pass)==0)
-            $CryptpPWD = $pass;
-         else {
-            Header("Location: user.php?stop=1");
-            return;
-         }
-      } else {
-         if (password_verify($pass, $dbpass)) {
-            if($setinfo['hashkey'] == 1)
-               sql_query("UPDATE ".$NPDS_Prefix."users SET pass='$pass', hashkey='0' WHERE uname='$uname'");
-            $CryptpPWD = $pass;
-         }
-         else if (strcmp($dbpass,$pass)==0)
-            $CryptpPWD = $pass;
-         else {
-            Header("Location: user.php?stop=1");
-            return;
-         }
-      }
-
-      docookie($setinfo['uid'], $setinfo['uname'], $CryptpPWD, $setinfo['storynum'], $setinfo['umode'], $setinfo['uorder'], $setinfo['thold'], $setinfo['noscore'], $setinfo['ublockon'], $setinfo['theme'], $setinfo['commentmax'], $setinfo['user_langue']);
 
       $ip = getip();
       $result = sql_query("SELECT * FROM ".$NPDS_Prefix."session WHERE host_addr='$ip' AND guest='1'");
@@ -1030,7 +965,7 @@ function edituser() {
 }
 
 function saveuser($uid, $name, $uname, $email, $femail, $url, $pass, $vpass, $bio, $user_avatar, $user_occ, $user_from, $user_intrest, $user_sig, $user_viewemail, $attach, $usend_email, $uis_visible,$user_lnl, $C1,$C2,$C3,$C4,$C5,$C6,$C7,$C8,$M1,$M2,$T1,$T2,$B1,$MAX_FILE_SIZE,$raz_avatar) {
-   global $NPDS_Prefix, $user, $userinfo, $system, $minpass;
+   global $NPDS_Prefix, $user, $userinfo, $minpass, $oldpw;
    $cookie=cookiedecode($user);
    $check = $cookie[1];
    $result = sql_query("SELECT uid, email FROM ".$NPDS_Prefix."users WHERE uname='$check'");
@@ -1123,18 +1058,10 @@ function saveuser($uid, $name, $uname, $email, $femail, $url, $pass, $vpass, $bi
 
             if ($pass!='') {
                cookiedecode($user);
-               if ($system == 1){
-                  $AlgoCrypt = PASSWORD_BCRYPT;
-                  $min_ms = 250;
-                  $options = ['cost' => getOptimalBcryptCostParameter($pass, $AlgoCrypt, $min_ms),];
-                  $hashpass = password_hash($pass, PASSWORD_BCRYPT, $options);
-                  $pass = crypt($pass, $hashpass);
-                  $hashkey = 1;
-               }
-               else
-                  $hashkey = 0;
+               
+               $pass = passwordCryptType($pass);
 
-               sql_query("UPDATE ".$NPDS_Prefix."users SET name='$name', email='$email', femail='".removeHack($femail)."', url='".removeHack($url)."', pass='$pass', hashkey='$hashkey', bio='".removeHack($bio)."', user_avatar='$user_avatar', user_occ='".removeHack($user_occ)."', user_from='".removeHack($user_from)."', user_intrest='".removeHack($user_intrest)."', user_sig='".removeHack($user_sig)."', user_viewemail='$a', send_email='$u', is_visible='$v', user_lnl='$w' WHERE uid='$uid'");
+               sql_query("UPDATE ".$NPDS_Prefix."users SET name='$name', email='$email', femail='".removeHack($femail)."', url='".removeHack($url)."', pass='$pass', bio='".removeHack($bio)."', user_avatar='$user_avatar', user_occ='".removeHack($user_occ)."', user_from='".removeHack($user_from)."', user_intrest='".removeHack($user_intrest)."', user_sig='".removeHack($user_sig)."', user_viewemail='$a', send_email='$u', is_visible='$v', user_lnl='$w' WHERE uid='$uid'");
                $result = sql_query("SELECT uid, uname, pass, storynum, umode, uorder, thold, noscore, ublockon, theme FROM ".$NPDS_Prefix."users WHERE uname='$uname' AND pass='$pass'");
                if (sql_num_rows($result)==1) {
                   $userinfo = sql_fetch_assoc($result);

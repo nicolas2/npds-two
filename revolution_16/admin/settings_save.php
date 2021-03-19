@@ -274,9 +274,8 @@ function ConfigSave($xparse,$xsitename,$xnuke_url,$xsite_logo,$xslogan,$xstartda
    if (!isset($mysql_i)) {$mysql_i=0;}
    $content .= "\$mysql_i = $mysql_i;\n";
    $content .= "# =======================\n";
-   $content .= "\$system = $system;\n";
-   if (!$system_md5) $system_md5=1;
-   $content .= "\$system_md5 = $system_md5;\n";
+   $content .= "\$system = null;\n";
+   $content .= "\$system_md5 = null;\n";
    $content .= "\n";
    $content .= "/*********************************************************************/\n";
    $content .= "/* You finished to configure the Database. Now you can change all    */\n";
