@@ -13,9 +13,18 @@
 /************************************************************************/
 include("vendor/autoload.php");
 
-include("boot/bootstrap.php");
+include("lib/grab_globals.php");
+include("config/config.php");
+include("lib/multi-langue.php");
+include("language/$language/lang-$language.php");
+include("lib/cache/cache.class.php");
 
+if ($mysql_i==1)
+   include("lib/database/mysqli.php");
+else 
+   include("lib/database/mysql.php");
 
+include("lib/metalang/metalang.php");
 
 #autodoc Mysql_Connexion() : Connexion plus détaillée ($mysql_p=true => persistente connexion) - Attention : le type de SGBD n'a pas de lien avec le nom de cette fontion
 function Mysql_Connexion() {
