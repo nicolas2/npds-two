@@ -474,7 +474,11 @@ function updateadmin($chng_aid, $chng_name, $chng_email, $chng_url, $chng_radmin
          exit;
       }
 
-      $chng_pwd = passwordCryptType($chng_pass);
+      $AlgoCrypt = PASSWORD_BCRYPT;
+      $min_ms = 100;
+      $options = ['cost' => getOptimalBcryptCostParameter($chng_pwd, $AlgoCrypt, $min_ms)];
+      $hashpass = password_hash($chng_pwd, $AlgoCrypt, $options);
+      $chng_pwd=crypt($chng_pwd, $hashpass);
 
       if ($old_pwd) {
          global $admin, $admin_cook_duration;
@@ -493,11 +497,9 @@ function updateadmin($chng_aid, $chng_name, $chng_email, $chng_url, $chng_radmin
             }
          }
       }
-
-      if ($chng_radminsuper==1)
-         $result = sql_query("UPDATE ".$NPDS_Prefix."authors SET name='$chng_name', email='$chng_email', url='$chng_url', radminsuper='$chng_radminsuper', pwd='$chng_pwd' WHERE aid='$chng_aid'");
-      else
-         $result = sql_query("UPDATE ".$NPDS_Prefix."authors SET name='$chng_name', email='$chng_email', url='$chng_url', radminsuper='0', pwd='$chng_pwd' WHERE aid='$chng_aid'");
+      $result = $chng_radminsuper==1 ?
+         sql_query("UPDATE ".$NPDS_Prefix."authors SET name='$chng_name', email='$chng_email', url='$chng_url', radminsuper='$chng_radminsuper', pwd='$chng_pwd', hashkey='1' WHERE aid='$chng_aid'"):
+         sql_query("UPDATE ".$NPDS_Prefix."authors SET name='$chng_name', email='$chng_email', url='$chng_url', radminsuper='0', pwd='$chng_pwd', hashkey='1' WHERE aid='$chng_aid'");
    } else {
       if ($chng_radminsuper==1) {
          $result = sql_query("UPDATE ".$NPDS_Prefix."authors SET name='$chng_name', email='$chng_email', url='$chng_url', radminsuper='$chng_radminsuper' WHERE aid='$chng_aid'");
@@ -550,12 +552,16 @@ switch ($op) {
          return;
       }
 
-      $add_pwdX = passwordCryptType($add_pass);
+      $AlgoCrypt = PASSWORD_BCRYPT;
+      $min_ms = 100;
+      $options = ['cost' => getOptimalBcryptCostParameter($add_pwd, $AlgoCrypt, $min_ms)];
+      $hashpass = password_hash($add_pwd, $AlgoCrypt, $options);
+      $add_pwdX=crypt($add_pwd, $hashpass);
 
-      $result = sql_query("INSERT INTO ".$NPDS_Prefix."authors VALUES ('$add_aid', '$add_name', '$add_url', '$add_email', '$add_pwdX','0','0', '$add_radminsuper')");
+      $result = sql_query("INSERT INTO ".$NPDS_Prefix."authors VALUES ('$add_aid', '$add_name', '$add_url', '$add_email', '$add_pwdX', '1', '0', '0', '$add_radminsuper')");
       updatedroits($add_aid);
       // Copie du fichier pour filemanager
-      if ($add_radminsuper or $ad_d_27!='')
+      if ($add_radminsuper or $ad_d_27 !='')
          @copy("modules/f-manager/users/modele.admin.conf.php","modules/f-manager/users/".strtolower($add_aid).".conf.php");
       global $aid; Ecr_Log('security', "AddAuthor($add_aid) by AID : $aid", '');
       Header("Location: admin.php?op=mod_authors");

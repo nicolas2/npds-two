@@ -37,20 +37,37 @@ if ((isset($aid)) and (isset($pwd)) and ($op == 'login')) {
       if (sql_num_rows($result)==1) {
          $setinfo = sql_fetch_assoc($result);
          $dbpass = $setinfo['pwd'];
+         $scryptPass = null;
          
-         list($newpass, $newdbpass) = newPassBcrypt($pwd, $dbpass, $aid, 'admin');
+         if ( password_verify($pwd, $dbpass) or (strcmp($dbpass, $pwd)==0)) {
+            if(!$setinfo['hashkey']) {
+               $AlgoCrypt = PASSWORD_BCRYPT;
+               $min_ms = 100;
+               $options = ['cost' => getOptimalBcryptCostParameter($pwd, $AlgoCrypt, $min_ms)];
+               $hashpass = password_hash($pwd, $AlgoCrypt, $options);
+               $pwd = crypt($pwd, $hashpass);
+               sql_query("UPDATE ".$NPDS_Prefix."authors SET pwd='$pwd', hashkey='1' WHERE aid='$aid'");
+               $result = sql_query("SELECT pwd, hashkey FROM ".$NPDS_Prefix."authors WHERE aid = '$aid'");
+               if (sql_num_rows($result)==1)
+                  $setinfo = sql_fetch_assoc($result);
+               $dbpass = $setinfo['pwd'];
+               $scryptPass = crypt($dbpass, $hashpass);
+            }
+         }
 
-         if(password_verify($pwd, $dbpass)
-            or password_verify($pwd, $newdbpass)
-         ) {
-            $admin = base64_encode("$aid:".md5($newdbpass));
-            if ($admin_cook_duration<=0) 
-               $admin_cook_duration=1;
-            $timeX=time()+(3600*$admin_cook_duration);
-            setcookie('admin',$admin,$timeX);
-            setcookie('adm_exp',$timeX,$timeX);            
-         } else 
+         if(password_verify($pwd, $dbpass))
+            $CryptpPWD = $dbpass;
+         elseif (password_verify($dbpass, $scryptPass) or strcmp($dbpass, $pwd)==0)
+            $CryptpPWD = $pwd;
+         else 
             Admin_Alert("Passwd not in DB#1 : $aid");
+
+         $admin = base64_encode("$aid:".md5($CryptpPWD));
+         if ($admin_cook_duration<=0) 
+            $admin_cook_duration=1;
+         $timeX=time()+(3600*$admin_cook_duration);
+         setcookie('admin',$admin,$timeX);
+         setcookie('adm_exp',$timeX,$timeX);
       }
    }
 }
