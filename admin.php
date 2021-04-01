@@ -152,8 +152,6 @@ function GraphicAdmin($hlpfile) {
 
   // si message on compare avec la base
   if ($mess) {
-      settype($mes_x, 'array');
-      $fico ='';
       for ($i=0;$i<count($mess);$i++) {
          $ibid = explode('|',$mess[$i]);
          $fico = $ibid[0] != 'Note'? 'flag_red':'flag_green';
@@ -166,7 +164,7 @@ function GraphicAdmin($hlpfile) {
             if (sql_num_rows($result)==1) {
                $alertinfo = sql_fetch_assoc($result);
 
-               if (strcmp($alertinfo['fnom_affich'], $ibid[2] !=0))
+               if ($alertinfo['fnom_affich'] != $ibid[2])
                   sql_query('UPDATE '.$NPDS_Prefix.'fonctions SET fdroits1_descr="", fnom_affich="'.addslashes($ibid[2]).'" WHERE fnom="mes_npds_'.$i.'"');
             }
          } else {
