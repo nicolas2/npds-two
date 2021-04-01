@@ -33,10 +33,11 @@ function Admin_alert($motif) {
 
 if ((isset($aid)) and (isset($pwd)) and ($op == 'login')) {
    if ($aid!='' and $pwd!='') {
-      $result=sql_query("SELECT pwd FROM ".$NPDS_Prefix."authors WHERE aid='$aid'");
+      $result=sql_query("SELECT pwd, hashkey FROM ".$NPDS_Prefix."authors WHERE aid='$aid'");
       if (sql_num_rows($result)==1) {
          $setinfo = sql_fetch_assoc($result);
          $dbpass = $setinfo['pwd'];
+         $pwd = utf8_decode($pwd);
          $scryptPass = null;
          
          if ( password_verify($pwd, $dbpass) or (strcmp($dbpass, $pwd)==0)) {

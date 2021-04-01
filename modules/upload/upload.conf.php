@@ -14,31 +14,31 @@
 /************************************************************************/
 
 // Taille maxi des fichiers en octets
-$max_size = 100000000;// for debug pagetec smartphone
+$max_size = 100000000;
 
 // Si votre variable $DOCUMENT_ROOT n'est pas bonne (notamment en cas de redirection)
 // vous pouvez en spécifier une ici (c'est le chemin physique d'accès à la racine de votre site en partant de / ou C:\)
 // par exemple /data/web/mon_site OU c:\web\mon_site SINON LAISSER cette variable VIDE
-$DOCUMENTROOT = '';
+$DOCUMENTROOT = "";
 
 // Autorise l'upload DANS le répertoire personnel du membre (true ou false)
 $autorise_upload_p = "true";
 
 // Sous répertoire : n'utiliser que si votre NPDS n'est pas directement dans la racine de votre site
 // par exemple si : www.mon_site/npds/.... alors $racine="/npds" (avec le / DEVANT) sinon $racine="";
-$racine = '';
+$racine = "";
 
 // Répertoire de téléchargement (avec le / terminal)
-$rep_upload = $racine.'/modules/upload/upload/';
+$rep_upload = $racine."/modules/upload/upload/";
 
 // Répertoire de stockage des fichiers temporaires (avec le / terminal)
-$rep_cache = $racine.'/modules/upload/tmp/';
+$rep_cache = $racine."/modules/upload/tmp/";
 
 // Répertoire/fichier de stockage de la log de téléchargement (par défaut /storage/logs/security.log)
-$rep_log = $racine.'/storage/logs/security.log';
+$rep_log = $racine."/storage/logs/security.log";
 
 // URL HTTP de votre site (exemple : http://www.monsite.org)  !
-$url_upload = 'http://localhost';
+$url_upload = "http://localhost";
 
 // URL de la feuille de style à utiliser pour la présentation de la fenetre d'upload (ou "")
 

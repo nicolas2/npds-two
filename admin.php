@@ -434,7 +434,7 @@ function GraphicAdmin($hlpfile) {
                       ficone = JSON.stringify(data['ficone']);
                   $('#messageModalLabel').html(JSON.parse(fretour_h));
                   $('#messageModalContent').html(JSON.parse(fnom_affich));
-                  $('#messageModalIcon').html('<img src=\"images/admin/'+JSON.parse(ficone)+'.png\" />');
+                  $('#messageModalIcon').html('<img src=\"".$nuke_url."/assets/images/admin/'+JSON.parse(ficone)+'.png\" />');
                }
             });
          });
@@ -492,7 +492,7 @@ function GraphicAdmin($hlpfile) {
       <div class="modal-dialog">
          <div class="modal-content">
             <div class="modal-header">
-               <h5 class="modal-title" id="versusModalLabel"><img class="adm_img mr-2" src="images/admin/message_npds.png" alt="icon_" />'.adm_translate("Version").' NPDS</h5>
+               <h5 class="modal-title" id="versusModalLabel"><img class="adm_img mr-2" src="assets/images/admin/message_npds.png" alt="icon_" />'.adm_translate("Version").' NPDS</h5>
                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                </button>
@@ -528,7 +528,7 @@ function GraphicAdmin($hlpfile) {
                </form>
             </div>
             <div class="modal-footer">
-            <span class="small text-muted">Information de npds.org</span><img class="adm_img mr-2" src="images/admin/message_npds.png" alt="icon_" />
+            <span class="small text-muted">Information de npds.org</span><img class="adm_img mr-2" src="assets/images/admin/message_npds.png" alt="icon_" />
             </div>
          </div>
       </div>

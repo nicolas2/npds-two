@@ -2422,7 +2422,7 @@ function adminblock() {
 
    $content .= '
       <div class="d-flex justify-content-start flex-wrap" id="adm_block">
-      '.$bloc_foncts_A.'<a class="btn btn-outline-primary btn-sm mr-2 my-1" title="'.translate("Vider la table chatBox").'" data-toggle="tooltip" href="powerpack.php?op=admin_chatbox_write&amp;chatbox_clearDB=OK" ><img src="images/admin/chat.png" class="adm_img" />&nbsp;<span class="badge badge-danger ml-1">X</span></a>
+      '.$bloc_foncts_A.'<a class="btn btn-outline-primary btn-sm mr-2 my-1" title="'.translate("Vider la table chatBox").'" data-toggle="tooltip" href="powerpack.php?op=admin_chatbox_write&amp;chatbox_clearDB=OK" ><img src="assets/images/admin/chat.png" class="adm_img" />&nbsp;<span class="badge badge-danger ml-1">X</span></a>
       </div>
       <div class="mt-3">
          <small class="text-muted"><i class="fas fa-user-cog fa-2x align-middle"></i> '.$aid.'</small>
@@ -2431,7 +2431,7 @@ function adminblock() {
       <div class="modal-dialog">
          <div class="modal-content">
             <div class="modal-header">
-               <h5 class="modal-title" id="bl_versusModalLabel"><img class="adm_img mr-2" src="images/admin/message_npds.png" alt="icon_" />'.translate("Version").' NPDS^</h5>
+               <h5 class="modal-title" id="bl_versusModalLabel"><img class="adm_img mr-2" src="assets/images/admin/message_npds.png" alt="icon_" />'.translate("Version").' NPDS^</h5>
                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                </button>
@@ -2467,7 +2467,7 @@ function adminblock() {
                </form>
             </div>
             <div class="modal-footer">
-            <span class="small text-muted">Information de npds.org</span><img class="adm_img mr-2" src="images/admin/message_npds.png" alt="icon_" />
+            <span class="small text-muted">Information de npds.org</span><img class="adm_img mr-2" src="assets/images/admin/message_npds.png" alt="icon_" />
             </div>
          </div>
       </div>
@@ -2490,7 +2490,7 @@ function adminblock() {
                       ficone = JSON.stringify(data["ficone"]);
                   $("#bl_messageModalLabel").html(JSON.parse(fretour_h));
                   $("#bl_messageModalContent").html(JSON.parse(fnom_affich));
-                  $("#bl_messageModalIcon").html("<img src=\"images/admin/"+JSON.parse(ficone)+".png\" />");
+                  $("#bl_messageModalIcon").html("<img src=\"'.$nuke_url.'/assets/images/admin/"+JSON.parse(ficone)+".png\" />");
                }
             });
          });
@@ -3557,9 +3557,9 @@ function adminfoot($fv,$fv_parametres,$arg1,$foo) {
    }
 }
 
-#autodoc getOptimalBcryptCostParameter($pass, $AlgoCrypt, $min_ms=250) : permet de calculer le cout algorythmique optimum pour la procédure de hashage
-function getOptimalBcryptCostParameter($pass, $AlgoCrypt, $min_ms=250) {
-   for ($i = 4; $i < 31; $i++) {
+#autodoc getOptimalBcryptCostParameter($pass, $AlgoCrypt, $min_ms=100) : permet de calculer le coût algorythmique optimum pour la procédure de hashage ($AlgoCrypt) d'un mot de pass ($pass) avec un temps minimum alloué ($min_ms)
+function getOptimalBcryptCostParameter($pass, $AlgoCrypt, $min_ms=100) {
+   for ($i = 8; $i < 13; $i++) {
       $calculCost = [ 'cost' => $i ];
       $time_start = microtime(true);
       password_hash($pass, $AlgoCrypt, $calculCost);
@@ -3567,48 +3567,6 @@ function getOptimalBcryptCostParameter($pass, $AlgoCrypt, $min_ms=250) {
       if (($time_end - $time_start) * 1000 > $min_ms)
          return $i;
    }
-}
-
-function passwordCryptType($pass) {
-    $AlgoCrypt = PASSWORD_BCRYPT;
-    $min_ms = 250;
-    $options = ['cost' => getOptimalBcryptCostParameter($pass, $AlgoCrypt, $min_ms)];
-    $hashpass = password_hash($pass, $AlgoCrypt, $options);
-    $newPass = crypt($pass, $hashpass);
-
-    return $newPass;  
-}
-
-function newPassBcrypt($pass, $dbpass, $uname, $connexion) {
-   global $NPDS_Prefix;
-   if (password_verify($pass, $dbpass) or strcmp($pass, $dbpass)==0 ) {
-
-      $newPass = passwordCryptType($pass);
-
-      if ($connexion === 'user') {
-         if(!password_verify($newPass, $dbpass) or strcmp($pass, $dbpass)!=0 ) {
-            sql_query("UPDATE ".$NPDS_Prefix."users SET pass='$newPass' WHERE uname='$uname'");
-         }
-               
-         $result = sql_query("SELECT pass FROM ".$NPDS_Prefix."users WHERE uname = '$uname'");
-         if (sql_num_rows($result)==1)
-            $setinfo = sql_fetch_assoc($result);
-
-         $dbpass = $setinfo['pass'];
-      } elseif ($connexion === 'admin') {
-         if(!password_verify($newPass, $dbpass) or strcmp($pass, $dbpass)!=0 ) {
-            sql_query("UPDATE ".$NPDS_Prefix."authors SET pwd='$newPass' WHERE aid='$uname'");
-         }
-               
-         $result = sql_query("SELECT pwd FROM ".$NPDS_Prefix."authors WHERE aid = '$uname'");
-         if (sql_num_rows($result)==1)
-            $setinfo2 = sql_fetch_assoc($result);
-
-         $dbpass = $setinfo2['pwd'];            
-      }
-   }
-
-   return array($newPass, $dbpass);   
 }
 
 ?>

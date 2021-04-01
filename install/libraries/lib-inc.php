@@ -165,15 +165,13 @@ function write_users($adminlogin, $adminpass1, $adminpass2, $NPDS_Prefix) {
             $stage7_ok = 2;
          else {
             $stage7_ok = 1;
-            if ($system_md5 == 1) {
-               $AlgoCrypt = PASSWORD_BCRYPT;
-               $min_ms = 250;
-               $options = ['cost' => getOptimalBcryptCostParameter($adminpass1, $AlgoCrypt, $min_ms)];
-               $hashpass = password_hash($adminpass1, $AlgoCrypt, $options);
-               $adminpwd=crypt($adminpass1, $hashpass);
-               $hashkey = 1;
-            } else
-               $hashkey = 0;
+
+            $AlgoCrypt = PASSWORD_BCRYPT;
+            $min_ms = 250;
+            $options = ['cost' => getOptimalBcryptCostParameter($adminpass1, $AlgoCrypt, $min_ms)];
+            $hashpass = password_hash($adminpass1, $AlgoCrypt, $options);
+            $adminpwd=crypt($adminpass1, $hashpass);
+            $hashkey = 1;
 
             sql_connect();
             $result1 = sql_query("UPDATE ".$NPDS_Prefix."authors SET aid='$adminlogin', pwd='$adminpwd', hashkey='$hashkey' WHERE radminsuper='1'");
