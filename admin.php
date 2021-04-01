@@ -161,9 +161,17 @@ function GraphicAdmin($hlpfile) {
          if (in_array($ibid[1],$f_mes,true)) {
             $k=(array_search ($ibid[1], $f_mes));
             unset ($f_mes[$k]);
-         } else
-            sql_query('REPLACE '.$NPDS_Prefix.'fonctions SET fnom="mes_npds_'.$i.'",fretour_h="'.$ibid[1].'",fcategorie="9", fcategorie_nom="Alerte", ficone="'.$fico.'",fetat="1", finterface="1", fnom_affich="'.addslashes($ibid[2]).'", furlscript="data-toggle=\"modal\" data-target=\"#messageModal\""');
+            
+            $result=sql_query("SELECT fnom_affich FROM ".$NPDS_Prefix."fonctions WHERE fnom='mes_npds_$i'");
+            if (sql_num_rows($result)==1) {
+               $alertinfo = sql_fetch_assoc($result);
 
+               if (strcmp($alertinfo['fnom_affich'], $ibid[2] !=0))
+                  sql_query('UPDATE '.$NPDS_Prefix.'fonctions SET fdroits1_descr="", fnom_affich="'.addslashes($ibid[2]).'" WHERE fnom="mes_npds_'.$i.'"');
+            }
+         } else {
+            sql_query('REPLACE '.$NPDS_Prefix.'fonctions SET fnom="mes_npds_'.$i.'", fretour_h="'.$ibid[1].'", fcategorie="9", fcategorie_nom="Alerte", ficone="'.$fico.'",fetat="1", finterface="1", fnom_affich="'.addslashes($ibid[2]).'", furlscript="data-toggle=\"modal\" data-target=\"#messageModal\""');
+         }       
       }
 
       if(count ($f_mes)!==0) {
