@@ -11,7 +11,8 @@
 /* it under the terms of the GNU General Public License as published by */
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
-include("vendor/autoload.php");
+if (file_exists("vendor/autoload.php"))
+  include("vendor/autoload.php");
 
 include("lib/grab_globals.php");
 include("config/config.php");
