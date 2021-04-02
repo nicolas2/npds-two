@@ -13,7 +13,7 @@
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
 if (!function_exists("Mysql_Connexion"))
-   header("location: index.php");
+   header("location: ".site_url('index.php'));
 
 $rowQ1 = Q_Select("SELECT * FROM " . $NPDS_Prefix . "config", 3600);
 if ($rowQ1) {

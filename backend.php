@@ -16,7 +16,7 @@ include("mainfile.php");
 include('functions.php');
 
 function fab_feed($type,$filename,$timeout) {
-   global $sitename,$slogan,$nuke_url,$backend_image,$backend_title,$backend_width,$backend_height,$backend_language,$storyhome;
+   global $sitename,$slogan,$backend_image,$backend_title,$backend_width,$backend_height,$backend_language,$storyhome;
    include("lib/feed/feedcreator.class.php");
 
    $rss=new UniversalFeedCreator();
@@ -28,7 +28,7 @@ function fab_feed($type,$filename,$timeout) {
    $rss->descriptionHtmlSyndicated=true;
 
    $rss->link=$nuke_url;
-   $rss->syndicationURL=$nuke_url."/backend.php?op=".$type;
+   $rss->syndicationURL=site_url('backend.php?op='.$type);
 
    $image=new FeedImage();
    $image->title=$sitename;
@@ -46,7 +46,7 @@ function fab_feed($type,$filename,$timeout) {
       $story_limit++;
       $item = new FeedItem();
       $item->title = preview_local_langue($backend_language, str_replace('&quot;','\"',$title));
-      $item->link = $nuke_url."/article.php?sid=$sid";
+      $item->link = site_url('article.php?sid='.$sid);
       $item->description = meta_lang(preview_local_langue($backend_language, $hometext));
       $item->descriptionHtmlSyndicated = true;
       $item->date = convertdateTOtimestamp($time)+((integer)$gmt*3600);

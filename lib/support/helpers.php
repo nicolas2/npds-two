@@ -39,6 +39,44 @@ if (! function_exists('module_url'))
 	}
 }
 
+/**
+ * asset_url('links', 'links');
+ */
+if (! function_exists('asset_url'))
+{
+	/**
+	 * [module_url description]
+	 * @param  [type] $url     [description]
+	 * @param  [type] $ModPath [description]
+	 * @return [type]          [description]
+	 */
+	function asset_url($url)
+	{
+		return site_url('assets/'.trim($url, '/'));
+	}
+}
+
+/**
+ * redirect_url($urlx)
+ */
+if (! function_exists('redirect_url'))
+{
+	/**
+	 * Permet une redirection javascript / en lieu et place de header("location: ...");
+	 * @param  [type] $url     [description]
+	 * @param  [type] $ModPath [description]
+	 * @return [type]          [description]
+	 */ 
+	function redirect_url($url) 
+	{
+	    echo "<script type=\"text/javascript\">\n";
+	    echo "//<![CDATA[\n";
+	    echo "document.location.href='".site_url($url)."';\n";
+	    echo "//]]>\n";
+	    echo "</script>";
+	}
+}
+
 // Security
 
 /**

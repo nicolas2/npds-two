@@ -57,9 +57,9 @@ function login() {
    <h1>'.adm_translate("Administration").'</h1>
    <div id ="adm_men">
       <div class="men_tit">
-         <h2 class="mb-3"><img class="adm_img vam" src="'.$adminimg.'login.png" />&nbsp;<a href="admin.php">'.adm_translate("Connexion").'</a></h2>
+         <h2 class="mb-3"><img class="adm_img vam" src="'.$adminimg.'login.png" />&nbsp;<a href="'.site_url('admin.php').'">'.adm_translate("Connexion").'</a></h2>
       </div>
-      <form action="admin.php" method="post" id="adminlogin" name="adminlogin">
+      <form action="'.site_url('admin.php').'" method="post" id="adminlogin" name="adminlogin">
          <fieldset>
             <div class="form-group row">
                <label class="col-form-label col-sm-3" for="aid">'.adm_translate("Administrateur ID").'</label>
@@ -428,9 +428,9 @@ function GraphicAdmin($hlpfile) {
             var button = $(event.relatedTarget); 
             var id = button.data('id');
             $('#messageModalId').val(id);
-            $('#messageModalForm').attr('action', '".$nuke_url."/npds_api.php?op=alerte_update');
+            $('#messageModalForm').attr('action', '".site_url('npds_api.php?op=alerte_update')."');
             $.ajax({
-               url:\"".$nuke_url."/npds_api.php?op=alerte_api\",
+               url:\"".site_url('npds_api.php?op=alerte_api')."\",
                method: \"POST\",
                data:{id:id},
                dataType:\"JSON\",
@@ -440,7 +440,7 @@ function GraphicAdmin($hlpfile) {
                       ficone = JSON.stringify(data['ficone']);
                   $('#messageModalLabel').html(JSON.parse(fretour_h));
                   $('#messageModalContent').html(JSON.parse(fnom_affich));
-                  $('#messageModalIcon').html('<img src=\"".$nuke_url."/assets/images/admin/'+JSON.parse(ficone)+'.png\" />');
+                  $('#messageModalIcon').html('<img src=\"".asset_url('images/admin/'."'+JSON.parse(ficone)+'".'.png')."\" />');
                }
             });
          });
@@ -458,11 +458,11 @@ function GraphicAdmin($hlpfile) {
    <div id ="adm_men" class="mb-4">
       <div id="adm_header" class="row justify-content-end">
          <div class="col-6 col-lg-6 men_tit align-self-center">
-            <h2><a href="admin.php">'.adm_translate("Menu").'</a></h2>
+            <h2><a href="'.site_url('admin.php').'">'.adm_translate("Menu").'</a></h2>
          </div>
          <div id="adm_men_man" class="col-6 col-lg-6 men_man text-right">
             <ul class="liste" id="lst_men_top">
-               <li data-toggle="tooltip" title="'.adm_translate("Déconnexion").'" ><a class="btn btn-outline-danger btn-sm" href="admin.php?op=logout" ><i class="fas fa-sign-out-alt fa-2x"></i></a></li>';
+               <li data-toggle="tooltip" title="'.adm_translate("Déconnexion").'" ><a class="btn btn-outline-danger btn-sm" href="'.site_url('admin.php?op=logout').'" ><i class="fas fa-sign-out-alt fa-2x"></i></a></li>';
    if ($hlpfile) {
       $adm_ent .='
               <li class="ml-2" data-toggle="tooltip" title="'.adm_translate("Manuel en ligne").'"><a class="btn btn-outline-primary btn-sm" href="javascript:openwindow();"><i class="fa fa-question-circle fa-2x"></i></a></li>';
@@ -498,7 +498,7 @@ function GraphicAdmin($hlpfile) {
       <div class="modal-dialog">
          <div class="modal-content">
             <div class="modal-header">
-               <h5 class="modal-title" id="versusModalLabel"><img class="adm_img mr-2" src="assets/images/admin/message_npds.png" alt="icon_" />'.adm_translate("Version").' NPDS</h5>
+               <h5 class="modal-title" id="versusModalLabel"><img class="adm_img mr-2" src="'.asset_url('images/admin/message_npds.png').'" alt="icon_" />'.adm_translate("Version").' NPDS</h5>
                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                </button>
@@ -534,7 +534,7 @@ function GraphicAdmin($hlpfile) {
                </form>
             </div>
             <div class="modal-footer">
-            <span class="small text-muted">Information de npds.org</span><img class="adm_img mr-2" src="assets/images/admin/message_npds.png" alt="icon_" />
+            <span class="small text-muted">Information de npds.org</span><img class="adm_img mr-2" src="'.asset_url('images/admin/message_npds.png').'" alt="icon_" />
             </div>
          </div>
       </div>
@@ -552,8 +552,8 @@ function adminMain($deja_affiches) {
    $radminsuper=GraphicAdmin($hlpfile);///????????
    
    echo '
-   <div id="adm_men_art" class="adm_workarea">
-   <h2><img src="assets/images/admin/submissions.'.$admf_ext.'" class="adm_img" title="'.adm_translate("Articles").'" alt="icon_'.adm_translate("Articles").'" />&nbsp;'.adm_translate("Derniers").' '.$admart.' '.adm_translate("Articles").'</h2>';
+   <div id="adm_men_artl" cass="adm_workarea">
+   <h2><img src="'.asset_url('images/admin/submissions.'.$admf_ext).'" class="adm_img" title="'.adm_translate("Articles").'" alt="icon_'.adm_translate("Articles").'" />&nbsp;'.adm_translate("Derniers").' '.$admart.' '.adm_translate("Articles").'</h2>';
 
    $resul = sql_query("SELECT sid FROM ".$NPDS_Prefix."stories");
    $nbre_articles = sql_num_rows($resul);
@@ -613,7 +613,7 @@ function adminMain($deja_affiches) {
             echo $title.' <i>(archive)</i>';
          else {
             if ($affiche) {
-               echo '<a data-toggle="popover" data-placement="bottom" data-trigger="hover" href="article.php?sid='.$sid.'" data-content=\'   <div class="thumbnail"><img class="img-rounded" src="assets/images/topics/'.$topicimage.'" height="80" width="80" alt="topic_logo" /><div class="caption">'.htmlentities($hometext,ENT_QUOTES).'</div></div>\' title="'.$sid.'" data-html="true">'.ucfirst($title).'</a>';
+               echo '<a data-toggle="popover" data-placement="bottom" data-trigger="hover" href="'.site_url('article.php?sid='.$sid).'" data-content=\'   <div class="thumbnail"><img class="img-rounded" src="'.asset_url('images/topics/'.$topicimage).'" height="80" width="80" alt="topic_logo" /><div class="caption">'.htmlentities($hometext,ENT_QUOTES).'</div></div>\' title="'.$sid.'" data-html="true">'.ucfirst($title).'</a>';
                if($ihome==1)
                   echo '<br /><small><span class="badge badge-secondary" title="'.adm_translate("Catégorie").'" data-toggle="tooltip">'.aff_langue($cat_title).'</span> <span class="text-danger">non publié en index</span></small>';
                else
@@ -628,13 +628,13 @@ function adminMain($deja_affiches) {
             <td>';
          } else {
             echo '</td>
-            <td>'.$topictext.'<a href="index.php?op=newtopic&amp;topic='.$topic.'" class="tooltip">'.aff_langue($topictext).'</a>';
+            <td>'.$topictext.'<a href="'.site_url('index.php?op=newtopic&amp;topic='.$topic).'" class="tooltip">'.aff_langue($topictext).'</a>';
          }
          if ($affiche)
             echo '</td>
             <td>
-            <a href="admin.php?op=EditStory&amp;sid='.$sid.'" ><i class="fas fa-edit fa-lg mr-2" title="'.adm_translate("Editer").'" data-toggle="tooltip"></i></a>
-            <a href="admin.php?op=RemoveStory&amp;sid='.$sid.'" ><i class="far fa-trash-alt fa-lg text-danger" title="'.adm_translate("Effacer").'" data-toggle="tooltip"></i></a>';
+            <a href="'.site_url('admin.php?op=EditStory&amp;sid='.$sid).'" ><i class="fas fa-edit fa-lg mr-2" title="'.adm_translate("Editer").'" data-toggle="tooltip"></i></a>
+            <a href="'.site_url('admin.php?op=RemoveStory&amp;sid='.$sid).'" ><i class="far fa-trash-alt fa-lg text-danger" title="'.adm_translate("Effacer").'" data-toggle="tooltip"></i></a>';
          else
             echo '</td>
             <td>';
@@ -650,12 +650,12 @@ function adminMain($deja_affiches) {
          <li class="page-item disabled"><a class="page-link" href="#">'.$nbre_articles.' Articles</a></li>
          <li class="page-item disabled"><a class="page-link" href="#">'.$nbPages.' '.adm_translate("Page(s)").'</a></li>
       </ul>';
-      echo paginate('admin.php?op=suite_articles&amp;deja_affiches=', '', $nbPages, $current, 1, $admart, $start);
+      echo paginate(site_url('admin.php?op=suite_articles&amp;deja_affiches='), '', $nbPages, $current, 1, $admart, $start);
       echo '
       </div>';
 
       echo '
-      <form id="fad_articles" class="form-inline" action="admin.php" method="post">
+      <form id="fad_articles" class="form-inline" action="'.site_url('admin.php').'" method="post">
          <label class="mr-2 mt-sm-1">'.adm_translate("ID Article:").'</label>
          <input class="form-control  mr-2 mt-sm-3 mb-2" type="number" name="sid" />
          <select class="custom-select form-control mr-2 mt-sm-3 mb-2" name="op">
@@ -679,16 +679,16 @@ if ($admintest) {
          setcookie("admin");
          setcookie("adm_exp");
          unset($admin);
-         Header("Location: index.php");
+         Header("Location: ".site_url('index.php'));
       break;
       // FILES MANAGER
       case 'FileManager':
          if ($admintest and $filemanager)
-            header("location: modules.php?ModPath=f-manager&ModStart=f-manager&FmaRep=$aid");
+            header("location: ".module_url('f-manager&FmaRep='.$aid, 'f-manager'));
       break;
       case 'FileManagerDisplay':
          if ($admintest and $filemanager)
-            header("location: modules.php?ModPath=f-manager&ModStart=f-manager&FmaRep=download");
+            header("location: ".module_url('f-manager&FmaRep=download', 'f-manager'));
       break;
       //BLACKBOARD
       case 'abla':
@@ -702,7 +702,7 @@ if ($admintest) {
       break;
       case 'deleteNotice':
          sql_query("DELETE FROM ".$NPDS_Prefix."reviews_add WHERE id='$id'");
-         Header("Location: admin.php?op=$op_back");
+         Header("Location: ".site_url('admin.php?op='.$op_back));
       break;
       // FORUMS
       case "ForumConfigAdmin":
