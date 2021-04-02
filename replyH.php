@@ -1,17 +1,14 @@
 <?php
-/************************************************************************/
-/* DUNE by NPDS                                                         */
-/* ===========================                                          */
-/*                                                                      */
-/* Based on PhpNuke 4.x and PhpBB integration source code               */
-/*                                                                      */
-/* NPDS Copyright (c) 2002-2021 by Philippe Brunier                     */
-/* Great mods by snipe                                                  */
-/*                                                                      */
-/* This program is free software. You can redistribute it and/or modify */
-/* it under the terms of the GNU General Public License as published by */
-/* the Free Software Foundation; either version 2 of the License.       */
-/************************************************************************/
+/**
+ * Npds Two
+ *
+ * Based on NPDS Copyright (c) 2002-2020 by Philippe Brunier
+ * 
+ * @author Nicolas2
+ * @version 1.0
+ * @date 02/04/2021
+ */
+
 if (!function_exists("Mysql_Connexion"))
    include ("mainfile.php");
 

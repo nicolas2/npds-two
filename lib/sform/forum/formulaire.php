@@ -1,14 +1,13 @@
 <?php
-/************************************************************************/
-/* SFORM Extender for NPDS FORUM                                        */
-/* ===========================                                          */
-/*                                                                      */
-/* NPDS Copyright (c) 2002-2020 by Philippe Brunier                     */
-/*                                                                      */
-/* This program is free software. You can redistribute it and/or modify */
-/* it under the terms of the GNU General Public License as published by */
-/* the Free Software Foundation; either version 2 of the License.       */
-/************************************************************************/
+/**
+ * Npds Two
+ *
+ * Based on NPDS Copyright (c) 2002-2020 by Philippe Brunier
+ * 
+ * @author Nicolas2
+ * @version 1.0
+ * @date 02/04/2021
+ */
 
 // ---------------------------------------------------------------------
 // CE CHAMPS est indispensable --- Don't remove this field

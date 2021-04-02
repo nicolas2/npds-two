@@ -1,16 +1,14 @@
 <?php
-/************************************************************************/                                                         
-/* DUNE by NPDS                                                         */
-/* ===========================                                          */
-/*                                                                      */
-/* Based on PhpNuke 4.x source code                                     */
-/*                                                                      */
-/* NPDS Copyright (c) 2002-2021 by Philippe Brunier                     */
-/*                                                                      */
-/* This program is free software. You can redistribute it and/or modify */
-/* it under the terms of the GNU General Public License as published by */
-/* the Free Software Foundation; either version 2 of the License.       */
-/************************************************************************/
+/**
+ * Npds Two
+ *
+ * Based on NPDS Copyright (c) 2002-2020 by Philippe Brunier
+ * 
+ * @author Nicolas2
+ * @version 1.0
+ * @date 02/04/2021
+ */
+
 include("vendor/autoload.php");
 
 include("lib/grab_globals.php");
@@ -335,14 +333,7 @@ function Ecr_Log($fic_log, $req_log, $mot_log) {
    flock($fp, 3);
    fclose($fp);
 }
-#autodoc redirect_url($urlx) : Permet une redirection javascript / en lieu et place de header("location: ...");
-function redirect_url($urlx) {
-   echo "<script type=\"text/javascript\">\n";
-   echo "//<![CDATA[\n";
-   echo "document.location.href='".$urlx."';\n";
-   echo "//]]>\n";
-   echo "</script>";
-}
+
 #autodoc SC_infos() : Indique le status de SuperCache
 function SC_infos() {
    global $SuperCache, $npds_sc;

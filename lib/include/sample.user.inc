@@ -1,14 +1,14 @@
 <?php
-/************************************************************************/
-/* NPDS DUNE : Net Portal Dynamic System .                              */
-/* ===========================                                          */
-/*                                                                      */
-/* This version name NPDS Copyright (c) 2001-2019 by Philippe Brunier   */
-/*                                                                      */
-/* This program is free software. You can redistribute it and/or modify */
-/* it under the terms of the GNU General Public License as published by */
-/* the Free Software Foundation; either version 2 of the License.       */
-/************************************************************************/
+/**
+ * Npds Two
+ *
+ * Based on NPDS Copyright (c) 2002-2020 by Philippe Brunier
+ * 
+ * @author Nicolas2
+ * @version 1.0
+ * @date 02/04/2021
+ */
+
 // OBJET : Ce fichier vous permet de personnaliser la page de Login et le plan du site
    echo '
    <p class="text-center my-3">

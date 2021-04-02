@@ -1,13 +1,14 @@
 <?php
-/************************************************************************/
-/* DUNE by NPDS / SUPER-CACHE engine                                    */
-/*                                                                      */
-/* NPDS Copyright (c) 2002-2019 by Philippe Brunier                     */
-/*                                                                      */
-/* This program is free software. You can redistribute it and/or modify */
-/* it under the terms of the GNU General Public License as published by */
-/* the Free Software Foundation; either version 2 of the License.       */
-/************************************************************************/
+/**
+ * Npds Two
+ *
+ * Based on NPDS Copyright (c) 2002-2020 by Philippe Brunier
+ * 
+ * @author Nicolas2
+ * @version 1.0
+ * @date 02/04/2021
+ */
+
 /************************************************************************/
 /*  Original Autor : Francisco Echarte [patxi@eslomas.com]              */
 /*  Revision : 2004-03-15 Version: 1.1 / multi-language support by Dev  */

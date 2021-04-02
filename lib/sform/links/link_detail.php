@@ -1,16 +1,14 @@
 <?php
-/************************************************************************/
-/* DUNE by NPDS                                                         */
-/* ===========================                                          */
-/*                                                                      */
-/* This version name NPDS Copyright (c) 2001-2020 by Philippe Brunier   */
-/*                                                                      */
-/* New Links.php Module with SFROM extentions                           */
-/*                                                                      */
-/* This program is free software. You can redistribute it and/or modify */
-/* it under the terms of the GNU General Public License as published by */
-/* the Free Software Foundation; either version 2 of the License.       */
-/************************************************************************/
+/**
+ * Npds Two
+ *
+ * Based on NPDS Copyright (c) 2002-2020 by Philippe Brunier
+ * 
+ * @author Nicolas2
+ * @version 1.0
+ * @date 02/04/2021
+ */
+
 global $ModPath, $ModStart;
 $pos = strpos($ModPath, '/admin');
 if ($pos>0) $ModPathX=substr($ModPath,0,$pos); else $ModPathX=$ModPath;

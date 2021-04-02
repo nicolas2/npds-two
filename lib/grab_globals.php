@@ -1,21 +1,13 @@
 <?php
-/************************************************************************/
-/* DUNE by NPDS                                                         */
-/*                                                                      */
-/* NPDS Copyright (c) 2001-2021 by Philippe Brunier                     */
-/* =========================                                            */
-/*                                                                      */
-/* Based on phpmyadmin.net  grabber library                             */
-/*                                                                      */
-/* This program is free software. You can redistribute it and/or modify */
-/* it under the terms of the GNU General Public License as published by */
-/* the Free Software Foundation; either version 2 of the License.       */
-/************************************************************************/
-/* This library grabs the names and values of the variables sent or     */
-/* posted to a script in the '$HTTP_*_VARS' arrays and sets simple      */
-/* globals variables from them and  use the new globals arrays defined  */
-/* with php 4.1+                                                        */
-/************************************************************************/
+/**
+ * Npds Two
+ *
+ * Based on NPDS Copyright (c) 2002-2020 by Philippe Brunier
+ * 
+ * @author Nicolas2
+ * @version 1.0
+ * @date 02/04/2021
+ */
 
 if (!defined('NPDS_GRAB_GLOBALS_INCLUDED')) {
    define('NPDS_GRAB_GLOBALS_INCLUDED', 1);

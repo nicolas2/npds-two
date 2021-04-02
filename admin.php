@@ -1,58 +1,75 @@
 <?php
-/************************************************************************/
-/* DUNE by NPDS - admin prototype                                       */
-/* ===========================                                          */
-/*                                                                      */
-/*                                                                      */
-/* NPDS Copyright (c) 2002-2020 by Philippe Brunier                     */
-/*                                                                      */
-/* This program is free software. You can redistribute it and/or modify */
-/* it under the terms of the GNU General Public License as published by */
-/* the Free Software Foundation; either version 2 of the License.       */
-/************************************************************************/
+/**
+ * Npds Two
+ *
+ * Based on NPDS Copyright (c) 2002-2020 by Philippe Brunier
+ * 
+ * @author Nicolas2
+ * @version 1.0
+ * @date 02/04/2021
+ */
 
 if (!function_exists("Mysql_Connexion"))
    include ("mainfile.php");
+
 include("language/$language/lang-adm-$language.php");
-function Access_Error () {
+
+function Access_Error () 
+{
    include("admin/die.php");
 }
 
-function admindroits($aid,$f_meta_nom) {
+function admindroits($aid, $f_meta_nom) 
+{
    global $NPDS_Prefix, $radminsuper;
+   
    $res = sql_query("SELECT fnom, radminsuper FROM ".$NPDS_Prefix."authors a LEFT JOIN ".$NPDS_Prefix."droits d ON a.aid = d.d_aut_aid LEFT JOIN ".$NPDS_Prefix."fonctions f ON d.d_fon_fid = f.fdroits1 WHERE a.aid='$aid'");
-   $foncts=array();$supers=array();
+   
+   $foncts = array();
+   $supers = array();
+   
    while ($data = sql_fetch_row($res)) {
       $foncts[] = $data[0];
       $supers[] = $data[1];
    }
+
    if ((!in_array('1', $supers)) AND (!in_array($f_meta_nom, $foncts)))
       Access_Error();
+   
    $radminsuper = $supers[0];
 }
 
-function adminhead($f_meta_nom, $f_titre, $adminimg) {
+function adminhead($f_meta_nom, $f_titre, $adminimg) 
+{
    global $admf_ext, $NPDS_Prefix, $f_meta_nom, $ModPath, $adm_img_mod;
-   list($furlscript, $ficone)=sql_fetch_row(sql_query("SELECT furlscript, ficone FROM ".$NPDS_Prefix."fonctions WHERE fnom='$f_meta_nom'"));
+   
+   list($furlscript, $ficone) = sql_fetch_row(sql_query("SELECT furlscript, ficone FROM ".$NPDS_Prefix."fonctions WHERE fnom='$f_meta_nom'"));
+   
    if (file_exists($adminimg.$ficone.'.'.$admf_ext))
-      $img_adm ='<img src="'.$adminimg.$ficone.'.'.$admf_ext.'" class="vam " alt="'.$f_titre.'" />';
-   elseif (stristr($_SERVER['QUERY_STRING'],"Extend-Admin-SubModule")||$adm_img_mod==1) {
+      $img_adm = '<img src="'.$adminimg.$ficone.'.'.$admf_ext.'" class="vam " alt="'.$f_titre.'" />';
+   elseif (stristr($_SERVER['QUERY_STRING'],"Extend-Admin-SubModule") || $adm_img_mod==1) {
       if (file_exists('modules/'.$ModPath.'/'.$ModPath.'.'.$admf_ext)) {
-         $img_adm ='<img src="modules/'.$ModPath.'/'.$ModPath.'.'.$admf_ext.'" class="vam" alt="'.$f_titre.'" />';
-      } else $img_adm ='';
+         $img_adm = '<img src="modules/'.$ModPath.'/'.$ModPath.'.'.$admf_ext.'" class="vam" alt="'.$f_titre.'" />';
+      } else $img_adm = '';
    }
-   else $img_adm ='';
-   $entete_adm ='<div id="adm_workarea" class="adm_workarea">'."\n".'   <h2><a '.$furlscript.' >'.$img_adm.'&nbsp;'.$f_titre.'</a></h2>';
+   else $img_adm = '';
+   
+   $entete_adm = '<div id="adm_workarea" class="adm_workarea">'."\n".'   <h2><a '.$furlscript.' >'.$img_adm.'&nbsp;'.$f_titre.'</a></h2>';
+   
    echo $entete_adm;
 }
 
-$filemanager=false;
+$filemanager = false;
+
 if (file_exists("config/filemanager.conf"))
    include_once("config/filemanager.conf");
 
-function login() {
+function login() 
+{
    global $adminimg;
+
    include ("header.php");
+
    echo '
    <h1>'.adm_translate("Administration").'</h1>
    <div id ="adm_men">
@@ -92,14 +109,17 @@ function login() {
       });
       //]]>
       </script>';
-      $arg1='
+      $arg1 = '
       var formulid =["adminlogin"];
       ';
-   adminfoot('fv','',$arg1,'');
+
+   adminfoot('fv', '', $arg1, '');
 }
 
-function GraphicAdmin($hlpfile) {
+function GraphicAdmin($hlpfile) 
+{
    global $aid, $admingraphic, $adminimg, $language, $admin, $banners, $filemanager, $Version_Sub, $Version_Num, $httprefmax, $httpref, $short_menu_admin, $admf_ext, $NPDS_Prefix, $adm_ent,$nuke_url;
+   
    $bloc_foncts ='';
    $bloc_foncts_A ='';
 
@@ -107,29 +127,35 @@ function GraphicAdmin($hlpfile) {
    //article à valider
    $newsubs=sql_num_rows(sql_query("SELECT qid FROM ".$NPDS_Prefix."queue"));
    if($newsubs) sql_query("UPDATE ".$NPDS_Prefix."fonctions SET fetat='1',fretour='".$newsubs."',fretour_h='".adm_translate("Articles en attente de validation !")."' WHERE fid='38'"); else sql_query("UPDATE ".$NPDS_Prefix."fonctions SET fetat='0',fretour='0' WHERE fid='38'");
+   
    //news auto
    $newauto=sql_num_rows(sql_query("SELECT anid FROM ".$NPDS_Prefix."autonews"));
    if($newauto) sql_query("UPDATE ".$NPDS_Prefix."fonctions SET fetat='1',fretour='".$newauto."',fretour_h='".adm_translate("Articles programmés pour la publication.")."' WHERE fid=37"); else sql_query("UPDATE ".$NPDS_Prefix."fonctions SET fetat='0',fretour='0',fretour_h='' WHERE fid=37");
+   
    //etat filemanager
    if ($filemanager) sql_query("UPDATE ".$NPDS_Prefix."fonctions SET fetat='1' WHERE fid='27'"); else sql_query("UPDATE ".$NPDS_Prefix."fonctions SET fetat='0' WHERE fid='27'");
 
 
-//==> recuperation traitement des messages de NPDS
+   //==> recuperation traitement des messages de NPDS
    $QM=sql_query("SELECT * FROM ".$NPDS_Prefix."fonctions WHERE fnom REGEXP'mes_npds_[[:digit:]]'");
    settype($f_mes, 'array');
+   
    while ($SQM=sql_fetch_assoc($QM)) {
       $f_mes[]=$SQM['fretour_h'];
    }
    //==> recuperation
+   
    $messagerie_npds= file_get_contents('https://raw.githubusercontent.com/nicolas2/npds_dune/master/versus.txt');
    $messages_npds = explode("\n", $messagerie_npds);
    array_pop($messages_npds);
+   
    // traitement specifique car fonction permanente versus
    $versus_info = explode('|', $messages_npds[0]);
    if($versus_info[1] == $Version_Sub and $versus_info[2] == $Version_Num)
       sql_query("UPDATE ".$NPDS_Prefix."fonctions SET fetat='1', fretour='', fretour_h='Version NPDS ".$Version_Sub." ".$Version_Num."', furlscript='' WHERE fid='36'");
    else
       sql_query("UPDATE ".$NPDS_Prefix."fonctions SET fetat='1', fretour='N', furlscript='data-toggle=\"modal\" data-target=\"#versusModal\"', fretour_h='Une nouvelle version NPDS est disponible !<br />".$versus_info[1]." ".$versus_info[2]."<br />Cliquez pour télécharger.' WHERE fid='36'"); 
+   
    $mess=array_slice($messages_npds, 1);
 
    if(empty($mess)) {
@@ -184,17 +210,21 @@ function GraphicAdmin($hlpfile) {
    //utilisateur à valider
    $newsuti=sql_num_rows(sql_query("SELECT uid FROM ".$NPDS_Prefix."users_status WHERE uid!='1' AND open='0'"));
    if($newsuti) sql_query("UPDATE ".$NPDS_Prefix."fonctions SET fetat='1',fretour='".$newsuti."',fretour_h='".adm_translate("Utilisateur en attente de validation !")."' WHERE fid='44'"); else sql_query("UPDATE ".$NPDS_Prefix."fonctions SET fetat='0',fretour='0' WHERE fid='44'");
+   
    //référants à gérer
    if($httpref == 1) {
    $result=sql_fetch_assoc(sql_query("SELECT COUNT(*) AS total FROM ".$NPDS_Prefix."referer"));
    if ($result['total']>=$httprefmax) sql_query("UPDATE ".$NPDS_Prefix."fonctions set fetat='1', fretour='!!!' WHERE fid='39'");else sql_query("UPDATE ".$NPDS_Prefix."fonctions SET fetat='0' WHERE fid='39'");
    }
+   
    //critique en attente
    $critsubs= sql_num_rows(sql_query("SELECT * FROM ".$NPDS_Prefix."reviews_add"));
    if($critsubs) sql_query("UPDATE ".$NPDS_Prefix."fonctions SET fetat='1',fretour='".$critsubs."', fretour_h='".adm_translate("Critique en attente de validation.")."' WHERE fid='35'"); else sql_query("UPDATE ".$NPDS_Prefix."fonctions SET fetat='0',fretour='0' WHERE fid='35'");
+   
    //nouveau lien à valider
    $newlink= sql_num_rows(sql_query("SELECT * FROM ".$NPDS_Prefix."links_newlink"));
    if($newlink) sql_query("UPDATE ".$NPDS_Prefix."fonctions SET fetat='1',fretour='".$newlink."', fretour_h='".adm_translate("Liens à valider.")."' WHERE fid='41'"); else sql_query("UPDATE ".$NPDS_Prefix."fonctions SET fetat='0',fretour='0' WHERE fid='41'");
+   
    //lien rompu à valider
    $brokenlink= sql_num_rows(sql_query("SELECT * FROM ".$NPDS_Prefix."links_modrequest where brokenlink='1'"));
    if($brokenlink) sql_query("UPDATE ".$NPDS_Prefix."fonctions SET fetat='1',fretour='".$brokenlink."', fretour_h='".adm_translate("Liens rompus à valider.")."' WHERE fid='42'"); else sql_query("UPDATE ".$NPDS_Prefix."fonctions SET fetat='0',fretour='0' WHERE fid='42'");
@@ -202,6 +232,7 @@ function GraphicAdmin($hlpfile) {
 
    //==> Pour les modules installés produisant des notifications
    $alert_modules=sql_query("SELECT * FROM fonctions f LEFT JOIN modules m ON m.mnom = f.fnom WHERE m.minstall=1 AND fcategorie=9"); 
+   
    if($alert_modules) {
       while($am=sql_fetch_array($alert_modules)) {
          include("modules/".$am['fnom']."/admin/adm_alertes.php");
@@ -218,6 +249,7 @@ function GraphicAdmin($hlpfile) {
 
    //==> construction des blocs menu : selection de fonctions actives ayant une interface graphique de premier niveau et dont l'administrateur connecté en posséde les droits d'accès
    $Q = sql_fetch_assoc(sql_query("SELECT * FROM ".$NPDS_Prefix."authors WHERE aid='$aid' LIMIT 1"));
+   
    // on prend tout ce qui a une interface 
    if ($Q['radminsuper']==1)
       $R = sql_query("SELECT * FROM ".$NPDS_Prefix."fonctions f WHERE f.finterface =1 AND f.fetat != '0' ORDER BY f.fcategorie, f.fordre");
@@ -231,6 +263,7 @@ function GraphicAdmin($hlpfile) {
       $cat[]=$SAQ['fcategorie'];
       $cat_n[]=$SAQ['fcategorie_nom'];
       $fid_ar[]=$SAQ['fid'];
+      
       if ($SAQ['fcategorie'] == 6 or ($SAQ['fcategorie'] == 9 and strstr($SAQ['furlscript'],"op=Extend-Admin-SubModule"))) {
          if (file_exists('modules/'.$SAQ['fnom'].'/'.$SAQ['ficone'].'.'.$admf_ext)) 
             $adminico='modules/'.$SAQ['fnom'].'/'.$SAQ['ficone'].'.'.$admf_ext;
@@ -263,6 +296,7 @@ function GraphicAdmin($hlpfile) {
          <ul id="'.strtolower(substr($SAQ['fcategorie_nom'],0,3)).'" class="list" style="clear:left;">';
          $li_c = '
             <li id="'.$SAQ['fid'].'"  data-toggle="tooltip" data-placement="top" title="'.adm_translate($SAQ['fnom_affich']).'"><a class="btn btn-outline-primary" '.$SAQ['furlscript'].'>';
+         
          if ($admingraphic==1)
             $li_c .='<img class="adm_img" src="'.$adminico.'" alt="icon_'.$SAQ['fnom_affich'].'" />';
          else {
@@ -271,6 +305,7 @@ function GraphicAdmin($hlpfile) {
             else
                $li_c .= adm_translate($SAQ['fnom_affich']);
          }
+
          $li_c .='</a></li>';
          $ul_f='';
          if ($j!==0)
@@ -284,10 +319,13 @@ function GraphicAdmin($hlpfile) {
          //]]>
          </script>';
 
-         if ($j==0) {$bloc_foncts .= $ul_o.$li_c;} 
-         else { 
-            if ($j>0 and $cat[$j]>$cat[$j-1]) $bloc_foncts.=$ul_f.$ul_o.$li_c; 
-            else $bloc_foncts .= $li_c;
+         if ($j==0) {
+            $bloc_foncts .= $ul_o.$li_c;
+         } else { 
+            if ($j>0 and $cat[$j]>$cat[$j-1]) 
+               $bloc_foncts.=$ul_f.$ul_o.$li_c; 
+            else 
+               $bloc_foncts .= $li_c;
          }
       }
       $j++;
@@ -542,12 +580,17 @@ function GraphicAdmin($hlpfile) {
    return ($Q['radminsuper']);
 }
 
-function adminMain($deja_affiches) {
+function adminMain($deja_affiches) 
+{
    global $language, $admart, $hlpfile, $aid, $admf_ext, $NPDS_Prefix;
+   
    $hlpfile = "admin/manuels/$language/admin.html";
+   
    include("header.php");
    include_once('functions.php');
+   
    global $short_menu_admin;
+   
    $short_menu_admin=false;
    $radminsuper=GraphicAdmin($hlpfile);///????????
    
@@ -557,12 +600,15 @@ function adminMain($deja_affiches) {
 
    $resul = sql_query("SELECT sid FROM ".$NPDS_Prefix."stories");
    $nbre_articles = sql_num_rows($resul);
+   
    settype($deja_affiches,"integer");
    settype($admart,"integer");
+   
    $result = sql_query("SELECT sid, title, hometext, topic, informant, time, archive, catid, ihome FROM ".$NPDS_Prefix."stories ORDER BY sid DESC LIMIT $deja_affiches,$admart");
 
    $nbPages = ceil($nbre_articles/$admart);
    $current = 1;
+   
    if ($deja_affiches >= 1) {
       $current=$deja_affiches/$admart;
    } else if ($deja_affiches < 1) {
@@ -570,6 +616,7 @@ function adminMain($deja_affiches) {
    } else {
       $current = $nbPages;
    }
+
    $start=($current*$admart);
 
    if ($nbre_articles) {
@@ -584,6 +631,7 @@ function adminMain($deja_affiches) {
             </tr>
          </thead>
          <tbody>';
+      
       $i=0;
       while( (list($sid, $title, $hometext, $topic, $informant, $time, $archive, $catid, $ihome) = sql_fetch_row($result)) and ($i<$admart) ) {
          $affiche = false;
@@ -600,20 +648,26 @@ function adminMain($deja_affiches) {
                if (trim($topicadminX[$iX])==$aid) $affiche=true;
             }
          }
+
          $hometext = strip_tags ( $hometext ,'<br><br />');
          $lg_max = 200;
-         if(strlen($hometext)>$lg_max) $hometext = substr($hometext, 0 , $lg_max).' ...';
+         
+         if(strlen($hometext)>$lg_max) 
+            $hometext = substr($hometext, 0 , $lg_max).' ...';
+         
          echo '
          <tr>
             <td>'.$sid.'</td>
             <td>';
 
          $title=aff_langue($title);
+         
          if ($archive)
             echo $title.' <i>(archive)</i>';
          else {
             if ($affiche) {
                echo '<a data-toggle="popover" data-placement="bottom" data-trigger="hover" href="'.site_url('article.php?sid='.$sid).'" data-content=\'   <div class="thumbnail"><img class="img-rounded" src="'.asset_url('images/topics/'.$topicimage).'" height="80" width="80" alt="topic_logo" /><div class="caption">'.htmlentities($hometext,ENT_QUOTES).'</div></div>\' title="'.$sid.'" data-html="true">'.ucfirst($title).'</a>';
+               
                if($ihome==1)
                   echo '<br /><small><span class="badge badge-secondary" title="'.adm_translate("Catégorie").'" data-toggle="tooltip">'.aff_langue($cat_title).'</span> <span class="text-danger">non publié en index</span></small>';
                else
@@ -623,6 +677,7 @@ function adminMain($deja_affiches) {
                echo '<i>'.$title.'</i>';
             }
          }
+
          if ($topictext=='') {
             echo '</td>
             <td>';
@@ -630,6 +685,7 @@ function adminMain($deja_affiches) {
             echo '</td>
             <td>'.$topictext.'<a href="'.site_url('index.php?op=newtopic&amp;topic='.$topic).'" class="tooltip">'.aff_langue($topictext).'</a>';
          }
+
          if ($affiche)
             echo '</td>
             <td>
@@ -638,10 +694,12 @@ function adminMain($deja_affiches) {
          else
             echo '</td>
             <td>';
+        
          echo '</td>
          </tr>';
          $i++;
       }
+      
       echo '
          </tbody>
       </table>
@@ -650,7 +708,9 @@ function adminMain($deja_affiches) {
          <li class="page-item disabled"><a class="page-link" href="#">'.$nbre_articles.' Articles</a></li>
          <li class="page-item disabled"><a class="page-link" href="#">'.$nbPages.' '.adm_translate("Page(s)").'</a></li>
       </ul>';
+      
       echo paginate(site_url('admin.php?op=suite_articles&amp;deja_affiches='), '', $nbPages, $current, 1, $admart, $start);
+      
       echo '
       </div>';
 
@@ -665,7 +725,9 @@ function adminMain($deja_affiches) {
          <button class="btn btn-primary ml-sm-2 mt-sm-3 mb-2" type="submit">'.adm_translate("Ok").' </button>
       </form>';
    }
+
    echo '</div>';
+   
    include("footer.php");
 }
 

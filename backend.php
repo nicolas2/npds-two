@@ -1,22 +1,22 @@
 <?php
-/************************************************************************/
-/* DUNE by NPDS                                                         */
-/* ===========================                                          */
-/*                                                                      */
-/* Based on PhpNuke 4.x source code                                     */
-/*                                                                      */
-/* NPDS Copyright (c) 2002-2020 by Philippe Brunier                     */
-/*                                                                      */
-/* This program is free software. You can redistribute it and/or modify */
-/* it under the terms of the GNU General Public License as published by */
-/* the Free Software Foundation; either version 2 of the License.       */
-/************************************************************************/
+/**
+ * Npds Two
+ *
+ * Based on NPDS Copyright (c) 2002-2020 by Philippe Brunier
+ * 
+ * @author Nicolas2
+ * @version 1.0
+ * @date 02/04/2021
+ */
+
 include("mainfile.php");
 
 include('functions.php');
 
-function fab_feed($type,$filename,$timeout) {
+function fab_feed($type, $filename, $timeout) 
+{
    global $sitename,$slogan,$backend_image,$backend_title,$backend_width,$backend_height,$backend_language,$storyhome;
+   
    include("lib/feed/feedcreator.class.php");
 
    $rss=new UniversalFeedCreator();
@@ -41,6 +41,7 @@ function fab_feed($type,$filename,$timeout) {
 
    $xtab=news_aff('index',"WHERE ihome='0' AND archive='0'",$storyhome,'');
    $story_limit=0;
+   
    while (($story_limit<$storyhome) and ($story_limit<sizeof($xtab))) {
       list($sid, $catid, $aid, $title, $time, $hometext, $bodytext, $comments, $counter, $topic, $informant, $notes) = $xtab[$story_limit];
       $story_limit++;

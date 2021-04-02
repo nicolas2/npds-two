@@ -1,19 +1,14 @@
 <?php
-################################################################################################
-// Simple Form generator  SFORM / version 1.6 for DUNE
-// Class to manage several Form in a single database(MySql) in XML Format
-// P.Brunier 2001 - 2020
-//
-// This program is free software. You can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation; either version 2 of the License.
-//
-// Based on Form_Handler 19-4-01 Copyright Drs. Jelte 'YeeHaW' Werkhoven
-//
-// Mod by Didier (Jireck) Hoen Xhtml + form_id
-// Mod by Dev 2011 - Rajout d'un textarea de type 'textarea_no_mceEditor' pour pouvoir associer
-// dans un même FORMULAIRE des champs avec ET sans TinyMce / Rajout de l'anti_spambot
-################################################################################################
+/**
+ * Npds Two
+ *
+ * Based on NPDS Copyright (c) 2002-2020 by Philippe Brunier
+ * 
+ * @author Nicolas2
+ * @version 1.0
+ * @date 02/04/2021
+ */
+
 // Constante
 //   define('CRLF', "\n", TRUE);
    define('CRLF', "\n");

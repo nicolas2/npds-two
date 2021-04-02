@@ -1,15 +1,14 @@
 <?php
-/************************************************************************/
-/* SFORM Extender for NPDS USER                                         */
-/* ===========================                                          */
-/* NPDS Copyright (c) 2002-2020 by Philippe Brunier                     */
-/*                                                                      */
-/* This program is free software. You can redistribute it and/or modify */
-/* it under the terms of the GNU General Public License as published by */
-/* the Free Software Foundation; either version 2 of the License.       */
-/************************************************************************/
-/* Dont modify this file if you dont know what you do                   */
-/************************************************************************/
+/**
+ * Npds Two
+ *
+ * Based on NPDS Copyright (c) 2002-2020 by Philippe Brunier
+ * 
+ * @author Nicolas2
+ * @version 1.0
+ * @date 02/04/2021
+ */
+
 global $NPDS_Prefix,$minpass;
 
 $m->add_title(translate("Utilisateur"));
