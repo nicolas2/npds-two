@@ -1,20 +1,13 @@
 <?php
-/************************************************************************/
-/* DUNE by NPDS / SUPER-CACHE engine                                    */
-/*                                                                      */
-/* NPDS Copyright (c) 2002-2019 by Philippe Brunier                     */
-/*                                                                      */
-/* This program is free software. You can redistribute it and/or modify */
-/* it under the terms of the GNU General Public License as published by */
-/* the Free Software Foundation; either version 2 of the License.       */
-/************************************************************************/
-/************************************************************************/
-/*  Original Autor : Francisco Echarte [patxi@eslomas.com]              */
-/*  Revision : 2004-03-15 Version: 1.1 / multi-language support by Dev  */
-/*  Revision : 2004-08-10 Version: 1.2 / SQL support by Dev             */
-/*  Revision : 2006-01-28 Version: 1.3 / .common support by Dev         */
-/*  Revision : 2009-03-12 Version: 1.4 / clean_limit mods by Dev        */
-/************************************************************************/
+/**
+ * Npds Two
+ *
+ * Based on NPDS Copyright (c) 2002-2020 by Philippe Brunier
+ * 
+ * @author Nicolas2
+ * @version 1.0
+ * @date 02/04/2021
+ */
 
 // Be sure that apache user have the permission to Read/Write/Delete in the Dir
 $CACHE_CONFIG['data_dir'] = 'storage/cache/';
