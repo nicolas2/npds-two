@@ -2182,7 +2182,7 @@ function adminblock() {
    $content = aff_langue(preg_replace_callback('#<a href=[^>]*(&)[^>]*>#','changetoampadm',$content));
    
    //==> recuperation
-   $messagerie_npds= file_get_contents('https://raw.githubusercontent.com/nicolas2/npds_dune/master/versus.txt');
+   $messagerie_npds= file_get_contents('https://raw.githubusercontent.com/nicolas2/npds-two/master/versus.txt');
    $messages_npds = explode("\n", $messagerie_npds);
    array_pop($messages_npds);
    // traitement specifique car fonction permanente versus

@@ -145,7 +145,7 @@ function GraphicAdmin($hlpfile)
    }
    //==> recuperation
    
-   $messagerie_npds= file_get_contents('https://raw.githubusercontent.com/nicolas2/npds_dune/master/versus.txt');
+   $messagerie_npds= file_get_contents('https://raw.githubusercontent.com/nicolas2/npds-two/master/versus.txt');
    $messages_npds = explode("\n", $messagerie_npds);
    array_pop($messages_npds);
    
