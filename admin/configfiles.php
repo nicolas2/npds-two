@@ -9,21 +9,29 @@
  * @date 02/04/2021
  */
 
-if (!stristr($_SERVER['PHP_SELF'],"admin.php")) Access_Error();
-$f_meta_nom ='ConfigFiles';
+if (!stristr($_SERVER['PHP_SELF'], "admin.php")) 
+  Access_Error();
+
+$f_meta_nom = 'ConfigFiles';
 $f_titre = adm_translate("Les fichiers de configuration");
+
 //==> controle droit
-admindroits($aid,$f_meta_nom);
+admindroits($aid, $f_meta_nom);
 //<== controle droit
+//
 global $language;
 $hlpfile = "admin/manuels/$language/configfiles.html";
 
-function ConfigFiles($contents, $files) {
+function ConfigFiles($contents, $files) 
+{
    global $hlpfile, $language, $max_car, $f_meta_nom, $f_titre, $adminimg;
+
    include ("header.php");
+
    GraphicAdmin($hlpfile);
-   adminhead ($f_meta_nom, $f_titre, $adminimg);
-   if ($contents=='') {
+   adminhead($f_meta_nom, $f_titre, $adminimg);
+
+   if ($contents == '') {
       echo '
    <hr />
    <table id="tad_cfile" data-toggle="table" data-striped="true" data-show-toggle="true" data-buttons-class="outline-secondary" data-icons="icons" data-icons-prefix="fa">
@@ -123,7 +131,9 @@ function ConfigFiles($contents, $files) {
       <h3 class="my-3">'.adm_translate("Modification de").' : <span class="text-muted">'.$files.'</span></h3>
       <form action="admin.php?op=ConfigFiles_save" method="post">
          <code><textarea class="form-control" name="Xtxt" rows="20" cols="70">';
-      echo htmlspecialchars($contents,ENT_COMPAT|ENT_SUBSTITUTE|ENT_HTML401,cur_charset);
+      
+      echo htmlspecialchars($contents, ENT_COMPAT|ENT_SUBSTITUTE|ENT_HTML401, cur_charset);
+      
       echo '</textarea></code>
          <input type="hidden" name="Xfiles" value="'.$files.'" />
          <div class="form-group mt-3">
@@ -133,144 +143,167 @@ function ConfigFiles($contents, $files) {
       </form>
       ';
    }
-    adminfoot('','','','');
+
+    adminfoot('', '', '', '');
 }
 
-function ConfigFiles_save($Xtxt, $Xfiles) {
+function ConfigFiles_save($Xtxt, $Xfiles) 
+{
    if ($Xfiles == "header_before") {
-      $fp=fopen("lib/include/header_before.inc","w");
-      fputs($fp,stripslashes($Xtxt));
+      $fp = fopen("lib/include/header_before.inc", "w");
+      fputs($fp, stripslashes($Xtxt));
       fclose($fp);
    }
    elseif ($Xfiles == "header_head") {
-      $fp=fopen("lib/include/header_head.inc","w");
-      fputs($fp,stripslashes($Xtxt));
+      $fp = fopen("lib/include/header_head.inc", "w");
+      fputs($fp, stripslashes($Xtxt));
       fclose($fp);
    }
    elseif ($Xfiles == "body_onload") {
-      $fp=fopen("lib/include/body_onload.inc","w");
-      fputs($fp,stripslashes($Xtxt));
+      $fp = fopen("lib/include/body_onload.inc", "w");
+      fputs($fp, stripslashes($Xtxt));
       fclose($fp);
    }
    elseif ($Xfiles == "header_after") {
-      $fp=fopen("lib/include/header_after.inc","w");
-      fputs($fp,stripslashes($Xtxt));
+      $fp = fopen("lib/include/header_after.inc", "w");
+      fputs($fp, stripslashes($Xtxt));
       fclose($fp);
    }
    elseif ($Xfiles == "footer_before") {
-      $fp=fopen("lib/include/footer_before.inc","w");
-      fputs($fp,stripslashes($Xtxt));
+      $fp = fopen("lib/include/footer_before.inc", "w");
+      fputs($fp, stripslashes($Xtxt));
       fclose($fp);
    }
    elseif ($Xfiles == "footer_after") {
-      $fp=fopen("lib/include/footer_after.inc","w");
-      fputs($fp,stripslashes($Xtxt));
+      $fp = fopen("lib/include/footer_after.inc", "w");
+      fputs($fp, stripslashes($Xtxt));
       fclose($fp);
    }
    elseif ($Xfiles == "new_user") {
-      $fp=fopen("lib/include/new_user.inc","w");
-      fputs($fp,stripslashes($Xtxt));
+      $fp = fopen("lib/include/new_user.inc", "w");
+      fputs($fp, stripslashes($Xtxt));
       fclose($fp);
    }
    elseif ($Xfiles == "user") {
-      $fp=fopen("lib/include/user.inc","w");
-      fputs($fp,stripslashes($Xtxt));
+      $fp = fopen("lib/include/user.inc", "w");
+      fputs($fp, stripslashes($Xtxt));
       fclose($fp);
    }
    elseif ($Xfiles == "config/cache.config") {
-      $fp=fopen("config/cache.config.php","w");
-      fputs($fp,stripslashes($Xtxt));
+      $fp = fopen("config/cache.config.php", "w");
+      fputs($fp, stripslashes($Xtxt));
       fclose($fp);
    }
    elseif ($Xfiles == "robots") {
-      $fp=fopen("robots.txt","w");
-      fputs($fp,stripslashes($Xtxt));
+      $fp = fopen("robots.txt", "w");
+      fputs($fp, stripslashes($Xtxt));
       fclose($fp);
    }
    elseif ($Xfiles == "humans") {
-      $fp=fopen("humans.txt","w");
-      fputs($fp,stripslashes($Xtxt));
+      $fp = fopen("humans.txt", "w");
+      fputs($fp, stripslashes($Xtxt));
       fclose($fp);
    }
 
-   global $aid; Ecr_Log('security', "SaveConfigFile($Xfiles) by AID : $aid", '');
+   global $aid; 
+   Ecr_Log('security', "SaveConfigFile($Xfiles) by AID : $aid", '');
+
    header("location: admin.php?op=ConfigFiles");
 }
 
-function delete_configfile($fileX) {
+function delete_configfile($fileX) 
+{
    global $hlpfile, $f_meta_nom, $f_titre, $adminimg;
+
    include("header.php");
+
    GraphicAdmin($hlpfile);
-   adminhead ($f_meta_nom, $f_titre, $adminimg);
+   adminhead($f_meta_nom, $f_titre, $adminimg);
+   
    echo '
    <div class="alert alert-danger" role="alert">
       <p><strong>'.adm_translate("Supprimer le fichier").' '.$fileX.' ? </strong><br /><br /><a class="btn btn-danger btn-sm" href="admin.php?op=ConfigFiles_delete&amp;file='.$fileX.'">'.adm_translate("Oui").'</a>&nbsp;&nbsp;<a class="btn btn-secondary btn-sm" href="admin.php?op=ConfigFiles" >'.adm_translate("Non").'</a></p>
    </div>';
-   adminfoot('','','','');
+   
+   adminfoot('', '', '', '');
 }
-function ConfigFiles_delete($modele) {
-   if ($modele=='header_before')
+
+function ConfigFiles_delete($modele) 
+{
+   if ($modele == 'header_before')
       @unlink("lib/include/header_before.inc");
-   elseif ($modele=='header_head')
+   elseif ($modele == 'header_head')
       @unlink("lib/include/header_head.inc");
-   elseif ($modele=='body_onload')
+   elseif ($modele == 'body_onload')
       @unlink("lib/include/body_onload.inc");
-   elseif ($modele=='header_after')
+   elseif ($modele == 'header_after')
       @unlink("lib/include/header_after.inc");
-   elseif ($modele=='footer_before')
+   elseif ($modele == 'footer_before')
       @unlink("lib/include/footer_before.inc");
-   elseif ($modele=='footer_after')
+   elseif ($modele == 'footer_after')
       @unlink("lib/include/footer_after.inc");
-   elseif ($modele=='new_user')
+   elseif ($modele == 'new_user')
       @unlink("lib/include/new_user.inc");
-   elseif ($modele=='user')
+   elseif ($modele == 'user')
       @unlink("lib/include/user.inc");
 
-   global $aid; Ecr_Log('security', "DeleteConfigFile($modele) by AID : $aid", '');
+   global $aid; 
+   Ecr_Log('security', "DeleteConfigFile($modele) by AID : $aid", '');
+   
    header("location: admin.php?op=ConfigFiles");
 }
 
-function copy_sample($fileX) {
+function copy_sample($fileX) 
+{
    global $hlpfile, $f_meta_nom, $f_titre, $adminimg;
+
    include("header.php");
+
    GraphicAdmin($hlpfile);
-   adminhead ($f_meta_nom, $f_titre, $adminimg);
+   adminhead($f_meta_nom, $f_titre, $adminimg);
+   
    echo '
    <hr />
    <div class="card card-body">
        <p>'.adm_translate("Créer le fichier en utilisant le modèle").' ? <br /><br /><a class="btn btn-primary" href="admin.php?op=ConfigFiles_create&amp;modele='.$fileX.'" >'.adm_translate("Oui").'</a>&nbsp;&nbsp;<a class="btn btn-secondary" href="admin.php?op=ConfigFiles" >'.adm_translate("Non").'</a></p>
    </div>';
-   adminfoot('','','','');
+   
+   adminfoot('', '', '', '');
 }
-function ConfigFiles_create($modele) {
+
+function ConfigFiles_create($modele) 
+{
    @umask("0000");
-   if ($modele=="header_before") {
-      @copy("lib/include/sample.header_before.inc","lib/include/header_before.inc");
-      @chmod("lib/include/header_before.inc",0766);
-   } elseif ($modele=="header_head")  {
-      @copy("lib/include/sample.header_head.inc","lib/include/header_head.inc");
-      @chmod("lib/include/header_head.inc",0766);
-   } elseif ($modele=="body_onload")  {
-      @copy("lib/include/sample.body_onload.inc","lib/include/body_onload.inc");
-      @chmod("lib/include/body_onload.inc",0766);
-   } elseif ($modele=="header_after")  {
-      @copy("lib/include/sample.header_after.inc","lib/include/header_after.inc");
-      @chmod("lib/include/header_after.inc",0766);
-   } elseif ($modele=="footer_before")  {
-      copy("lib/include/sample.footer_before.inc","lib/include/footer_before.inc");
-      chmod("lib/include/footer_before.inc",0766);
-   } elseif ($modele=="footer_after")  {
-      @copy("lib/include/sample.footer_after.inc","lib/include/footer_after.inc");
-      @chmod("lib/include/footer_after.inc",0766);
-   } elseif ($modele=="new_user")  {
-      @copy("lib/include/sample.new_user.inc","lib/include/new_user.inc");
-      @chmod("lib/include/new_user.inc",0766);
-   } elseif ($modele=="user")  {
-      @copy("lib/include/sample.user.inc","lib/include/user.inc");
-      @chmod("lib/include/user.inc",0766);
+   
+   if ($modele == "header_before") {
+      @copy("lib/include/sample.header_before.inc", "lib/include/header_before.inc");
+      @chmod("lib/include/header_before.inc", 0766);
+   } elseif ($modele == "header_head")  {
+      @copy("lib/include/sample.header_head.inc", "lib/include/header_head.inc");
+      @chmod("lib/include/header_head.inc", 0766);
+   } elseif ($modele == "body_onload")  {
+      @copy("lib/include/sample.body_onload.inc", "lib/include/body_onload.inc");
+      @chmod("lib/include/body_onload.inc", 0766);
+   } elseif ($modele == "header_after")  {
+      @copy("lib/include/sample.header_after.inc", "lib/include/header_after.inc");
+      @chmod("lib/include/header_after.inc", 0766);
+   } elseif ($modele == "footer_before")  {
+      copy("lib/include/sample.footer_before.inc", "lib/include/footer_before.inc");
+      chmod("lib/include/footer_before.inc", 0766);
+   } elseif ($modele == "footer_after")  {
+      @copy("lib/include/sample.footer_after.inc", "lib/include/footer_after.inc");
+      @chmod("lib/include/footer_after.inc", 0766);
+   } elseif ($modele == "new_user")  {
+      @copy("lib/include/sample.new_user.inc", "lib/include/new_user.inc");
+      @chmod("lib/include/new_user.inc", 0766);
+   } elseif ($modele == "user")  {
+      @copy("lib/include/sample.user.inc", "lib/include/user.inc");
+      @chmod("lib/include/user.inc", 0766);
    }
 
-   global $aid; Ecr_Log('security', "CreateConfigFile($modele) by AID : $aid", '');
+   global $aid; 
+   Ecr_Log('security', "CreateConfigFile($modele) by AID : $aid", '');
+   
    header("location: admin.php?op=ConfigFiles");
 }
 
@@ -278,103 +311,108 @@ switch ($op) {
    case 'ConfigFiles_load':
       if ($files == 'header_before') {
          if (file_exists("lib/include/header_before.inc")) {
-            $fp=fopen("lib/include/header_before.inc","r");
-            $Xcontents=fread($fp,filesize("lib/include/header_before.inc"));
+            $fp = fopen("lib/include/header_before.inc", "r");
+            $Xcontents = fread($fp, filesize("lib/include/header_before.inc"));
             fclose($fp);
          } else
             copy_sample($files);
       }
       elseif ($files == 'header_head') {
          if (file_exists("lib/include/header_head.inc")) {
-            $fp=fopen("lib/include/header_head.inc","r");
-            $Xcontents=fread($fp,filesize("lib/include/header_head.inc"));
+            $fp = fopen("lib/include/header_head.inc", "r");
+            $Xcontents = fread($fp, filesize("lib/include/header_head.inc"));
             fclose($fp);
          } else
             copy_sample($files);
       }
       elseif ($files == 'body_onload') {
          if (file_exists("lib/include/body_onload.inc")) {
-            $fp=fopen("lib/include/body_onload.inc","r");
-            $Xcontents=fread($fp,filesize("lib/include/body_onload.inc"));
+            $fp = fopen("lib/include/body_onload.inc", "r");
+            $Xcontents = fread($fp, filesize("lib/include/body_onload.inc"));
             fclose($fp);
          } else
             copy_sample($files);
       }
       elseif ($files == 'header_after') {
          if (file_exists("lib/include/header_after.inc")) {
-            $fp=fopen("lib/include/header_after.inc","r");
-            $Xcontents=fread($fp,filesize("lib/include/header_after.inc"));
+            $fp = fopen("lib/include/header_after.inc", "r");
+            $Xcontents = fread($fp, filesize("lib/include/header_after.inc"));
             fclose($fp);
          } else
             copy_sample($files);
       }
       elseif ($files == 'footer_before') {
          if (file_exists("lib/include/footer_before.inc")) {
-            $fp=fopen("lib/include/footer_before.inc","r");
-            $Xcontents=fread($fp,filesize("lib/include/footer_before.inc"));
+            $fp = fopen("lib/include/footer_before.inc", "r");
+            $Xcontents = fread($fp, filesize("lib/include/footer_before.inc"));
             fclose($fp);
          } else
             copy_sample($files);
       }
       elseif ($files == 'footer_after') {
          if (file_exists("lib/include/footer_after.inc")) {
-            $fp=fopen("lib/include/footer_after.inc","r");
-            $Xcontents=fread($fp,filesize("lib/include/footer_after.inc"));
+            $fp = fopen("lib/include/footer_after.inc", "r");
+            $Xcontents = fread($fp, filesize("lib/include/footer_after.inc"));
             fclose($fp);
          } else
             copy_sample($files);
       }
       elseif ($files == 'new_user') {
          if (file_exists("lib/include/new_user.inc")) {
-            $fp=fopen("lib/include/new_user.inc","r");
-            $Xcontents=fread($fp,filesize("lib/include/new_user.inc"));
+            $fp = fopen("lib/include/new_user.inc", "r");
+            $Xcontents = fread($fp, filesize("lib/include/new_user.inc"));
             fclose($fp);
          } else
             copy_sample($files);
       }
       elseif ($files == 'user') {
          if (file_exists("lib/include/user.inc")) {
-            $fp=fopen("lib/include/user.inc","r");
-            $Xcontents=fread($fp,filesize("lib/include/user.inc"));
+            $fp = fopen("lib/include/user.inc", "r");
+            $Xcontents = fread($fp, filesize("lib/include/user.inc"));
             fclose($fp);
          } else
             copy_sample($files);
       }
       elseif ($files == 'config/cache.config') {
          if (file_exists("config/cache.config.php")) {
-            $fp=fopen("config/cache.config.php","r");
-            $Xcontents=fread($fp,filesize("config/cache.config.php"));
+            $fp = fopen("config/cache.config.php", "r");
+            $Xcontents = fread($fp, filesize("config/cache.config.php"));
             fclose($fp);
          }
       }
       elseif ($files == 'robots') {
          if (file_exists("robots.txt")) {
-            $fp=fopen("robots.txt","r");
-            $Xcontents=fread($fp,filesize("robots.txt"));
+            $fp = fopen("robots.txt", "r");
+            $Xcontents = fread($fp, filesize("robots.txt"));
             fclose($fp);
          }
       }
       elseif ($files == 'humans') {
          if (file_exists("humans.txt")) {
-            $fp=fopen("humans.txt","r");
-            $Xcontents=fread($fp,filesize("humans.txt"));
+            $fp = fopen("humans.txt", "r");
+            $Xcontents = fread($fp, filesize("humans.txt"));
             fclose($fp);
          }
       }
       ConfigFiles($Xcontents, $files);
    break;
+
    case 'ConfigFiles_save':
       ConfigFiles_save($Xtxt, $Xfiles);
    break;
+
    case 'ConfigFiles_create':
       ConfigFiles_create($modele);
    break;
+
    case 'delete_configfile':
       delete_configfile($file);
    break;
+
    case 'ConfigFiles_delete':
       ConfigFiles_delete($file);
    break;
+   
    default:
       ConfigFiles('', '');
    break;

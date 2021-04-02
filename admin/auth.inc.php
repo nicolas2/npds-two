@@ -9,15 +9,20 @@
  * @date 02/04/2021
  */
 
-function Admin_alert($motif) {
+function Admin_alert($motif) 
+{
    global $admin;
-   setcookie('admin','',0);
+
+   setcookie('admin', '', 0);
    unset($admin);
 
    Ecr_Log('security', 'admin/auth.inc.php/Admin_alert : '.$motif, '');
-   $Titlesitename='NPDS';
+   
+   $Titlesitename = 'NPDS';
+   
    if (file_exists("config/meta.php"))
       include("config/meta.php");
+   
    echo '
       </head>
       <body>
@@ -29,25 +34,29 @@ function Admin_alert($motif) {
 }
 
 if ((isset($aid)) and (isset($pwd)) and ($op == 'login')) {
-   if ($aid!='' and $pwd!='') {
+   if ($aid != '' and $pwd != '') {
       $result=sql_query("SELECT pwd, hashkey FROM ".$NPDS_Prefix."authors WHERE aid='$aid'");
-      if (sql_num_rows($result)==1) {
+      
+      if (sql_num_rows($result) == 1) {
          $setinfo = sql_fetch_assoc($result);
          $dbpass = $setinfo['pwd'];
          $pwd = utf8_decode($pwd);
          $scryptPass = null;
          
-         if ( password_verify($pwd, $dbpass) or (strcmp($dbpass, $pwd)==0)) {
+         if ( password_verify($pwd, $dbpass) or (strcmp($dbpass, $pwd) == 0)) {
             if(!$setinfo['hashkey']) {
                $AlgoCrypt = PASSWORD_BCRYPT;
                $min_ms = 100;
                $options = ['cost' => getOptimalBcryptCostParameter($pwd, $AlgoCrypt, $min_ms)];
                $hashpass = password_hash($pwd, $AlgoCrypt, $options);
                $pwd = crypt($pwd, $hashpass);
+               
                sql_query("UPDATE ".$NPDS_Prefix."authors SET pwd='$pwd', hashkey='1' WHERE aid='$aid'");
                $result = sql_query("SELECT pwd, hashkey FROM ".$NPDS_Prefix."authors WHERE aid = '$aid'");
-               if (sql_num_rows($result)==1)
+               
+               if (sql_num_rows($result) == 1)
                   $setinfo = sql_fetch_assoc($result);
+               
                $dbpass = $setinfo['pwd'];
                $scryptPass = crypt($dbpass, $hashpass);
             }
@@ -55,17 +64,19 @@ if ((isset($aid)) and (isset($pwd)) and ($op == 'login')) {
 
          if(password_verify($pwd, $dbpass))
             $CryptpPWD = $dbpass;
-         elseif (password_verify($dbpass, $scryptPass) or strcmp($dbpass, $pwd)==0)
+         elseif (password_verify($dbpass, $scryptPass) or strcmp($dbpass, $pwd) == 0)
             $CryptpPWD = $pwd;
          else 
             Admin_Alert("Passwd not in DB#1 : $aid");
 
          $admin = base64_encode("$aid:".md5($CryptpPWD));
-         if ($admin_cook_duration<=0) 
-            $admin_cook_duration=1;
-         $timeX=time()+(3600*$admin_cook_duration);
-         setcookie('admin',$admin,$timeX);
-         setcookie('adm_exp',$timeX,$timeX);
+         
+         if ($admin_cook_duration <= 0) 
+            $admin_cook_duration = 1;
+         
+         $timeX = time()+(3600*$admin_cook_duration);
+         setcookie('admin', $admin, $timeX);
+         setcookie('adm_exp', $timeX, $timeX);
       }
    }
 }
@@ -74,27 +85,32 @@ if ((isset($aid)) and (isset($pwd)) and ($op == 'login')) {
 $admintest = false;
 $super_admintest = false;
 
-if (isset($admin) and ($admin!='')) {
+if (isset($admin) and ($admin != '')) {
    $Xadmin = base64_decode($admin);
    $Xadmin = explode(':', $Xadmin);
    $aid = urlencode($Xadmin[0]);
    $AIpwd = $Xadmin[1];
-   if ($aid=='' or $AIpwd=='')
+   
+   if ($aid == '' or $AIpwd == '')
       Admin_Alert('Null Aid or Passwd');
-   $result=sql_query("SELECT pwd, radminsuper FROM ".$NPDS_Prefix."authors WHERE aid = '$aid'");
+   
+   $result = sql_query("SELECT pwd, radminsuper FROM ".$NPDS_Prefix."authors WHERE aid = '$aid'");
+   
    if (!$result)
       Admin_Alert("DB not ready #2 : $aid / $AIpwd");
    else {
-     list($AIpass, $Xsuper_admintest)=sql_fetch_row($result);
+     list($AIpass, $Xsuper_admintest) = sql_fetch_row($result);
+     
      if (md5($AIpass) == $AIpwd and $AIpass != '') {
         $admintest = true;
         $super_admintest = $Xsuper_admintest;
      } else
         Admin_Alert("Password in Cookies not Good #1 : $aid / $AIpwd");
    }
-   unset ($AIpass);
-   unset ($AIpwd);
-   unset ($Xadmin);
-   unset ($Xsuper_admintest);
+   
+   unset($AIpass);
+   unset($AIpwd);
+   unset($Xadmin);
+   unset($Xsuper_admintest);
 }
 ?>

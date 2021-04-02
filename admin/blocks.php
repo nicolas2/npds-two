@@ -9,61 +9,85 @@
  * @date 02/04/2021
  */
 
-if (!stristr($_SERVER['PHP_SELF'],"admin.php")) Access_Error();
-$f_meta_nom ='blocks';
+if (!stristr($_SERVER['PHP_SELF'], "admin.php")) 
+   Access_Error();
+
+$f_meta_nom = 'blocks';
 $f_titre = adm_translate('Gestion des blocs');
+
 //==> controle droit
-admindroits($aid,$f_meta_nom);
+admindroits($aid, $f_meta_nom);
 //<== controle droit
 
 global $NPDS_Prefix, $language;
 
 $hlpfile = "admin/manuels/$language/blocks.html";
 
-function groupe($groupe) {
-   $les_groupes=explode(',',$groupe);
-   $mX=liste_group();
-   $nbg=0; $str='';
+function groupe($groupe) 
+{
+   $les_groupes = explode(',', $groupe);
+   $mX = liste_group();
+   $nbg = 0; 
+   $str = '';
+
    foreach($mX as $groupe_id => $groupe_name) {
-      $selectionne=0;
+      $selectionne = 0;
       if ($les_groupes) {
          foreach ($les_groupes as $groupevalue) {
-            if (($groupe_id==$groupevalue) and ($groupe_id!=0)) $selectionne=1;
+            if (($groupe_id == $groupevalue) and ($groupe_id != 0)) 
+               $selectionne = 1;
          }
       }
-      if ($selectionne==1)
-         $str.='
+
+      if ($selectionne == 1)
+         $str .= '
          <option value="'.$groupe_id.'" selected="selected">'.$groupe_name.'</option>';
       else
-         $str.='
+         $str .= '
          <option value="'.$groupe_id.'">'.$groupe_name.'</option>';
+      
       $nbg++;
    }
-   if ($nbg>5) $nbg=5;
+
+   if ($nbg > 5) 
+      $nbg = 5;
+
    return ('
    <select multiple="multiple" class="form-control" name="Mmember[]" size="'.$nbg.'">
    '.$str.'
    </select>');
 }
 
-function droits_bloc($member,$j,$lb) {
+function droits_bloc($member,$j,$lb) 
+{
    echo '
    <div class="form-group">
       <div class="custom-control custom-radio custom-control-inline">';
-   if ($member==-127) $checked=' checked="checked"'; else $checked='';
+   
+   if ($member == -127) 
+      $checked = ' checked="checked"'; 
+   else 
+      $checked = '';
+
    echo '
          <input type="radio" id="adm'.$j.$lb.'" name="members" value="-127" '.$checked.' class="custom-control-input" />
          <label class="custom-control-label" for="adm'.$j.$lb.'">'.adm_translate("Administrateurs").'</label>
       </div>
       <div class="custom-control custom-radio custom-control-inline">';
-   if ($member==-1) $checked=' checked="checked"'; else $checked='';
+   
+   if ($member == -1) 
+      $checked = ' checked="checked"'; 
+   else 
+      $checked = '';
+   
    echo '
          <input type="radio" id="ano'.$j.$lb.'" name="members" value="-1" '.$checked.' class="custom-control-input" />
          <label class="custom-control-label" for="ano'.$j.$lb.'">'.adm_translate("Anonymes").'</label>
       </div>';
    echo '
       <div class="custom-control custom-radio custom-control-inline">';
-   if ($member>0) {
+   
+   if ($member > 0) {
       echo '
          <input type="radio" id="mem'.$j.$lb.'" name="members" value="1" checked="checked" class="custom-control-input"/>
          <label class="custom-control-label" for="mem'.$j.$lb.'">'.adm_translate("Membres").'</label>
@@ -80,7 +104,11 @@ function droits_bloc($member,$j,$lb) {
       </div>
    </div>';
    } else {
-      if ($member==0) $checked=' checked="checked"'; else $checked='';
+      if ($member == 0) 
+         $checked = ' checked="checked"'; 
+      else 
+         $checked = '';
+
       echo '
          <input type="radio" id="mem'.$j.$lb.'" name="members" value="1" class="custom-control-input" />
          <label class="custom-control-label" for="mem'.$j.$lb.'">'.adm_translate("Membres").'</label>
@@ -99,18 +127,23 @@ function droits_bloc($member,$j,$lb) {
    }
 }
 
-function blocks() {
+function blocks() 
+{
   global $hlpfile, $NPDS_Prefix, $f_meta_nom, $f_titre, $adminimg, $aid;
+
   include("header.php");
+
   GraphicAdmin($hlpfile);
-  adminhead ($f_meta_nom, $f_titre, $adminimg);
+  adminhead($f_meta_nom, $f_titre, $adminimg);
 
    echo '
    <hr />
    <h3>'.adm_translate("Edition des Blocs de gauche").'</h3>';
+   
    $result = sql_query("SELECT id, title, content, member, Lindex, cache, actif, aide, css FROM ".$NPDS_Prefix."lblocks ORDER BY Lindex ASC");
-   $num_row=sql_num_rows($result);
-   if ($num_row>0) {
+   $num_row = sql_num_rows($result);
+   
+   if ($num_row > 0) {
       echo '
    <script type="text/javascript">
       //<![CDATA[
@@ -152,39 +185,48 @@ function blocks() {
          </tr>
       </thead>
       <tbody>';
-      $j=0;
+      
+      $j = 0;
       while (list($id, $title, $content, $member, $Lindex, $Scache, $Sactif, $BLaide, $css) = sql_fetch_row($result)) {
-         $funct='';
-         if ($title=='') {
-            //$title=adm_translate("Sans nom");
-            $pos_func=strpos($content,'function#');
-            $pos_nl=strpos($content,chr(13),$pos_func);
-            if ($pos_func!==false) {
-               $funct='<span style="font-size: 0.65rem;"> (';
-               if ($pos_nl!==false)
-                  $funct.=substr($content,$pos_func, $pos_nl-$pos_func);
+         $funct = '';
+         
+         if ($title == '') {
+            //$title = adm_translate("Sans nom");
+            $pos_func = strpos($content, 'function#');
+            $pos_nl = strpos($content, chr(13), $pos_func);
+            
+            if ($pos_func !== false) {
+               $funct = '<span style="font-size: 0.65rem;"> (';
+               if ($pos_nl !== false)
+                  $funct .= substr($content, $pos_func, $pos_nl-$pos_func);
                else
-                  $funct.=substr($content,$pos_func);
-               $funct.=')</span>';
+                  $funct .= substr($content, $pos_func);
+               
+               $funct .= ')</span>';
             }
-            $funct=adm_translate("Sans nom").$funct;
+            $funct = adm_translate("Sans nom").$funct;
          }
+
          if ($Sactif) 
          echo '
          <tr class="table-success">'; 
          else 
          echo '
          <tr class="table-danger">';
+         
          echo '
             <td align="left">
                <a class="tog" id="show_bloga_'.$id.'" title="'.adm_translate("Déplier la liste").'"><i id="i_bloga_'.$id.'" class="fa fa-caret-down fa-lg text-primary mr-1" ></i></a>&nbsp;';
+         
          echo aff_langue($title).' '.$funct.'</td>';
+         
          if ($Sactif)
             echo '
             <td class="d-none d-sm-table-cell text-center">'.adm_translate("Oui").'</td>';
          else
             echo '
             <td class="text-danger d-none d-sm-table-cell text-center">'.adm_translate("Non").'</td>';
+         
          echo '
             <td class="d-none d-sm-table-cell" align="right">'.$Lindex.'</td>
             <td class="d-none d-sm-table-cell" align="right">'.$Scache.'</td>
@@ -219,7 +261,9 @@ function blocks() {
                         </fieldset>
                         <fieldset>
                            <legend>'.adm_translate("Droits").'</legend>';
-                        echo droits_bloc($member,$j,'L');
+                        
+                        echo droits_bloc($member, $j, 'L');
+                        
                         echo '
                         </fieldset>
                         <div class="form-group row">
@@ -251,7 +295,10 @@ function blocks() {
                            <div class="form-group ">
                               <div class="custom-control custom-checkbox" >
                                  <input type="checkbox" class="custom-control-input" id="Sactif'.$j.'L" name="Sactif" value="ON" ';
-                              if ($Sactif) echo 'checked="checked" ';
+                              
+                              if ($Sactif) 
+                                 echo 'checked="checked" ';
+                              
                               echo '/>
                                  <label class="custom-control-label" for="Sactif'.$j.'L">'.adm_translate("Activer le Bloc").'</label>
                               </div>
@@ -259,7 +306,10 @@ function blocks() {
                            <div class="form-group ">
                               <div class="custom-control custom-checkbox" >
                                  <input type="checkbox" class="custom-control-input" id="css'.$j.'L" name="css" value="1" ';
-                              if ($css=='1') echo 'checked="checked" ';
+                              
+                              if ($css == '1') 
+                                 echo 'checked="checked" ';
+                              
                               echo '/>
                                  <label class="custom-control-label" for="css'.$j.'L">'.adm_translate("CSS Specifique").'</label>
                               </div>
@@ -283,6 +333,7 @@ function blocks() {
          </tr>';
       $j++;
       }
+
       echo '
       </tbody>
    </table>
@@ -292,9 +343,11 @@ function blocks() {
    echo '
    <hr />
    <h3>'.adm_translate("Edition des Blocs de droite").'</h3>';
+   
    $result = sql_query("SELECT id, title, content, member, Rindex, cache, actif, aide, css FROM ".$NPDS_Prefix."rblocks ORDER BY Rindex ASC");
-   $num_row=sql_num_rows($result);
-   if ($num_row>0) {
+   $num_row = sql_num_rows($result);
+   
+   if ($num_row > 0) {
       echo '
    <script type="text/javascript">
       //<![CDATA[
@@ -322,39 +375,46 @@ function blocks() {
          </tr>
       </thead>
       <tbody>';
-      $j=0;
+      $j = 0;
       while (list($id, $title, $content, $member, $Rindex, $Scache, $Sactif, $BRaide, $css) = sql_fetch_row($result)) {
-         $funct='';
-         if ($title=='') {
-            //$title=adm_translate("Sans nom");
-            $pos_func=strpos($content,'function#');
-            $pos_nl=strpos($content,chr(13),$pos_func);
-            if ($pos_func!==false) {
-               $funct='<span style="font-size: 0.65rem"> (';
-               if ($pos_nl!==false)
-                  $funct.=substr($content,$pos_func, $pos_nl-$pos_func);
+         $funct = '';
+         
+         if ($title == '') {
+            //$title = adm_translate("Sans nom");
+            $pos_func = strpos($content, 'function#');
+            $pos_nl = strpos($content, chr(13), $pos_func);
+            if ($pos_func !== false) {
+               $funct = '<span style="font-size: 0.65rem"> (';
+               if ($pos_nl !== false)
+                  $funct .= substr($content, $pos_func, $pos_nl-$pos_func);
                else
-                  $funct.=substr($content,$pos_func);
-               $funct.=')</span>';
+                  $funct .= substr($content, $pos_func);
+               
+               $funct .= ')</span>';
             }
-            $funct=adm_translate("Sans nom").$funct;
+            $funct = adm_translate("Sans nom").$funct;
          }
+
          if ($Sactif) 
             echo '
          <tr class="table-success mw-100">'; 
          else 
             echo '
          <tr class="table-danger class="mw-100">';
+         
          echo '
             <td align="left">
                <a class="tog" id="show_blodr_'.$id.'" title="'.adm_translate("Déplier la liste").'"><i id="i_blodr_'.$id.'" class="fa fa-caret-down fa-lg text-primary" ></i></a>&nbsp;';
+         
          echo aff_langue($title).' '.$funct.'</td>';
+         
          if ($Sactif)
             echo '
             <td class="d-none d-sm-table-cell text-center" >'.adm_translate("Oui").'</td>';
          else
             echo '
             <td class="text-danger d-none d-sm-table-cell text-center">'.adm_translate("Non").'</td>';
+         
          echo '
             <td class="d-none d-sm-table-cell text-right">'.$Rindex.'</td>
             <td class="d-none d-sm-table-cell text-right">'.$Scache.'</td>
@@ -389,7 +449,9 @@ function blocks() {
                         </fieldset>
                         <fieldset>
                            <legend>'.adm_translate("Droits").'</legend>';
-         echo droits_bloc($member,$j,'R');
+         
+         echo droits_bloc($member, $j, 'R');
+         
          echo '
                         </fieldset>
                         <div class="form-group row">
@@ -421,7 +483,10 @@ function blocks() {
                            <div class="form-group">
                               <div class="custom-control custom-checkbox" >
                                  <input type="checkbox" class="custom-control-input" id="Sactif'.$j.'R" name="Sactif" value="ON" ';
-         if ($Sactif) echo 'checked="checked" ';
+         
+         if ($Sactif) 
+            echo 'checked="checked" ';
+         
          echo '/>
                                  <label class="custom-control-label" for="Sactif'.$j.'R">'.adm_translate("Activer le Bloc").'</label>
                               </div>
@@ -429,7 +494,10 @@ function blocks() {
                            <div class="form-group">
                               <div class="custom-control custom-checkbox" >
                                  <input type="checkbox" class="custom-control-input" id="css'.$j.'R" name="css" value="1" ';
-         if ($css=="1") echo 'checked="checked" ';
+         
+         if ($css == "1") 
+            echo 'checked="checked" ';
+         
          echo '/>
                                  <label class="custom-control-label" for="css'.$j.'R"> '.adm_translate("CSS Specifique").'</label>
                               </div>
@@ -453,10 +521,12 @@ function blocks() {
          </tr>';
       $j++;
       }
+
       echo '
       </tbody>
    </table>';
    }
+
    echo '
    <hr />
    <h3 class="my-3">'.adm_translate("Créer un nouveau Bloc").'</h3>
@@ -488,7 +558,9 @@ function blocks() {
             </fieldset>
             <fieldset>
                <legend>'.adm_translate("Droits").'</legend>';
-   echo droits_bloc('0','','');
+   
+   echo droits_bloc('0', '', '');
+   
    echo '
             </fieldset>
             <div class="form-group row">
@@ -542,15 +614,18 @@ function blocks() {
         </div>
      </div>
    </form>';
-   $arg1='
+
+   $arg1 = '
       var formulid = ["blocknewblock"];
       inpandfieldlen("nblock_title",1000);
 
 ';
-   adminfoot('fv','',$arg1,'');
+
+   adminfoot('fv', '', $arg1, '');
 }
 
 switch ($op) {
+   
    case 'blocks':
       blocks();
    break;

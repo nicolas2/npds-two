@@ -9,20 +9,28 @@
  * @date 02/04/2021
  */
 
-if (!stristr($_SERVER['PHP_SELF'],"admin.php")) Access_Error();
-$f_meta_nom ='HeadlinesAdmin';
+if (!stristr($_SERVER['PHP_SELF'], "admin.php")) 
+   Access_Error();
+
+$f_meta_nom = 'HeadlinesAdmin';
 $f_titre = adm_translate("Grands Titres de sites de News");
+
 //==> controle droit
-admindroits($aid,$f_meta_nom);
+admindroits($aid, $f_meta_nom);
 //<== controle droit
+//
 global $language;
 $hlpfile = "admin/manuels/$language/headlines.html";
 
-function HeadlinesAdmin() {
+function HeadlinesAdmin() 
+{
    global $hlpfile, $NPDS_Prefix, $f_meta_nom, $f_titre, $adminimg;
+
    include ("header.php");
+
    GraphicAdmin($hlpfile);
-   adminhead ($f_meta_nom, $f_titre, $adminimg);
+   adminhead($f_meta_nom, $f_titre, $adminimg);
+
    echo'
    <hr />
    <h3 class="mb-3">'.adm_translate("Liste des Grands Titres de sites de News").'</h3>
@@ -37,6 +45,7 @@ function HeadlinesAdmin() {
          </tr>
       </thead>
       <tbody>';
+
    $result = sql_query("SELECT hid, sitename, url, headlinesurl, status FROM ".$NPDS_Prefix."headlines ORDER BY hid");
    while(list($hid, $sitename, $url, $headlinesurl, $status) = sql_fetch_row($result)) {
       echo '
@@ -44,11 +53,13 @@ function HeadlinesAdmin() {
             <td>'.$hid.'</td>
             <td>'.$sitename.'</td>
             <td>'.$url.'</td>';
+      
       if($status == 1) {
       $status = '<span class="text-success">'.adm_translate("Actif(s)").'</span>';
       } else {
       $status = '<span class="text-danger">'.adm_translate("Inactif(s)").'</span>';
       }
+      
       echo '
             <td>'.$status.'</td>
             <td>
@@ -58,6 +69,7 @@ function HeadlinesAdmin() {
             </td>
          </tr>';
       }
+
       echo '
       </tbody>
    </table>
@@ -102,6 +114,7 @@ function HeadlinesAdmin() {
          <input type="hidden" name="op" value="HeadlinesAdd" />
       </fieldset>
    </form>';
+
    echo '
    <script type="text/javascript">
    //<![CDATA[
@@ -114,16 +127,22 @@ function HeadlinesAdmin() {
    //]]>
    </script>';
 
-   adminfoot('fv','','','');
+   adminfoot('fv', '', '', '');
 }
 
-function HeadlinesEdit($hid) {
+function HeadlinesEdit($hid) 
+{
    global $hlpfile, $NPDS_Prefix, $f_meta_nom, $f_titre, $adminimg;
+
    include ("header.php");
+
    GraphicAdmin($hlpfile);
+
    $result = sql_query("SELECT sitename, url, headlinesurl, status FROM ".$NPDS_Prefix."headlines WHERE hid='$hid'");
    list($xsitename, $url, $headlinesurl, $status) = sql_fetch_row($result);
-   adminhead ($f_meta_nom, $f_titre, $adminimg);
+   
+   adminhead($f_meta_nom, $f_titre, $adminimg);
+   
    echo '
    <hr />
    <h3 class="mb-3">'.adm_translate("Editer paramètres Grand Titre").'</h3>
@@ -155,11 +174,13 @@ function HeadlinesEdit($hid) {
             <label class="col-form-label col-sm-4" for="status">'.adm_translate("Etat").'</label>
             <div class="col-sm-8">
                <select class="custom-select form-control" name="status">';
+   
    if ($status == 1) {
       $sel_a = 'selected="selected"';
    } else {
       $sel_i = 'selected="selected"';
    }
+
    echo '
                   <option name="status" value="1" '.$sel_a.'>'.adm_translate("Actif(s)").'</option>
                   <option name="status" value="0" '.$sel_i.'>'.adm_translate("Inactif(s)").'</option>
@@ -183,37 +204,51 @@ function HeadlinesEdit($hid) {
       });
    //]]>
    </script>';
-   adminfoot('fv','','','');
+   
+   adminfoot('fv', '', '', '');
 }
 
-function HeadlinesSave($hid, $xsitename, $url, $headlinesurl, $status) {
+function HeadlinesSave($hid, $xsitename, $url, $headlinesurl, $status) 
+{
     global $NPDS_Prefix;
+    
     sql_query("UPDATE ".$NPDS_Prefix."headlines SET sitename='$xsitename', url='$url', headlinesurl='$headlinesurl', status='$status' WHERE hid='$hid'");
+    
     Header("Location: admin.php?op=HeadlinesAdmin");
 }
 
-function HeadlinesAdd($xsitename, $url, $headlinesurl, $status) {
+function HeadlinesAdd($xsitename, $url, $headlinesurl, $status) 
+{
     global $NPDS_Prefix;
+    
     sql_query("INSERT INTO ".$NPDS_Prefix."headlines VALUES (NULL, '$xsitename', '$url', '$headlinesurl', '$status')");
+    
     Header("Location: admin.php?op=HeadlinesAdmin");
 }
 
-function HeadlinesDel($hid, $ok=0) {
+function HeadlinesDel($hid, $ok=0) 
+{
    global $NPDS_Prefix, $f_meta_nom, $f_titre, $adminimg;
-   if ($ok==1) {
+
+   if ($ok == 1) {
       sql_query("DELETE FROM ".$NPDS_Prefix."headlines WHERE hid='$hid'");
+      
       Header("Location: admin.php?op=HeadlinesAdmin");
    } else {
       global $hlpfile;
+
       include("header.php");
+
       GraphicAdmin($hlpfile);
       adminhead($f_meta_nom, $f_titre, $adminimg);
+      
       echo '
       <hr />
       <p class="alert alert-danger">
          <strong class="d-block mb-1">'.adm_translate("Etes-vous sûr de vouloir supprimer cette boîte de Titres ?").'</strong>
          <a class="btn btn-danger btn-sm" href="admin.php?op=HeadlinesDel&amp;hid='.$hid.'&amp;ok=1" role="button">'.adm_translate("Oui").'</a>&nbsp;<a class="btn btn-secondary btn-sm" href="admin.php?op=HeadlinesAdmin" role="button">'.adm_translate("Non").'</a>
       </p>';
+      
       include("footer.php");
    }
 }
@@ -222,15 +257,19 @@ switch ($op) {
    case 'HeadlinesDel':
       HeadlinesDel($hid, $ok);
    break;
+
    case 'HeadlinesAdd':
       HeadlinesAdd($xsitename, $url, $headlinesurl, $status);
    break;
+
    case 'HeadlinesSave':
       HeadlinesSave($hid, $xsitename, $url, $headlinesurl, $status);
    break;
+   
    case 'HeadlinesAdmin':
       HeadlinesAdmin();
    break;
+
    case 'HeadlinesEdit':
       HeadlinesEdit($hid);
    break;

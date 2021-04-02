@@ -9,21 +9,30 @@
  * @date 02/04/2021
  */
 
-if (!stristr($_SERVER['PHP_SELF'],"admin.php")) Access_Error();
-$f_meta_nom ='Ephemerids';
+if (!stristr($_SERVER['PHP_SELF'], "admin.php")) 
+  Access_Error();
+
+$f_meta_nom = 'Ephemerids';
 $f_titre = adm_translate("Ephémérides");
+
 //==> controle droit
-admindroits($aid,$f_meta_nom);
+admindroits($aid, $f_meta_nom);
 //<== controle droit
+//
 global $language;
 $hlpfile = "admin/manuels/$language/ephem.html";
 
-function Ephemerids() {
+function Ephemerids() 
+{
    global $hlpfile, $f_meta_nom, $f_titre, $adminimg;
+
    include ("header.php");
+
    GraphicAdmin($hlpfile);
-   adminhead ($f_meta_nom, $f_titre, $adminimg);
+   adminhead($f_meta_nom, $f_titre, $adminimg);
+   
    $nday = '1';
+   
    echo '
    <hr />
    <h3>'.adm_translate("Ajouter un éphéméride").'</h3>
@@ -32,24 +41,30 @@ function Ephemerids() {
          <div class="col-4">
             <label class="col-form-label" for="did">'.adm_translate("Jour").'</label>
             <select class="custom-select form-control" id="did" name="did">';
-   while ($nday<=31) {
+   
+   while ($nday <= 31) {
       echo '
                <option name="did">'.$nday.'</option>';
       $nday++;
    }
+
    echo '
             </select>
          </div>';
+    
     $nmonth = "1";
+    
     echo '
          <div class="col-4">
             <label class="col-form-label" for="mid">'.adm_translate("Mois").'</label>
             <select class="custom-select form-control" id="mid" name="mid">';
-    while ($nmonth<=12) {
+    
+    while ($nmonth <= 12) {
        echo '
                <option name="mid">'.$nmonth.'</option>';
        $nmonth++;
     }
+
     echo '
             </select>
          </div>
@@ -74,30 +89,38 @@ function Ephemerids() {
    <hr />
    <h3>'.adm_translate("Maintenance des Ephémérides (Editer/Effacer)").'</h3>
    <form action="admin.php" method="post">';
+   
    $nday = "1";
+   
    echo '
       <div class="form-group row">
          <div class="col-4">
             <label class="col-form-label" for="did">'.adm_translate("Jour").'</label>
             <select class="custom-select form-control" id="did" name="did">';
-   while ($nday<=31) {
+   
+   while ($nday <= 31) {
       echo '
                <option name="did">'.$nday.'</option>';
       $nday++;
    }
+
     echo '
             </select>
          </div>';
+    
     $nmonth = "1";
+    
     echo '
          <div class="col-4">
             <label class="col-form-label" for="mid">'.adm_translate("Mois").'</label>
             <select class="custom-select form-control" id="mid" name="mid">';
-    while ($nmonth<=12) {
+    
+    while ($nmonth <= 12) {
        echo '
                <option name="mid">'.$nmonth.'</option>';
        $nmonth++;
     }
+
     echo '
             </select>
          </div>
@@ -109,23 +132,34 @@ function Ephemerids() {
          </div>
       </div>
    </form>';
-    adminfoot('','','','');
+    
+    adminfoot('', '', '', '');
 }
 
-function Ephemeridsadd($did, $mid, $yid, $content) {
+function Ephemeridsadd($did, $mid, $yid, $content) 
+{
    global $NPDS_Prefix, $f_meta_nom;
+
    $content = stripslashes(FixQuotes($content)."");
    sql_query("INSERT into ".$NPDS_Prefix."ephem VALUES (NULL, '$did', '$mid', '$yid', '$content')");
+   
    Header("Location: admin.php?op=Ephemerids");
 }
 
-function Ephemeridsmaintenance($did, $mid) {
+function Ephemeridsmaintenance($did, $mid) 
+{
    global $hlpfile, $NPDS_Prefix, $f_meta_nom, $f_titre, $adminimg;
-   $resultX=sql_query("SELECT eid, did, mid, yid, content FROM ".$NPDS_Prefix."ephem WHERE did='$did' AND mid='$mid' ORDER BY yid ASC");
-   if (!sql_num_rows($resultX)) header("location: admin.php?op=Ephemerids");
+
+   $resultX = sql_query("SELECT eid, did, mid, yid, content FROM ".$NPDS_Prefix."ephem WHERE did='$did' AND mid='$mid' ORDER BY yid ASC");
+   
+   if (!sql_num_rows($resultX)) 
+    header("location: admin.php?op=Ephemerids");
+   
    include ("header.php");
+   
    GraphicAdmin($hlpfile);
-   adminhead ($f_meta_nom, $f_titre, $adminimg);
+   adminhead($f_meta_nom, $f_titre, $adminimg);
+   
    echo '
    <hr />
    <h3>'.adm_translate("Maintenance des Ephémérides").'</h3>
@@ -147,25 +181,35 @@ function Ephemeridsmaintenance($did, $mid) {
             <td><a href="admin.php?op=Ephemeridsedit&amp;eid='.$eid.'&amp;did='.$did.'&amp;mid='.$mid.'" title="'.adm_translate("Editer").'" data-toggle="tooltip" ><i class="fa fa-edit fa-lg mr-2"></i></a>&nbsp;<a href="admin.php?op=Ephemeridsdel&amp;eid='.$eid.'&amp;did='.$did.'&amp;mid='.$mid.'" title="'.adm_translate("Effacer").'" data-toggle="tooltip"><i class="far fa-trash-alt fa-lg text-danger"></i></a>
          </tr>';
    }
+
    echo '
         </tbody>
     </table>';
-    adminfoot('','','','');
+
+    adminfoot('', '', '', '');
 }
 
-function Ephemeridsdel($eid, $did, $mid) {
+function Ephemeridsdel($eid, $did, $mid) 
+{
    global $NPDS_Prefix;
+
    sql_query("DELETE FROM ".$NPDS_Prefix."ephem WHERE eid='$eid'");
+
    Header("Location: admin.php?op=Ephemeridsmaintenance&did=$did&mid=$mid");
 }
 
-function Ephemeridsedit($eid, $did, $mid) {
+function Ephemeridsedit($eid, $did, $mid) 
+{
    global $hlpfile, $NPDS_Prefix, $f_meta_nom, $f_titre, $adminimg;
+
    include ("header.php");
+
    GraphicAdmin($hlpfile);
-   adminhead ($f_meta_nom, $f_titre, $adminimg);
-   $result=sql_query("SELECT yid, content FROM ".$NPDS_Prefix."ephem WHERE eid='$eid'");
+   adminhead($f_meta_nom, $f_titre, $adminimg);
+
+   $result = sql_query("SELECT yid, content FROM ".$NPDS_Prefix."ephem WHERE eid='$eid'");
    list($yid, $content) = sql_fetch_row($result);
+   
    echo '
    <hr />
    <h3>'.adm_translate("Editer éphéméride").'</h3>
@@ -192,13 +236,17 @@ function Ephemeridsedit($eid, $did, $mid) {
          </div>
       </div>
    </form>';
-   adminfoot('','','','');
+
+   adminfoot('', '', '', '');
 }
 
-function Ephemeridschange($eid, $did, $mid, $yid, $content) {
+function Ephemeridschange($eid, $did, $mid, $yid, $content) 
+{
    global $hlpfile, $NPDS_Prefix, $f_meta_nom, $f_titre, $adminimg;
+
    $content = stripslashes(FixQuotes($content)."");
    sql_query("UPDATE ".$NPDS_Prefix."ephem SET yid='$yid', content='$content' WHERE eid='$eid'");
+   
    Header("Location: admin.php?op=Ephemeridsmaintenance&did=$did&mid=$mid");
 }
 
@@ -206,18 +254,23 @@ switch ($op) {
    case 'Ephemeridsedit':
         Ephemeridsedit($eid, $did, $mid);
         break;
+
    case 'Ephemeridschange':
         Ephemeridschange($eid, $did, $mid, $yid, $content);
         break;
+
    case 'Ephemeridsdel':
         Ephemeridsdel($eid, $did, $mid);
         break;
+
    case 'Ephemeridsmaintenance':
         Ephemeridsmaintenance($did, $mid);
         break;
+
    case 'Ephemeridsadd':
         Ephemeridsadd($did, $mid, $yid, $content);
         break;
+        
    case 'Ephemerids':
         Ephemerids();
         break;

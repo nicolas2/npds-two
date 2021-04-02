@@ -9,21 +9,28 @@
  * @date 02/04/2021
  */
 
-if (!stristr($_SERVER['PHP_SELF'],"admin.php")) Access_Error();
-$f_meta_nom ='FaqAdmin';
+if (!stristr($_SERVER['PHP_SELF'], "admin.php")) 
+   Access_Error();
+
+$f_meta_nom = 'FaqAdmin';
 $f_titre = adm_translate("Faq");
+
 //==> controle droit
-admindroits($aid,$f_meta_nom);
+admindroits($aid, $f_meta_nom);
 //<== controle droit
 
 global $language, $adminimg, $admf_ext;
 $hlpfile = "admin/manuels/$language/faqs.html";
 
-function FaqAdmin() {
+function FaqAdmin() 
+{
    global $hlpfile, $NPDS_Prefix, $admf_ext, $f_meta_nom, $f_titre, $adminimg;
+
    include ("header.php");
+
    GraphicAdmin($hlpfile);
-   adminhead ($f_meta_nom, $f_titre, $adminimg);
+   adminhead($f_meta_nom, $f_titre, $adminimg);
+   
    echo '
    <hr />
    <h3 class="mb-3">'.adm_translate("Liste des catégories").'</h3>
@@ -35,6 +42,7 @@ function FaqAdmin() {
          </tr>
       </thead>
       <tbody>';
+   
    $result = sql_query("SELECT id_cat, categories FROM ".$NPDS_Prefix."faqcategories order by id_cat ASC");
    while(list($id_cat, $categories) = sql_fetch_row($result)) {
       echo '
@@ -43,6 +51,7 @@ function FaqAdmin() {
             <td><a href="admin.php?op=FaqCatEdit&amp;id_cat='.$id_cat.'"><i class="fa fa-edit fa-lg" title="'.adm_translate("Editer").'" data-toggle="tooltip"></i></a> <a href="admin.php?op=FaqCatDel&amp;id_cat='.$id_cat.'&amp;ok=0"><i class="far fa-trash-alt fa-lg text-danger" title="'.adm_translate("Effacer").'" data-toggle="tooltip"></a></td>
          </tr>';
    }
+
    echo '
       </tbody>
    </table>
@@ -65,24 +74,32 @@ function FaqAdmin() {
          </div>
       </fieldset>
    </form>';  
-      $arg1='
+      
+      $arg1 = '
       var formulid = ["adminfaqcatad"];
       inpandfieldlen("categories",255);
    ';
-   adminfoot('fv','',$arg1,'');
+
+   adminfoot('fv', '', $arg1, '');
 }
 
-function FaqCatGo($id_cat) {
+function FaqCatGo($id_cat)
+{
    global $hlpfile, $NPDS_Prefix, $admf_ext, $f_meta_nom, $f_titre, $adminimg;
+
    include ("header.php");
+   
    GraphicAdmin($hlpfile);
-   $lst_qr ='';
+   
+   $lst_qr = '';
 
    $result = sql_query("SELECT fa.id, fa.question, fa.answer, fc.categories FROM ".$NPDS_Prefix."faqanswer fa LEFT JOIN ".$NPDS_Prefix."faqcategories fc ON fa.id_cat = fc.id_cat WHERE fa.id_cat='$id_cat' ORDER BY id");
+   
    while(list($id, $question, $answer, $categories) = sql_fetch_row($result)) {
       $faq_cat = aff_langue($categories);
       $answer = aff_code(aff_langue($answer));
-      $lst_qr.= '
+      
+      $lst_qr .= '
       <li id="qr_'.$id.'" class="list-group-item">
          <div class="topi">
             <h5 id="q_'.$id.'" class="list-group-item-heading"><a class="" href="admin.php?op=FaqCatGoEdit&amp;id='.$id.'" title="'.adm_translate("Editer la question réponse").'" data-toggle="tooltip">'.aff_langue($question).'</a></h5>
@@ -91,7 +108,9 @@ function FaqCatGo($id_cat) {
          </div>
       </li>';
    }
-   adminhead ($f_meta_nom, $f_titre, $adminimg);
+
+   adminhead($f_meta_nom, $f_titre, $adminimg);
+   
    echo '
    <hr />
    <h3 class="mb-3">'.$faq_cat.'</h3>
@@ -111,7 +130,9 @@ function FaqCatGo($id_cat) {
                <textarea class="tin form-control" id="answer" name="answer" rows="15"></textarea>
             </div>
          </div>';
-   echo aff_editeur("answer","false");
+   
+   echo aff_editeur("answer", "false");
+   
    echo '
          <div class="form-group row">
             <div class="col-sm-12 d-flex flex-row justify-content-left flex-wrap">
@@ -142,20 +163,27 @@ function FaqCatGo($id_cat) {
         });
       //]]>
    </script>';
-   $arg1='
+   
+   $arg1 = '
       var formulid = ["adminfaqquest"];
       inpandfieldlen("question",255);
    ';
-   adminfoot('fv','',$arg1,'');
+
+   adminfoot('fv', '', $arg1, '');
 }
 
-function FaqCatEdit($id_cat) {
+function FaqCatEdit($id_cat) 
+{
    global $hlpfile, $NPDS_Prefix, $admf_ext, $f_meta_nom, $f_titre, $adminimg;
+
    include ("header.php");
+
    GraphicAdmin($hlpfile);
-   adminhead ($f_meta_nom, $f_titre, $adminimg);
+   adminhead($f_meta_nom, $f_titre, $adminimg);
+   
    $result = sql_query("SELECT categories FROM ".$NPDS_Prefix."faqcategories WHERE id_cat='$id_cat'");
    list($categories) = sql_fetch_row($result);
+   
    echo '
    <hr />
    <h3 class="mb-3">'.adm_translate("Editer la catégorie").'</h3>
@@ -179,34 +207,42 @@ function FaqCatEdit($id_cat) {
          </div>
       </fieldset>
    </form>';
-   $arg1='
+   
+   $arg1 = '
       var formulid = ["adminfaqcated"];
       inpandfieldlen("categories",255);
    ';
-   adminfoot('fv','',$arg1,'');
+   
+   adminfoot('fv', '', $arg1, '');
 }
 
-function FaqCatGoEdit($id) {
+function FaqCatGoEdit($id) 
+{
    global $hlpfile, $NPDS_Prefix, $local_user_language, $admf_ext, $f_meta_nom, $f_titre, $adminimg;
+
    include ("header.php");
    GraphicAdmin($hlpfile);
 
    $result = sql_query("SELECT fa.question, fa.answer, fa.id_cat, fc.categories FROM ".$NPDS_Prefix."faqanswer fa LEFT JOIN ".$NPDS_Prefix."faqcategories fc ON fa.id_cat = fc.id_cat WHERE fa.id='$id'");
    list($question, $answer, $id_cat, $faq_cat) = sql_fetch_row($result);
 
-   adminhead ($f_meta_nom, $f_titre, $adminimg);
+   adminhead($f_meta_nom, $f_titre, $adminimg);
+   
    echo '
    <hr />
    <h3 class="mb-3">'.$faq_cat.'</h3>
    <h4>'.$question.'</h4>
    <h4>'.adm_translate("Prévisualiser").'</h4>';
+   
    echo'
    <label class="col-form-label" for="">'
       .aff_local_langue(adm_translate("Langue de Prévisualisation"),'','local_user_language').'
    </label>
    <div class="card card-body mb-3">
    <p>'.preview_local_langue($local_user_language, $question).'</p>';
-   $answer= aff_code($answer);
+   
+   $answer = aff_code($answer);
+   
    echo '<p>'.meta_lang(preview_local_langue($local_user_language, $answer)).'</p>
    </div>';
 
@@ -227,7 +263,7 @@ function FaqCatGoEdit($id) {
                <textarea class="tin form-control" name="answer" rows="15">'.$answer.'</textarea>
             </div>
          </div>
-         '.aff_editeur('answer','').'
+         '.aff_editeur('answer', '').'
          <div class="form-group row">
             <div class="col-sm-12 d-flex flex-row justify-content-center flex-wrap">
                <input type="hidden" name="id" value="'.$id.'" />
@@ -238,83 +274,116 @@ function FaqCatGoEdit($id) {
          </div>
       </fieldset>
    </form>';
-   $arg1='
+   
+   $arg1 = '
       var formulid = ["adminfaqquested"];
       inpandfieldlen("question",255);
    ';
-   adminfoot('fv','',$arg1,'');
+   
+   adminfoot('fv', '', $arg1, '');
 }
 
-function FaqCatSave($old_id_cat, $id_cat, $categories) {
+function FaqCatSave($old_id_cat, $id_cat, $categories) 
+{
    global $NPDS_Prefix;
+
    $categories = stripslashes(FixQuotes($categories));
-   if ($old_id_cat!=$id_cat) {
+   
+   if ($old_id_cat != $id_cat) {
       sql_query("UPDATE ".$NPDS_Prefix."faqanswer SET id_cat='$id_cat' WHERE id_cat='$old_id_cat'");
    }
+
    sql_query("UPDATE ".$NPDS_Prefix."faqcategories SET id_cat='$id_cat', categories='$categories' WHERE id_cat='$old_id_cat'");
+   
    Header("Location: admin.php?op=FaqAdmin");
 }
 
-function FaqCatGoSave($id, $question, $answer) {
+function FaqCatGoSave($id, $question, $answer) 
+{
    global $NPDS_Prefix;
+
    $question = stripslashes(FixQuotes($question));
    $answer = stripslashes(FixQuotes($answer));
+   
    sql_query("UPDATE ".$NPDS_Prefix."faqanswer SET question='$question', answer='$answer' WHERE id='$id'");
+   
    Header("Location: admin.php?op=FaqCatGoEdit&id=$id");
 }
 
-function FaqCatAdd($categories) {
+function FaqCatAdd($categories) 
+{
    global $NPDS_Prefix;
+
    $categories = stripslashes(FixQuotes($categories));
+   
    sql_query("INSERT INTO ".$NPDS_Prefix."faqcategories VALUES (NULL, '$categories')");
+   
    Header("Location: admin.php?op=FaqAdmin");
 }
 
-function FaqCatGoAdd($id_cat, $question, $answer) {
+function FaqCatGoAdd($id_cat, $question, $answer) 
+{
    global $NPDS_Prefix;
+
    $question = stripslashes(FixQuotes($question));
    $answer = stripslashes(FixQuotes($answer));
+   
    sql_query("INSERT INTO ".$NPDS_Prefix."faqanswer VALUES (NULL, '$id_cat', '$question', '$answer')");
+   
    Header("Location: admin.php?op=FaqCatGo&id_cat=$id_cat");
 }
 
-function FaqCatDel($id_cat, $ok=0) {
+function FaqCatDel($id_cat, $ok=0) 
+{
    global $NPDS_Prefix;
-   if($ok==1) {
+
+   if($ok == 1) {
       sql_query("DELETE FROM ".$NPDS_Prefix."faqcategories WHERE id_cat='$id_cat'");
       sql_query("DELETE FROM ".$NPDS_Prefix."faqanswer WHERE id_cat='$id_cat'");
+      
       Header("Location: admin.php?op=FaqAdmin");
    } else {
       global $hlpfile, $f_meta_nom, $f_titre, $adminimg;
+      
       include("header.php");
+      
       GraphicAdmin($hlpfile);
-      adminhead ($f_meta_nom, $f_titre, $adminimg);
+      adminhead($f_meta_nom, $f_titre, $adminimg);
+      
       echo '
       <hr />
       <div class="alert alert-danger">
          <p><strong>'.adm_translate("ATTENTION : êtes-vous sûr de vouloir effacer cette FAQ et toutes ses questions ?").'</strong></p>
          <a href="admin.php?op=FaqCatDel&amp;id_cat='.$id_cat.'&amp;ok=1" class="btn btn-danger btn-sm">'.adm_translate("Oui").'</a>&nbsp;<a href="admin.php?op=FaqAdmin" class="btn btn-secondary btn-sm">'.adm_translate("Non").'</a>
       </div>';
+      
       include("footer.php");
    }
 }
 
-function FaqCatGoDel($id, $ok=0) {
+function FaqCatGoDel($id, $ok=0) 
+{
    global $NPDS_Prefix;
-   if($ok==1) {
+
+   if($ok == 1) {
       sql_query("DELETE FROM ".$NPDS_Prefix."faqanswer WHERE id='$id'");
+      
       Header("Location: admin.php?op=FaqAdmin");
    } else {
       global $hlpfile, $f_meta_nom, $f_titre, $adminimg;
+      
       include("header.php");
+      
       GraphicAdmin($hlpfile);
-      adminhead ($f_meta_nom, $f_titre, $adminimg);
+      adminhead($f_meta_nom, $f_titre, $adminimg);
+      
       echo '
       <hr />
       <div class="alert alert-danger">
          <p><strong>'.adm_translate("ATTENTION : êtes-vous sûr de vouloir effacer cette question ?").'</strong></p>
          <a href="admin.php?op=FaqCatGoDel&amp;id='.$id.'&amp;ok=1" class="btn btn-danger btn-sm">'.adm_translate("Oui").'</a>&nbsp;<a href="admin.php?op=FaqAdmin" class="btn btn-secondary btn-sm">'.adm_translate("Non").'</a>
       </div>';
+      
       include("footer.php");
    }
 }

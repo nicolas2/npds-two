@@ -9,23 +9,32 @@
  * @date 02/04/2021
  */
 
-if (!stristr($_SERVER['PHP_SELF'],'admin.php')) Access_Error();
-$f_meta_nom ='mblock';
+if (!stristr($_SERVER['PHP_SELF'], 'admin.php')) 
+   Access_Error();
+
+$f_meta_nom = 'mblock';
 $f_titre = adm_translate("Bloc Principal");
+
 //==> controle droit
-admindroits($aid,$f_meta_nom);
+admindroits($aid, $f_meta_nom);
 //<== controle droit
+//
 global $language;
 $hlpfile = "admin/manuels/$language/mainblock.html";
 
-function mblock() {
+function mblock() 
+{
    global $hlpfile, $NPDS_Prefix, $f_meta_nom, $f_titre, $adminimg;
+
    include("header.php");
+
    GraphicAdmin($hlpfile);
    adminhead ($f_meta_nom, $f_titre, $adminimg);
+
    echo '
    <hr />
    <h3>'.adm_translate("Edition du Bloc Principal").'</h3>';
+   
    $result = sql_query("SELECT title, content FROM ".$NPDS_Prefix."block WHERE id=1");
    if (sql_num_rows($result) > 0) {
       while(list($title, $content) = sql_fetch_row($result)) {
@@ -60,23 +69,32 @@ function mblock() {
          </script>';
       }
    }
-   adminfoot('fv','','','');
+
+   adminfoot('fv', '', '', '');
 }
 
-function changemblock($title, $content) {
+function changemblock($title, $content) 
+{
    global $NPDS_Prefix;
+   
    $title = stripslashes(FixQuotes($title));
    $content = stripslashes(FixQuotes($content));
+   
    sql_query("UPDATE ".$NPDS_Prefix."block SET title='$title', content='$content' WHERE id='1'");
-   global $aid; Ecr_Log('security', "ChangeMainBlock($title) by AID : $aid", '');
+   
+   global $aid; 
+   Ecr_Log('security', "ChangeMainBlock($title) by AID : $aid", '');
+   
    Header("Location: admin.php?op=adminMain");
 }
 
 switch ($op) {
+
    case 'mblock':
       mblock();
    break;
-    case 'changemblock':
+
+   case 'changemblock':
       changemblock($title, $content);
    break;
 }

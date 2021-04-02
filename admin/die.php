@@ -9,9 +9,11 @@
  * @date 02/04/2021
  */
 
-   $Titlesitename='NPDS';
+   $Titlesitename = 'NPDS';
+   
    if (file_exists("config/meta.php"))
    include ("config/meta.php");
+   
    echo '
    </head>
    <body>

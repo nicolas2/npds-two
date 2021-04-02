@@ -9,23 +9,33 @@
  * @date 02/04/2021
  */
 
-if (!stristr($_SERVER['PHP_SELF'],'admin.php')) Access_Error();
-$f_meta_nom ='MetaTagAdmin';
+if (!stristr($_SERVER['PHP_SELF'], 'admin.php')) 
+   Access_Error();
+
+$f_meta_nom = 'MetaTagAdmin';
 $f_titre = adm_translate("Administration des MétaTags");
+
 //==> controle droit
-admindroits($aid,$f_meta_nom);
+admindroits($aid, $f_meta_nom);
 //<== controle droit
 
-function MetaTagAdmin($saved = false) {
+function MetaTagAdmin($saved = false) 
+{
    global $hlpfile, $f_meta_nom, $f_titre, $adminimg;
+
    $tags = GetMetaTags("config/meta.php");
+
    include("header.php");
+
    GraphicAdmin($hlpfile);
    adminhead ($f_meta_nom, $f_titre, $adminimg);
+   
    echo '
    <hr />';
+   
    if ($saved)
       echo '<div class="alert alert-success">'.adm_translate("Vos MétaTags ont été modifiés avec succès !").'</div>';
+   
    echo '
    <form id="metatagsadm" action="admin.php" method="post">
       <div class="form-group row">
@@ -136,6 +146,7 @@ function MetaTagAdmin($saved = false) {
          <label class="col-form-label" >'.adm_translate("Encodage").'</label>
          <span class="text-danger">utf8_encode() '.adm_translate("non disponible").'</span>';
    }
+
    echo '
       <div class="form-group row">
          <label class="col-form-label col-12" for="newtagdoctype">DOCTYPE</label>
@@ -156,7 +167,8 @@ function MetaTagAdmin($saved = false) {
          </div>
       </div>
    </form>';
-   $arg1='
+   
+   $arg1 = '
    var formulid = ["metatagsadm"];
    inpandfieldlen("newtagauthor",100);
    inpandfieldlen("newtagowner",100);
@@ -167,21 +179,23 @@ function MetaTagAdmin($saved = false) {
    inpandfieldlen("newtagcopyright",100);
    inpandfieldlen("newtagrevisitafter",30);
    ';
-   adminfoot('fv','',$arg1,'');
+   
+   adminfoot('fv', '', $arg1, '');
 }
 
-if (!stristr($_SERVER['PHP_SELF'],'admin.php')) Access_Error();
 include ("admin/settings_save.php");
 
 global $language;
 $hlpfile = "admin/manuels/$language/metatags.html";
 
-   settype($meta_saved,'string');
-   switch ($op) {
+settype($meta_saved, 'string');
+switch ($op) {
+
    case 'MetaTagSave':
       $meta_saved = MetaTagSave("config/meta.php", $newtag);
       header("location: admin.php?op=MetaTagAdmin");
    break;
+
    case 'MetaTagAdmin':
       MetaTagAdmin($meta_saved);
    break;

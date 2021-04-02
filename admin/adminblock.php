@@ -9,24 +9,34 @@
  * @date 02/04/2021
  */
 
-if (!stristr($_SERVER['PHP_SELF'],"admin.php")) Access_Error();
-$f_meta_nom ='ablock';
+if (!stristr($_SERVER['PHP_SELF'], "admin.php")) 
+   Access_Error();
+
+$f_meta_nom = 'ablock';
 $f_titre = adm_translate("Bloc Administration");
+
 //==> controle droit
-admindroits($aid,$f_meta_nom);
+admindroits($aid, $f_meta_nom);
 //<== controle droit
+//
 global $language;
 $hlpfile = "admin/manuels/$language/adminblock.html";
 
-function ablock() {
+function ablock() 
+{
    global $hlpfile, $NPDS_Prefix, $f_meta_nom, $f_titre, $adminimg;
+   
    include("header.php");
+   
    GraphicAdmin($hlpfile);
-   adminhead ($f_meta_nom, $f_titre, $adminimg);
+   adminhead($f_meta_nom, $f_titre, $adminimg);
+   
    echo '
       <hr />
       <h3>'.adm_translate("Editer le Bloc Administration").'</h3>';
+   
    $result = sql_query("SELECT title, content FROM ".$NPDS_Prefix."block WHERE id=2");
+   
    if (sql_num_rows($result) > 0) {
       while (list($title, $content) = sql_fetch_row($result)) {
          echo '
@@ -51,28 +61,38 @@ function ablock() {
                </div>
             </div>
          </form>';
-      $arg1='
+      
+      $arg1 = '
    var formulid = ["adminblock"];
    inpandfieldlen("title",1000);
    ';
       }
    }
-   adminfoot('fv','',$arg1,'');
+
+   adminfoot('fv', '', $arg1, '');
 }
 
-function changeablock($title, $content) {
+function changeablock($title, $content) 
+{
    global $NPDS_Prefix;
+
    $title = stripslashes(FixQuotes($title));
    $content = stripslashes(FixQuotes($content));
+   
    sql_query("UPDATE ".$NPDS_Prefix."block SET title='$title', content='$content' WHERE id='2'");
-   global $aid; Ecr_Log('security', "ChangeAdminBlock() by AID : $aid", '');
+   
+   global $aid; 
+   Ecr_Log('security', "ChangeAdminBlock() by AID : $aid", '');
+
    Header("Location: admin.php?op=adminMain");
 }
 
 switch ($op) {
+
    case 'ablock':
       ablock();
    break;
+   
    case 'changeablock':
       changeablock($title, $content);
    break;
