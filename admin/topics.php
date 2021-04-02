@@ -9,35 +9,49 @@
  * @date 02/04/2021
  */
 
-if (!stristr($_SERVER['PHP_SELF'],'admin.php')) Access_Error();
-$f_meta_nom ='topicsmanager';
+if (!stristr($_SERVER['PHP_SELF'], 'admin.php')) 
+  Access_Error();
+
+$f_meta_nom = 'topicsmanager';
 $f_titre = adm_translate("Gestion des sujets");
+
 //==> controle droit
-admindroits($aid,$f_meta_nom);
+admindroits($aid, $f_meta_nom);
 //<== controle droit
+//
 global $language;
 $hlpfile = "admin/manuels/$language/topics.html";
+
 function topicsmanager() {
    global $hlpfile, $tipath, $NPDS_Prefix, $f_meta_nom, $f_titre, $adminimg;
+   
    include("header.php");
+   
    GraphicAdmin($hlpfile);
+   
    $result = sql_query("SELECT topicid, topicname, topicimage, topictext FROM ".$NPDS_Prefix."topics ORDER BY topicname");
-   adminhead ($f_meta_nom, $f_titre, $adminimg);
-   settype($topicadmin,'string');
+   
+   adminhead($f_meta_nom, $f_titre, $adminimg);
+   
+   settype($topicadmin, 'string');
+   
    if (sql_num_rows($result) > 0) {
       echo '
    <hr />
    <h3 class="my-3">'.adm_translate("Sujets actifs").'<span class="badge badge-secondary float-right">'.sql_num_rows($result).'</span></h3>
    <div class="card-columns">';
+      
       while (list($topicid, $topicname, $topicimage, $topictext) = sql_fetch_row($result)) {
          echo '
    <div class="card card-body mb-2" id="top_'.$topicid.'">
       <div class=" topi">
          <div class="">';
-         if (($topicimage) or ($topicimage!=''))
+         
+         if (($topicimage) or ($topicimage != ''))
             echo '<a href="admin.php?op=topicedit&amp;topicid='.$topicid.'"><img class="img-thumbnail" style="height:80px;  max-width:120px" src="'.$tipath.$topicimage.'" data-toggle="tooltip" title="ID : '.$topicid.'" alt="'.$topicname.'" /></a>';
          else
             echo '<a href="admin.php?op=topicedit&amp;topicid='.$topicid.'"><img class="img-thumbnail" style="height:80px;  max-width:120px" src="'.$tipath.'topics.png" data-toggle="tooltip" title="ID : '.$topicid.'" alt="'.$topicname.'" /></a>';
+         
          echo '
          </div>
          <div class="">
@@ -49,6 +63,7 @@ function topicsmanager() {
    </div>';
        }
     }
+
     echo '
     </div>
    <hr />
@@ -89,6 +104,7 @@ function topicsmanager() {
          </div>
       </div>
    </form>';
+    
     echo'
    <script type="text/javascript">
       //<![CDATA[
@@ -103,6 +119,7 @@ function topicsmanager() {
         });
       //]]>
    </script>';
+   
    $fv_parametres = '
    topicadmin: {
       validators: {
@@ -144,33 +161,42 @@ function topicsmanager() {
 
 ';
 
-   $arg1='
+   $arg1 = '
    var formulid = ["topicmake"];
    inpandfieldlen("topicname",20);
    inpandfieldlen("topictext",250);
    inpandfieldlen("topicimage",20);
    inpandfieldlen("topicadmin",255);
    ';
-   echo auto_complete_multi('admin','aid','authors','topicadmin','');
+   echo auto_complete_multi('admin', 'aid', 'authors', 'topicadmin', '');
 
    sql_free_result($result);
-   adminfoot('fv',$fv_parametres,$arg1,'');
+   
+   adminfoot('fv', $fv_parametres, $arg1, '');
 }
 
-function topicedit($topicid) {
+function topicedit($topicid) 
+{
    global $hlpfile, $tipath, $NPDS_Prefix, $f_meta_nom, $f_titre, $adminimg, $radminsuper;
+
    include("header.php");
+
    GraphicAdmin($hlpfile);
+
    $result = sql_query("SELECT topicid, topicname, topicimage, topictext, topicadmin FROM ".$NPDS_Prefix."topics WHERE topicid='$topicid'");
    list($topicid, $topicname, $topicimage, $topictext, $topicadmin) = sql_fetch_row($result);
-   adminhead ($f_meta_nom, $f_titre, $adminimg);
+   
+   adminhead($f_meta_nom, $f_titre, $adminimg);
+   
    echo '
    <hr />
    <h3 class="mb-1">'.adm_translate("Editer le Sujet :").' <span class="text-muted">'.aff_langue($topicname).'</span></h3>';
-   if ($topicimage!='') {
+   
+   if ($topicimage != '') {
       echo '
    <div class="card card-body my-4 py-3"><img class="img-fluid mx-auto d-block" src="'.$tipath.$topicimage.'" alt="image-sujet" /></div>';
    }
+
    echo '
    <form action="admin.php" method="post" id="topicchange">
       <fieldset>
@@ -245,7 +271,9 @@ function topicedit($topicid) {
     echo '
     <hr />
     <h3 class="my-2">'.adm_translate("Gérer les Liens Relatifs : ").' <span class="text-muted">'.aff_langue($topicname).'</span></h3>';
-    $res=sql_query("SELECT rid, name, url FROM ".$NPDS_Prefix."related WHERE tid='$topicid'");
+    
+    $res = sql_query("SELECT rid, name, url FROM ".$NPDS_Prefix."related WHERE tid='$topicid'");
+    
     echo '
    <table id="tad_linkrel" data-toggle="table" data-striped="true" data-icons="icons" data-icons-prefix="fa">
       <thead>
@@ -254,6 +282,7 @@ function topicedit($topicid) {
          <th class="n-t-col-xs-2" data-halign="center" data-align="right">'.adm_translate('Fonctions').'</th>
       </thead>
       <tbody>';
+    
     while (list($rid, $name, $url) = sql_fetch_row($res)) {
        echo '
             <tr>
@@ -266,9 +295,11 @@ function topicedit($topicid) {
                 </td>
             </tr>';
     }
+
     echo '
         </tbody>
     </table>';
+   
    $fv_parametres = '
    topicadmin: {
       validators: {
@@ -305,7 +336,8 @@ function topicedit($topicid) {
          }
       }
    },';
-      $arg1='
+      
+      $arg1 = '
    var formulid = ["topicchange"];
    inpandfieldlen("topicname",20);
    inpandfieldlen("topictext",250);
@@ -313,30 +345,40 @@ function topicedit($topicid) {
    inpandfieldlen("name",30);
    inpandfieldlen("url",200);
    ';
-   echo auto_complete_multi('admin','aid','authors','topicadmin','');
-   adminfoot('fv',$fv_parametres,$arg1,'');
+   
+   echo auto_complete_multi('admin', 'aid', 'authors', 'topicadmin', '');
+   
+   adminfoot('fv', $fv_parametres, $arg1, '');
 }
 
-function relatededit($tid, $rid) {
+function relatededit($tid, $rid) 
+{
    global $hlpfile, $tipath, $NPDS_Prefix, $f_meta_nom, $f_titre, $adminimg;
 
    include("header.php");
+
    GraphicAdmin($hlpfile);
-   $result=sql_query("SELECT name, url FROM ".$NPDS_Prefix."related WHERE rid='$rid'");
+
+   $result = sql_query("SELECT name, url FROM ".$NPDS_Prefix."related WHERE rid='$rid'");
    list($name, $url) = sql_fetch_row($result);
-   $result2=sql_query("SELECT topictext, topicimage FROM ".$NPDS_Prefix."topics WHERE topicid='$tid'");
+   
+   $result2 = sql_query("SELECT topictext, topicimage FROM ".$NPDS_Prefix."topics WHERE topicid='$tid'");
    list($topictext, $topicimage) = sql_fetch_row($result2);
 
    adminhead ($f_meta_nom, $f_titre, $adminimg);
+   
    echo '
    <hr />
    <h3>'.adm_translate("Sujet : ").' '.$topictext.'</h3>
    <h4>'.adm_translate("Editer les Liens Relatifs").'</h4>';
-   if ($topicimage!="") {
+   
+   if ($topicimage != "") {
       echo '
    <div class="thumbnail">
       <img class="img-fluid " src="'.$tipath.$topicimage.'" alt="'.$topictext.'" />
-   </div>';}
+   </div>';
+   }
+   
    echo'
    <form class="form-horizontal" action="admin.php" method="post">
        <fieldset>
@@ -378,57 +420,85 @@ function relatededit($tid, $rid) {
       });
    //]]>
    </script>';
-   adminfoot('fv','','','');
+   
+   adminfoot('fv', '', '', '');
 }
 
-function relatedsave($tid, $rid, $name, $url) {
+function relatedsave($tid, $rid, $name, $url) 
+{
    global $NPDS_Prefix;
+
    sql_query("UPDATE ".$NPDS_Prefix."related SET name='$name', url='$url' WHERE rid='$rid'");
+   
    Header("Location: admin.php?op=topicedit&topicid=$tid");
 }
 
-function relateddelete($tid, $rid) {
+function relateddelete($tid, $rid) 
+{
    global $NPDS_Prefix;
+   
    sql_query("DELETE FROM ".$NPDS_Prefix."related WHERE rid='$rid'");
+   
    Header("Location: admin.php?op=topicedit&topicid=$tid");
 }
 
-function topicmake($topicname, $topicimage, $topictext, $topicadmin) {
+function topicmake($topicname, $topicimage, $topictext, $topicadmin) 
+{
    global $NPDS_Prefix;
+
    $topicname = stripslashes(FixQuotes($topicname));
    $topicimage = stripslashes(FixQuotes($topicimage));
    $topictext = stripslashes(FixQuotes($topictext));
+   
    sql_query("INSERT INTO ".$NPDS_Prefix."topics VALUES (NULL,'$topicname','$topicimage','$topictext','0', '$topicadmin')");
-   global $aid; Ecr_Log("security", "topicMake ($topicname) by AID : $aid", "");
-   $topicadminX = explode(",",$topicadmin);
+   
+   global $aid; 
+   Ecr_Log("security", "topicMake ($topicname) by AID : $aid", "");
+   
+   $topicadminX = explode(",", $topicadmin);
    array_pop($topicadminX);
+   
    for ($iX = 0; $iX < count($topicadminX); $iX++) {
       $nres = sql_num_rows(sql_query("SELECT * FROM ".$NPDS_Prefix."droits WHERE d_aut_aid='$topicadminX[$iX]' and d_droits=11112"));
-      if($nres == 0){
+      
+      if($nres == 0) {
          sql_query("INSERT INTO ".$NPDS_Prefix."droits VALUES ('$topicadminX[$iX]', '2', '11112')");
       }
    }
+
    Header("Location: admin.php?op=topicsmanager#Add");
 }
 
 function topicchange($topicid, $topicname, $topicimage, $topictext, $topicadmin, $name, $url) {
    global $NPDS_Prefix;
-   $topicadminX = explode(',',$topicadmin);
+   
+   $topicadminX = explode(',', $topicadmin);
    array_pop($topicadminX);
+   
    $res = sql_query("SELECT * FROM ".$NPDS_Prefix."droits WHERE d_droits=11112 AND d_fon_fid=2");
-   $d=array();$topad=array();
-   while ($d = sql_fetch_row($res)) {$topad[] = $d[0];}
-
-   foreach ($topicadminX as $value){
-      if (!in_array($value, $topad)) sql_query("INSERT INTO ".$NPDS_Prefix."droits VALUES ('$value', '2', '11112')");
+   $d = array();
+   $topad = array();
+   
+   while ($d = sql_fetch_row($res)) {
+    $topad[] = $d[0];
    }
-   foreach ($topad as $value){//pour chaque droit adminsujet on regarde le nom de l'adminsujet
+
+   foreach ($topicadminX as $value) {
+      if (!in_array($value, $topad)) 
+        sql_query("INSERT INTO ".$NPDS_Prefix."droits VALUES ('$value', '2', '11112')");
+   }
+
+   foreach ($topad as $value) {//pour chaque droit adminsujet on regarde le nom de l'adminsujet
+      
       if (!in_array($value, $topicadminX)) {//si le nom de l'adminsujet n'est pas dans les nouveaux adminsujet
-      //on cherche si il administre un aure sujet
-      $resu=sql_query("SELECT * FROM ".$NPDS_Prefix."topics WHERE topicadmin REGEXP '[[:<:]]".$value."[[:>:]]'");
-      $nbrow = sql_num_rows($resu);
-      list($tid) = sql_fetch_row($resu);
-      if( ($nbrow==1) and ($topicid==$tid) ) {sql_query("DELETE FROM ".$NPDS_Prefix."droits WHERE d_aut_aid='$value' AND d_droits=11112 AND d_fon_fid=2");}
+        //on cherche si il administre un aure sujet
+        $resu = sql_query("SELECT * FROM ".$NPDS_Prefix."topics WHERE topicadmin REGEXP '[[:<:]]".$value."[[:>:]]'");
+        $nbrow = sql_num_rows($resu);
+        list($tid) = sql_fetch_row($resu);
+        
+        if( ($nbrow == 1) and ($topicid == $tid) ) {
+          sql_query("DELETE FROM ".$NPDS_Prefix."droits WHERE d_aut_aid='$value' AND d_droits=11112 AND d_fon_fid=2");
+        }
       }
    }
 
@@ -437,8 +507,12 @@ function topicchange($topicid, $topicname, $topicimage, $topictext, $topicadmin,
     $topictext = stripslashes(FixQuotes($topictext));
     $name = stripslashes(FixQuotes($name));
     $url = stripslashes(FixQuotes($url));
+    
     sql_query("UPDATE ".$NPDS_Prefix."topics SET topicname='$topicname', topicimage='$topicimage', topictext='$topictext', topicadmin='$topicadmin' WHERE topicid='$topicid'");
-    global $aid; Ecr_Log("security", "topicChange ($topicname, $topicid) by AID : $aid", "");
+    
+    global $aid; 
+    Ecr_Log("security", "topicChange ($topicname, $topicid) by AID : $aid", "");
+    
     if ($name) {
        sql_query("INSERT INTO ".$NPDS_Prefix."related VALUES (NULL, '$topicid','$name','$url')");
     }
@@ -446,47 +520,63 @@ function topicchange($topicid, $topicname, $topicimage, $topictext, $topicadmin,
    Header("Location: admin.php?op=topicedit&topicid=$topicid");
 }
 
-function topicdelete($topicid, $ok=0) {
+function topicdelete($topicid, $ok=0) 
+{
    global $NPDS_Prefix;
 
-   if ($ok==1) {
+   if ($ok == 1) {
       global $aid;
-      $result=sql_query("SELECT sid FROM ".$NPDS_Prefix."stories WHERE topic='$topicid'");
+      
+      $result = sql_query("SELECT sid FROM ".$NPDS_Prefix."stories WHERE topic='$topicid'");
       list($sid) = sql_fetch_row($result);
+      
       sql_query("DELETE FROM ".$NPDS_Prefix."stories WHERE topic='$topicid'");
       Ecr_Log("security", "topicDelete (stories, $topicid) by AID : $aid", "");
+      
       sql_query("DELETE FROM ".$NPDS_Prefix."topics WHERE topicid='$topicid'");
       Ecr_Log("security", "topicDelete (topic, $topicid) by AID : $aid", "");
+      
       sql_query("DELETE FROM ".$NPDS_Prefix."related WHERE tid='$topicid'");
       Ecr_Log("security", "topicDelete (related, $topicid) by AID : $aid", '');
-      // commentaires
+     
+     // commentaires
       if (file_exists("modules/comments/article.conf.php")) {
          include ("modules/comments/article.conf.php");
+         
          sql_query("DELETE FROM ".$NPDS_Prefix."posts WHERE forum_id='$forum' and topic_id='$topic'");
          Ecr_Log("security", "topicDelete (comments, $topicid) by AID : $aid", "");
       }
       Header("Location: admin.php?op=topicsmanager");
    } else {
+   
    global $hlpfile, $tipath, $topicimage, $f_meta_nom, $f_titre, $adminimg;
+   
    include("header.php");
+   
    GraphicAdmin($hlpfile);
-   $result2=sql_query("SELECT topicimage, topictext FROM ".$NPDS_Prefix."topics WHERE topicid='$topicid'");
+   
+   $result2 = sql_query("SELECT topicimage, topictext FROM ".$NPDS_Prefix."topics WHERE topicid='$topicid'");
    list($topicimage, $topictext) = sql_fetch_row($result2);
+   
    adminhead($f_meta_nom, $f_titre, $adminimg);
+   
    echo '
    <h3 class=""><span class="text-danger">'.adm_translate("Effacer le Sujet").' : </span>'.aff_langue($topictext).'</h3>';
    echo'<div class="alert alert-danger lead" role="alert">';
-   if ($topicimage!="") {echo '
+   
+   if ($topicimage != "") {echo '
    <div class="thumbnail">
       <img class="img-fluid" src="'.$tipath.$topicimage.'" alt="" />
    </div>';
    }
+   
    echo'
       <p>'.adm_translate("Etes-vous sûr de vouloir effacer ce sujet ?").' : '.aff_langue($topictext).'</p>
       <p>'.adm_translate("Ceci effacera tous ses articles et ses commentaires !").'</p>
       <p><a class="btn btn-danger" href="admin.php?op=topicdelete&amp;topicid='.$topicid.'&amp;ok=1">'.adm_translate("Oui").'</a>&nbsp;<a class="btn btn-primary"href="admin.php?op=topicsmanager">'.adm_translate("Non").'</a></p>
    </div>';
-   adminfoot('','','','');
+   
+   adminfoot('', '', '', '');
    }
 }
 
@@ -494,24 +584,31 @@ switch ($op) {
    case 'topicsmanager':
       topicsmanager();
    break;
+
    case 'topicedit':
       topicedit($topicid);
    break;
+
    case 'topicmake':
       topicmake($topicname, $topicimage, $topictext, $topicadmin);
    break;
+
    case 'topicdelete':
       topicdelete($topicid, $ok);
    break;
+
    case 'topicchange':
       topicchange($topicid, $topicname, $topicimage, $topictext, $topicadmin, $name, $url);
    break;
+
    case 'relatedsave':
       relatedsave($tid, $rid, $name, $url);
    break;
+
    case 'relatededit':
       relatededit($tid, $rid);
    break;
+
    case 'relateddelete':
       relateddelete($tid, $rid);
    break;

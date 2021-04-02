@@ -9,24 +9,33 @@
  * @date 02/04/2021
  */
 
-if (!stristr($_SERVER['PHP_SELF'],'admin.php')) Access_Error();
-$f_meta_nom ='hreferer';
+if (!stristr($_SERVER['PHP_SELF'], 'admin.php')) 
+  Access_Error();
+
+$f_meta_nom = 'hreferer';
 $f_titre = adm_translate("Sites Référents");
+
 //==> controle droit
-admindroits($aid,$f_meta_nom);
+admindroits($aid, $f_meta_nom);
 //<== controle droit
+//
 global $language;
 $hlpfile = "admin/manuels/$language/referer.html";
 
-function hreferer($filter) {
+function hreferer($filter) 
+{
    global $hlpfile, $f_meta_nom, $adminimg, $admf_ext, $f_titre;
+
    include ("header.php");
+
    GraphicAdmin($hlpfile);
+   adminhead($f_meta_nom, $f_titre, $adminimg);
 
-   adminhead ($f_meta_nom, $f_titre, $adminimg);
+   settype($filter, 'integer');
+   
+   if (!$filter) 
+    $filter = 2048;
 
-   settype($filter,'integer');
-   if (!$filter) $filter=2048;
    echo '
    <hr />
    <h3>'.adm_translate("Qui parle de nous ?").'</h3>
@@ -49,21 +58,28 @@ function hreferer($filter) {
       </tr>
    </thead>
    <tbody>';
-   $hresult = sql_query("SELECT url, COUNT(url) AS TheCount, substring(url,1,$filter) AS filter FROM ".$NPDS_Prefix."referer GROUP BY filter ORDER BY TheCount DESC");
+   
+   $hresult = sql_query("SELECT url, COUNT(url) AS TheCount, substring(url, 1, $filter) AS filter FROM ".$NPDS_Prefix."referer GROUP BY filter ORDER BY TheCount DESC");
    while(list($url, $TheCount) = sql_fetch_row($hresult)) {
       echo '
       <tr>
          <td>';
-      if($TheCount == 1) echo '<a href="'.$url.'" target="_blank">';
-      if ($filter!=2048)
-        echo '<span>'.substr($url,0,$filter).'</span><span class="text-muted">'.substr($url,$filter).'</span>';
+      if($TheCount == 1) 
+        echo '<a href="'.$url.'" target="_blank">';
+      
+      if ($filter != 2048)
+        echo '<span>'.substr($url, 0, $filter).'</span><span class="text-muted">'.substr($url, $filter).'</span>';
       else
         echo $url;
-      if($TheCount == 1) echo '</a>';
+      
+      if($TheCount == 1) 
+        echo '</a>';
+      
       echo '</a></td>
          <td>'.$TheCount.'</td>
       </tr>';
    }
+
     echo '
    </tbody>
    </table>
@@ -72,40 +88,51 @@ function hreferer($filter) {
       <li class="nav-item"><a class="text-danger nav-link" href="admin.php?op=delreferer" >'.adm_translate("Effacer les Référants").'</a></li>
       <li class="nav-item"><a class="nav-link" href="admin.php?op=archreferer&amp;filter='.$filter.'">'.adm_translate("Archiver les Référants").'</a></li>
    </ul>';
-   adminfoot('','','','');
+   
+   adminfoot('', '', '', '');
 }
 
-function delreferer() {
+function delreferer() 
+{
     global $NPDS_Prefix;
+
     sql_query("DELETE FROM ".$NPDS_Prefix."referer");
+    
     Header("Location: admin.php?op=AdminMain");
 }
 
-function archreferer($filter) {
+function archreferer($filter) 
+{
     global $NPDS_Prefix;
 
     $file = fopen("storage/logs/referers.log", "w");
     $content = "===================================================\n";
-    $content .="Date : ".date("d-m-Y")."-/- NPDS - HTTP Referers\n";
+    $content .= "Date : ".date("d-m-Y")."-/- NPDS - HTTP Referers\n";
     $content .= "===================================================\n";
-    $result=sql_query("SELECT url FROM ".$NPDS_Prefix."referer");
-    while(list($url)= sql_fetch_row($result)) {
+    $result = sql_query("SELECT url FROM ".$NPDS_Prefix."referer");
+    
+    while(list($url) = sql_fetch_row($result)) {
        $content .= "$url\n";
     }
+
     $content .= "===================================================\n";
     fwrite($file, $content);
     fclose($file);
+    
     Header("Location: admin.php?op=hreferer&filter=$filter");
 }
 
-settype($filter,'integer');
+settype($filter, 'integer');
+
 switch ($op) {
    case 'hreferer':
       hreferer($filter);
    break;
+
    case 'archreferer':
       archreferer($filter);
    break;
+
    case 'delreferer':
       delreferer();
    break;
