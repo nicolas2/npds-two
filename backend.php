@@ -13,22 +13,7 @@
 /************************************************************************/
 include("mainfile.php");
 
-function convertdateTOtimestamp($myrow) {
-   if (substr($myrow,2,1)=='-') {
-      $day=substr($myrow,0,2);
-      $month=substr($myrow,3,2);
-      $year=substr($myrow,6,4);
-   } else {
-      $day=substr($myrow,8,2);
-      $month=substr($myrow,5,2);
-      $year=substr($myrow,0,4);
-   }
-   $hour=substr($myrow,11,2);
-   $mns=substr($myrow,14,2);
-   $sec=substr($myrow,17,2);
-   $tmst=mktime($hour,$mns,$sec,$month,$day,$year);
-   return ($tmst);
-}
+include('functions.php');
 
 function fab_feed($type,$filename,$timeout) {
    global $sitename,$slogan,$nuke_url,$backend_image,$backend_title,$backend_width,$backend_height,$backend_language,$storyhome;

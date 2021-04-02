@@ -108,6 +108,7 @@ if (!defined('NPDS_GRAB_GLOBALS_INCLUDED')) {
    // include current charset
    if (file_exists("config/cur_charset.php"))
       include ("config/cur_charset.php");
+   
    // include url_protect Bad Words and create the filter function
    include ("config/url_protect.php");
 

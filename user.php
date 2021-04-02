@@ -1120,12 +1120,12 @@ function saveuser($uid, $name, $uname, $email, $femail, $url, $pass, $vpass, $bi
 }
 
 function edithome() {
-   global $user, $Default_Theme, $Default_skin;
+   global $user, $Default_Theme, $Default_Skin;
    include ("header.php");
    $userinfo=getusrinfo($user);
    nav($userinfo['mns']);
    if ($userinfo['theme']=='') {
-      $userinfo['theme'] = "$Default_Theme+$Default_skin";
+      $userinfo['theme'] = "$Default_Theme+$Default_Skin";
    }
    echo '
    <h2 class="mb-3">'.translate("Editer votre page principale").'</h2>
