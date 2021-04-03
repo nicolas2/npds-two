@@ -27,7 +27,8 @@ class extract {
     {
         $user = cookie::get('user');
 
-        if (isset($user)) {
+        if (isset($user)) 
+        {
             $ibid = explode(':', base64_decode($user));
             array_walk($ibid, [protect::class, 'url']);
             return base64_encode(str_replace("%3A", ":", urlencode(base64_decode($user))));
@@ -44,7 +45,8 @@ class extract {
     {
         $user_language = cookie::get('user_language');
 
-        if (isset($user_language)) {
+        if (isset($user_language)) 
+        {
             $ibid = explode(':', $user_language);
             array_walk($ibid, [protect::class, 'url']);
             return str_replace("%3A", ":", urlencode($user_language));
@@ -61,7 +63,8 @@ class extract {
     {
         $admin = cookie::get('admin');
 
-        if (isset($admin)) {
+        if (isset($admin)) 
+        {
             $ibid = explode(':', base64_decode($admin));
             array_walk($ibid, [protect::class, 'url']);
             return base64_encode(str_replace('%3A', ':', urlencode(base64_decode($admin))));

@@ -11,6 +11,7 @@
 
 use npds\security\protect;
 use npds\security\extract;
+use npds\security\ip;
 use npds\error\access;
 use npds\support\str;
 
@@ -28,8 +29,9 @@ if (!defined('NPDS_GRAB_GLOBALS_INCLUDED')) {
    if (file_exists("storage/logs/spam.log"))
       $tab_spam = str_replace("\r\n", "", file("storage/logs/spam.log"));
    
+
    if (is_array($tab_spam)) {
-      $ipadr = urldecode(getip());
+      $ipadr = urldecode(ip::get());
       
       if (strstr($ipadr, ':'))
          $ipv = '6';

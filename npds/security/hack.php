@@ -24,7 +24,8 @@ class hack {
      */
     public static function remove($Xstring) 
     {
-        if ($Xstring != '') {
+        if ($Xstring != '') 
+        {
             $npds_forbidden_words = array(
             // NCRs 2 premières séquence = NCR (dec|hexa) correspondant aux caractères latin 
             // de la table ascii (code ascii entre 33 et 126)
