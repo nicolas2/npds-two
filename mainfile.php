@@ -11,45 +11,28 @@
 
 include("vendor/autoload.php");
 
+use npds\cache\cacheManager;
+use npds\cache\cacheEmpty;
+
 include("lib/grab_globals.php");
 include("config/config.php");
+
 include("lib/multi-langue.php");
 include("language/$language/lang-$language.php");
-include("lib/cache/cache.class.php");
 
-if ($mysql_i==1)
-   include("lib/database/mysqli.php");
-else 
-   include("lib/database/mysql.php");
+include('npds/support/database/connexion.php');
 
-include("lib/metalang/metalang.php");
-
-#autodoc Mysql_Connexion() : Connexion plus détaillée ($mysql_p=true => persistente connexion) - Attention : le type de SGBD n'a pas de lien avec le nom de cette fontion
-function Mysql_Connexion() {
-   $ret_p=sql_connect();
-   if (!$ret_p) {
-      $Titlesitename="NPDS";
-      if (file_exists("config/meta.php"))
-         include ("config/meta.php");
-      if (file_exists("storage/static/database.txt"))
-         include ("storage/static/database.txt");
-      die();
-   }
-   return ($ret_p);
-}
-/****************/
-$dblink=Mysql_Connexion();
-if ($mysql_i==1)
-   mysqli_set_charset($dblink,"utf8mb4");
-else 
-   mysql_set_charset($dblink,"utf8mb4");
+Mysql_Connexion();
 
 require_once("admin/auth.inc.php");
-if (isset($user)) $cookie=cookiedecode($user);
+if (isset($user)) 
+   $cookie=cookiedecode($user);
 
 session_manage();
 $tab_langue=make_tab_langue();
 
+
+include("lib/metalang/metalang.php");
 global $meta_glossaire;
 $meta_glossaire=charg_metalang();
 
@@ -1015,7 +998,7 @@ function fab_block($title, $member, $content, $Xcache) {
       $cache_obj = new cacheManager();
       $cache_obj->startCachingBlock($cache_clef);
    } else
-      $cache_obj = new SuperCacheEmpty();
+      $cache_obj = new cacheEmpty();
    if (($cache_obj->genereting_output==1) or ($cache_obj->genereting_output==-1) or (!$SuperCache) or ($Xcache==0)) {
       global $user, $admin;
       // For including CLASS AND URI in Block

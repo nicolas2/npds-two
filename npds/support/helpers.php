@@ -120,6 +120,8 @@ if (! function_exists('getip'))
     }
 }
 
+// get cookie user, user_language, admin
+
 /**
  * cookie user
  */
@@ -162,5 +164,144 @@ if (! function_exists('admin'))
     function admin()
     {
         return extract::admin();
+    }
+}
+
+// SuperCache
+
+/**
+ * Q_Select
+ */
+if (! function_exists('Q_Select'))
+{ 
+    /**
+     * [Q_Select description]
+     * @param [type]  $Xquery    [description]
+     * @param integer $retention [description]
+     */
+    function Q_Select($Xquery, $retention=3600) 
+    {
+        global $SuperCache, $cache_obj;
+       
+        if (($SuperCache) and ($cache_obj)) 
+        {
+            $row = $cache_obj->CachingQuery($Xquery, $retention);
+          
+            return ($row);
+        } 
+        else 
+        {
+            $result = @sql_query($Xquery);
+            $tab_tmp = array();
+          
+            while($row = sql_fetch_assoc($result)) 
+            {
+                $tab_tmp[] = $row;
+            }
+          
+            return ($tab_tmp);
+        }
+    }
+}
+
+/**
+ * PG_clean
+ */
+if (! function_exists('PG_clean'))
+{ 
+    /**
+     * [PG_clean description]
+     * @param [type] $request [description]
+     */
+    function PG_clean($request) 
+    {
+        global $CACHE_CONFIG;
+       
+        $page = md5($request);
+        $dh = opendir($CACHE_CONFIG['data_dir']);
+        
+        while(false !== ($filename = readdir($dh))) 
+        {
+            if ($filename === '.' 
+                OR $filename === '..' 
+                OR (strpos($filename, $page) === FALSE)) 
+            {
+                continue;
+            }
+              
+            unlink($CACHE_CONFIG['data_dir'].$filename);
+        }
+        closedir($dh);
+    }
+}
+
+/**
+ * Q_Clean
+ */
+if (! function_exists('Q_Clean'))
+{ 
+    /**
+     * [Q_Clean description]
+     */
+    function Q_Clean() 
+    {
+        global $CACHE_CONFIG;
+        
+        $dh = opendir($CACHE_CONFIG['data_dir']."sql");
+        
+        while(false !== ($filename = readdir($dh))) 
+        {
+            if ($filename === '.' 
+                OR $filename === '..') 
+            {
+                continue;
+            }
+              
+            if (is_file($CACHE_CONFIG['data_dir']."sql/".$filename))
+            {
+                unlink($CACHE_CONFIG['data_dir']."sql/".$filename);
+            }
+        }
+
+        closedir($dh);
+        $fp = fopen($CACHE_CONFIG['data_dir']."sql/.htaccess", 'w');
+        @fputs($fp, "Deny from All");
+        fclose($fp);
+    }
+}
+
+/**
+ * SC_clean
+ */
+if (! function_exists('SC_clean'))
+{ 
+    /**
+     * [SC_clean description]
+     */
+    function SC_clean() 
+    {
+        global $CACHE_CONFIG;
+       
+        $dh = opendir($CACHE_CONFIG['data_dir']);
+       
+        while (false !== ($filename = readdir($dh))) 
+        {
+            if ($filename === '.' 
+                OR $filename === '..' 
+                OR $filename === 'ultramode.txt' 
+                OR $filename === 'net2zone.txt' 
+                OR $filename === 'sql' 
+                OR $filename === 'index.html')
+            { 
+                continue;
+            }
+             
+            if (is_file($CACHE_CONFIG['data_dir'].$filename))
+            {
+                unlink($CACHE_CONFIG['data_dir'].$filename);
+            }
+        }
+        closedir($dh);
+        Q_Clean();
     }
 }
