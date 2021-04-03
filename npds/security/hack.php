@@ -8,6 +8,8 @@
  * @version 1.0
  * @date 02/04/2021
  */
+namespace npds\security;
+
 
 /*
  * hack
@@ -20,7 +22,7 @@ class hack {
      * @param  [type] $Xstring [description]
      * @return [type]          [description]
      */
-    public function remove($Xstring) 
+    public static function remove($Xstring) 
     {
         if ($Xstring != '') {
             $npds_forbidden_words = array(

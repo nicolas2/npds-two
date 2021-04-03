@@ -8,9 +8,8 @@
  * @version 1.0
  * @date 02/04/2021
  */
-
-include 'lib/security/hack.php';
-include 'lib/security/ip.php';
+use npds\security\hack;
+use npds\security\ip;
 
 // Url
 

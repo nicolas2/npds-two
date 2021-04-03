@@ -8,6 +8,8 @@
  * @version 1.0
  * @date 02/04/2021
  */
+namespace npds\security;
+
 
 /*
  * ip
@@ -19,7 +21,7 @@ class ip {
 	 * [getip description]
 	 * @return [type] [description]
 	 */
-    public function get() 
+    public static function get() 
     {
         if (isset($_SERVER)) {
             if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {

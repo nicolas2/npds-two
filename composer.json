@@ -22,11 +22,10 @@
     },
     "autoload": {        
         "psr-4": {
-            "App\\": "/",
-            "Npds\\": "system"           
+            "npds\\": "npds"           
         },
         "files": [
-            "lib/support/helpers.php"
+            "npds/support/helpers.php"
         ]        
     }
 }

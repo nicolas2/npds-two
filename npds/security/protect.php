@@ -8,6 +8,10 @@
  * @version 1.0
  * @date 02/04/2021
  */
+namespace npds\security;
+
+use npds\error\access;
+
 
 /*
  * protect
@@ -24,7 +28,7 @@ class protect {
     public function url($arr, $key) 
     {
         $bad_uri_content = include ("config/url_protect.php");
-      
+
         $arr = rawurldecode($arr);
         $RQ_tmp = strtolower($arr);
         $RQ_tmp_large = strtolower($key)."=".$RQ_tmp;
@@ -32,7 +36,7 @@ class protect {
         if(in_array($RQ_tmp, $bad_uri_content) 
             OR in_array($RQ_tmp_large, $bad_uri_content)) {
                 unset($bad_uri_content);
-                access_denied();
+                access::denied();
         }
     }
 
