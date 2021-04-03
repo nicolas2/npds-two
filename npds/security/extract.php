@@ -11,6 +11,7 @@
 namespace npds\security;
 
 use npds\security\protect;
+use npds\cookie\cookie;
 
 
 /*
@@ -24,9 +25,7 @@ class extract {
      */
     public static function user() 
     {
-        if (!empty($_COOKIE)) {
-            extract($_COOKIE, EXTR_OVERWRITE);
-        }
+        $user = cookie::get('user');
 
         if (isset($user)) {
             $ibid = explode(':', base64_decode($user));
@@ -43,9 +42,7 @@ class extract {
      */
     public static function user_language() 
     {
-        if (!empty($_COOKIE)) {
-            extract($_COOKIE, EXTR_OVERWRITE);
-        }
+        $user_language = cookie::get('user_language');
 
         if (isset($user_language)) {
             $ibid = explode(':', $user_language);
@@ -62,9 +59,7 @@ class extract {
      */
     public static function admin() 
     {
-        if (!empty($_COOKIE)) {
-            extract($_COOKIE, EXTR_OVERWRITE);
-        }
+        $admin = cookie::get('admin');
 
         if (isset($admin)) {
             $ibid = explode(':', base64_decode($admin));

@@ -23,7 +23,7 @@ class access {
 	 */
     public static function denied() 
     {
-        include("admin/die.php");
+        include('admin/die.php');
     }
 
 }
