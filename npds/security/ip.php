@@ -17,10 +17,10 @@ namespace npds\security;
 class ip {
 
 
-	/**
-	 * [getip description]
-	 * @return [type] [description]
-	 */
+    /**
+     * [getip description]
+     * @return [type] [description]
+     */
     public static function get() 
     {
         if (isset($_SERVER)) {

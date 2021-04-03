@@ -17,10 +17,10 @@ namespace npds\error;
 class access {
 
 
-	/**
-	 * [access_denied description]
-	 * @return [type] [description]
-	 */
+    /**
+     * [access_denied description]
+     * @return [type] [description]
+     */
     public static function denied() 
     {
         include('admin/die.php');
