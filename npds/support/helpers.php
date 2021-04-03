@@ -50,7 +50,7 @@ if (! function_exists('module_url'))
 }
 
 /**
- * asset_url('links', 'links');
+ * asset_url('images/npdstwo.png');
  */
 if (! function_exists('asset_url'))
 {
