@@ -35,10 +35,11 @@ class protect {
       
         if(in_array($RQ_tmp, $bad_uri_content) 
             OR in_array($RQ_tmp_large, $bad_uri_content)) 
-        {
-                unset($bad_uri_content);
-                access::denied();
+        {    
+            access::denied();
         }
+
+        unset($bad_uri_content);
     }
 
 }
