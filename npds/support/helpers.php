@@ -19,17 +19,17 @@ use npds\security\extract;
  */
 if (! function_exists('site_url'))
 {
-	/**
-	 * [site_url description]
-	 * @param  [type] $url [description]
-	 * @return [type]      [description]
-	 */
-	function site_url($url)
-	{
-		global $nuke_url;
+    /**
+     * [site_url description]
+     * @param  [type] $url [description]
+     * @return [type]      [description]
+     */
+    function site_url($url)
+    {
+        global $nuke_url;
 
-		return $nuke_url.'/'.trim($url, '/');
-	}
+        return $nuke_url.'/'.trim($url, '/');
+    }
 }
 
 /**
@@ -37,16 +37,16 @@ if (! function_exists('site_url'))
  */
 if (! function_exists('module_url'))
 {
-	/**
-	 * [module_url description]
-	 * @param  [type] $url     [description]
-	 * @param  [type] $ModPath [description]
-	 * @return [type]          [description]
-	 */
-	function module_url($url, $ModPath)
-	{
-		return site_url('modules.php?ModPath='.$ModPath.'&ModStart='.trim($url, '/'));
-	}
+    /**
+     * [module_url description]
+     * @param  [type] $url     [description]
+     * @param  [type] $ModPath [description]
+     * @return [type]          [description]
+     */
+    function module_url($url, $ModPath)
+    {
+        return site_url('modules.php?ModPath='.$ModPath.'&ModStart='.trim($url, '/'));
+    }
 }
 
 /**
@@ -54,16 +54,16 @@ if (! function_exists('module_url'))
  */
 if (! function_exists('asset_url'))
 {
-	/**
-	 * [module_url description]
-	 * @param  [type] $url     [description]
-	 * @param  [type] $ModPath [description]
-	 * @return [type]          [description]
-	 */
-	function asset_url($url)
-	{
-		return site_url('assets/'.trim($url, '/'));
-	}
+    /**
+     * [module_url description]
+     * @param  [type] $url     [description]
+     * @param  [type] $ModPath [description]
+     * @return [type]          [description]
+     */
+    function asset_url($url)
+    {
+        return site_url('assets/'.trim($url, '/'));
+    }
 }
 
 /**
@@ -71,20 +71,20 @@ if (! function_exists('asset_url'))
  */
 if (! function_exists('redirect_url'))
 {
-	/**
-	 * Permet une redirection javascript / en lieu et place de header("location: ...");
-	 * @param  [type] $url     [description]
-	 * @param  [type] $ModPath [description]
-	 * @return [type]          [description]
-	 */ 
-	function redirect_url($url) 
-	{
-	    echo "<script type=\"text/javascript\">\n";
-	    echo "//<![CDATA[\n";
-	    echo "document.location.href='".site_url($url)."';\n";
-	    echo "//]]>\n";
-	    echo "</script>";
-	}
+    /**
+     * Permet une redirection javascript / en lieu et place de header("location: ...");
+     * @param  [type] $url     [description]
+     * @param  [type] $ModPath [description]
+     * @return [type]          [description]
+     */ 
+    function redirect_url($url) 
+    {
+        echo "<script type=\"text/javascript\">\n";
+        echo "//<![CDATA[\n";
+        echo "document.location.href='".site_url($url)."';\n";
+        echo "//]]>\n";
+        echo "</script>";
+    }
 }
 
 // Security
@@ -94,15 +94,15 @@ if (! function_exists('redirect_url'))
  */
 if (! function_exists('removeHack'))
 {
-	/**
-	 * [removeHack description]
-	 * @param  [type] $string [description]
-	 * @return [type]         [description]
-	 */
-	function removeHack($string)
-	{
-	    return hack::remove($string);
-	}
+    /**
+     * [removeHack description]
+     * @param  [type] $string [description]
+     * @return [type]         [description]
+     */
+    function removeHack($string)
+    {
+        return hack::remove($string);
+    }
 }
 
 /**
@@ -110,14 +110,14 @@ if (! function_exists('removeHack'))
  */
 if (! function_exists('getip'))
 {
-	/**
-	 * [getip description]
-	 * @return [type] [description]
-	 */
-	function getip()
-	{
-	    return ip::get();
-	}
+    /**
+     * [getip description]
+     * @return [type] [description]
+     */
+    function getip()
+    {
+        return ip::get();
+    }
 }
 
 /**
@@ -125,14 +125,14 @@ if (! function_exists('getip'))
  */
 if (! function_exists('user'))
 {
-	/**
-	 * [user description]
-	 * @return [type] [description]
-	 */
-	function user()
-	{
-	    return extract::user();
-	}
+    /**
+     * [user description]
+     * @return [type] [description]
+     */
+    function user()
+    {
+        return extract::user();
+    }
 }
 
 /**
@@ -140,14 +140,14 @@ if (! function_exists('user'))
  */
 if (! function_exists('user_laguage'))
 {
-	/**
-	 * [user_lnguage description]
-	 * @return [type] [description]
-	 */
-	function user_laguage()
-	{
-	    return extract::user_laguage();
-	}
+    /**
+     * [user_lnguage description]
+     * @return [type] [description]
+     */
+    function user_laguage()
+    {
+        return extract::user_laguage();
+    }
 }
 
 /**
@@ -155,12 +155,12 @@ if (! function_exists('user_laguage'))
  */
 if (! function_exists('admin'))
 {
-	/**
-	 * [admin description]
-	 * @return [type] [description]
-	 */
-	function admin()
-	{
-	    return extract::admin();
-	}
+    /**
+     * [admin description]
+     * @return [type] [description]
+     */
+    function admin()
+    {
+        return extract::admin();
+    }
 }
