@@ -15,23 +15,23 @@
  */
 if (! function_exists('load_Driver'))
 {
-	/**
+    /**
      * [load_Driver description]
      * @return [type] [description]
      */
     function load_Driver() 
     {
-    	global $mysql_i;
+        global $mysql_i;
 
-		if ($mysql_i == 1)
-		{
-		    include("npds/database/mysqli.php");
-		}
-		else 
-		{
-			include("npds/database/mysql.php");
-		}
-	}
+        if ($mysql_i == 1)
+        {
+            include("npds/database/mysqli.php");
+        }
+        else 
+        {
+            include("npds/database/mysql.php");
+        }
+    }
 }
 
 /**
@@ -39,14 +39,14 @@ if (! function_exists('load_Driver'))
  */
 if (! function_exists('Mysql_Connexion'))
 {
-	/**
-	 * Connexion plus détaillée 
-	 * $mysql_p=true => persistente connexion 
-	 * Attention : le type de SGBD n'a pas de lien avec le nom de cette fontion
-	 */
+    /**
+     * Connexion plus détaillée 
+     * $mysql_p=true => persistente connexion 
+     * Attention : le type de SGBD n'a pas de lien avec le nom de cette fontion
+     */
     function Mysql_Connexion() 
     {
-    	// Loading driver
+        // Loading driver
         load_Driver();
 
         // connecxion base
