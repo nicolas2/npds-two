@@ -10,6 +10,7 @@
  */
 
 include 'lib/security/hack.php';
+include 'lib/security/ip.php';
 
 // Url
 
@@ -44,7 +45,7 @@ if (! function_exists('module_url'))
 	 */
 	function module_url($url, $ModPath)
 	{
-		return site_url(trim('modules.php?ModPath='.$ModPath.'&ModStart='.$url, '/'));
+		return site_url('modules.php?ModPath='.$ModPath.'&ModStart='.trim($url, '/'));
 	}
 }
 
@@ -101,5 +102,20 @@ if (! function_exists('removeHack'))
 	function removeHack($string)
 	{
 	    return hack::remove($string);
+	}
+}
+
+/**
+ * getip()
+ */
+if (! function_exists('getip'))
+{
+	/**
+	 * [getip description]
+	 * @return [type] [description]
+	 */
+	function getip()
+	{
+	    return ip::get();
 	}
 }

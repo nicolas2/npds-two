@@ -9,6 +9,6 @@
  * @date 02/04/2021
  */
 
-define('TIMESTART',microtime(true)); // avec constante pour PHP => 5
+define('TIMESTART', microtime(true)); // avec constante pour PHP => 5
 
 ?>

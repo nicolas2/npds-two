@@ -9,7 +9,7 @@
  * @date 02/04/2021
  */
 
-$sql_nbREQ=0;
+$sql_nbREQ = 0;
 
 // Escape string
    function SQL_escape_string ($arr) {
@@ -25,9 +25,9 @@ $sql_nbREQ=0;
       global $mysql_p, $dbhost, $dbuname, $dbpass, $dbname;
 
       if (($mysql_p) or (!isset($mysql_p)))
-         $dblink=@mysql_pconnect($dbhost, $dbuname, $dbpass);
+         $dblink = @mysql_pconnect($dbhost, $dbuname, $dbpass);
       else
-         $dblink=@mysql_connect($dbhost, $dbuname, $dbpass);
+         $dblink = @mysql_connect($dbhost, $dbuname, $dbpass);
 
       if (!$dblink)
          return (false);

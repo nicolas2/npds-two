@@ -9,10 +9,18 @@
  * @date 02/04/2021
  */
 
+/*
+ * hack
+ */
 class hack {
 
-    #autodoc removeHack($Xstring) : Permet de rechercher et de remplacer "some bad words" dans une chaine // Preg_replace by Pascalp
-    function remove($Xstring) 
+
+    /**
+     * remove($Xstring) Permet de rechercher et de remplacer "some bad words" dans une chaine
+     * @param  [type] $Xstring [description]
+     * @return [type]          [description]
+     */
+    public function remove($Xstring) 
     {
         if ($Xstring != '') {
             $npds_forbidden_words = array(

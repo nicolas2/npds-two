@@ -9,7 +9,7 @@
  * @date 02/04/2021
  */
 
-$sql_nbREQ=0;
+$sql_nbREQ = 0;
 
 // Escape string
    function SQL_escape_string ($arr) {
@@ -47,7 +47,7 @@ $sql_nbREQ=0;
    function sql_query($sql) {
       global $sql_nbREQ, $dblink;
       $sql_nbREQ++;
-      if (!$query_id = @mysqli_query($dblink,SQL_escape_string($sql)))
+      if (!$query_id = @mysqli_query($dblink, SQL_escape_string($sql)))
          return false;
       else
          return $query_id;

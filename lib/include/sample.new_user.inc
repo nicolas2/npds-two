@@ -16,9 +16,9 @@
 // $message     : contenu du message (html, meta-mot, ...) SANS les <br />, NPDS fera le nécessaire
 
 
-$emetteur_id="1";
-$sujet="[french]Bonjour[/french][english]Hi[/english][chinese]你好[/chinese][spanish]Hola[/spanish][german]Hallo[/german]";
-$message="[french]Vous &#xEA;tes maintenant un membre &#xE0; part enti&#xE8;re.
+$emetteur_id = "1";
+$sujet = "[french]Bonjour[/french][english]Hi[/english][chinese]你好[/chinese][spanish]Hola[/spanish][german]Hallo[/german]";
+$message = "[french]Vous &#xEA;tes maintenant un membre &#xE0; part enti&#xE8;re.
 Ce site vous offre de nombreuses ressources alors ne vous privez pas : participez !
 
 L'&#xE9;quipe du site.[/french][english]You are now a full member.

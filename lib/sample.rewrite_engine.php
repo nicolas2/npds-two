@@ -9,12 +9,15 @@
  * @date 02/04/2021
  */
 
-/************************************************************************/
-/* Ce fichier permet de demander à SuperCache de procéder à une modif   */
-/* sur les pages dont il assure le cache. ce traitement peut opérer     */
-/* des modifications dans le résultat HTML et doit agir sur             */
-/* la variable $output                                                  */
-/*                                                                      */
-/* par exemple : $output=preg_replace(' class="noir"', "", $output)     */
-/************************************************************************/
+/*
+ * Note :
+ * Ce fichier permet de demander à SuperCache de procéder à une modif
+ * sur les pages dont il assure le cache. ce traitement peut opérer
+ * des modifications dans le résultat HTML et doit agir sur
+ * la variable $output
+ * 
+ * par exemple : 
+ * $output=preg_replace('class="noir"', "", $output)
+ */
+
 ?>
