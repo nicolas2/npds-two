@@ -20,7 +20,7 @@ include("config/config.php");
 include("lib/multi-langue.php");
 include("language/$language/lang-$language.php");
 
-include('npds/support/database/connexion.php');
+include('npds/database/connexion.php');
 
 Mysql_Connexion();
 

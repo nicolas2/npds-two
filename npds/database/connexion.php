@@ -25,11 +25,11 @@ if (! function_exists('load_Driver'))
 
 		if ($mysql_i == 1)
 		{
-		    include("npds/support/database/mysqli.php");
+		    include("npds/database/mysqli.php");
 		}
 		else 
 		{
-			include("npds/support/database/mysql.php");
+			include("npds/database/mysql.php");
 		}
 	}
 }
