@@ -25,9 +25,9 @@ class protect {
      * @param  [type] $key [description]
      * @return [type]      [description]
      */
-    public function url($arr, $key) 
+    public static function url($arr, $key) 
     {
-        $bad_uri_content = include ("config/url_protect.php");
+        $bad_uri_content = include ('config/url_protect.php');
 
         $arr = rawurldecode($arr);
         $RQ_tmp = strtolower($arr);

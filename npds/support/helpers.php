@@ -10,6 +10,7 @@
  */
 use npds\security\hack;
 use npds\security\ip;
+use npds\security\extract;
 
 // Url
 
@@ -116,5 +117,50 @@ if (! function_exists('getip'))
 	function getip()
 	{
 	    return ip::get();
+	}
+}
+
+/**
+ * cookie user
+ */
+if (! function_exists('user'))
+{
+	/**
+	 * [user description]
+	 * @return [type] [description]
+	 */
+	function user()
+	{
+	    return extract::user();
+	}
+}
+
+/**
+ * cookie user_laguage
+ */
+if (! function_exists('user_laguage'))
+{
+	/**
+	 * [user_lnguage description]
+	 * @return [type] [description]
+	 */
+	function user_laguage()
+	{
+	    return extract::user_laguage();
+	}
+}
+
+/**
+ * cookie user
+ */
+if (! function_exists('admin'))
+{
+	/**
+	 * [admin description]
+	 * @return [type] [description]
+	 */
+	function admin()
+	{
+	    return extract::admin();
 	}
 }

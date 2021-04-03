@@ -69,7 +69,7 @@ class ip {
      * [getIp description]
      * @return [type] [description]
      */
-    public function get()
+    public static function get()
     {
         if(static::$ip === null)
         {
