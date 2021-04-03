@@ -12,7 +12,7 @@ namespace npds\support;
 
 
 /*
- * str
+ * Npdswo
  */
 class Npdswo {
 
