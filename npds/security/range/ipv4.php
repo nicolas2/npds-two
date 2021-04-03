@@ -17,36 +17,36 @@ namespace npds\security\range;
 class ipv4
 {
 
-	
-	/**
-	 * [inRange description]
-	 * @param  string $ip    [description]
-	 * @param  string $range [description]
-	 * @return [type]        [description]
-	 */
-	public static function inRange(string $ip, string $range)
-	{
-		if(strpos($range, '/') === false)
-		{
-			$netmask = 32;
-		}
-		else
-		{
-			[$range, $netmask] = explode('/', $range, 2);
+    
+    /**
+     * [inRange description]
+     * @param  string $ip    [description]
+     * @param  string $range [description]
+     * @return [type]        [description]
+     */
+    public static function inRange(string $ip, string $range)
+    {
+        if(strpos($range, '/') === false)
+        {
+            $netmask = 32;
+        }
+        else
+        {
+            [$range, $netmask] = explode('/', $range, 2);
 
-			if($netmask < 0 || $netmask > 32)
-			{
-				return false;
-			}
-		}
+            if($netmask < 0 || $netmask > 32)
+            {
+                return false;
+            }
+        }
 
-		if(($ip2Long = ip2long($ip)) === false || ($range2Long = ip2long($range)) === false)
-		{
-			return false;
-		}
+        if(($ip2Long = ip2long($ip)) === false || ($range2Long = ip2long($range)) === false)
+        {
+            return false;
+        }
 
-		$netmaskDecimal = ~ ((2 ** (32 - $netmask)) - 1);
+        $netmaskDecimal = ~ ((2 ** (32 - $netmask)) - 1);
 
-		return ($ip2Long & $netmaskDecimal) === ($range2Long & $netmaskDecimal);
-	}
+        return ($ip2Long & $netmaskDecimal) === ($range2Long & $netmaskDecimal);
+    }
 }
