@@ -10,11 +10,13 @@
  */
 namespace npds\cache;
 
+
 /**
  * cacheEmpty
  */
 class cacheEmpty {
    
+
    /**
     * [$genereting_output description]
     * @var [type]
