@@ -14,7 +14,7 @@ namespace npds\support;
 /*
  * Npdswo
  */
-class Npdswo {
+class NpdsTwo {
 
 
     /**
