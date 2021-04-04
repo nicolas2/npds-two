@@ -12,7 +12,7 @@ namespace npds\utility;
 
 
 /*
- * protect
+ * code
  */
 class code {
 

@@ -8,6 +8,9 @@
  * @version 1.0
  * @date 02/04/2021
  */
+use npds\cache\cacheManager;
+use npds\cache\cacheEmpty;
+
 
 // Modification pour IZ-Xinstall - EBH - JPB & PHR
 if (file_exists("IZ-Xinstall.ok")) {
@@ -227,7 +230,7 @@ function theindex($op, $catid, $marqeur) {
        $cache_obj = new cacheManager();
        $cache_obj->startCachingPage();
     } else
-       $cache_obj = new SuperCacheEmpty();
+       $cache_obj = new cacheEmpty();
     if (($cache_obj->genereting_output==1) or ($cache_obj->genereting_output==-1) or (!$SuperCache)) {
        // Appel de la publication de News et la purge automatique
        automatednews();

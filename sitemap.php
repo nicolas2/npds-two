@@ -8,6 +8,7 @@
  * @version 1.0
  * @date 02/04/2021
  */
+use npds\logs\logs;
 
 if (stristr($_SERVER['PHP_SELF'],'sitemap.php')) die();
 
@@ -149,7 +150,7 @@ function sitemap_create($PAGES, $filename) {
    fwrite($file, $ibid);
    fclose($file);
 
-   Ecr_Log("sitemap", "sitemap generated : ".date("H:i:s", time()), "");
+   logs::Ecr_Log("sitemap", "sitemap generated : ".date("H:i:s", time()), "");
 }
 
 /* -----------------------------------------*/

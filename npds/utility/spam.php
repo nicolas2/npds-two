@@ -15,7 +15,7 @@ use npds\security\ip;
 
 
 /*
- * protect
+ * spam
  */
 class spam {
 

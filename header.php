@@ -8,6 +8,7 @@
  * @version 1.0
  * @date 02/04/2021
  */
+use npds\assets\css;
 
 if (!function_exists("Mysql_Connexion")) {
    include ("mainfile.php");
@@ -108,7 +109,7 @@ function head($tiny_mce_init, $css_pages_ref, $css, $tmp_theme, $skin, $js, $m_d
    }
    if (file_exists("themes/$tmp_theme/include/header_head.inc")) {include ("themes/$tmp_theme/include/header_head.inc");}
 
-   echo import_css($tmp_theme, $language, '', $css_pages_ref, $css);
+   echo css::import_css($tmp_theme, $language, '', $css_pages_ref, $css);
 
    // Mod by Jireck - Chargeur de JS via PAGES.PHP
    if ($js) {

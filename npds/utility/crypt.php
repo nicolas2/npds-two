@@ -12,7 +12,7 @@ namespace npds\utility;
 
 
 /*
- * protect
+ * crypt
  */
 class crypt {
 
