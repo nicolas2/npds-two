@@ -26,7 +26,7 @@ class spam {
      */
     public static function boot()
     {
-    // First of all : Spam from IP 
+        // First of all : Spam from IP 
         // |5 indicate that the same IP has passed 6 times with status 
         // KO in the anti_spambot function
         if (file_exists("storage/logs/spam.log")) 
@@ -326,7 +326,7 @@ class spam {
         
         // END ALEA
 
-        //Captcha - si GD
+        // Captcha - si GD
         if (function_exists("imagepng"))
         {
             $aff = "<img src=\"getfile.php?att_id=".rawurlencode(crypt::encrypt($aff." = "))."&amp;apli=captcha\" style=\"vertical-align: middle;\" />";
