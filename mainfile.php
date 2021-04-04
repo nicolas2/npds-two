@@ -12,11 +12,8 @@
 include("vendor/autoload.php");
 
 use npds\session\session;
-use npds\cache\cacheManager;
-use npds\cache\cacheEmpty;
 use npds\cookie\cookie;
-use npds\utility\str;
-use npds\time\time;
+use npds\language\language;
 
 include("lib/grab_globals.php");
 include("config/config.php");
@@ -37,7 +34,7 @@ if (isset($user))
 
 session::manage();
 
-$tab_langue = make_tab_langue();
+$tab_langue = language::make_tab_langue();
 
 include("lib/metalang/metalang.php");
 
