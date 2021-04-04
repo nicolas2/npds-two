@@ -12,7 +12,7 @@ namespace npds\assets;
 
 
 /**
- * css
+ * auto
  */
 class auto {
 
@@ -34,7 +34,7 @@ class auto {
      * @param  [type] $temps_cache  [description]
      * @return [type]               [description]
      */
-    function auto_complete ($nom_array_js, $nom_champ, $nom_tabl, $id_inpu, $temps_cache) 
+    public static function auto_complete ($nom_array_js, $nom_champ, $nom_tabl, $id_inpu, $temps_cache) 
     {
         global $NPDS_Prefix;
 
@@ -102,7 +102,7 @@ class auto {
      * @param  [type] $req          [description]
      * @return [type]               [description]
      */
-    function auto_complete_multi($nom_array_js, $nom_champ, $nom_tabl, $id_inpu, $req) 
+    public static function auto_complete_multi($nom_array_js, $nom_champ, $nom_tabl, $id_inpu, $req) 
     {
         global $NPDS_Prefix;
 

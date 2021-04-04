@@ -54,12 +54,12 @@ class language {
                 
                 if ($pos_deb === false) 
                 {
-                	$pos_deb = -1;
+                    $pos_deb = -1;
                 }
                 
                 if ($pos_fin === false) 
                 {
-                	$pos_fin = -1;
+                    $pos_fin = -1;
                 }
                 
                 // tags [!langue]
@@ -72,7 +72,7 @@ class language {
                     
                     if ($lang != $language) 
                     {
-                    	$trouve_language = true;
+                        $trouve_language = true;
                     }
                 }
 
@@ -109,7 +109,7 @@ class language {
                 {
                     $pasfin = false;
                 }
-			}
+            }
             
             if ($ok_language)
             {
@@ -264,27 +264,27 @@ class language {
             
         if ($c !== 1) 
         {
-        	$ietf = $iso_lang;
+            $ietf = $iso_lang;
         }
 
         if (($l == 1) and ($c == 1)) 
         {
-        	$ietf = $iso_lang.$s.$iso_country;
+            $ietf = $iso_lang.$s.$iso_country;
         }
 
         if (($l !== 1) and ($c == 1)) 
         {
-        	$ietf = $iso_country;
+            $ietf = $iso_country;
         }
 
         if (($l !== 1) and ($c !== 1)) 
         {
-        	$ietf = '';
+            $ietf = '';
         }
 
         if (($l == 1) and ($c !== 1)) 
         {
-        	$ietf = $iso_lang;
+            $ietf = $iso_lang;
         }
         
         return $ietf;

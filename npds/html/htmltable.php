@@ -12,7 +12,7 @@ namespace npds\html;
 
 
 /*
- * error
+ * htmltable
  */
 class htmltable {
 

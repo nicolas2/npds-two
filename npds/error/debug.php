@@ -12,7 +12,7 @@ namespace npds\error;
 
 
 /*
- * error
+ * debug
  */
 class debug {
 

@@ -12,7 +12,7 @@ namespace npds\error;
 
 
 /*
- * error
+ * access
  */
 class access {
 

@@ -14,7 +14,7 @@ use npds\cookie\cookie;
 
 
 /*
- * error
+ * auth
  */
 class auth {
 
@@ -114,6 +114,182 @@ class auth {
             {
                 return $i;
             }
+        }
+    }
+
+    /**
+     * Retourne true ou false en fonction des paramètres d'autorisation 
+     * de Npds Two (Administrateur, anonyme, Membre, Groupe de Membre, Tous)
+     * @param  [type] $auto [description]
+     * @return [type]       [description]
+     */
+    public static function autorisation($auto) 
+    {
+        global $user, $admin;
+        
+        $affich = false;
+        
+        if (($auto == -1) and (!$user)) 
+        {
+            $affich = true;
+        }
+        
+        if (($auto == 1) and (isset($user))) 
+        {
+            $affich = true;
+        }
+        
+        if ($auto > 1) 
+        {
+            $tab_groupe = valid_group($user);
+            
+            if ($tab_groupe) 
+            {
+                foreach($tab_groupe as $groupevalue) 
+                {
+                    if ($groupevalue == $auto) 
+                    {
+                        $affich = true;
+                        break;
+                    }
+                }
+            }
+        }
+
+        if ($auto == 0) 
+        {
+            $affich = true;
+        }
+
+        if (($auto == -127) and ($admin)) 
+        {
+            $affich = true;
+        }
+        
+        return $affich;
+    }
+
+    /**
+     * Gestion + fine des destinataires (-1, 0, 1, 2 -> 127, -127)
+     * @param  [type]  $ihome [description]
+     * @param  integer $catid [description]
+     * @return [type]         [description]
+     */
+    public static function ctrl_aff($ihome, $catid=0) 
+    {
+        global $user;
+        
+        $affich = false;
+        
+        if ($ihome == -1 and (!$user)) 
+        {
+            $affich = true;
+        }
+         elseif ($ihome == 0) 
+        {
+            $affich = true;
+        } 
+        elseif ($ihome == 1) 
+        {
+            if ($catid > 0) 
+            {
+                $affich = false;
+            } 
+            else 
+            {
+                $affich = true;
+            }
+        } 
+        elseif (($ihome > 1) and ($ihome <= 127)) 
+        {
+            $tab_groupe = valid_group($user);
+            
+            if ($tab_groupe) 
+            {
+                foreach($tab_groupe as $groupevalue) 
+                {
+                    if ($groupevalue == $ihome) 
+                    {
+                        $affich = true;
+                        break;
+                    }
+                }
+            }
+        } 
+        else 
+        {
+            if ($user)
+            { 
+                $affich = true;
+            }
+        }
+        
+        return $affich;
+    }
+
+    /**
+     * Affiche URL et Email d'un auteur
+     * @param  [type] $aid [description]
+     * @return [type]      [description]
+     */
+    public static function formatAidHeader($aid) 
+    {
+        global $NPDS_Prefix;
+           
+        $holder = sql_query("SELECT url, email FROM ".$NPDS_Prefix."authors WHERE aid='$aid'");
+           
+        if ($holder) 
+        {
+            list($url, $email) = sql_fetch_row($holder);
+              
+            if (isset($url)) 
+            {
+                echo '<a href="'.$url.'" >'.$aid.'</a>';
+            } 
+            elseif (isset($email)) 
+            {
+                echo '<a href="mailto:'.$email.'" >'.$aid.'</a>';
+            } 
+            else 
+            {
+                echo $aid;
+            }
+        }
+    }
+
+    /**
+     * Pour savoir si le visiteur est un : membre ou admin 
+     * (static.php et banners.php par exemple)
+     * @param  [type] $sec_type [description]
+     * @return [type]           [description]
+     */
+    public static function secur_static($sec_type) 
+    {
+        global $user, $admin;
+
+        switch ($sec_type) 
+        {
+            case 'member':
+                if (isset($user)) 
+                {
+                    return true;
+                } 
+                else 
+                {
+                    return false;
+                }
+            break;
+
+            case 'admin':
+                if (isset($admin)) 
+                {
+                    return true;
+                } 
+                else 
+                {
+                    return false;
+                }
+            break;
         }
     }
 
