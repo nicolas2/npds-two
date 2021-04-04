@@ -17,13 +17,13 @@ namespace npds\error;
 class debug {
 
 
-	/**
-	 * Modify the report level of PHP
-	 * @return [type] [description]
-	 */
-	public static function reporting()
-	{
-		$debug = include ('config/debug.php');
+    /**
+     * Modify the report level of PHP
+     * @return [type] [description]
+     */
+    public static function reporting()
+    {
+        $debug = include ('config/debug.php');
 
         // report NO ERROR
         if ($debug['noerror'] === true) 
@@ -48,6 +48,6 @@ class debug {
         {
             error_reporting(E_ALL);
         }
-	}
+    }
 
 }

@@ -128,7 +128,7 @@ class cacheManager {
                 $this->logVisit($this->request_uri, 'HIT');
                 if ($CACHE_CONFIG['exit'] == 1) 
                 { 
-                	exit; 
+                    exit; 
                 }
             } 
             else 
@@ -450,7 +450,7 @@ class cacheManager {
                 
                 if ($CACHE_CONFIG['exit'] == 1) 
                 { 
-                	exit; 
+                    exit; 
                 }
             } 
             else 
@@ -569,7 +569,7 @@ class cacheManager {
                 
                 if ($CACHE_CONFIG['exit'] == 1) 
                 { 
-                	exit; 
+                    exit; 
                 }
                 
                 return unserialize($cached_page);

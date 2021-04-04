@@ -9,4 +9,14 @@
  * @date 02/04/2021
  */
 
-?>
+// SuperCache
+
+if (!defined('LOCK_EX')) 
+{
+    define('LOCK_EX', 2);
+}
+
+if (!defined('LOCK_EX')) 
+{
+    define('LOCK_UN', 3);
+}

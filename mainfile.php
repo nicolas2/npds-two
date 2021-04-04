@@ -317,19 +317,7 @@ function Ecr_Log($fic_log, $req_log, $mot_log) {
    fclose($fp);
 }
 
-#autodoc SC_infos() : Indique le status de SuperCache
-function SC_infos() {
-   global $SuperCache, $npds_sc;
-   $infos='';
-   if ($SuperCache) {
-      if ($npds_sc) {
-         $infos='<span class="small">'.translate(".:Page >> Super-Cache:.").'</span>';
-      } else {
-         $infos='<span class="small">'.translate(".:Page >> Super-Cache:.").'</span>';
-      }
-   }
-   return $infos;
-}
+
 #autodoc req_stat() : Retourne un tableau contenant les nombres pour les statistiques du site (stats.php)
 function req_stat() {
    global $NPDS_Prefix;
@@ -708,7 +696,7 @@ function news_aff($type_req, $sel, $storynum, $oldnum) {
    // Astuce pour afficher le nb de News correct même si certaines News ne sont pas visibles (membres, groupe de membres)
    // En fait on * le Nb de News par le Nb de groupes
    $row_Q2 = Q_select("SELECT COUNT(groupe_id) AS total FROM ".$NPDS_Prefix."groupes",86400);
-//   list(,$NumG)=each($row_Q2);
+   //   list(,$NumG)=each($row_Q2);
    $NumG=$row_Q2[0];
 
    if ($NumG['total']<2) $coef=2; else $coef=$NumG['total'];
@@ -741,7 +729,7 @@ function news_aff($type_req, $sel, $storynum, $oldnum) {
    $ibid=0; settype($tab,'array');
 
   foreach($result as $myrow) {
-//   while(list(,$myrow) = each($result)) {
+   //   while(list(,$myrow) = each($result)) {
       $s_sid=$myrow['sid'];
       $catid=$myrow['catid'];
       $ihome=$myrow['ihome'];
@@ -1502,7 +1490,7 @@ function make_tab_langue() {
 #autodoc aff_localzone_langue($ibid) : Charge une zone de formulaire de selection de la langue
 function aff_localzone_langue($ibid) {
    global $tab_langue;
-//   reset ($tab_langue);
+   //   reset ($tab_langue);
    $M_langue= '
    <div class="form-group">
       <select name="'.$ibid.'" class="custom-select form-control" onchange="this.form.submit()">
@@ -1543,66 +1531,10 @@ function preview_local_langue($local_user_language,$ibid) {
    }
    return ($ibid);
 }
-#autodoc af_cod($ibid) : Analyse le contenu d'une chaîne et converti les pseudo-balises [code]...[/code] et leur contenu en html
-   function change_cod($r) {
-      return '<'.$r[2].' class="language-'.$r[3].'">'.htmlentities($r[5],ENT_COMPAT|ENT_QUOTES|ENT_SUBSTITUTE|ENT_HTML401,cur_charset).'</'.$r[2].'>';
-   }
 
-function af_cod($ibid) {
-   $pat='#(\[)(\w+)\s+([^\]]*)(\])(.*?)\1/\2\4#s';
-   $ibid=preg_replace_callback($pat, "change_cod", $ibid, -1, $nb);
-//   $ibid= str_replace(array("\r\n", "\r", "\n"), "<br />",$ibid);
-   return $ibid;
-}
-#autodoc desaf_cod($ibid) : Analyse le contenu d'une chaîne et converti les balises html <code>...</code> en pseudo-balises [code]...[/code]
-function desaf_cod($ibid) {
-   $pat='#(<)(\w+)\s+(class="language-)([^">]*)(">)(.*?)\1/\2>#';
-   function rechange_cod($r) {
-     return '['.$r[2].' '.$r[4].']'.$r[6].'[/'.$r[2].']';
-   }
-   $ibid=preg_replace_callback($pat, 'rechange_cod', $ibid, -1);
-   return $ibid;
-}
 
-#autodoc aff_code($ibid) : Analyse le contenu d'une chaîne et converti les balises [code]...[/code]
-function aff_code($ibid) {
-   $pasfin=true;
-   while ($pasfin) {
-      $pos_deb=strpos($ibid,"[code]",0);
-      $pos_fin=strpos($ibid,"[/code]",0);
-      // ne pas confondre la position ZERO et NON TROUVE !
-      if ($pos_deb===false) {$pos_deb=-1;}
-      if ($pos_fin===false) {$pos_fin=-1;}
-      if (($pos_deb>=0) and ($pos_fin>=0)) {
-         ob_start();
-            highlight_string(substr($ibid,$pos_deb+6,($pos_fin-$pos_deb-6)));
-            $fragment=ob_get_contents();
-         ob_end_clean();
-         $ibid=str_replace(substr($ibid,$pos_deb,($pos_fin-$pos_deb+7)),$fragment,$ibid);
-      } else {
-         $pasfin=false;
-      }
-   }
-   return ($ibid);
-}
-#autodoc is_admin($xadmin) : Phpnuke compatibility functions
-function is_admin($xadmin) {
-   global $admin;
-   if (isset($admin) and ($admin!='')) {
-      return (true);
-   } else {
-      return (false);
-   }
-}
-#autodoc is_user($xuser) : Phpnuke compatibility functions
-function is_user($xuser) {
-   global $user;
-   if (isset($user) and ($user!='')) {
-      return (true);
-   } else {
-      return (false);
-   }
-}
+
+
 #autodoc split_string_without_space($msg, $split) : Découpe la chaine en morceau de $slpit longueur si celle-ci ne contient pas d'espace / Snipe 2004
 function split_string_without_space($msg, $split) {
    $Xmsg=explode(' ',$msg);
@@ -1633,44 +1565,7 @@ function wrapper_f (&$string, $key, $cols) {
       }
 //   }
 }
-#autodoc preg_anti_spam($str) : Permet l'utilisation de la fonction anti_spam via preg_replace
-function preg_anti_spam($ibid) {
-   // Adaptation - David MARTINET alias Boris (2011)
-   return("<a href=\"mailto:".anti_spam($ibid, 1)."\" target=\"_blank\">".anti_spam($ibid, 0)."</a>");  
-}  
-#autodoc anti_spam($str [, $highcode]) : Encode une chaine en mélangeant caractères normaux, codes décimaux et hexa. Si $highcode == 1, utilise également le codage ASCII (compatible uniquement avec des mailto et des URL, pas pour affichage)
-function anti_spam($str, $highcode = 0) {
-   // Idée originale : Pomme (2004). Nouvelle version : David MARTINET alias Boris (2011)
-   $str_encoded = "";  
-   mt_srand((double)microtime()*1000000);
-   for($i = 0; $i < strlen($str); $i++) {
-      if ($highcode==1) {
-         $alea=mt_rand(1, 400);
-         $modulo=4;
-      } else { 
-         $alea=mt_rand(1, 300);
-         $modulo=3;
-      }
-      switch (($alea % $modulo)) {
-         case 0: 
-            $str_encoded.=$str[$i];
-            break;  
-         case 1: 
-            $str_encoded.="&#".ord($str[$i]).";";
-            break;  
-         case 2: 
-            $str_encoded.="&#x".bin2hex($str[$i]).";";
-            break;  
-         case 3: 
-            $str_encoded.="%".bin2hex($str[$i])."";
-            break;  
-         default: 
-            $str_encoded="Error";
-            break;  
-      }  
-   }
-   return $str_encoded;
-}
+
 #autodoc aff_editeur($Xzone, $Xactiv) : Charge l'éditeur ... ou non : $Xzone = nom du textarea / $Xactiv = deprecated <br /> si $Xzone="custom" on utilise $Xactiv pour passer des paramètres spécifiques
 function aff_editeur($Xzone, $Xactiv) {
    global $language, $tmp_theme, $tiny_mce,$tiny_mce_theme,$tiny_mce_relurl;
@@ -1734,226 +1629,18 @@ function wrh($ibid) {
    $tmp=str_replace(' ','&nbsp;',$tmp);
    return ($tmp);
 }
-#autodoc Q_spambot() : forge un champ de formulaire (champ de saisie : $asb_reponse / champ hidden : asb_question) permettant de déployer une fonction anti-spambot
-function Q_spambot() {
-   // Idée originale, développement et intégration - Gérald MARINO alias neo-machine
-   // Rajout brouillage anti_spam() : David MARTINET, alias Boris (2011)
-   // Other stuff : Dev 2012
-   global $user;
-   $asb_question = array (
-   '4 - (3 / 1)'       => 1,
-   '7 - 5 - 0'         => 2,
-   '2 + (1 / 1)'       => 3,
-   '2 + (1 + 1)'       => 4,
-   '3 + (0) + 2'       => 5,
-   '3 + (9 / 3)'       => 6,
-   '4 + 3 - 0'         => 7,
-   '6 + (0) + 2'       => 8,
-   '8 + (5 - 4)'       => 9,
-   '0 + (6 + 4)'       => 10,
-   '(5 * 2) + 1'       => 11,
-   '6 + (3 + 3)'       => 12,
-   '1 + (6 * 2)'       => 13,
-   '(8 / 1) + 6 '      => 14,
-   '6 + (5 + 4)'       => 15,
-   '8 + (4 * 2)'       => 16,
-   '1 + (8 * 2)'       => 17,
-   '9 + (3 + 6)'       => 18,
-   '(7 * 2) + 5'       => 19,
-   '(8 * 3) - 4'       => 20,
-   '7 + (2 * 7)'       => 21,
-   '9 + 5 + 8'         => 22,
-   '(5 * 4) + 3'       => 23,
-   '0 + (8 * 3)'       => 24,
-   '1 + (4 * 6)'       => 25,
-   '(6 * 5) - 4'       => 26,
-   '3 * (9 + 0)'       => 27,
-   '4 + (3 * 8)'       => 28,
-   '(6 * 4) + 5'       => 29,
-   '0 + (6 * 5)'       => 30);
-   
-   // START ALEA
-   mt_srand((double)microtime()*1000000);
-      // choix de la question
-      $asb_index = mt_rand(0,count($asb_question)-1);
-      $ibid=array_keys($asb_question);
-      $aff = $ibid[$asb_index];
 
-      // translate
-      $tab=explode(' ', str_replace(')','',str_replace('(','',$aff))); 
-      $al1=mt_rand(0,count($tab)-1);
-      if (function_exists("imagepng"))
-         $aff=str_replace($tab[$al1],html_entity_decode(translate($tab[$al1]), ENT_QUOTES | ENT_HTML401, 'UTF-8'),$aff);
-      else
-         $aff=str_replace($tab[$al1],translate($tab[$al1]),$aff);
-      // mis en majuscule
-      if ($asb_index%2)
-         $aff = ucfirst($aff);
-   // END ALEA
 
-   //Captcha - si GD
-   if (function_exists("imagepng"))
-      $aff="<img src=\"getfile.php?att_id=".rawurlencode(encrypt($aff." = "))."&amp;apli=captcha\" style=\"vertical-align: middle;\" />";
-   else
-      $aff="".anti_spam($aff." = ",0)."";
 
-   $tmp='';
-   if ($user=='') {
-      $tmp='
-      <div class="form-group row">
-         <div class="col-sm-9 text-right">
-            <label class="form-control-label text-danger" for="asb_reponse">'.translate("Anti-Spam / Merci de répondre à la question suivante : ").'&nbsp;'.$aff.'</label>
-         </div>
-         <div class="col-sm-3 text-right">
-            <input class="form-control" type="text" id="asb_reponse" name="asb_reponse" maxlength="2" onclick="this.value" />
-            <input type="hidden" name="asb_question" value="'.encrypt($ibid[$asb_index].','.time()).'" />
-         </div>
-      </div>';
-   } else {
-      $tmp='
-      <input type="hidden" name="asb_question" value="" />
-      <input type="hidden" name="asb_reponse" value="" />';
-   }
-   return ($tmp);
-}
-#autodoc L_spambot($ip, $status) : Log spambot activity : $ip="" => getip of the current user OR $ip="x.x.x.x" / $status = Op to do : true => not log or suppress log - false => log+1 - ban => Ban an IP 
-function L_spambot($ip, $status) {
-   $cpt_sup=0;
-   $maj_fic=false;
-   if ($ip=='')
-      $ip=getip();
-   $ip=urldecode($ip);
-   if (file_exists("storage/logs/spam.log")) {
-      $tab_spam=str_replace("\r\n",'',file("storage/logs/spam.log"));
-      if (in_array($ip.'|1',$tab_spam))
-         $cpt_sup=2;
-      if (in_array($ip.'|2',$tab_spam))
-         $cpt_sup=3;
-      if (in_array($ip.'|3',$tab_spam))
-         $cpt_sup=4;
-      if (in_array($ip.'|4',$tab_spam))
-         $cpt_sup=5;
-   }
-   if ($cpt_sup) {
-      if ($status=="false") {
-         $tab_spam[array_search($ip.'|'.($cpt_sup-1),$tab_spam)]=$ip.'|'.$cpt_sup;
-      } else if ($status=="ban") {
-         $tab_spam[array_search($ip.'|'.($cpt_sup-1),$tab_spam)]=$ip.'|5';
-      } else {
-         $tab_spam[array_search($ip.'|'.($cpt_sup-1),$tab_spam)]='';
-      }
-      $maj_fic=true;
-   } else {
-      if ($status=="false") {
-         $tab_spam[]=$ip.'|1';
-         $maj_fic=true;
-      } else if ($status=='ban') {
-         if (!in_array($ip.'|5',$tab_spam)) {
-            $tab_spam[]=$ip.'|5';
-            $maj_fic=true;
-         }
-      }
-   }
-   if ($maj_fic) {
-      $file = fopen("storage/logs/spam.log", "w");
-      foreach($tab_spam as $key => $val) {
-         if ($val)
-            fwrite($file, $val."\r\n");
-      }
-      fclose($file);
-   }
-}
-#autodoc R_spambot($asb_question, $asb_reponse, $message) : valide le champ $asb_question avec la valeur de $asb_reponse (anti-spambot) et filtre le contenu de $message si nécessaire
-function R_spambot($asb_question, $asb_reponse, $message='') {
-   // idée originale, développement et intégration - Gérald MARINO alias neo-machine
-   global $user;
-   global $REQUEST_METHOD;
-   if ($REQUEST_METHOD=="POST") {
-      if ($user=='') {
-         if ( ($asb_reponse!='') and (is_numeric($asb_reponse)) and (strlen($asb_reponse)<=2) ) {
-            $ibid=decrypt($asb_question);
-            $ibid=explode(',',$ibid);
-            $result="\$arg=($ibid[0]);";
-            // submit intervient en moins de 5 secondes (trop vite) ou plus de 30 minutes (trop long)
-            $temp=time()-$ibid[1];
-            if (($temp<1800) and ($temp>5)) {
-               eval($result);
-            } else {
-               $arg=uniqid(mt_rand());
-            }
-         } else {
-            $arg=uniqid(mt_rand());
-         }
-         if ($arg==$asb_reponse) {
-            // plus de 2 http:// dans le texte
-            preg_match_all('#http://#',$message,$regs);
-            if (count($regs[0])>2) {
-               L_spambot('',"false");
-               return (false);
-            } else {
-               L_spambot('',"true");
-               return (true);
-            }
-         } else {
-            L_spambot('',"false");
-            return (false);
-         }
-      } else {
-         L_spambot('',"true");
-         return (true);
-      }
-   } else {
-      L_spambot('',"false");
-      return (false);
-   }
-}
-#autodoc keyED($txt,$encrypt_key) : Composant des fonctions encrypt et decrypt
-function keyED($txt,$encrypt_key) {
-   $encrypt_key = md5($encrypt_key);
-   $ctr=0;
-   $tmp = '';
-   for ($i=0;$i<strlen($txt);$i++) {
-       if ($ctr==strlen($encrypt_key) ) $ctr=0;
-       $tmp.= substr($txt,$i,1) ^ substr($encrypt_key,$ctr,1);
-       $ctr++;
-   }
-   return $tmp;
-}
-#autodoc encrypt($txt) : retourne une chaine encryptée en utilisant la valeur de $NPDS_Key
-function encrypt($txt) {
-   global $NPDS_Key;
-   return (encryptK($txt,$NPDS_Key));
-}
-#autodoc encryptK($txt, $C_key) : retourne une chaine encryptée en utilisant la clef : $C_key
-function encryptK($txt, $C_key) {
-   srand( (double)microtime()*1000000);
-   $encrypt_key = md5(rand(0,32000) );
-   $ctr=0;
-   $tmp = '';
-   for ($i=0;$i<strlen($txt);$i++) {
-       if ($ctr==strlen($encrypt_key) ) $ctr=0;
-       $tmp.= substr($encrypt_key,$ctr,1) .
-       (substr($txt,$i,1) ^ substr($encrypt_key,$ctr,1) );
-       $ctr++;
-   }
-   return base64_encode(keyED($tmp,$C_key));
-}
-#autodoc decrypt($txt) : retourne une chaine décryptée en utilisant la valeur de $NPDS_Key
-function decrypt($txt) {
-   global $NPDS_Key;
-   return (decryptK($txt, $NPDS_Key));
-}
-#autodoc decryptK($txt, $C_key) : retourne une décryptée en utilisant la clef de $C_Key
-function decryptK($txt, $C_key) {
-   $txt = keyED(base64_decode($txt),$C_key);
-   $tmp = '';
-   for ($i=0;$i<strlen($txt);$i++) {
-       $md5 = substr($txt,$i,1);
-       $i++;
-       $tmp.= (substr($txt,$i,1) ^ $md5);
-   }
-   return ($tmp);
-}
+
+
+
+
+
+
+
+
+
 #autodoc conv2br($txt) : convertie \r \n  BR ... en br XHTML
 function conv2br($txt) {
    $Xcontent=str_replace("\r\n","<br />",$txt);
@@ -2053,10 +1740,10 @@ function lnlbox() {
       $title=translate("La lettre");
    else
       $title=$block_title;
-/*
+   /*
    $arg1='
       var formulid = ["lnlblock"]';
-*/
+   */
    $boxstuff = '
          <form id="lnlblock" action="lnl.php" method="get">
             <div class="form-group">

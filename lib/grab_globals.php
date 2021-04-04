@@ -10,10 +10,10 @@
  */
 use npds\security\protect;
 use npds\security\extract;
-use npds\security\spam;
+use npds\utility\spam;
+use npds\utility\str;
 use npds\error\access;
 use npds\error\debug;
-use npds\support\str;
 
 
 if (!defined('NPDS_GRAB_GLOBALS_INCLUDED')) 
@@ -31,6 +31,11 @@ if (!defined('NPDS_GRAB_GLOBALS_INCLUDED'))
         include ("config/charset.php");
     }
    
+    // include current charset
+    if (file_exists("config/constant.php")) {
+        include ("config/constant.php");
+    }
+
     // Get values, slash, filter and extract
     if (!empty($_GET)) 
     {

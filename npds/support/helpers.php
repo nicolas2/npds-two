@@ -11,6 +11,9 @@
 use npds\security\hack;
 use npds\security\ip;
 use npds\security\extract;
+use npds\utility\crypt;
+use npds\utility\code;
+
 
 // Url
 
@@ -303,5 +306,182 @@ if (! function_exists('SC_clean'))
         }
         closedir($dh);
         Q_Clean();
+    }
+}
+
+/**
+ * SC_infos()
+ */
+if (! function_exists('SC_infos'))
+{ 
+    /**
+     * Indique le status de SuperCache
+     */
+    function SC_infos() 
+    {
+        global $SuperCache, $npds_sc;
+        
+        if ($SuperCache) 
+        {
+            if ($npds_sc) 
+            {
+                return '<span class="small">'.translate(".:Page << Super-Cache:.").'</span>';
+            } 
+            else 
+            {
+                return '<span class="small">'.translate(".:Page >> Super-Cache:.").'</span>';
+            }
+        }
+    }
+}
+
+// Crypt
+
+/**
+ * keyED($txt, $encrypt_key)
+ */
+if (! function_exists('keyED'))
+{ 
+    /**
+     * [keyED description]
+     * @param  [type] $txt         [description]
+     * @param  [type] $encrypt_key [description]
+     * @return [type]              [description]
+     */
+    function keyED($txt, $encrypt_key) 
+    {
+        crypt::keyED($txt, $encrypt_key);
+    }
+}
+
+/**
+ * encrypt($txt)
+ */
+if (! function_exists('encrypt'))
+{ 
+    /**
+     * [encrypt description]
+     * @param  [type] $txt [description]
+     * @return [type]      [description]
+     */
+    function encrypt($txt) 
+    {
+        crypt::encrypt($txt);
+    }
+}
+
+/**
+ * encryptK($txt, $C_key)
+ */
+if (! function_exists('encryptK'))
+{ 
+    /**
+     * [encryptK description]
+     * @param  [type] $txt   [description]
+     * @param  [type] $C_key [description]
+     * @return [type]        [description]
+     */
+    function encryptK($txt, $C_key) 
+    {
+        crypt::encryptK($txt, $C_key);
+    }
+}
+
+/**
+ * decrypt($txt)
+ */
+if (! function_exists('decrypt'))
+{ 
+    /**
+     * [decrypt description]
+     * @param  [type] $txt [description]
+     * @return [type]      [description]
+     */
+    function decrypt($txt) 
+    {
+        crypt::decrypt($txt);
+    }
+}
+
+/**
+ * decryptK($txt, $C_key)
+ */
+if (! function_exists('decryptK'))
+{ 
+    /**
+     * [decryptK description]
+     * @param  [type] $txt   [description]
+     * @param  [type] $C_key [description]
+     * @return [type]        [description]
+     */
+    function decryptK($txt, $C_key) 
+    {
+        crypt::decryptK($txt, $C_key);
+    }
+}
+
+// Code
+
+/**
+ * change_cod($r)
+ */
+if (! function_exists('change_cod'))
+{ 
+    /**
+     * [change_cod description]
+     * @param  [type] $r [description]
+     * @return [type]    [description]
+     */
+    function change_cod($r) 
+    {
+        code::change_cod($r);
+    }
+}
+
+/**
+ * af_cod($ibid)
+ */
+if (! function_exists('af_cod'))
+{ 
+    /**
+     * [af_cod description]
+     * @param  [type] $ibid [description]
+     * @return [type]       [description]
+     */
+    function af_cod($ibid) 
+    {
+        code::af_cod($ibid);
+    }
+}
+
+/**
+ * desaf_cod($ibid)
+ */
+if (! function_exists('desaf_cod'))
+{ 
+    /**
+     * [desaf_cod description]
+     * @param  [type] $ibid [description]
+     * @return [type]       [description]
+     */
+    function desaf_cod($ibid) 
+    {
+        code::desaf_cod($ibid);
+    }
+}
+
+/**
+ * aff_code($ibid)
+ */
+if (! function_exists('aff_code'))
+{ 
+    /**
+     * [aff_code description]
+     * @param  [type] $ibid [description]
+     * @return [type]       [description]
+     */
+    function aff_code($ibid) 
+    {
+        code::aff_code($ibid);
     }
 }

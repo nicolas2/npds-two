@@ -9,10 +9,9 @@
  * @date 02/04/2021
  */
 
-/************************************************************************/
-// Dont modified these lines if you dont know exactly what you have to do
-/************************************************************************/
-
+/**
+ * Dont modified these lines if you dont know exactly what you have to do
+ */
 $bad_uri_content = array(
                   // To Filter "php WebWorm" and like Santy and other
                   "perl",
@@ -28,6 +27,7 @@ $bad_uri_content = array(
                   " insert ",
                   " drop ",
                   " delete ",
+                  
                   // Comment inline SQL - shiney 2011
                   "/*",
 
@@ -47,6 +47,7 @@ $bad_uri_content = array(
                   "msgbox(",
                   "alert(",
                   "expression(",
+                  
                   // some HTML5 tags - dev 2012
                   "formaction",
                   "autofocus",
@@ -54,4 +55,5 @@ $bad_uri_content = array(
                   "onformchange",
                   "history.pushstate("
                  );
-?>
+
+return $bad_uri_content;

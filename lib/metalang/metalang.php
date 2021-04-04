@@ -9,6 +9,10 @@
  * @date 02/04/2021
  */
 
+use npds\cache\cacheManager;
+use npds\cache\cacheEmpty;
+
+
 // Cette fonction doit être utilisée pour filtrer les arguments des requêtes SQL et est
 // automatiquement appelée par META-LANG lors de passage de paramètres
 function arg_filter($arg) {
@@ -99,7 +103,7 @@ function charg_metalang() {
       $cache_obj = new cacheManager();
       $glossaire = $cache_obj->startCachingObjet($cache_clef);
    } else
-      $cache_obj = new SuperCacheEmpty();
+      $cache_obj = new cacheEmpty();
 
    if (($cache_obj->genereting_output == 1) or ($cache_obj->genereting_output == -1) or (!$SuperCache)) {
       

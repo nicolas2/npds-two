@@ -21,5 +21,5 @@ return array(
     'standard' => false,
 
     // report All error    
-    'all' => false,
+    'all' => true,
 );
