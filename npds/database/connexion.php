@@ -70,7 +70,7 @@ if (! function_exists('Mysql_Connexion'))
         }
 
         // Init mysql charset
-        mysql_Charset();
+        mysql_Charset($ret_p);
 
         return $ret_p;
     }
@@ -85,17 +85,17 @@ if (! function_exists('mysql_Charset'))
      * [mysql_Charset description]
      * @return [type] [description]
      */
-    function mysql_Charset() 
+    function mysql_Charset($ret_p) 
     {
-        global $dblink, $mysql_i;
+        global $mysql_i;
 
         if ($mysql_i == 1)
         {
-            mysqli_set_charset($dblink, 'utf8mb4');
+            mysqli_set_charset($ret_p, 'utf8mb4');
         }
         else 
         {
-            mysql_set_charset($dblink, 'utf8mb4');
+            mysql_set_charset($ret_p, 'utf8mb4');
         }
     }
 }
