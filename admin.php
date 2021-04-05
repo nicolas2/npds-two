@@ -436,7 +436,9 @@ function GraphicAdmin($hlpfile)
                     </a>';
                 }
                 
-            } else {
+            } 
+            else 
+            {
                 $bloc_foncts_A .= '
                 <a class=" btn btn-outline-primary btn-sm mr-2 my-1 tooltipbyclass" title="'.$SAQ['fretour_h'].'" data-id="'.$SAQ['fid'].'" data-html="true" '.$SAQ['furlscript'].' >
                     <img class="adm_img" src="'.$adminico.'" alt="icon_'.$SAQ['fnom_affich'].'" />

@@ -19,11 +19,10 @@ use npds\cookie\cookie;
 use npds\language\language;
 use npds\language\metalang;
 
+
 defined('DS') || define('DS', DIRECTORY_SEPARATOR);
 
 define('BASEPATH', realpath(__DIR__ .'/../') .DS);
-
-//var_dump(BASEPATH);
 
 include(BASEPATH."vendor/autoload.php");
 

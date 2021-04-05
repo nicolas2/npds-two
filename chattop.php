@@ -9,12 +9,14 @@
  * @date 02/04/2021
  */
 
-   $Titlesitename='NPDS';
-   $nuke_url=''; $meta_op='';
-   include('config/meta.php');
-   echo '
-   </head>
-   <body>
-   </body>
+$Titlesitename = 'Npds Two';
+$nuke_url = ''; 
+$meta_op = '';
+
+include('config/meta.php');
+
+echo '
+    </head>
+    <body>
+    </body>
 </html>';
-?>
