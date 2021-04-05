@@ -12,14 +12,10 @@
 include("vendor/autoload.php");
 
 use npds\session\session;
-use npds\language\language;
-use npds\cache\cacheManager;
-use npds\cache\cacheEmpty;
 use npds\cookie\cookie;
-use npds\utility\str;
-use npds\time\time;
+use npds\language\language;
 
-include("boot/grab_globals.php");
+include("lib/grab_globals.php");
 include("config/config.php");
 
 include("lib/multi-langue.php");
