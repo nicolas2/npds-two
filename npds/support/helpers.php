@@ -8,14 +8,8 @@
  * @version 1.0
  * @date 02/04/2021
  */
-use npds\security\hack;
-use npds\security\ip;
 use npds\security\extract;
-use npds\utility\crypt;
-use npds\utility\code;
 
-
-// Url
 
 /**
  * site_url('index.php?op=index');
@@ -90,41 +84,6 @@ if (! function_exists('redirect_url'))
     }
 }
 
-// Security
-
-/**
- * removeHack($string)
- */
-if (! function_exists('removeHack'))
-{
-    /**
-     * [removeHack description]
-     * @param  [type] $string [description]
-     * @return [type]         [description]
-     */
-    function removeHack($string)
-    {
-        return hack::remove($string);
-    }
-}
-
-/**
- * getip()
- */
-if (! function_exists('getip'))
-{
-    /**
-     * [getip description]
-     * @return [type] [description]
-     */
-    function getip()
-    {
-        return ip::get();
-    }
-}
-
-// get cookie user, user_language, admin
-
 /**
  * cookie user
  */
@@ -156,7 +115,7 @@ if (! function_exists('user_laguage'))
 }
 
 /**
- * cookie user
+ * cookie admin
  */
 if (! function_exists('admin'))
 {
@@ -167,157 +126,6 @@ if (! function_exists('admin'))
     function admin()
     {
         return extract::admin();
-    }
-}
-
-// Crypt
-
-/**
- * keyED($txt, $encrypt_key)
- */
-if (! function_exists('keyED'))
-{ 
-    /**
-     * [keyED description]
-     * @param  [type] $txt         [description]
-     * @param  [type] $encrypt_key [description]
-     * @return [type]              [description]
-     */
-    function keyED($txt, $encrypt_key) 
-    {
-        crypt::keyED($txt, $encrypt_key);
-    }
-}
-
-/**
- * encrypt($txt)
- */
-if (! function_exists('encrypt'))
-{ 
-    /**
-     * [encrypt description]
-     * @param  [type] $txt [description]
-     * @return [type]      [description]
-     */
-    function encrypt($txt) 
-    {
-        crypt::encrypt($txt);
-    }
-}
-
-/**
- * encryptK($txt, $C_key)
- */
-if (! function_exists('encryptK'))
-{ 
-    /**
-     * [encryptK description]
-     * @param  [type] $txt   [description]
-     * @param  [type] $C_key [description]
-     * @return [type]        [description]
-     */
-    function encryptK($txt, $C_key) 
-    {
-        crypt::encryptK($txt, $C_key);
-    }
-}
-
-/**
- * decrypt($txt)
- */
-if (! function_exists('decrypt'))
-{ 
-    /**
-     * [decrypt description]
-     * @param  [type] $txt [description]
-     * @return [type]      [description]
-     */
-    function decrypt($txt) 
-    {
-        crypt::decrypt($txt);
-    }
-}
-
-/**
- * decryptK($txt, $C_key)
- */
-if (! function_exists('decryptK'))
-{ 
-    /**
-     * [decryptK description]
-     * @param  [type] $txt   [description]
-     * @param  [type] $C_key [description]
-     * @return [type]        [description]
-     */
-    function decryptK($txt, $C_key) 
-    {
-        crypt::decryptK($txt, $C_key);
-    }
-}
-
-// Code
-
-/**
- * change_cod($r)
- */
-if (! function_exists('change_cod'))
-{ 
-    /**
-     * [change_cod description]
-     * @param  [type] $r [description]
-     * @return [type]    [description]
-     */
-    function change_cod($r) 
-    {
-        code::change_cod($r);
-    }
-}
-
-/**
- * af_cod($ibid)
- */
-if (! function_exists('af_cod'))
-{ 
-    /**
-     * [af_cod description]
-     * @param  [type] $ibid [description]
-     * @return [type]       [description]
-     */
-    function af_cod($ibid) 
-    {
-        code::af_cod($ibid);
-    }
-}
-
-/**
- * desaf_cod($ibid)
- */
-if (! function_exists('desaf_cod'))
-{ 
-    /**
-     * [desaf_cod description]
-     * @param  [type] $ibid [description]
-     * @return [type]       [description]
-     */
-    function desaf_cod($ibid) 
-    {
-        code::desaf_cod($ibid);
-    }
-}
-
-/**
- * aff_code($ibid)
- */
-if (! function_exists('aff_code'))
-{ 
-    /**
-     * [aff_code description]
-     * @param  [type] $ibid [description]
-     * @return [type]       [description]
-     */
-    function aff_code($ibid) 
-    {
-        code::aff_code($ibid);
     }
 }
 
