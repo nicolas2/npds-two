@@ -10,6 +10,11 @@
  */
 namespace npds\news;
 
+use npds\auth\auth;
+use npds\language\language;
+use npds\utility\str;
+use npds\utility\code;
+
 
 /*
  * news
@@ -113,7 +118,7 @@ class news {
                 $ihome = 0;
             }
               
-            if (ctrl_aff($ihome, $catid)) 
+            if (auth::ctrl_aff($ihome, $catid)) 
             {
                 if (($type_req == "index") or ($type_req == "libre"))
                 {
@@ -185,7 +190,7 @@ class news {
                 $marqeur = 0;
             }
             
-            $xtab = news_aff("libre", "WHERE catid='$catid' AND archive='0' ORDER BY sid DESC LIMIT $marqeur,$storynum", "", "-1");
+            $xtab = static::news_aff("libre", "WHERE catid='$catid' AND archive='0' ORDER BY sid DESC LIMIT $marqeur,$storynum", "", "-1");
             $storynum = sizeof($xtab);
         } 
         elseif ($op == "topics") 
@@ -197,7 +202,7 @@ class news {
                 $marqeur = 0;
             }
             
-            $xtab = news_aff("libre", "WHERE topic='$catid' AND archive='0' ORDER BY sid DESC LIMIT $marqeur,$storynum", "", "-1");
+            $xtab = static::news_aff("libre", "WHERE topic='$catid' AND archive='0' ORDER BY sid DESC LIMIT $marqeur,$storynum", "", "-1");
             $storynum = sizeof($xtab);
         } 
         elseif ($op == "news") 
@@ -209,16 +214,16 @@ class news {
                 $marqeur = 0;
             }
             
-            $xtab = news_aff("libre", "WHERE ihome!='1' AND archive='0' ORDER BY sid DESC LIMIT $marqeur,$storynum", "", "-1");
+            $xtab = static::news_aff("libre", "WHERE ihome!='1' AND archive='0' ORDER BY sid DESC LIMIT $marqeur,$storynum", "", "-1");
             $storynum = sizeof($xtab);
         } 
         elseif ($op == "article") 
         {
-            $xtab = news_aff("index", "WHERE ihome!='1' AND sid='$catid'", 1, "");
+            $xtab = static::news_aff("index", "WHERE ihome!='1' AND sid='$catid'", 1, "");
         } 
         else 
         {
-            $xtab = news_aff("index", "WHERE ihome!='1' AND archive='0'", $storynum, "");
+            $xtab = static::news_aff("index", "WHERE ihome!='1' AND archive='0'", $storynum, "");
         }
            
         $story_limit = 0;
@@ -233,16 +238,16 @@ class news {
             
             $sendF = '<a href="friend.php?op=FriendSend&amp;sid='.$s_sid.'" class="mr-3" title="'.translate("Envoyer cet article à un ami").'" data-toggle="tooltip" ><i class="fa fa-lg fa-at"></i></a>';
             
-            getTopics($s_sid);
+            topics::getTopics($s_sid);
             
-            $title = aff_langue(stripslashes($title));
-            $hometext = aff_langue(stripslashes($hometext));
-            $notes = aff_langue(stripslashes($notes));
-            $bodycount = strlen(strip_tags(aff_langue($bodytext), '<img>'));
+            $title = language::aff_langue(stripslashes($title));
+            $hometext = language::aff_langue(stripslashes($hometext));
+            $notes = language::aff_langue(stripslashes($notes));
+            $bodycount = strlen(strip_tags(language::aff_langue($bodytext), '<img>'));
             
             if ($bodycount > 0) 
             {
-                $bodycount = strlen(strip_tags(aff_langue($bodytext)));
+                $bodycount = strlen(strip_tags(language::aff_langue($bodytext)));
                 
                 if ($bodycount > 0 )
                 {
@@ -289,7 +294,7 @@ class news {
                 $title = $title;
                 
                 // Attention à cela aussi
-                $morelink[6] = ' <a href="index.php?op=newcategory&amp;catid='.$catid.'">&#x200b;'.aff_langue($title1).'</a>';
+                $morelink[6] = ' <a href="index.php?op=newcategory&amp;catid='.$catid.'">&#x200b;'.language::aff_langue($title1).'</a>';
             } 
             else
             {
@@ -302,8 +307,8 @@ class news {
             $news_tab[$story_limit]['title'] = serialize($title);
             $news_tab[$story_limit]['counter'] = serialize($counter);
             $news_tab[$story_limit]['topic'] = serialize($topic);
-            $news_tab[$story_limit]['hometext'] = serialize(meta_lang(aff_code($hometext)));
-            $news_tab[$story_limit]['notes'] = serialize(meta_lang(aff_code($notes)));
+            $news_tab[$story_limit]['hometext'] = serialize(meta_lang(code::aff_code($hometext)));
+            $news_tab[$story_limit]['notes'] = serialize(meta_lang(code::aff_code($notes)));
             $news_tab[$story_limit]['morelink'] = serialize($morelink);
             $news_tab[$story_limit]['topicname'] = serialize($topicname);
             $news_tab[$story_limit]['topicimage'] = serialize($topicimage);
@@ -335,7 +340,7 @@ class news {
         fwrite($file, "General purpose self-explanatory file with news headlines\n");
         
         $storynum = $storyhome;
-        $xtab = news_aff('index', "WHERE ihome='0' AND archive='0'", $storyhome, '');
+        $xtab = staic::news_aff('index', "WHERE ihome='0' AND archive='0'", $storyhome, '');
         $story_limit = 0;
         
         while (($story_limit < $storynum) and ($story_limit < sizeof($xtab))) 

@@ -12,6 +12,7 @@ namespace npds\utility;
 
 use npds\error\access;
 use npds\security\ip;
+use npds\utility\crypt;
 
 
 /*
@@ -58,11 +59,13 @@ class spam {
             {
                 $ipv4 = explode('.', $ip);
              
-                if (in_array($ipv4[0].'.'.$ipv4[1].'.%|5', $tab_spam)) {
+                if (in_array($ipv4[0].'.'.$ipv4[1].'.%|5', $tab_spam)) 
+                {
                     access::denied();
                 }
              
-                if (in_array($ipv4[0].'.'.$ipv4[1].'.'.$ipv4[2].'.%|5', $tab_spam)) {
+                if (in_array($ipv4[0].'.'.$ipv4[1].'.'.$ipv4[2].'.%|5', $tab_spam)) 
+                {
                     access::denied();
                 }
             }
@@ -73,11 +76,13 @@ class spam {
             {
                 $ipv6 = explode(':', $ip);
              
-                if (in_array($ipv6[0].':'.$ipv6[1].':%|5', $tab_spam)) {
+                if (in_array($ipv6[0].':'.$ipv6[1].':%|5', $tab_spam)) 
+                {
                     access::denied();
                 }
              
-                if (in_array($ipv6[0].':'.$ipv6[1].':'.$ipv6[2].':%|5', $tab_spam)) {
+                if (in_array($ipv6[0].':'.$ipv6[1].':'.$ipv6[2].':%|5', $tab_spam)) 
+                {
                     access::denied();
                 }
             }

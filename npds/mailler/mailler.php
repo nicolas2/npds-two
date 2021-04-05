@@ -10,6 +10,9 @@
  */
 namespace npds\mailler;
 
+use npds\views\theme;
+use npds\utility\spam;
+
 
 /*
  * mailler
@@ -32,7 +35,7 @@ class mailler {
     {
         global $anonymous;
            
-        if ($ibid = theme_image("fle_b.gif")) 
+        if ($ibid = theme::theme_image("fle_b.gif")) 
         {
             $imgtmp = $ibid;
         } 
@@ -236,4 +239,59 @@ class mailler {
         }
     }
 
+    /**
+     * [fakedmail description]
+     * @param  [type] $r [description]
+     * @return [type]    [description]
+     */
+    public static function fakedmail($r) 
+    { 
+        return spam::preg_anti_spam($r[1]);
+    }
+
+    /**
+     * Controle si le domaine existe et si il dispose d'un serveur de mail
+     * @param  [type] $email [description]
+     * @return [type]        [description]
+     */
+    public static function checkdnsmail($email) 
+    {
+        $ibid = explode('@', $email);
+        
+        if(!checkdnsrr($ibid[1],'MX'))
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+    
+    /**
+     * utilisateur dans le fichier des mails incorrect true or false 
+     * @param  [type] $utilisateur [description]
+     * @return [type]              [description]
+     */
+    public static function isbadmailuser($utilisateur) 
+    {
+        $contents = '';
+        $filename = "storage/users_private/usersbadmail.txt";
+        $handle = fopen($filename, "r");
+        
+        if(filesize($filename) > 0)
+        {
+            $contents = fread($handle, filesize($filename));
+        }
+        fclose($handle);
+        
+        if(strstr($contents, '#'.$utilisateur.'|'))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
 }

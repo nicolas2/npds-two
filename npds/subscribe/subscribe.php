@@ -10,6 +10,8 @@
  */
 namespace npds\subscribe;
 
+use npds\mailler\mailler;
+
 
 /*
  * subscribe
@@ -105,7 +107,7 @@ class subscribe {
                 
                 include("signat.php");
                 
-                send_email($email, $subject, $message, '', true, 'html');
+                mailler::send_email($email, $subject, $message, '', true, 'html');
             }
         }
     }

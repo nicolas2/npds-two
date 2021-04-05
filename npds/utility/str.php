@@ -169,7 +169,7 @@ class str {
      * @param  integer $response_code [description]
      * @return [type]                 [description]
      */
-    function file_contents_exist($url, $response_code = 200) 
+    public static function file_contents_exist($url, $response_code = 200) 
     {
         $headers = get_headers($url);
         
@@ -182,4 +182,20 @@ class str {
             return false;
         }
     }
+
+    /**
+     * [undo_htmlspecialchars description]
+     * @param  [type] $input [description]
+     * @return [type]        [description]
+     */
+    public static function undo_htmlspecialchars($input) 
+    {
+        $input = preg_replace("/&gt;/i", ">", $input);
+        $input = preg_replace("/&lt;/i", "<", $input);
+        $input = preg_replace("/&quot;/i", "\"", $input);
+        $input = preg_replace("/&amp;/i", "&", $input);
+       
+        return $input;
+    }
+
 }

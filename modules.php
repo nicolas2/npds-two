@@ -32,15 +32,6 @@ if (filtre_module($ModPath) and filtre_module($ModStart)) {
       die();
    } else
       Access_Error();
-} elseif (filtre_module($name) and filtre_module($file)) {
-   // phpnuke compatibility
-   if (!function_exists("Mysql_Connexion"))
-      include ("mainfile.php");
-   if (file_exists("modules/$name/$file.php")) {
-      include("modules/$name/$file.php");
-      die();
-   } else
-      Access_Error();
 } else
    Access_Error();
 ?>

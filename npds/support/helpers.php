@@ -13,6 +13,7 @@ use npds\security\ip;
 use npds\security\extract;
 use npds\utility\crypt;
 use npds\utility\code;
+use npds\cache\cache;
 
 
 // Url
@@ -177,34 +178,7 @@ if (! function_exists('admin'))
  */
 if (! function_exists('Q_Select'))
 { 
-    /**
-     * [Q_Select description]
-     * @param [type]  $Xquery    [description]
-     * @param integer $retention [description]
-     */
-    function Q_Select($Xquery, $retention=3600) 
-    {
-        global $SuperCache, $cache_obj;
-       
-        if (($SuperCache) and ($cache_obj)) 
-        {
-            $row = $cache_obj->CachingQuery($Xquery, $retention);
-          
-            return ($row);
-        } 
-        else 
-        {
-            $result = @sql_query($Xquery);
-            $tab_tmp = array();
-          
-            while($row = sql_fetch_assoc($result)) 
-            {
-                $tab_tmp[] = $row;
-            }
-          
-            return ($tab_tmp);
-        }
-    }
+    cache::Q_Select($Xquery, $retention);
 }
 
 /**
@@ -212,30 +186,7 @@ if (! function_exists('Q_Select'))
  */
 if (! function_exists('PG_clean'))
 { 
-    /**
-     * [PG_clean description]
-     * @param [type] $request [description]
-     */
-    function PG_clean($request) 
-    {
-        global $CACHE_CONFIG;
-       
-        $page = md5($request);
-        $dh = opendir($CACHE_CONFIG['data_dir']);
-        
-        while(false !== ($filename = readdir($dh))) 
-        {
-            if ($filename === '.' 
-                OR $filename === '..' 
-                OR (strpos($filename, $page) === FALSE)) 
-            {
-                continue;
-            }
-              
-            unlink($CACHE_CONFIG['data_dir'].$filename);
-        }
-        closedir($dh);
-    }
+    cache::PG_clean($request);
 }
 
 /**
@@ -243,34 +194,7 @@ if (! function_exists('PG_clean'))
  */
 if (! function_exists('Q_Clean'))
 { 
-    /**
-     * [Q_Clean description]
-     */
-    function Q_Clean() 
-    {
-        global $CACHE_CONFIG;
-        
-        $dh = opendir($CACHE_CONFIG['data_dir']."sql");
-        
-        while(false !== ($filename = readdir($dh))) 
-        {
-            if ($filename === '.' 
-                OR $filename === '..') 
-            {
-                continue;
-            }
-              
-            if (is_file($CACHE_CONFIG['data_dir']."sql/".$filename))
-            {
-                unlink($CACHE_CONFIG['data_dir']."sql/".$filename);
-            }
-        }
-
-        closedir($dh);
-        $fp = fopen($CACHE_CONFIG['data_dir']."sql/.htaccess", 'w');
-        @fputs($fp, "Deny from All");
-        fclose($fp);
-    }
+    cache::Q_Clean();
 }
 
 /**
@@ -278,35 +202,7 @@ if (! function_exists('Q_Clean'))
  */
 if (! function_exists('SC_clean'))
 { 
-    /**
-     * [SC_clean description]
-     */
-    function SC_clean() 
-    {
-        global $CACHE_CONFIG;
-       
-        $dh = opendir($CACHE_CONFIG['data_dir']);
-       
-        while (false !== ($filename = readdir($dh))) 
-        {
-            if ($filename === '.' 
-                OR $filename === '..' 
-                OR $filename === 'ultramode.txt' 
-                OR $filename === 'net2zone.txt' 
-                OR $filename === 'sql' 
-                OR $filename === 'index.html')
-            { 
-                continue;
-            }
-             
-            if (is_file($CACHE_CONFIG['data_dir'].$filename))
-            {
-                unlink($CACHE_CONFIG['data_dir'].$filename);
-            }
-        }
-        closedir($dh);
-        Q_Clean();
-    }
+    cache::SC_clean();
 }
 
 /**
@@ -314,25 +210,7 @@ if (! function_exists('SC_clean'))
  */
 if (! function_exists('SC_infos'))
 { 
-    /**
-     * Indique le status de SuperCache
-     */
-    function SC_infos() 
-    {
-        global $SuperCache, $npds_sc;
-        
-        if ($SuperCache) 
-        {
-            if ($npds_sc) 
-            {
-                return '<span class="small">'.translate(".:Page << Super-Cache:.").'</span>';
-            } 
-            else 
-            {
-                return '<span class="small">'.translate(".:Page >> Super-Cache:.").'</span>';
-            }
-        }
-    }
+    cache::SC_infos();
 }
 
 // Crypt
@@ -483,5 +361,38 @@ if (! function_exists('aff_code'))
     function aff_code($ibid) 
     {
         code::aff_code($ibid);
+    }
+}
+
+/**
+ * get_os()
+ */
+if (! function_exists('get_os'))
+{
+    /**
+     * retourne true si l'OS de la station cliente est Windows sinon false
+     * @return [type] [description]
+     */
+    function get_os() 
+    {
+        $client = getenv("HTTP_USER_AGENT");
+        
+        if (preg_match('#(\(|; )(Win)#', $client, $regs)) 
+        {
+            if ($regs[2] == "Win") 
+            {
+                $MSos = true;
+            } 
+            else 
+            {
+                $MSos = false;
+            }
+        } 
+        else 
+        {
+            $MSos = false;
+        }
+
+        return $MSos;
     }
 }

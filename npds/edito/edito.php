@@ -10,6 +10,8 @@
  */
 namespace npds\edito;
 
+use npds\time\time;
+
 
 /*
  * edito
@@ -119,7 +121,7 @@ class edito {
             $affich = true;
         }
         
-        $Xcontents = meta_lang(aff_langue($Xcontents));
+        $Xcontents = meta_lang(language::aff_langue($Xcontents));
         
         return array($affich, $Xcontents);
     }

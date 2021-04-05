@@ -26,7 +26,8 @@
         },
         "files": [
             "npds/support/helpers.php",
-            "npds/support/box.php"
+            "npds/support/box.php",
+            "npds/support/metas.php"
         ]        
     }
 }

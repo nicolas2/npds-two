@@ -11,6 +11,8 @@
 namespace npds\auth;
 
 use npds\cookie\cookie;
+use npds\groupes\groupe;
+use npds\error\error;
 
 
 /*
@@ -141,7 +143,7 @@ class auth {
         
         if ($auto > 1) 
         {
-            $tab_groupe = valid_group($user);
+            $tab_groupe = groupe::valid_group($user);
             
             if ($tab_groupe) 
             {
@@ -202,7 +204,7 @@ class auth {
         } 
         elseif (($ihome > 1) and ($ihome <= 127)) 
         {
-            $tab_groupe = valid_group($user);
+            $tab_groupe = groupe::valid_group($user);
             
             if ($tab_groupe) 
             {
@@ -291,6 +293,90 @@ class auth {
                 }
             break;
         }
+    }
+
+    /**
+     * [get_userdata_from_id description]
+     * @param  [type] $userid [description]
+     * @return [type]         [description]
+     */
+    public static function get_userdata_from_id($userid) 
+    {
+        global $NPDS_Prefix;
+        
+        $sql1 = "SELECT * FROM ".$NPDS_Prefix."users WHERE uid='$userid'";
+        $sql2 = "SELECT * FROM ".$NPDS_Prefix."users_status WHERE uid='$userid'";
+        
+        if (!$result = sql_query($sql1))
+        {
+            error::forumerror('0016');
+        }
+        
+        if (!$myrow = sql_fetch_assoc($result))
+        {
+            $myrow = array( "uid" => 1);
+        }
+        else
+        {
+            $myrow = array_merge($myrow, (array)sql_fetch_assoc(sql_query($sql2)));
+        }
+        
+        return $myrow;
+    }
+
+    /**
+     * [get_userdata_extend_from_id description]
+     * @param  [type] $userid [description]
+     * @return [type]         [description]
+     */
+    public static function get_userdata_extend_from_id($userid) 
+    {
+        global $NPDS_Prefix;
+           
+        $sql1 = "SELECT * FROM ".$NPDS_Prefix."users_extend WHERE uid='$userid'";
+        /*
+        $sql2 = "SELECT * FROM ".$NPDS_Prefix."users_status WHERE uid='$userid'";
+
+        if (!$result = sql_query($sql1))
+        {  
+            error::forumerror('0016');
+        }
+
+        if (!$myrow = sql_fetch_assoc($result))
+        {
+            $myrow = array( "uid" => 1);}
+        else
+        {
+            $myrow = array_merge($myrow, (array)sql_fetch_assoc(sql_query($sql1)));
+        }
+        */
+        $myrow = (array)sql_fetch_assoc(sql_query($sql1));
+         
+        return $myrow;
+    }
+
+    /**
+     * [get_userdata description]
+     * @param  [type] $username [description]
+     * @return [type]           [description]
+     */
+    public static function get_userdata($username) 
+    {
+        global $NPDS_Prefix;
+        
+        $sql = "SELECT * FROM ".$NPDS_Prefix."users WHERE uname='$username'";
+        
+        if (!$result = sql_query($sql))
+        {
+            error::forumerror('0016');
+        }
+        
+        if (!$myrow = sql_fetch_assoc($result))
+        {
+            $myrow = array( "uid" => 1);
+        }
+        
+        return $myrow;
     }
 
 }

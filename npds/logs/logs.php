@@ -43,7 +43,7 @@ class logs {
            
         if ($mot_log == "") 
         {
-            $mot_log = "IP=>".ip:get();
+            $mot_log = "IP=>".ip::get();
         }
           
         $ibid = sprintf(

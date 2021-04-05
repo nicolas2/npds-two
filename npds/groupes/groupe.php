@@ -10,6 +10,14 @@
  */
 namespace npds\groupes;
 
+use npds\language\language;
+use npds\groupes\groupe;
+use npds\utility\spam;
+use npds\utility\str;
+use npds\utility\crypt;
+use npds\auth\auth;
+use npds\view\theme;
+
 
 /*
  * groupe
@@ -56,7 +64,7 @@ class groupe {
            
         while($mX = sql_fetch_assoc($r)) 
         {
-            $tmp_groupe[$mX['groupe_id']] = aff_langue($mX['groupe_name']);
+            $tmp_groupe[$mX['groupe_id']] = language::aff_langue($mX['groupe_name']);
         }
         sql_free_result($r);
         
@@ -72,7 +80,7 @@ class groupe {
      */
     public static function groupe_forum($forum_groupeX, $tab_groupeX) 
     {
-        $ok_affich = groupe_autorisation($forum_groupeX, $tab_groupeX);
+        $ok_affich = groupe::groupe_autorisation($forum_groupeX, $tab_groupeX);
         
         return $ok_affich;
     }
@@ -145,10 +153,10 @@ class groupe {
            
         if ($t_gr == 1) 
         {
-            $content .= '<span style="font-size: 120%; font-weight:bolder;">'.aff_langue($rsql['groupe_name']).'</span>'."\n";
+            $content .= '<span style="font-size: 120%; font-weight:bolder;">'.language::aff_langue($rsql['groupe_name']).'</span>'."\n";
         }
            
-        $content .= '<p>'.aff_langue($rsql['groupe_description']).'</p>'."\n";
+        $content .= '<p>'.language::aff_langue($rsql['groupe_description']).'</p>'."\n";
            
         if (file_exists('storage/users_private/groupe/'.$gr.'/groupe.png') and ($i_gr == 1)) 
         {
@@ -255,7 +263,7 @@ class groupe {
               
             if ($femail != '')
             {
-                $useroutils .= '<a class="list-group-item text-primary" href="mailto:'.anti_spam($femail,1).'" target="_blank" title="'.translate("Email").'" data-toggle="tooltip"><i class="fas fa-at fa-2x align-middle fa-fw"></i><span class="ml-2 d-none d-sm-inline">'.translate("Email").'</span></a>';
+                $useroutils .= '<a class="list-group-item text-primary" href="mailto:'.spam::anti_spam($femail,1).'" target="_blank" title="'.translate("Email").'" data-toggle="tooltip"><i class="fas fa-at fa-2x align-middle fa-fw"></i><span class="ml-2 d-none d-sm-inline">'.translate("Email").'</span></a>';
             }
             
             if ($url != '')
@@ -288,7 +296,7 @@ class groupe {
             }
             else 
             {
-                if ($ibid = theme_image("forum/avatar/$user_avatar")) 
+                if ($ibid = theme::theme_image("forum/avatar/$user_avatar")) 
                 {
                     $imgtmp = $ibid;
                 } 
@@ -398,10 +406,10 @@ class groupe {
                 
                 while (list($p, $e, $m, $r) = sql_fetch_row($docs_gr)) 
                 {
-                    $surlignage = $couleur[hexfromchr($e)];
+                    $surlignage = $couleur[str::hexfromchr($e)];
                     
                     $lst_doc .= '
-                    <li class="list-group-item list-group-item-action" style="line-height:14px;"><div id="last_editor_'.$p.'" data-toggle="tooltip" data-placement="right" title="'.translate("Dernier éditeur").' : '.$e.' '.date (translate("dateinternal"),$m ).'" style="float:left; width:1rem; height:1rem; background-color:'.$surlignage.'"></div><i class="fa fa-edit text-muted mx-1" data-toggle="tooltip" title="'.translate("Document co-rédigé").'." ></i><a href="modules.php?ModPath=wspad&amp;ModStart=wspad&amp;op=relo&amp;page='.$p.'&amp;member='.$gr.'&amp;ranq='.$r.'">'.$p.'</a></li>';
+                    <li class="list-group-item list-group-item-action" style="line-height:14px;"><div id="last_editor_'.$p.'" data-toggle="tooltip" data-placement="right" title="'.translate("Dernier éditeur").' : '.$e.' '.date(translate("dateinternal"), $m ).'" style="float:left; width:1rem; height:1rem; background-color:'.$surlignage.'"></div><i class="fa fa-edit text-muted mx-1" data-toggle="tooltip" title="'.translate("Document co-rédigé").'." ></i><a href="modules.php?ModPath=wspad&amp;ModStart=wspad&amp;op=relo&amp;page='.$p.'&amp;member='.$gr.'&amp;ranq='.$r.'">'.$p.'</a></li>';
                 }
 
                 $lst_doc .= '
@@ -453,7 +461,7 @@ class groupe {
            
         if ($rsql['groupe_chat'] == 1) 
         {
-            $PopUp = JavaPopUp("chat.php?id=$gr&amp;auto=".encrypt(serialize ($gr)), "chat".$gr, 380, 480);
+            $PopUp = JavaPopUp("chat.php?id=$gr&amp;auto=".crypt::encrypt(serialize ($gr)), "chat".$gr, 380, 480);
             
             if (array_key_exists('chat_info_'.$gr, $_COOKIE))
             {
@@ -467,7 +475,7 @@ class groupe {
         }
         
         // admin
-        if (autorisation(-127))
+        if (auth::autorisation(-127))
         {
             $content .= '<a class="mx-2" href="admin.php?op=groupes" ><i title="'.translate("Gestion des groupes.").'" data-toggle="tooltip" class="fa fa-cogs fa-2x"></i></a>';
         }

@@ -10,6 +10,10 @@
  */
 namespace npds\downloads;
 
+use npds\auth\auth;
+use npds\utility\str;
+use npds\language\language;
+
 
 /*
  * download
@@ -43,10 +47,10 @@ class download {
         {
             if ($dcounter > 0) 
             {
-                $okfile = autorisation($dperm);
+                $okfile = auth::autorisation($dperm);
                 if ($ordre == 'dcounter') 
                 {
-                    $dd = wrh($dcounter);
+                    $dd = str::wrh($dcounter);
                 }
 
                 if ($ordre == 'ddate') 
@@ -79,7 +83,7 @@ class download {
                 {
                     if ($okfile) 
                     { 
-                        $ibid .= '<li class="ml-4 my-1"><a href="download.php?op=mydown&amp;did='.$did.'" >'.$dfilename.'</a> ('.translate("Catégorie"). ' : '.aff_langue(stripslashes($dcategory)).')&nbsp;<span class="badge badge-secondary float-right align-self-center">'.wrh($dcounter).'</span></li>';
+                        $ibid .= '<li class="ml-4 my-1"><a href="download.php?op=mydown&amp;did='.$did.'" >'.$dfilename.'</a> ('.translate("Catégorie"). ' : '.language::aff_langue(stripslashes($dcategory)).')&nbsp;<span class="badge badge-secondary float-right align-self-center">'.str::wrh($dcounter).'</span></li>';
                     }
                 }
                 

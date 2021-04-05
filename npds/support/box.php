@@ -10,7 +10,8 @@
  */
 
 use npds\utility\str;
- 
+use npds\forum\forum;
+
 
 /**
  * Construit le bloc sondage
@@ -596,7 +597,7 @@ function ephemblock()
        
     $cnt = 0;
     $eday = date("d", time()+((integer)$gmt*3600));
-    $emonth =date("m", time()+((integer)$gmt*3600));
+    $emonth = date("m", time()+((integer)$gmt*3600));
     
     $result = sql_query("SELECT yid, content FROM ".$NPDS_Prefix."ephem WHERE did='$eday' AND mid='$emonth' ORDER BY yid ASC");
     $boxstuff = '<div>'.translate("En ce jour...").'</div>';
@@ -1377,4 +1378,386 @@ function bloc_espace_groupe($gr, $i_gr)
     }
 
     themesidebox($title, fab_espace_groupe($gr, "0", $i_gr));
+}
+
+/**
+ * Bloc Forums
+ * syntaxe : function#RecentForumPosts
+ * params#titre, 
+ *    nb_max_forum (O=tous), 
+ *    nb_max_topic, affiche_l'emetteu(true / false), 
+ *    topic_nb_max_char, 
+ *    affiche_HR(true / false),r
+ * @param [type]  $title         [description]
+ * @param [type]  $maxforums     [description]
+ * @param [type]  $maxtopics     [description]
+ * @param boolean $displayposter [description]
+ * @param integer $topicmaxchars [description]
+ * @param boolean $hr            [description]
+ * @param [type]  $decoration    [description]
+ */
+function RecentForumPosts($title, $maxforums, $maxtopics, $displayposter=false, $topicmaxchars=15,$hr=false, $decoration) 
+{
+    $boxstuff = forum::RecentForumPosts_fab($title, $maxforums, $maxtopics, $displayposter, $topicmaxchars, $hr,$decoration);
+    
+    global $block_title;
+    if ($title == '') 
+    {
+        if ($block_title == '')
+        {
+            $title = translate("Forums infos");
+        }
+        else
+        {    
+            $title = $block_title;
+        }
+    }
+
+    themesidebox($title, $boxstuff);
+}
+
+/**
+ * Bloc ChatBox 
+ * syntaxe : function#makeChatBox 
+ * params#chat_membres 
+ * le parametre doit etre en accord avec l'autorisation donc 
+ * (chat_membres, chat_tous, chat_admin, chat_anonyme)
+ * @param  [type] $pour [description]
+ * @return [type]       [description]
+ */
+function makeChatBox($pour) 
+{
+    global $user, $admin, $member_list, $long_chain, $NPDS_Prefix;
+           
+    include_once('functions.php');
+           
+    $auto = autorisation_block('params#'.$pour);
+    $dimauto = count($auto);
+
+    if (!$long_chain) 
+    {
+        $long_chain = 12;
+    }
+
+    $thing = ''; 
+    $une_ligne = false;
+
+    if ($dimauto <= 1) 
+    {
+        $counter = sql_num_rows(sql_query("SELECT message FROM ".$NPDS_Prefix."chatbox WHERE id='".$auto[0]."'"))-6;
+              
+        if ($counter < 0)
+        { 
+            $counter = 0;
+        }
+        
+        $result = sql_query("SELECT username, message, dbname FROM ".$NPDS_Prefix."chatbox WHERE id='".$auto[0]."' ORDER BY date ASC LIMIT $counter,6");
+              
+        if ($result) 
+        {
+            while (list($username, $message, $dbname) = sql_fetch_row($result)) 
+            {
+                if (isset($username)) 
+                {
+                    if ($dbname == 1) 
+                    {
+                        if ((!$user) and ($member_list == 1) and (!$admin)) 
+                        {
+                            $thing .= '<span class="">'.substr($username, 0, 8).'.</span>';
+                        } 
+                        else 
+                        {
+                            $thing .= "<a href=\"user.php?op=userinfo&amp;uname=$username\">".substr($username, 0, 8).".</a>";
+                        }
+                    } 
+                    else 
+                    {
+                        $thing .= '<span class="">'.substr($username, 0, 8).'.</span>';
+                    }
+                }
+
+                $une_ligne = true;
+                
+                if (strlen($message) > $long_chain) 
+                {
+                    $thing .= "&gt;&nbsp;<span>".smilie(stripslashes(substr($message, 0, $long_chain)))." </span><br />\n";
+                } 
+                else 
+                {
+                    $thing .= "&gt;&nbsp;<span>".smilie(stripslashes($message))." </span><br />\n";
+                }
+            }
+        }
+
+        $PopUp = JavaPopUp("chat.php?id=".$auto[0]."&amp;auto=".encrypt(serialize($auto[0])), "chat".$auto[0], 380, 480);
+        
+        if ($une_ligne) 
+        {
+            $thing .= '<hr />';
+        }
+
+        $result = sql_query("SELECT DISTINCT ip FROM ".$NPDS_Prefix."chatbox WHERE id='".$auto[0]."' AND date >= ".(time()-(60*2))."");
+        $numofchatters = sql_num_rows($result);
+        
+        if ($numofchatters > 0) 
+        {
+            $thing .= '<div class="d-flex"><a id="'.$pour.'_encours" class=" " href="javascript:void(0);" onclick="window.open('.$PopUp.');" title="'.translate("Cliquez ici pour entrer").' '.$pour.'" data-toggle="tooltip" data-placement="right"><i class="fa fa-comments fa-2x nav-link faa-pulse animated faa-slow"></i></a><span class="badge badge-pill badge-primary ml-auto align-self-center" title="'.translate("personne connectée.").'" data-toggle="tooltip">'.$numofchatters.'</span></div>';
+        }
+        else
+        {
+            $thing .= '<div><a id="'.$pour.'" href="javascript:void(0);" onclick="window.open('.$PopUp.');" title="'.translate("Cliquez ici pour entrer").'" data-toggle="tooltip" data-placement="right"><i class="fa fa-comments fa-2x "></i></a></div>';
+        }
+    } 
+    else 
+    {
+        if (count($auto) > 1) 
+        {
+            $numofchatters = 0;
+            $thing .= '<ul>';
+            
+            foreach($auto as $autovalue) 
+            {
+                $result = Q_select("SELECT groupe_id, groupe_name FROM ".$NPDS_Prefix."groupes WHERE groupe_id='$autovalue'", 3600);
+                $autovalueX = $result[0];
+                
+                $PopUp = JavaPopUp("chat.php?id=".$autovalueX['groupe_id']."&auto=".encrypt(serialize($autovalueX['groupe_id'])), "chat".$autovalueX['groupe_id'], 380, 480);
+                    
+                $thing .= "<li><a href=\"javascript:void(0);\" onclick=\"window.open($PopUp);\">".$autovalueX['groupe_name']."</a>";
+
+                $result = sql_query("SELECT DISTINCT ip FROM ".$NPDS_Prefix."chatbox WHERE id='".$autovalueX['groupe_id']."' AND date >= ".(time()-(60*3))."");
+                $numofchatters = sql_num_rows($result);
+                    
+                if ($numofchatters) 
+                {
+                    $thing .= '&nbsp;(<span class="text-danger"><b>'.sql_num_rows($result).'</b></span>)';
+                }
+                
+                echo '</li>';
+            }
+
+            $thing .= '</ul>';
+        }
+    }
+    
+    global $block_title;
+    
+    if ($block_title == '')
+    {
+        $block_title = translate("Bloc Chat");
+    }
+    
+    themesidebox($block_title, $thing);
+    
+    sql_free_result($result);
+}
+
+/**
+ * Bloc MI (Message Interne)
+ * syntaxe : function#instant_members_message
+ * @return [type] [description]
+ */
+function instant_members_message() 
+{
+    global $user, $admin, $long_chain, $NPDS_Prefix;
+           
+    settype($boxstuff, 'string');
+           
+    if (!$long_chain) 
+    {
+        $long_chain = 13;
+    }
+
+    global $block_title;
+    if ($block_title == '')
+    {
+        $block_title = translate("M2M bloc");
+    }
+
+    if ($user) 
+    {
+        global $cookie;
+        
+        $boxstuff = '
+        <ul class="">';
+        
+        $ibid = online_members();
+        $rank1 = '';
+        
+        for ($i = 1; $i <= $ibid[0]; $i++) 
+        {
+            $timex = time()-$ibid[$i]['time'];
+            
+            if ($timex >= 60)
+            {
+                $timex = '<i class="fa fa-plug text-muted" title="'.$ibid[$i]['username'].' '.translate("n'est pas connecté").'" data-toggle="tooltip" data-placement="right"></i>&nbsp;';
+            }
+            else
+            {
+                $timex = '<i class="fa fa-plug faa-flash animated text-primary" title="'.$ibid[$i]['username'].' '.translate("est connecté").'" data-toggle="tooltip" data-placement="right" ></i>&nbsp;';
+            }
+                  
+            global $member_invisible;
+            if ($member_invisible) 
+            {
+                if ($admin)
+                {
+                    $and = '';
+                }
+                else 
+                {
+                    if ($ibid[$i]['username'] == $cookie[1])
+                    {
+                        $and = '';
+                    }
+                    else
+                    {
+                        $and = "AND is_visible=1";
+                    }
+                }
+            } 
+            else
+            {
+                $and = '';
+            }
+                  
+            $result = sql_query("SELECT uid FROM ".$NPDS_Prefix."users WHERE uname='".$ibid[$i]['username']."' $and");
+            list($userid) = sql_fetch_row($result);
+                  
+            if ($userid) 
+            {
+                $rowQ1 = Q_Select("SELECT rang FROM ".$NPDS_Prefix."users_status WHERE uid='$userid'", 3600);
+                     
+                $myrow = $rowQ1[0];
+                $rank = $myrow['rang'];
+                $tmpR = '';
+                     
+                if ($rank) 
+                {
+                    if ($rank1 == '') 
+                    {
+                        if ($rowQ2 = Q_Select("SELECT rank1, rank2, rank3, rank4, rank5 FROM ".$NPDS_Prefix."config", 86400)) 
+                        {
+                            $myrow = $rowQ2[0];
+                            $rank1 = $myrow['rank1'];
+                            $rank2 = $myrow['rank2'];
+                            $rank3 = $myrow['rank3'];
+                            $rank4 = $myrow['rank4'];
+                            $rank5 = $myrow['rank5'];
+                        }
+                    }
+                        
+                    if ($ibidR = theme_image("forum/rank/".$rank.".gif")) 
+                    {
+                        $imgtmpA = $ibidR;
+                    } 
+                    else 
+                    {
+                        $imgtmpA = "assets/images/forum/rank/".$rank.".gif";
+                    }
+
+                    $messR = 'rank'.$rank;
+                    $tmpR = "<img src=\"".$imgtmpA."\" border=\"0\" alt=\"".aff_langue($$messR)."\" title=\"".aff_langue($$messR)."\" />";
+                } 
+                else
+                {
+                    $tmpR = '&nbsp;';
+                }
+                     
+                $new_messages = sql_num_rows(sql_query("SELECT msg_id FROM ".$NPDS_Prefix."priv_msgs WHERE to_userid = '$userid' AND read_msg='0' AND type_msg='0'"));
+                     
+                if ($new_messages > 0) 
+                {
+                    $PopUp = JavaPopUp("readpmsg_imm.php?op=new_msg", "IMM", 600, 500);
+                    $PopUp = "<a href=\"javascript:void(0);\" onclick=\"window.open($PopUp);\">";
+                        
+                    if ($ibid[$i]['username'] == $cookie[1]) 
+                    {
+                        $icon = $PopUp;
+                    } 
+                    else 
+                    {
+                        $icon = "";
+                    }
+                        
+                    $icon .= '<i class="fa fa-envelope fa-lg faa-shake animated" title="'.translate("Nouveau").'<span class=\'badge-pill badge-danger ml-2\'>'.$new_messages.'</span>" data-html="true" data-toggle="tooltip"></i>';
+                    
+                    if ($ibid[$i]['username'] == $cookie[1]) 
+                    {
+                        $icon .= '</a>';
+                    }
+                } 
+                else 
+                {
+                    $messages = sql_num_rows(sql_query("SELECT msg_id FROM ".$NPDS_Prefix."priv_msgs WHERE to_userid = '$userid' AND type_msg='0' AND dossier='...'"));
+                        
+                    if ($messages > 0) 
+                    {
+                        $PopUp = JavaPopUp("readpmsg_imm.php?op=msg", "IMM", 600, 500);
+                        $PopUp = '<a href="javascript:void(0);" onclick="window.open('.$PopUp.');">';
+                        
+                        if ($ibid[$i]['username'] == $cookie[1]) 
+                        {
+                            $icon = $PopUp;
+                        } 
+                        else 
+                        {
+                            $icon = '';
+                        }
+
+                        $icon .= '<i class="far fa-envelope-open fa-lg " title="'.translate("Nouveau").' : '.$new_messages.'" data-toggle="tooltip"></i></a>';
+                    } 
+                    else 
+                    {
+                        $icon = '&nbsp;';
+                    }
+                }
+                     
+                $N = $ibid[$i]['username'];
+                     
+                if (strlen($N) > $long_chain)
+                {
+                    $M = substr($N, 0, $long_chain).'.';
+                }
+                else
+                {
+                    $M = $N;
+                }
+
+                $boxstuff .= '
+                <li class="">'.$timex.'&nbsp;<a href="powerpack.php?op=instant_message&amp;to_userid='.$N.'" title="'.translate("Envoyer un message interne").'" data-toggle="tooltip" >'.$M.'</a><span class="float-right">'.$icon.'</span></li>';
+            }//suppression temporaire ... rank  '.$tmpR.'
+        }
+
+        $boxstuff .= '
+        </ul>';
+        
+        themesidebox($block_title, $boxstuff);
+    } 
+    else 
+    {
+        if ($admin) 
+        {
+            $ibid = online_members();
+            if ($ibid[0]) 
+            {
+                for ($i = 1; $i <= $ibid[0]; $i++) 
+                {
+                    $N = $ibid[$i]['username'];
+                    
+                    if (strlen($N) > $long_chain)
+                    {
+                        $M = substr($N, 0, $long_chain).'.';
+                    }
+                    else
+                    {
+                        $M = $N;
+                    }
+                    
+                    $boxstuff .= $M.'<br />';
+                }
+
+                themesidebox('<i>'.$block_title.'</i>', $boxstuff);
+            }
+        }
+    }
 }

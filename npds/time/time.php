@@ -10,6 +10,8 @@
  */
 namespace npds\time;
 
+use npds\language\language;
+
 
 /*
  * time
@@ -63,7 +65,7 @@ class time {
         
         $local_gmt = $gmt;
         
-        setlocale(LC_TIME, aff_langue($locale));
+        setlocale(LC_TIME, language::aff_langue($locale));
         
         if (substr($time, 0, 5) == 'nogmt') 
         {

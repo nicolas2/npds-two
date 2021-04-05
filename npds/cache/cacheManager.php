@@ -509,7 +509,7 @@ class cacheManager {
                 } 
                 else 
                 {
-                   return(array());
+                   return array();
                 }
 
                 $no_cache = false;

@@ -10,6 +10,8 @@
  */
 namespace npds\assets;
 
+use npds\language\language;
+
 
 /**
  * css
@@ -192,7 +194,7 @@ class css {
             echo '
             <script type="text/javascript" src="assets/js/es6-shim.min.js"></script>
             <script type="text/javascript" src="assets/shared/formvalidation/dist/js/FormValidation.full.min.js"></script>
-            <script type="text/javascript" src="assets/shared/formvalidation/dist/js/locales/'.language_iso(1, "_", 1).'.min.js"></script>
+            <script type="text/javascript" src="assets/shared/formvalidation/dist/js/locales/'.language::language_iso(1, "_", 1).'.min.js"></script>
             <script type="text/javascript" src="assets/shared/formvalidation/dist/js/plugins/Bootstrap.min.js"></script>
             <script type="text/javascript" src="assets/shared/formvalidation/dist/js/plugins/L10n.min.js"></script>
             <script type="text/javascript" src="assets/js/checkfieldinp.js"></script>
@@ -268,8 +270,8 @@ class css {
                 formulid.forEach(function(item, index, array) {
                     const fvitem = FormValidation.formValidation(
                         document.getElementById(item),{
-                            locale: "'.language_iso(1, "_", 1).'",
-                            localization: FormValidation.locales.'.language_iso(1, "_", 1).',
+                            locale: "'.language::language_iso(1, "_", 1).'",
+                            localization: FormValidation.locales.'.language::language_iso(1, "_", 1).',
                             fields: {';
            
             if($fv_parametres != '')

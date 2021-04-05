@@ -10,6 +10,7 @@
  */
 use npds\cache\cacheManager;
 use npds\cache\cacheEmpty;
+use npds\auth\auth;
 
 
 // Modification pour IZ-Xinstall - EBH - JPB & PHR
@@ -44,7 +45,7 @@ if (!function_exists("Mysql_Connexion"))
 // Redirect for default Start Page of the portal - look at Admin Preferences for choice
 function select_start_page($op) {
     global $Start_Page, $index;
-    if (!AutoReg()) { global $user; unset($user); }
+    if (!auth::AutoReg()) { global $user; unset($user); }
     if (($Start_Page=='') or ($op=="index.php") or ($op=="edito") or ($op=="edito-nonews")) {
        $index = 1;
        theindex($op, '', '');

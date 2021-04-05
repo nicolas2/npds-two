@@ -10,6 +10,12 @@
  */
 namespace npds\blocks;
 
+use npds\lnguage\language;
+use npds\cache\cacheManager;
+use npds\cache\cacheEmpty;
+use npds\groupes\groupe;
+use npds\auth\auth;
+
 
 /*
  * block
@@ -134,7 +140,7 @@ class block {
         global $SuperCache, $CACHE_TIMINGS;
            
         // Multi-Langue
-        $title = aff_langue($title);
+        $title = language::aff_langue($title);
            
         // Bloc caché
         $hidden = false;
@@ -178,7 +184,7 @@ class block {
             }
         }
            
-        $content = aff_langue($content);
+        $content = language::aff_langue($content);
            
         if (($SuperCache) and ($Xcache != 0)) 
         {
@@ -194,7 +200,8 @@ class block {
            
         if (($cache_obj->genereting_output == 1) 
             or ($cache_obj->genereting_output == -1) 
-            or (!$SuperCache) or ($Xcache == 0)) 
+            or (!$SuperCache) 
+            or ($Xcache == 0)) 
         {
             global $user, $admin;
             
@@ -340,7 +347,7 @@ class block {
             {
                 if (($member == 1) and (isset($user))) 
                 {
-                    if (!block_fonction($title, $content)) 
+                    if (!static::block_fonction($title, $content)) 
                     {
                         if (!$hidden)
                         {
@@ -354,7 +361,7 @@ class block {
                 } 
                 elseif ($member == 0) 
                 {
-                    if (!block_fonction($title, $content)) 
+                    if (!static::block_fonction($title, $content)) 
                     {
                         if (!$hidden)
                         {
@@ -368,11 +375,11 @@ class block {
                 } 
                 elseif (($member > 1) and (isset($user))) 
                 {
-                    $tab_groupe = valid_group($user);
+                    $tab_groupe = groupe::valid_group($user);
                     
-                    if (groupe_autorisation($member, $tab_groupe)) 
+                    if (groupe::groupe_autorisation($member, $tab_groupe)) 
                     {
-                        if (!block_fonction($title, $content)) 
+                        if (!static::block_fonction($title, $content)) 
                         {
                             if (!$hidden)
                             {
@@ -387,7 +394,7 @@ class block {
                 } 
                 elseif (($member == -1) and (!isset($user))) 
                 {
-                    if (!block_fonction($title, $content)) 
+                    if (!static::block_fonction($title, $content)) 
                     {
                         if (!$hidden)
                         {
@@ -401,7 +408,7 @@ class block {
                 } 
                 elseif (($member == -127) and (isset($admin)) and ($admin)) 
                 {
-                    if (!block_fonction($title, $content)) 
+                    if (!static::block_fonction($title, $content)) 
                     {
                         if (!$hidden)
                         {
@@ -429,7 +436,7 @@ class block {
      */
     public static function leftblocks() 
     {
-        Pre_fab_block('', 'LB');
+        static::Pre_fab_block('', 'LB');
     }
 
     /**
@@ -439,7 +446,7 @@ class block {
      */
     public static function rightblocks() 
     {
-        Pre_fab_block('', 'RB');
+        static::Pre_fab_block('', 'RB');
     }
 
     /**
@@ -451,7 +458,7 @@ class block {
     public static function oneblock($Xid, $Xblock) 
     {
         ob_start();
-            Pre_fab_block($Xid, $Xblock);
+            static::Pre_fab_block($Xid, $Xblock);
             $tmp = ob_get_contents();
         ob_end_clean();
            
@@ -516,7 +523,7 @@ class block {
                     <div class="card mb-3 '.strtolower($bloc_side).'bloc">'; 
                 }
                  
-                fab_block($title, $member, $content, $cache);
+                static::fab_block($title, $member, $content, $cache);
                 // echo "</div>"; 
             }
         }
@@ -565,7 +572,7 @@ class block {
     public static function autorisation_block($Xcontent) 
     {
         $autoX = array();//notice .... to follow
-        $auto = explode(',', niv_block($Xcontent));
+        $auto = explode(',', static::niv_block($Xcontent));
         
         // le dernier indice indique si le bloc est actif
         $actif = $auto[count($auto)-1];
@@ -575,7 +582,7 @@ class block {
            
         foreach($auto as $autovalue) 
         {
-            if (autorisation($autovalue))
+            if (auth::autorisation($autovalue))
             {
                 $autoX[] = $autovalue;
             }

@@ -10,6 +10,8 @@
  */
 namespace npds\editeur;
 
+use npds\language\languge;
+
 
 /*
  * tiny mce
@@ -56,7 +58,7 @@ class tiny {
                                         height: 300,
                                         theme : 'silver',
                                         mobile: { theme: 'mobile' },
-                                        language : '".language_iso(1, '', '')."',";
+                                        language : '".language::language_iso(1, '', '')."',";
                         
                         include ("assets/shared/editeur/tinymce/themes/advanced/npds.conf.php");
                    

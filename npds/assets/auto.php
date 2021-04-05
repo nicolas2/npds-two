@@ -34,7 +34,7 @@ class auto {
      * @param  [type] $temps_cache  [description]
      * @return [type]               [description]
      */
-    public static function auto_complete ($nom_array_js, $nom_champ, $nom_tabl, $id_inpu, $temps_cache) 
+    public static function auto_complete($nom_array_js, $nom_champ, $nom_tabl, $id_inpu, $temps_cache) 
     {
         global $NPDS_Prefix;
 
