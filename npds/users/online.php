@@ -8,7 +8,7 @@
  * @version 1.0
  * @date 02/04/2021
  */
-namespace npds\who;
+namespace npds\users;
 
 
 /*

@@ -12,7 +12,7 @@
 if (!function_exists("Mysql_Connexion"))
    include ("mainfile.php");
 
-include("powerpack_f.php");
+
 global $powerpack; $powerpack=true;
 
 settype($op,'string');

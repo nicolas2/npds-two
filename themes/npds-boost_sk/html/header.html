@@ -1,4 +1,9 @@
 <?php
+
+use npds\auth\auth;
+use npds\views\theme;
+
+
    global $cookie, $anonymous, $NPDS_Prefix, $mns, $Default_Skin;
    $con='';$ava='';$cha='';$bal='';$menuser='';
    if ($user) {
@@ -36,11 +41,11 @@
 
    if (!isset($powerpack)) include_once ("powerpack.php");
 
-   if (autorisation(-1)) {
+   if (auth::autorisation(-1)) {
       $con = '!nb_online! - <a href="user.php">Se connecter</a>';
       $btn_con = '<a class="dropdown-item" href="user.php"><i class="fas fa-sign-in-alt fa-lg"></i>&nbsp;'.translate("Connexion").'</a>';
       $ava='<a class="dropdown-item" href="user.php"><i class="fa fa-user fa-4x text-muted"></i></a>';
-   } elseif (autorisation(1)) {
+   } elseif (auth::autorisation(1)) {
       $menuser .='
       <li><a class="dropdown-item" href="user.php?op=edituser" title="'.translate("Vous").'"  ><i class="fa fa-user fa-lg mr-2"></i>'.translate("Vous").'</a></li>
       <li><a class="dropdown-item" href="user.php?op=editjournal" title="'.translate("Editer votre journal").'" ><i class="fa fa-edit fa-lg mr-2"></i>'.translate("Journal").'</a></li>';
@@ -64,7 +69,7 @@
       else if (stristr($user_avatar,"users_private"))
          $imgtmp=$user_avatar;
       else {
-         if ($ibid=theme_image("forum/avatar/$user_avatar")) {$imgtmp=$ibid;} else {$imgtmp="assets/images/forum/avatar/$user_avatar";}
+         if ($ibid=theme::theme_image("forum/avatar/$user_avatar")) {$imgtmp=$ibid;} else {$imgtmp="assets/images/forum/avatar/$user_avatar";}
          if (!file_exists($imgtmp)) {$imgtmp="assets/images/forum/avatar/blank.gif";}
       }
 

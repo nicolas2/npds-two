@@ -13,7 +13,6 @@ use npds\security\ip;
 use npds\security\extract;
 use npds\utility\crypt;
 use npds\utility\code;
-use npds\cache\cache;
 
 
 // Url
@@ -169,48 +168,6 @@ if (! function_exists('admin'))
     {
         return extract::admin();
     }
-}
-
-// SuperCache
-
-/**
- * Q_Select
- */
-if (! function_exists('Q_Select'))
-{ 
-    cache::Q_Select($Xquery, $retention);
-}
-
-/**
- * PG_clean
- */
-if (! function_exists('PG_clean'))
-{ 
-    cache::PG_clean($request);
-}
-
-/**
- * Q_Clean
- */
-if (! function_exists('Q_Clean'))
-{ 
-    cache::Q_Clean();
-}
-
-/**
- * SC_clean
- */
-if (! function_exists('SC_clean'))
-{ 
-    cache::SC_clean();
-}
-
-/**
- * SC_infos()
- */
-if (! function_exists('SC_infos'))
-{ 
-    cache::SC_infos();
 }
 
 // Crypt
@@ -394,5 +351,49 @@ if (! function_exists('get_os'))
         }
 
         return $MSos;
+    }
+}
+
+/**
+ * check_install()
+ */
+if (! function_exists('check_install'))
+{
+    /**
+     * [check_install description]
+     * @return [type] [description]
+     */
+    function check_install() 
+    {
+        // Modification pour IZ-Xinstall - EBH - JPB & PHR
+        if (file_exists("IZ-Xinstall.ok")) 
+        {
+            if (file_exists("install.php") OR is_dir("install")) 
+            {
+                echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+                <html xmlns="http://www.w3.org/1999/xhtml">
+                <head>
+                    <title>Npds Two IZ-Xinstall - Installation &amp; Configuration</title>
+                </head>
+                <body>
+                    <div style="text-align: center; font-size: 20px; font-family: Arial; font-weight: bold; color: #000000"><br />
+                    NPDS IZ-Xinstall - Installation &amp; Configuration
+                    </div>
+                    <div style="text-align: center; font-size: 20px; font-family: Arial; font-weight: bold; color: #ff0000"><br />
+                        Vous devez supprimer le r&eacute;pertoire "install" ET le fichier "install.php" avant de poursuivre !<br />
+                        You must remove the directory "install" as well as the file "install.php" before continuing!
+                    </div>
+                </body>
+                </html>';
+                die();
+            }
+        } 
+        else 
+        {
+            if (file_exists("install.php") AND is_dir("install")) 
+            {
+                header("location: install.php");
+            }
+        }
     }
 }

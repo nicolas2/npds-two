@@ -338,7 +338,7 @@ class metalang {
 
                 // Cword est un meta-mot ? (il en reste qui n'ont pas été interprétés 
                 // par la passe du dessus ... ceux avec params !)
-                if (substr($Cword, 0, 1) == "!") 
+                /*if (substr($Cword, 0, 1) == "!") 
                 {
                     $car_meta = strpos($Cword, "!", 1);
                     
@@ -359,6 +359,45 @@ class metalang {
                             $type_meta = '';
                         }
                     }
+                }*/
+
+                // Cword commence par function ?
+                if (substr($Cword, 0, 9) == "function ") 
+                {
+                    $Rword = "MM_".str_replace("!", "", $Rword);
+                   
+                    $MetaFunction = new metafunc();
+
+                    if ((!method_exists($MetaFunction, $Rword)) 
+                        or (!function_exists($Rword))) 
+                    {
+                        @eval($Cword);
+                    }
+                   
+                    if (is_array($arguments)) 
+                    {
+                        array_walk($arguments, [metalang::class, 'arg_filter']);
+                        if (method_exists($MetaFunction, $Rword)) 
+                        {              
+                            $Cword = call_user_func_array([$MetaFunction, $Rword], $arguments);
+                        } 
+                        else 
+                        {
+                            $Cword = call_user_func_array($Rword, $arguments);
+                        }
+                    } 
+                    else 
+                    {
+                        if (method_exists($MetaFunction, $Rword)) 
+                        {
+                            $Cword = call_user_func([$MetaFunction, $Rword]);
+                        } 
+                        else 
+                        {
+                            $Cword = call_user_func($Rword);
+                        }
+                    }
+                    $Rword = $word;
                 }
 
                 // Cword commence par $cmd ?
@@ -386,7 +425,7 @@ class metalang {
                        @eval($Cword);
                     }
                     
-                    $Cword = charg($Rword, $arguments);
+                    $Cword = static::charg($Rword, $arguments);
                     $Rword = $word;
                 }
 

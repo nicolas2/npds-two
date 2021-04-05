@@ -12,8 +12,13 @@ namespace npds\news;
 
 use npds\auth\auth;
 use npds\language\language;
+use npds\language\metalang;
+use npds\subscribe\subscribe;
 use npds\utility\str;
+use npds\logs\logs;
 use npds\utility\code;
+use npds\edito\edito;
+use npds\cache\cache;
 
 
 /*
@@ -38,7 +43,7 @@ class news {
         // Astuce pour afficher le nb de News correct même si certaines News 
         // ne sont pas visibles (membres, groupe de membres)
         // En fait on * le Nb de News par le Nb de groupes
-        $row_Q2 = Q_select("SELECT COUNT(groupe_id) AS total FROM ".$NPDS_Prefix."groupes", 86400);
+        $row_Q2 = cache::Q_select("SELECT COUNT(groupe_id) AS total FROM ".$NPDS_Prefix."groupes", 86400);
         
         // list(,$NumG)=each($row_Q2);
         $NumG = $row_Q2[0];
@@ -57,35 +62,35 @@ class news {
         if ($type_req == 'index') 
         {
             $Xstorynum = $storynum*$coef;
-            $result = Q_select("SELECT sid, catid, ihome FROM ".$NPDS_Prefix."stories $sel ORDER BY sid DESC LIMIT $Xstorynum", 3600);
+            $result = cache::Q_select("SELECT sid, catid, ihome FROM ".$NPDS_Prefix."stories $sel ORDER BY sid DESC LIMIT $Xstorynum", 3600);
             $Znum = $storynum;
         }
            
         if ($type_req == 'old_news') 
         {
             $Xstorynum = $oldnum*$coef;
-            $result = Q_select("SELECT sid, catid, ihome FROM ".$NPDS_Prefix."stories $sel ORDER BY time DESC LIMIT $storynum,$Xstorynum", 3600);
+            $result = cache::Q_select("SELECT sid, catid, ihome FROM ".$NPDS_Prefix."stories $sel ORDER BY time DESC LIMIT $storynum,$Xstorynum", 3600);
             $Znum = $oldnum;
         }
 
         if (($type_req == 'big_story') or ($type_req == 'big_topic')) 
         {
             $Xstorynum = $oldnum*$coef;
-            $result = Q_select("SELECT sid, catid, ihome FROM ".$NPDS_Prefix."stories $sel ORDER BY counter DESC LIMIT $storynum,$Xstorynum", 3600);
+            $result = cache::Q_select("SELECT sid, catid, ihome FROM ".$NPDS_Prefix."stories $sel ORDER BY counter DESC LIMIT $storynum,$Xstorynum", 3600);
             $Znum = $oldnum;
         }
 
         if ($type_req == 'libre') 
         {
             $Xstorynum = $oldnum*$coef;
-            $result = Q_select("SELECT sid, catid, ihome, time FROM ".$NPDS_Prefix."stories $sel", 3600);
+            $result = cache::Q_select("SELECT sid, catid, ihome, time FROM ".$NPDS_Prefix."stories $sel", 3600);
             $Znum = $oldnum;
         }
 
         if ($type_req == 'archive') 
         {
             $Xstorynum = $oldnum*$coef;
-            $result = Q_select("SELECT sid, catid, ihome FROM ".$NPDS_Prefix."stories $sel", 3600);
+            $result = cache::Q_select("SELECT sid, catid, ihome FROM ".$NPDS_Prefix."stories $sel", 3600);
             $Znum = $oldnum;
         }
 
@@ -151,6 +156,148 @@ class news {
         @sql_free_result($result);
         
         return $tab;
+    }
+
+    /**
+     * [aff_news description]
+     * @param  [type] $op      [description]
+     * @param  [type] $catid   [description]
+     * @param  [type] $marqeur [description]
+     * @return [type]          [description]
+     */
+    public static function aff_news($op, $catid, $marqeur) 
+    {
+        $url = $op;
+        
+        if ($op == 'edito-newindex') 
+        {
+            if ($marqeur == 0)
+            { 
+                edito::aff_edito();
+            }
+            
+            $op = 'news';
+        }
+        
+        if ($op == "newindex") 
+        {
+            if ($catid == '')
+            {
+                $op = 'news';
+            }
+            else 
+            {
+                $op = 'categories';
+            }
+        }
+        
+        if ($op == 'newtopic')
+        {
+             $op = 'topics';
+        }
+
+        
+        if ($op == 'newcategory')
+        {
+            $op = 'categories';
+        }
+        
+        $news_tab = static::prepa_aff_news($op, $catid, $marqeur);
+        $story_limit = 0;
+       
+        // si le tableau $news_tab est vide alors return 
+        if(is_null($news_tab)) 
+        {
+            return;
+        }
+       
+        $newscount = sizeof($news_tab);
+        while ($story_limit < $newscount) 
+        {
+            $story_limit++;
+            $aid = unserialize($news_tab[$story_limit]['aid']);
+            $informant = unserialize($news_tab[$story_limit]['informant']);
+            $datetime = unserialize($news_tab[$story_limit]['datetime']);
+            $title = unserialize($news_tab[$story_limit]['title']);
+            $counter = unserialize($news_tab[$story_limit]['counter']);
+            $topic = unserialize($news_tab[$story_limit]['topic']);
+            $hometext = unserialize($news_tab[$story_limit]['hometext']);
+            $notes = unserialize($news_tab[$story_limit]['notes']);
+            $morelink = unserialize($news_tab[$story_limit]['morelink']);
+            $topicname = unserialize($news_tab[$story_limit]['topicname']);
+            $topicimage = unserialize($news_tab[$story_limit]['topicimage']);
+            $topictext = unserialize($news_tab[$story_limit]['topictext']);
+            $s_id = unserialize($news_tab[$story_limit]['id']);
+            
+            themeindex($aid, $informant, $datetime, $title, $counter, $topic, $hometext, $notes, $morelink, $topicname, $topicimage, $topictext, $s_id);
+        }
+
+        $transl1 = translate("Page suivante");
+        $transl2 = translate("Home");
+        
+        global $storyhome, $cookie;
+        if (isset($cookie[3]))
+        {
+            $storynum = $cookie[3];
+        }
+        else
+        {
+            $storynum = $storyhome;
+        }
+
+        if ($op == 'categories') 
+        {
+            if (sizeof($news_tab) == $storynum) 
+            {
+                $marqeur = $marqeur+sizeof($news_tab);
+                echo '
+                <div class="text-right"><a href="index.php?op='.$url.'&amp;catid='.$catid.'&amp;marqeur='.$marqeur.'" class="page_suivante" >'.$transl1.'<i class="fa fa-chevron-right fa-lg ml-2" title="'.$transl1.'" data-toggle="tooltip"></i></a></div>';
+            } 
+            else 
+            {
+                if ($marqeur >= $storynum)
+                {
+                    echo '
+                    <div class="text-right"><a href="index.php?op='.$url.'&amp;catid='.$catid.'&amp;marqeur=0" class="page_suivante" title="'.$transl2.'">'.$transl2.'</a></div>';
+                }
+            }
+        }
+           
+        if ($op == 'news') 
+        {
+            if (sizeof($news_tab) == $storynum) 
+            {
+                $marqeur = $marqeur+sizeof($news_tab);
+                echo '
+                    <div class="text-right"><a href="index.php?op='.$url.'&amp;catid='.$catid.'&amp;marqeur='.$marqeur.'" class="page_suivante" >'.$transl1.'<i class="fa fa-chevron-right fa-lg ml-2" title="'.$transl1.'" data-toggle="tooltip"></i></a></div>';
+            } 
+            else 
+            {
+                if ($marqeur >= $storynum)
+                {
+                    echo '
+                    <div class="text-right"><a href="index.php?op='.$url.'&amp;catid='.$catid.'&amp;marqeur=0" class="page_suivante" title="'.$transl2.'">'.$transl2.'</a></div>';
+                }
+            }
+        }
+           
+        if ($op == 'topics') 
+        {
+            if (sizeof($news_tab) == $storynum) 
+            {
+                $marqeur = $marqeur+sizeof($news_tab);
+                echo '
+                    <div align="right"><a href="index.php?op=newtopic&amp;topic='.$topic.'&amp;marqeur='.$marqeur.'" class="page_suivante" >'.$transl1.'<i class="fa fa-chevron-right fa-lg ml-2" title="'.$transl1.'" data-toggle="tooltip"></i></a></div>';
+            } 
+            else 
+            {
+                if ($marqeur >= $storynum)
+                {
+                    echo '
+                    <div class="text-right"><a href="index.php?op=newtopic&amp;topic='.$topic.'&amp;marqeur=0" class="page_suivante" title="'.$transl2.'">'.$transl2.'</a></div>';
+                }
+            }
+        }
     }
 
     /**
@@ -307,8 +454,8 @@ class news {
             $news_tab[$story_limit]['title'] = serialize($title);
             $news_tab[$story_limit]['counter'] = serialize($counter);
             $news_tab[$story_limit]['topic'] = serialize($topic);
-            $news_tab[$story_limit]['hometext'] = serialize(meta_lang(code::aff_code($hometext)));
-            $news_tab[$story_limit]['notes'] = serialize(meta_lang(code::aff_code($notes)));
+            $news_tab[$story_limit]['hometext'] = serialize(metalang::meta_lang(code::aff_code($hometext)));
+            $news_tab[$story_limit]['notes'] = serialize(metalang::meta_lang(code::aff_code($notes)));
             $news_tab[$story_limit]['morelink'] = serialize($morelink);
             $news_tab[$story_limit]['topicname'] = serialize($topicname);
             $news_tab[$story_limit]['topicimage'] = serialize($topicimage);
@@ -321,6 +468,121 @@ class news {
             return $news_tab;
         }
     }
+
+    /**
+     * [automatednews description]
+     * @return [type] [description]
+     */
+    public static function automatednews() 
+    {
+        global $gmt, $NPDS_Prefix;
+
+        $today = getdate(time()+((integer)$gmt*3600));
+        $day = $today['mday'];
+           
+        if ($day < 10)
+        {
+            $day = "0$day";
+        }
+        
+        $month = $today['mon'];
+           
+        if ($month < 10)
+        {
+            $month = "0$month";
+        }
+           
+        $year = $today['year'];
+        $hour = $today['hours'];
+        $min = $today['minutes'];
+           
+        $result = sql_query("SELECT anid, date_debval FROM ".$NPDS_Prefix."autonews WHERE date_debval LIKE '$year-$month%'");
+          
+        while(list($anid, $date_debval) = sql_fetch_row($result)) 
+        {
+            preg_match('#^(\d{4})-(\d{1,2})-(\d{1,2}) (\d{1,2}):(\d{1,2}):(\d{1,2})$#', $date_debval, $date);
+              
+            if (($date[1] <= $year) 
+                AND ($date[2] <= $month) 
+                AND ($date[3] <= $day)) 
+            {
+                if (($date[4] < $hour) 
+                    AND ($date[5] >= $min) 
+                    OR ($date[4] <= $hour) 
+                    AND ($date[5] <= $min) 
+                    OR (($day-$date[3]) >= 1)) 
+                {
+                    $result2 = sql_query("SELECT catid, aid, title, hometext, bodytext, topic, informant, notes, ihome, date_finval, auto_epur FROM ".$NPDS_Prefix."autonews WHERE anid='$anid'");
+                    
+                    while (list($catid, $aid, $title, $hometext, $bodytext, $topic, $author, $notes, $ihome, $date_finval, $epur) = sql_fetch_row($result2)) 
+                    {
+                        $subject = stripslashes(str::FixQuotes($title));
+                        $hometext = stripslashes(str::FixQuotes($hometext));
+                        $bodytext = stripslashes(str::FixQuotes($bodytext));
+                        $notes = stripslashes(str::FixQuotes($notes));
+                       
+                        sql_query("INSERT INTO ".$NPDS_Prefix."stories VALUES (NULL, '$catid', '$aid', '$subject', now(), '$hometext', '$bodytext', '0', '0', '$topic', '$author', '$notes', '$ihome', '0', '$date_finval', '$epur')");
+                        sql_query("DELETE FROM ".$NPDS_Prefix."autonews WHERE anid='$anid'");
+                        
+                        global $subscribe;
+                        if ($subscribe)
+                        {
+                            subscribe::subscribe_mail('topic', $topic, '', $subject, '');
+                        }
+
+                        // Réseaux sociaux
+                        if (file_exists('modules/npds_twi/npds_to_twi.php')) 
+                        {
+                            include ('modules/npds_twi/npds_to_twi.php');
+                        }
+                        if (file_exists('modules/npds_fbk/npds_to_fbk.php')) 
+                        {
+                            include ('modules/npds_twi/npds_to_fbk.php');
+                        }
+                        // Réseaux sociaux
+                    }
+                }
+            }
+        }
+           
+        // Purge automatique
+        $result = sql_query("SELECT sid, date_finval, auto_epur FROM ".$NPDS_Prefix."stories WHERE date_finval LIKE '$year-$month%'");
+        
+        while(list($sid, $date_finval, $epur) = sql_fetch_row($result)) 
+        {
+            preg_match('#^(\d{4})-(\d{1,2})-(\d{1,2}) (\d{1,2}):(\d{1,2}):(\d{1,2})$#', $date_finval, $date);
+              
+            if (($date[1] <= $year) 
+                AND ($date[2] <= $month) 
+                AND ($date[3] <= $day)) 
+            {
+                if (($date[4] < $hour) 
+                    AND ($date[5] >= $min) 
+                    OR ($date[4] <= $hour) 
+                    AND ($date[5] <= $min)) 
+                {
+                    if ($epur == 1) 
+                    {
+                        sql_query("DELETE FROM ".$NPDS_Prefix."stories WHERE sid='$sid'");
+                        
+                        if (file_exists("modules/comments/article.conf.php")) 
+                        {
+                            include ("modules/comments/article.conf.php");
+                        
+                            sql_query("DELETE FROM ".$NPDS_Prefix."posts WHERE forum_id='$forum' AND topic_id='$topic'");
+                        }
+                    
+                        logs::Ecr_Log('security', "removeStory ($sid, epur) by automated epur : system", '');
+                    }
+                    else 
+                    {
+                        sql_query("UPDATE ".$NPDS_Prefix."stories SET archive='1' WHERE sid='$sid'");
+                    }
+                }
+            }
+        }
+    }
+
 
     /**
      * Génération des fichiers ultramode.txt et net2zone.txt dans /cache
@@ -351,7 +613,7 @@ class news {
             $rfile2 = sql_query("SELECT topictext, topicimage FROM ".$NPDS_Prefix."topics WHERE topicid='$topic'");
             list($topictext, $topicimage) = sql_fetch_row($rfile2);
               
-            $hometext = meta_lang(strip_tags($hometext));
+            $hometext = metalang::meta_lang(strip_tags($hometext));
               
             fwrite($file, "%%\n$title\n$nuke_url/article.php?sid=$sid\n$time\n$aid\n$topictext\n$hometext\n$topicimage\n");
             

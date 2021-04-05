@@ -10,6 +10,8 @@
 /* it under the terms of the GNU General Public License as published by */
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
+use npds\blocks\block;
+
 
 /************************************************************************/
 /* Fermeture ou ouverture et fermeture according with $pdst :           */
@@ -32,7 +34,7 @@ switch ($pdst)
          colsyst('#col_RB');
          echo '
          <div id="col_RB" class="collapse show col-lg-3 ">'."\n";
-        rightblocks();
+        block::rightblocks();
       echo '
          </div>
       </div>
@@ -44,13 +46,13 @@ switch ($pdst)
          colsyst('#col_LB');
       echo'
          <div id="col_LB" class="collapse show col-lg-3">'."\n";
-      leftblocks();
+      block::leftblocks();
       echo '
       </div>';
          colsyst('#col_RB');
       echo'
          <div id="col_RB" class="collapse show col-lg-3">'."\n";
-      rightblocks();
+      block::rightblocks();
       echo '
          </div>
       </div>
@@ -62,7 +64,7 @@ switch ($pdst)
          colsyst('#col_LB');
       echo'
       <div id="col_LB" class="collapse show col-lg-3">'."\n";
-         leftblocks();
+         block::leftblocks();
       echo '
          </div>
       </div>

@@ -14,9 +14,9 @@ use npds\views\theme;
 
 
 /*
- * smiles
+ * pixel
  */
-class pixels {
+class pixel {
 
 
     /**

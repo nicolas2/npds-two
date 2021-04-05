@@ -8,12 +8,14 @@
  * @version 1.0
  * @date 02/04/2021
  */
+use npds\language\language;
+
 
 //==> core required dont remove
 echo '
       <script type="text/javascript" src="assets/shared/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
       <script type="text/javascript" src="assets/shared/bootstrap-table/dist/bootstrap-table.min.js"></script>
-      <script type="text/javascript" src="assets/shared/bootstrap-table/dist/locale/bootstrap-table-'.language_iso(1, "-", 1).'.min.js" async="async"></script>
+      <script type="text/javascript" src="assets/shared/bootstrap-table/dist/locale/bootstrap-table-'.language::language_iso(1, "-", 1).'.min.js" async="async"></script>
       <script type="text/javascript" src="assets/shared/bootstrap-table/dist/extensions/mobile/bootstrap-table-mobile.min.js" async="async"></script>
       <script type="text/javascript" src="assets/shared/bootstrap-table/dist/extensions/export/bootstrap-table-export.min.js" async="async"></script>
       <script type="text/javascript" src="assets/shared/tableExport.jquery.plugin-master/tableExport.js" async="async"></script>

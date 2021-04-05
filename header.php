@@ -9,15 +9,18 @@
  * @date 02/04/2021
  */
 use npds\assets\css;
+use npds\language\language;
+use npds\security\hack;
+use npds\editeur\tiny;
 
-if (!function_exists("Mysql_Connexion")) {
-   include ("mainfile.php");
-   die();
-}
+//if (!function_exists("Mysql_Connexion")) {
+//   include ("mainfile.php");
+//   die();
+//}
 
 settype($m_keywords, 'string');
 settype($m_description, 'string');
-$skin='';
+$skin = '';
 
 function head($tiny_mce_init, $css_pages_ref, $css, $tmp_theme, $skin, $js, $m_description,$m_keywords) {
    global $slogan, $Titlesitename, $banners, $Default_Theme, $theme, $gzhandler, $language;
@@ -27,16 +30,16 @@ function head($tiny_mce_init, $css_pages_ref, $css, $tmp_theme, $skin, $js, $m_d
    settype($m_keywords, 'string');
    settype($m_description, 'string');
    if ($gzhandler==1) ob_start("ob_gzhandler");
-   include("themes/$tmp_theme/theme.php");
+   include(BASEPATH."themes/$tmp_theme/theme.php");
 
    // Meta
-   if (file_exists("config/meta.php")) {
+   if (file_exists(BASEPATH."config/meta.php")) {
       $meta_op='';
-      include ("config/meta.php");
+      include (BASEPATH."config/meta.php");
    }
 
    // Favicon
-   if (file_exists("themes/$tmp_theme/images/favicon.ico"))
+   if (file_exists(BASEPATH."themes/$tmp_theme/images/favicon.ico"))
       $favico="themes/$tmp_theme/images/favicon.ico";
    else
       $favico='assets/images/favicon.ico';
@@ -59,7 +62,7 @@ function head($tiny_mce_init, $css_pages_ref, $css, $tmp_theme, $skin, $js, $m_d
 <link rel="canonical" href="'.str_replace('&','&amp;',str_replace('&amp;','&',$uri)).'" />';
 
    // humans.txt
-   if (file_exists("humans.txt"))
+   if (file_exists(BASEPATH."humans.txt"))
       echo '
 <link type="text/plain" rel="author" href="'.$nuke_url.'/humans.txt" />';
 
@@ -72,7 +75,7 @@ function head($tiny_mce_init, $css_pages_ref, $css, $tmp_theme, $skin, $js, $m_d
 
    // Tiny_mce
    if ($tiny_mce_init)
-      echo aff_editeur("tiny_mce", "begin");
+      echo tiny::aff_editeur("tiny_mce", "begin");
 
    // include externe JAVASCRIPT file from lib/include or themes/.../include for functions, codes in the <body onload="..." event...
    $body_onloadH ='
@@ -83,9 +86,9 @@ function head($tiny_mce_init, $css_pages_ref, $css, $tmp_theme, $skin, $js, $m_d
          }
       //]]>
    </script>';
-   if (file_exists("lib/include/body_onload.inc")) {
+   if (file_exists("themes/include/body_onload.inc")) {
       echo $body_onloadH;
-      include ("lib/include/body_onload.inc");
+      include ("themes/include/body_onload.inc");
       echo $body_onloadF;
    }
    if (file_exists("themes/$tmp_theme/include/body_onload.inc")) {
@@ -95,9 +98,9 @@ function head($tiny_mce_init, $css_pages_ref, $css, $tmp_theme, $skin, $js, $m_d
    }
 
    // include externe file from lib/include or themes/.../include for functions, codes ... - skin motor
-   if (file_exists("lib/include/header_head.inc")) {
+   if (file_exists("themes/include/header_head.inc")) {
       ob_start();
-      include "lib/include/header_head.inc";
+      include "themes/include/header_head.inc";
       $hH = ob_get_contents();
       ob_end_clean();
 
@@ -146,7 +149,7 @@ function head($tiny_mce_init, $css_pages_ref, $css, $tmp_theme, $skin, $js, $m_d
    // -----------------------
 
    // include externe file from lib/include for functions, codes ...
-   if (file_exists("lib/include/header_before.inc")) {include ("lib/include/header_before.inc");}
+   if (file_exists("themes/include/header_before.inc")) {include ("themes/include/header_before.inc");}
 
    // take the right theme location !
    // nouvel version de la gestion des Themes et Skins
@@ -245,7 +248,7 @@ function head($tiny_mce_init, $css_pages_ref, $css, $tmp_theme, $skin, $js, $m_d
          $PAGES[$pages_ref]['title']=strip_tags($PAGES[$pages_ref]['title']);
       }
       $fin_title=substr($PAGES[$pages_ref]['title'],-1);
-      $TitlesitenameX=aff_langue(substr($PAGES[$pages_ref]['title'],0,strlen($PAGES[$pages_ref]['title'])-1));
+      $TitlesitenameX=language::aff_langue(substr($PAGES[$pages_ref]['title'],0,strlen($PAGES[$pages_ref]['title'])-1));
       if ($fin_title=="+")
          $Titlesitename=$TitlesitenameX." - ".$Titlesitename;
       else if ($fin_title=='-')
@@ -258,18 +261,18 @@ function head($tiny_mce_init, $css_pages_ref, $css, $tmp_theme, $skin, $js, $m_d
          if ($fin_title=="+" or $fin_title=="-")
             $title=$TitlesitenameX;
          else
-            $title=aff_langue(substr($PAGES[$pages_ref]['title'],0,strlen($PAGES[$pages_ref]['title'])));
+            $title=language::aff_langue(substr($PAGES[$pages_ref]['title'],0,strlen($PAGES[$pages_ref]['title'])));
       } else
-         $title=removeHack($title);
+         $title=hack::remove($title);
    
       // meta description
       settype($m_description, 'string');
       if (array_key_exists('meta-description',$PAGES[$pages_ref]) and ($m_description==''))
-         $m_description=aff_langue($PAGES[$pages_ref]['meta-description']);
+         $m_description=language::aff_langue($PAGES[$pages_ref]['meta-description']);
       // meta keywords
       settype($m_keywords, 'string');
       if (array_key_exists('meta-keywords',$PAGES[$pages_ref]) and ($m_keywords==''))
-         $m_keywords=aff_langue($PAGES[$pages_ref]['meta-keywords']);
+         $m_keywords=language::aff_langue($PAGES[$pages_ref]['meta-keywords']);
    }
 
    // Initialisation de TinyMce
@@ -322,7 +325,7 @@ function head($tiny_mce_init, $css_pages_ref, $css, $tmp_theme, $skin, $js, $m_d
    head($tiny_mce_init, $css_pages_ref, $css, $tmp_theme, $skin, $js, $m_description,$m_keywords);
    global $httpref, $nuke_url, $httprefmax, $admin, $NPDS_Prefix;
    if ($httpref==1) {
-      $referer= htmlentities(strip_tags(removeHack(getenv("HTTP_REFERER"))),ENT_QUOTES,cur_charset);
+      $referer= htmlentities(strip_tags(hack::remove(getenv("HTTP_REFERER"))),ENT_QUOTES,cur_charset);
       if ($referer!='' and !strstr($referer,"unknown") and !stristr($referer,$_SERVER['SERVER_NAME'])) {
          sql_query("INSERT INTO ".$NPDS_Prefix."referer VALUES (NULL, '$referer')");
       }
@@ -331,5 +334,5 @@ function head($tiny_mce_init, $css_pages_ref, $css, $tmp_theme, $skin, $js, $m_d
    include("counter.php");
 
    // include externe file from lib/include for functions, codes ...
-   if (file_exists("lib/include/header_after.inc")) {include ("lib/include/header_after.inc");}
+   if (file_exists("themes/include/header_after.inc")) {include ("themes/include/header_after.inc");}
 ?>

@@ -10,11 +10,13 @@
 /* it under the terms of the GNU General Public License as published by */
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
+use npds\blocks\block;
 
 global $NPDS_Prefix, $pdst;
 
 $blg_actif = sql_query("SELECT * FROM ".$NPDS_Prefix."lblocks WHERE actif ='1'");
 $nb_blg_actif = sql_num_rows($blg_actif);
+
 $bld_actif = sql_query("SELECT * FROM ".$NPDS_Prefix."rblocks WHERE actif ='1'");
 $nb_bld_actif = sql_num_rows($bld_actif);
 
@@ -56,6 +58,7 @@ if ($nb_bld_actif == 0) {
    case '5': $pdst='-1';break;
    }
 }
+
 function colsyst($coltarget) {
    $coltoggle ='
       <div class="col d-lg-none mr-2 my-2">
@@ -73,6 +76,7 @@ $ContainerGlobal='
 
 // Ne supprimez pas cette ligne / Don't remove this line
    require_once("themes/themes-dynamic/header.php");
+   
    global $powerpack;
    if (!isset($powerpack)) {include ("powerpack.php");}
 // Ne supprimez pas cette ligne / Don't remove this line
@@ -98,7 +102,7 @@ case '1':
    colsyst('#col_LB');
    echo '
          <div id="col_LB" class="collapse show col-lg-3">';
-     leftblocks();
+     block::leftblocks();
    echo '
          </div>
          <div id="col_princ" class="col-lg-6">';
@@ -111,13 +115,13 @@ case '3':
    colsyst('#col_LB');
    echo '
       <div id="col_LB" class="collapse show col-lg-3">';
-   leftblocks();
+   block::leftblocks();
    echo '
       </div>';
    colsyst('#col_RB');
    echo' 
       <div id="col_RB" class="collapse show col-lg-3">';
-   rightblocks();
+   block::rightblocks();
    echo '
       </div>
       <div id="col_princ" class="col-lg-6">';
@@ -130,7 +134,7 @@ case '5':
    colsyst('#col_RB');
    echo '
       <div id="col_RB" class="collapse show col-lg-3">';
-   rightblocks();
+   block::rightblocks();
    echo '
       </div>
       <div id="col_princ" class="col-lg-9">';
@@ -139,7 +143,7 @@ default:
    colsyst('#col_LB');
    echo '
          <div id="col_LB" class="collapse show col-lg-3">';
-   leftblocks();
+   block::leftblocks();
    echo '
          </div>
          <div id="col_princ" class="col-lg-9">';

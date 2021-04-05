@@ -11,7 +11,56 @@
 
 use npds\utility\str;
 use npds\forum\forum;
+use npds\language\language;
+use npds\stats\stat;
+use npds\views\theme;
+use npds\security\ip;
+use npds\cache\cache;
+use npds\assets\css;
+use npds\downloads\download;
+use npds\news\news;
+use npds\time\time;
+use npds\auth\auth;
+use npds\groupes\groupe;
+use npds\blocks\block;
+use npds\pixels\pixel;
+use npds\assets\java;
+use npds\utility\crypt;
+use npds\users\online;
+use npds\poolboth\poolboth;
 
+/**
+ * Bloc Sondage 
+ * syntaxe : function#pollnewest
+ * params#ID_du_sondage OU vide (dernier sondage créé)
+ * @param string $id [description]
+ */
+function PollNewest($id='') 
+{
+    global $NPDS_Prefix;
+           
+    // snipe : multi-poll evolution
+    if ($id != 0) 
+    {
+        settype($id, "integer");
+        list($ibid, $pollClose) = poolboth::pollSecur($id);
+            
+        if ($ibid) 
+        {
+            pollMain($ibid, $pollClose);
+        }
+    } 
+    elseif ($result = sql_query("SELECT pollID FROM ".$NPDS_Prefix."poll_data ORDER BY pollID DESC LIMIT 1")) 
+    {
+        list($pollID) = sql_fetch_row($result);
+        list($ibid, $pollClose) = poolboth::pollSecur($pollID);
+            
+        if ($ibid) 
+        {
+            pollMain($ibid, $pollClose);
+        }
+    }
+}
 
 /**
  * Construit le bloc sondage
@@ -20,7 +69,7 @@ use npds\forum\forum;
  * @param  [type] $pollClose [description]
  * @return [type]            [description]
  */
-function pollMain($pollID,$pollClose) 
+function pollMain($pollID, $pollClose) 
 {
     global $NPDS_Prefix, $maxOptions, $boxTitle, $boxContent, $userimg, $language, $pollcomm, $cookie;
     
@@ -52,7 +101,7 @@ function pollMain($pollID,$pollClose)
         $boxTitle = $block_title;
     }
        
-    $boxContent .= '<legend>'.aff_langue($pollTitle).'</legend>';
+    $boxContent .= '<legend>'.language::aff_langue($pollTitle).'</legend>';
     
     $result = sql_query("SELECT pollID, optionText, optionCount, voteID FROM ".$NPDS_Prefix."poll_data WHERE (pollID='$pollID' AND optionText<>'') ORDER BY voteID");
     $sum = 0; 
@@ -68,7 +117,7 @@ function pollMain($pollID,$pollClose)
             $boxContent .= '
             <div class="custom-control custom-radio">
                 <input class="custom-control-input" type="radio" id="voteID'.$j.'" name="voteID" value="'.$object['voteID'].'" />
-                <label class="custom-control-label d-block" for="voteID'.$j.'" >'.aff_langue($object['optionText']).'</label>
+                <label class="custom-control-label d-block" for="voteID'.$j.'" >'.language::aff_langue($object['optionText']).'</label>
             </div>';
             
             $sum = $sum + $object['optionCount'];
@@ -82,7 +131,7 @@ function pollMain($pollID,$pollClose)
     {
         while($object = sql_fetch_assoc($result)) 
         {
-            $boxContent .= '&nbsp;'.aff_langue($object['optionText']).'<br />';
+            $boxContent .= '&nbsp;'.language::aff_langue($object['optionText']).'<br />';
             $sum = $sum + $object['optionCount'];
         }
     }
@@ -134,7 +183,7 @@ function Site_Activ()
 {
     global $startdate, $top;
        
-    list($membres, $totala, $totalb, $totalc, $totald, $totalz) = req_stat();
+    list($membres, $totala, $totalb, $totalc, $totald, $totalz) = stat::req_stat();
     
     $who_online = '
     <p class="text-center">'.translate("Pages vues depuis").' '.$startdate.' : '.str::wrh($totalz).'</p>
@@ -146,7 +195,7 @@ function Site_Activ()
             <li class="my-1">'.translate("Nb. de critiques").' <span class="badge badge-pill badge-secondary float-right">'.str::wrh($totalb).'</span></li>
         </ul>';
        
-    if ($ibid = theme_image("box/top.gif")) 
+    if ($ibid = theme::theme_image("box/top.gif")) 
     {
         $imgtmp = $ibid;
     } 
@@ -160,7 +209,7 @@ function Site_Activ()
         $who_online .= '
         <p class="text-center"><a href="top.php"><img src="'.$imgtmp.'" alt="'.translate("Top").' '.$top.'" /></a>&nbsp;&nbsp;';
           
-        if ($ibid = theme_image("box/stat.gif")) 
+        if ($ibid = theme::theme_image("box/stat.gif")) 
         {
             $imgtmp = $ibid;
         } 
@@ -199,7 +248,7 @@ function online()
 {
     global $NPDS_Prefix, $user, $cookie;
        
-    $ip = getip();
+    $ip = ip::get();
     $username = $cookie[1];
        
     if (!isset($username)) 
@@ -244,7 +293,7 @@ function online()
     {
         $content .= '<br />'.translate("Vous êtes connecté en tant que").' <strong>'.$username.'</strong>.<br />';
         
-        $result = Q_select("SELECT uid FROM ".$NPDS_Prefix."users WHERE uname='$username'", 86400);
+        $result = cache::Q_select("SELECT uid FROM ".$NPDS_Prefix."users WHERE uname='$username'", 86400);
         $uid = $result[0];
           
         $result2 = sql_query("SELECT to_userid FROM ".$NPDS_Prefix."priv_msgs WHERE to_userid='".$uid['uid']."' AND type_msg='0'");
@@ -311,7 +360,7 @@ function lnlbox()
             </div>
         </div>
     </form>'
-    .adminfoot('', '', '', '0');
+    .css::adminfoot('', '', '', '0');
     
     themesidebox($title, $boxstuff);
 }
@@ -362,8 +411,8 @@ function mainblock()
     
     // must work from php 4 to 7 !..?..
     themesidebox(
-        aff_langue($title), 
-        aff_langue(
+        language::aff_langue($title), 
+        language::aff_langue(
             preg_replace_callback('#<a href=[^>]*(&)[^>]*>#',
                 [str::class, 'changetoamp'],
                 $content)
@@ -471,10 +520,10 @@ function adminblock()
         }
         else 
         {
-            $title = aff_langue($title);
+            $title = language::aff_langue($title);
         }
         
-        $content = aff_langue(
+        $content = language::aff_langue(
                         preg_replace_callback(
                             '#<a href=[^>]*(&)[^>]*>#',
                             [str::class, 'changetoampadm'], 
@@ -610,7 +659,7 @@ function ephemblock()
         }
 
         $boxstuff .= "<b>$yid</b>\n<br />\n";
-        $boxstuff .= aff_langue($content);
+        $boxstuff .= language::aff_langue($content);
         $cnt = 1;
     }
 
@@ -686,7 +735,7 @@ function userblock()
        
     if (($user) AND ($cookie[8])) 
     {
-        $getblock = Q_select("SELECT ublock FROM ".$NPDS_Prefix."users WHERE uid='$cookie[0]'",86400);
+        $getblock = cache::Q_select("SELECT ublock FROM ".$NPDS_Prefix."users WHERE uid='$cookie[0]'",86400);
         $ublock = $getblock[0];
         
         global $block_title;
@@ -722,7 +771,7 @@ function topdownload()
     }
         
     $boxstuff = '<ul>';
-    $boxstuff .= topdownload_data('short', 'dcounter');
+    $boxstuff .= download::topdownload_data('short', 'dcounter');
     $boxstuff .= '</ul>';
     
     if ($boxstuff == '<ul></ul>') 
@@ -752,7 +801,7 @@ function lastdownload()
     }
     
     $boxstuff = '<ul>';
-    $boxstuff .= topdownload_data('short', 'ddate');
+    $boxstuff .= download::topdownload_data('short', 'ddate');
     $boxstuff .= '</ul>';
     
     if ($boxstuff == '<ul></ul>') 
@@ -809,7 +858,7 @@ function oldNews($storynum, $typ_aff='')
     }
        
     $vari = 0;
-    $xtab = news_aff('old_news', $sel, $storynum, $oldnum);
+    $xtab = news::news_aff('old_news', $sel, $storynum, $oldnum);
     $story_limit = 0; 
     $time2 = 0; 
     $a = 0;
@@ -820,7 +869,7 @@ function oldNews($storynum, $typ_aff='')
           
         $story_limit++;
           
-        setlocale(LC_TIME, aff_langue($locale));
+        setlocale(LC_TIME, language::aff_langue($locale));
           
         preg_match('#^(\d{4})-(\d{1,2})-(\d{1,2}) (\d{1,2}):(\d{1,2}):(\d{1,2})$#', $time, $datetime2);
           
@@ -843,19 +892,19 @@ function oldNews($storynum, $typ_aff='')
         if ($time2 == $datetime2)
         {
             $boxstuff .= '
-            <li class="list-group-item list-group-item-action d-inline-flex justify-content-between align-items-center"><a class="n-ellipses" href="article.php?sid='.$sid.'">'.aff_langue($title).'</a>'.$comments.'</li>';
+            <li class="list-group-item list-group-item-action d-inline-flex justify-content-between align-items-center"><a class="n-ellipses" href="article.php?sid='.$sid.'">'.language::aff_langue($title).'</a>'.$comments.'</li>';
         } 
         else 
         {
             if ($a == 0) 
             {
-                $boxstuff .= "<strong>$datetime2</strong><br /><li><a href=\"article.php?sid=$sid\">".aff_langue($title)."</a> $comments</li>\n";
+                $boxstuff .= "<strong>$datetime2</strong><br /><li><a href=\"article.php?sid=$sid\">".language::aff_langue($title)."</a> $comments</li>\n";
                 $time2 = $datetime2;
                 $a = 1;
             } 
             else 
             {
-                $boxstuff .= "<br /><strong>$datetime2</strong><br /><li><a href=\"article.php?sid=$sid\">".aff_langue($title)."</a> $comments </li>\n";
+                $boxstuff .= "<br /><strong>$datetime2</strong><br /><li><a href=\"article.php?sid=$sid\">".language::aff_langue($title)."</a> $comments </li>\n";
                 $time2 = $datetime2;
             }
         }
@@ -924,7 +973,7 @@ function bigstory()
        
     $year = $today['year'];
     $tdate = "$year-$month-$day";
-    $xtab = news_aff("big_story","WHERE (time LIKE '%$tdate%')", 0, 1);
+    $xtab = news::news_aff("big_story","WHERE (time LIKE '%$tdate%')", 0, 1);
        
     if (sizeof($xtab)) 
     {
@@ -943,7 +992,7 @@ function bigstory()
     else 
     {
         $content = translate("L'article le plus consulté aujourd'hui est :")."<br /><br />";
-        $content .= "<a href=\"article.php?sid=$fsid\">".aff_langue($ftitle)."</a>";
+        $content .= "<a href=\"article.php?sid=$fsid\">".language::aff_langue($ftitle)."</a>";
     }
        
     global $block_title;
@@ -990,11 +1039,11 @@ function category()
                 
                 if ($cat == $catid)
                 {
-                    $boxstuff .= '<li><strong>'.aff_langue($title).'</strong></li>';
+                    $boxstuff .= '<li><strong>'.language::aff_langue($title).'</strong></li>';
                 }
                 else 
                 {
-                    $boxstuff .= '<li class="list-group-item list-group-item-action hyphenate"><a href="index.php?op=newcategory&amp;catid='.$catid.'" data-html="true" data-toggle="tooltip" data-placement="right" title="'.translate("Dernière contribution").' <br />'.formatTimestamp($time).' ">'.aff_langue($title).'</a></li>';
+                    $boxstuff .= '<li class="list-group-item list-group-item-action hyphenate"><a href="index.php?op=newcategory&amp;catid='.$catid.'" data-html="true" data-toggle="tooltip" data-placement="right" title="'.translate("Dernière contribution").' <br />'.time::formatTimestamp($time).' ">'.language::aff_langue($title).'</a></li>';
                 }
             }
         }
@@ -1285,7 +1334,7 @@ function bloc_langue()
         $title = $block_title;
     }
     
-    themesidebox($title, aff_local_langue('' , "index.php", "choice_user_language"));
+    themesidebox($title, language::aff_local_langue('' , "index.php", "choice_user_language"));
 }
 
 /**
@@ -1302,7 +1351,7 @@ function bloc_rubrique()
     $boxstuff = '<ul>';
     while (list($rubid, $rubname) = sql_fetch_row($result)) 
     {
-        $title = aff_langue($rubname);
+        $title = language::aff_langue($rubname);
         $result2 = sql_query("SELECT secid, secname, userlevel FROM ".$NPDS_Prefix."sections WHERE rubid='$rubid' ORDER BY ordre");
         
         $boxstuff .= '<li><strong>'.$title.'</strong></li>';
@@ -1320,7 +1369,7 @@ function bloc_rubrique()
                 
                 foreach($tmp_auto as $userlevel) 
                 {
-                    $okprintLV1 = autorisation($userlevel);
+                    $okprintLV1 = auth::autorisation($userlevel);
                     
                     if ($okprintLV1) 
                     {
@@ -1330,7 +1379,7 @@ function bloc_rubrique()
 
                 if ($okprintLV1) 
                 {
-                    $sec = aff_langue($secname);
+                    $sec = language::aff_langue($secname);
                     $boxstuff .= '<li><a href="sections.php?op=listarticles&amp;secid='.$secid.'">'.$sec.'</a></li>';
                 }
 
@@ -1377,7 +1426,7 @@ function bloc_espace_groupe($gr, $i_gr)
         $title = $block_title;
     }
 
-    themesidebox($title, fab_espace_groupe($gr, "0", $i_gr));
+    themesidebox($title, groupe::fab_espace_groupe($gr, "0", $i_gr));
 }
 
 /**
@@ -1428,10 +1477,8 @@ function RecentForumPosts($title, $maxforums, $maxtopics, $displayposter=false, 
 function makeChatBox($pour) 
 {
     global $user, $admin, $member_list, $long_chain, $NPDS_Prefix;
-           
-    include_once('functions.php');
-           
-    $auto = autorisation_block('params#'.$pour);
+                  
+    $auto = block::autorisation_block('params#'.$pour);
     $dimauto = count($auto);
 
     if (!$long_chain) 
@@ -1480,16 +1527,16 @@ function makeChatBox($pour)
                 
                 if (strlen($message) > $long_chain) 
                 {
-                    $thing .= "&gt;&nbsp;<span>".smilie(stripslashes(substr($message, 0, $long_chain)))." </span><br />\n";
+                    $thing .= "&gt;&nbsp;<span>".pixel::smilie(stripslashes(substr($message, 0, $long_chain)))." </span><br />\n";
                 } 
                 else 
                 {
-                    $thing .= "&gt;&nbsp;<span>".smilie(stripslashes($message))." </span><br />\n";
+                    $thing .= "&gt;&nbsp;<span>".pixel::smilie(stripslashes($message))." </span><br />\n";
                 }
             }
         }
 
-        $PopUp = JavaPopUp("chat.php?id=".$auto[0]."&amp;auto=".encrypt(serialize($auto[0])), "chat".$auto[0], 380, 480);
+        $PopUp = java::JavaPopUp("chat.php?id=".$auto[0]."&amp;auto=".crypt::encrypt(serialize($auto[0])), "chat".$auto[0], 380, 480);
         
         if ($une_ligne) 
         {
@@ -1517,10 +1564,10 @@ function makeChatBox($pour)
             
             foreach($auto as $autovalue) 
             {
-                $result = Q_select("SELECT groupe_id, groupe_name FROM ".$NPDS_Prefix."groupes WHERE groupe_id='$autovalue'", 3600);
+                $result = cache::Q_select("SELECT groupe_id, groupe_name FROM ".$NPDS_Prefix."groupes WHERE groupe_id='$autovalue'", 3600);
                 $autovalueX = $result[0];
                 
-                $PopUp = JavaPopUp("chat.php?id=".$autovalueX['groupe_id']."&auto=".encrypt(serialize($autovalueX['groupe_id'])), "chat".$autovalueX['groupe_id'], 380, 480);
+                $PopUp = java::JavaPopUp("chat.php?id=".$autovalueX['groupe_id']."&auto=".crypt::encrypt(serialize($autovalueX['groupe_id'])), "chat".$autovalueX['groupe_id'], 380, 480);
                     
                 $thing .= "<li><a href=\"javascript:void(0);\" onclick=\"window.open($PopUp);\">".$autovalueX['groupe_name']."</a>";
 
@@ -1580,7 +1627,7 @@ function instant_members_message()
         $boxstuff = '
         <ul class="">';
         
-        $ibid = online_members();
+        $ibid = online::online_members();
         $rank1 = '';
         
         for ($i = 1; $i <= $ibid[0]; $i++) 
@@ -1625,7 +1672,7 @@ function instant_members_message()
                   
             if ($userid) 
             {
-                $rowQ1 = Q_Select("SELECT rang FROM ".$NPDS_Prefix."users_status WHERE uid='$userid'", 3600);
+                $rowQ1 = cache::Q_Select("SELECT rang FROM ".$NPDS_Prefix."users_status WHERE uid='$userid'", 3600);
                      
                 $myrow = $rowQ1[0];
                 $rank = $myrow['rang'];
@@ -1635,7 +1682,7 @@ function instant_members_message()
                 {
                     if ($rank1 == '') 
                     {
-                        if ($rowQ2 = Q_Select("SELECT rank1, rank2, rank3, rank4, rank5 FROM ".$NPDS_Prefix."config", 86400)) 
+                        if ($rowQ2 = cache::Q_Select("SELECT rank1, rank2, rank3, rank4, rank5 FROM ".$NPDS_Prefix."config", 86400)) 
                         {
                             $myrow = $rowQ2[0];
                             $rank1 = $myrow['rank1'];
@@ -1646,7 +1693,7 @@ function instant_members_message()
                         }
                     }
                         
-                    if ($ibidR = theme_image("forum/rank/".$rank.".gif")) 
+                    if ($ibidR = theme::theme_image("forum/rank/".$rank.".gif")) 
                     {
                         $imgtmpA = $ibidR;
                     } 
@@ -1656,7 +1703,7 @@ function instant_members_message()
                     }
 
                     $messR = 'rank'.$rank;
-                    $tmpR = "<img src=\"".$imgtmpA."\" border=\"0\" alt=\"".aff_langue($$messR)."\" title=\"".aff_langue($$messR)."\" />";
+                    $tmpR = "<img src=\"".$imgtmpA."\" border=\"0\" alt=\"".laguage::aff_langue($$messR)."\" title=\"".laguage::aff_langue($$messR)."\" />";
                 } 
                 else
                 {
@@ -1667,7 +1714,7 @@ function instant_members_message()
                      
                 if ($new_messages > 0) 
                 {
-                    $PopUp = JavaPopUp("readpmsg_imm.php?op=new_msg", "IMM", 600, 500);
+                    $PopUp = java::JavaPopUp("readpmsg_imm.php?op=new_msg", "IMM", 600, 500);
                     $PopUp = "<a href=\"javascript:void(0);\" onclick=\"window.open($PopUp);\">";
                         
                     if ($ibid[$i]['username'] == $cookie[1]) 
@@ -1692,7 +1739,7 @@ function instant_members_message()
                         
                     if ($messages > 0) 
                     {
-                        $PopUp = JavaPopUp("readpmsg_imm.php?op=msg", "IMM", 600, 500);
+                        $PopUp = java::JavaPopUp("readpmsg_imm.php?op=msg", "IMM", 600, 500);
                         $PopUp = '<a href="javascript:void(0);" onclick="window.open('.$PopUp.');">';
                         
                         if ($ibid[$i]['username'] == $cookie[1]) 
@@ -1737,7 +1784,7 @@ function instant_members_message()
     {
         if ($admin) 
         {
-            $ibid = online_members();
+            $ibid = online::online_members();
             if ($ibid[0]) 
             {
                 for ($i = 1; $i <= $ibid[0]; $i++) 

@@ -10,7 +10,7 @@
  */
 namespace npds\blocks;
 
-use npds\lnguage\language;
+use npds\language\language;
 use npds\cache\cacheManager;
 use npds\cache\cacheEmpty;
 use npds\groupes\groupe;

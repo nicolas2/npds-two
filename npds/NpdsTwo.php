@@ -20,16 +20,16 @@ class NpdsTwo {
     /**
      * 
      */
-    const VERSION_NUM = 'v.1.0'
+    const VERSION_NUM = 'v.1.0';
     
     /**
      * 
      */
-    const VERSION_ID = 'Npds Two'
+    const VERSION_ID = 'Npds Two';
     
     /**
      * 
      */
-    const VERSION_SUB = 'Volcano'
+    const VERSION_SUB = 'Volcano';
 
 }

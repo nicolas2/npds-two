@@ -13,6 +13,7 @@ namespace npds\auth;
 use npds\cookie\cookie;
 use npds\groupes\groupe;
 use npds\error\error;
+use npds\cache\cache;
 
 
 /*

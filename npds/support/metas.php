@@ -10,6 +10,7 @@
  */
 use npds\views\theme;
 use npds\language\metalang;
+use npds\cache\cache;
 
 
 /**
@@ -38,4 +39,12 @@ function MM_img($ibid)
     }
 
     return $ret;
+}
+
+/**
+ * [SC_infos description]
+ */
+function SC_infos()
+{
+    cache::SC_infos();
 }

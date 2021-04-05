@@ -1,4 +1,6 @@
-
+<?php
+use npds\language\language;
+?>
 <footer id="footer" class="footer text-center mt-4">
    <div class="container">
       <p>!sc_infos!
@@ -10,7 +12,7 @@
    //<![CDATA[
       $(document).ready(function(){
          var translator = $('body').translate({lang: "fr", t: dict});
-         translator.lang("<?php echo language_iso(1,'',0); ?>");
+         translator.lang("<?php echo language::language_iso(1,'',0); ?>");
          $('.plusdecontenu').click(function(){
             var $this = $(this);
             $this.toggleClass('plusdecontenu');

@@ -9,9 +9,9 @@
  * @date 02/04/2021
  */
 
-//if (!function_exists("Mysql_Connexion")) {
-   include ("mainfile.php");
-//}
+if (!function_exists("Mysql_Connexion")) {
+   include ("boot/bootstrap.php");
+}
 
 function stripslashes_deep($value) {
    $value = is_array($value) ?

@@ -11,6 +11,8 @@
 namespace npds\edito;
 
 use npds\time\time;
+use npds\language\metalang;
+use npds\language\language;
 
 
 /*
@@ -121,9 +123,62 @@ class edito {
             $affich = true;
         }
         
-        $Xcontents = meta_lang(language::aff_langue($Xcontents));
+        $Xcontents = metalang::meta_lang(language::aff_langue($Xcontents));
         
         return array($affich, $Xcontents);
+    }
+
+    /**
+     * [aff_edito description]
+     * @return [type] [description]
+     */
+    public static function aff_edito() 
+    {
+        list($affich, $Xcontents) = static::fab_edito();
+        
+        if (($affich) and ($Xcontents != '')) 
+        {
+            $notitle = false;
+            if (strstr($Xcontents, '!edito-notitle!')) 
+            {
+                $notitle = 'notitle';
+                $Xcontents = str_replace('!edito-notitle!', '', $Xcontents);
+            }
+
+            $ret = false;
+           
+            if (function_exists("themedito")) 
+            {
+                $ret = themedito($Xcontents);
+            } 
+            else 
+            {
+                if (function_exists("theme_centre_box")) 
+                {
+                    if (!$notitle) 
+                    {
+                        $title = translate("EDITO");
+                    } 
+                    else 
+                    {
+                        $title = '';
+                    }
+                    
+                    theme_centre_box($title, $Xcontents);
+                    $ret = true;
+                }
+            }
+            
+            if ($ret == false) 
+            {
+                if (!$notitle)
+                {
+                    echo '<span class="edito">'.translate("EDITO").'</span>';
+                }
+                echo $Xcontents;
+                echo '<br />';
+            }
+        }
     }
 
 }

@@ -14,7 +14,18 @@
 /************************************************************************/
 if (!function_exists("Mysql_Connexion"))
    die();
-include_once('functions.php');
+
+use npds\pagination\pagination;
+use npds\error\error;
+use npds\views\theme;
+use npds\utility\spam;
+use npds\auth\auth;
+use npds\forum\forumauth;
+use npds\date\date;
+use npds\pixels\pixel;
+use npds\media\video;
+
+
 include_once('auth.php');
 
 settype($forum,'integer');
@@ -90,28 +101,28 @@ function Caff_pub($topic, $file_name, $archive) {
          </ul>
       </nav>';
    if ($total > $comments_per_page)
-      echo paginate(rawurldecode($url_ret).'&amp;C_start=', '', $nbPages, $current, 2, $comments_per_page, $C_start);
+      echo pagination::paginate(rawurldecode($url_ret).'&amp;C_start=', '', $nbPages, $current, 2, $comments_per_page, $C_start);
    echo '
       </div>';
    }
    if ($Mmod) $post_aff=' '; else $post_aff=" AND post_aff='1' ";
    $sql = "SELECT * FROM ".$NPDS_Prefix."posts WHERE forum_id='$forum' AND topic_id = '$topic'".$post_aff."ORDER BY post_id LIMIT $C_start, $comments_per_page";
-   if (!$result = sql_query($sql)) forumerror('0001');
+   if (!$result = sql_query($sql)) error::forumerror('0001');
    $mycount = sql_num_rows($result);
    $myrow = sql_fetch_assoc($result);
    $count = 0;
 
 if ($mycount) {
-   if ($ibid=theme_image("forum/icons/posticon.gif")) {$imgtmpPI=$ibid;} else {$imgtmpPI="assets/images/forum/icons/posticon.gif";}
+   if ($ibid=theme::theme_image("forum/icons/posticon.gif")) {$imgtmpPI=$ibid;} else {$imgtmpPI="assets/images/forum/icons/posticon.gif";}
    do {
-      $posterdata = get_userdata_from_id($myrow['poster_id']);
+      $posterdata = auth::get_userdata_from_id($myrow['poster_id']);
       if($myrow['poster_id'] !== '0') {
          $posts = $posterdata['posts'];
          $socialnetworks=array(); $posterdata_extend=array(); $res_id=array(); $my_rs='';
          if (!$short_user) {
-            $posterdata_extend = get_userdata_extend_from_id($myrow['poster_id']);
+            $posterdata_extend = auth::get_userdata_extend_from_id($myrow['poster_id']);
             include('modules/reseaux-sociaux/reseaux-sociaux.conf.php');
-            if($user or autorisation(-127)) {
+            if($user or auth::autorisation(-127)) {
                if (array_key_exists('M2', $posterdata_extend)) {
                   if ($posterdata_extend['M2']!='') {
                      $socialnetworks= explode(';',$posterdata_extend['M2']);
@@ -137,13 +148,13 @@ if ($mycount) {
          settype($ch_lat,'string');
 
          $useroutils = '';
-         if($user or autorisation(-127)) {
+         if($user or auth::autorisation(-127)) {
             if ($posterdata['uid']!= 1 and $posterdata['uid']!='')
                $useroutils .= '<a class="list-group-item text-primary text-center text-md-left" href="user.php?op=userinfo&amp;uname='.$posterdata['uname'].'" target="_blank" title="'.translate("Profil").'" data-toggle="tooltip"><i class="fa fa-user fa-2x align-middle"></i><span class="ml-3 d-none d-md-inline">'.translate("Profil").'</span></a>';
             if ($posterdata['uid']!= 1 and $posterdata['uid']!='')
                $useroutils .= '<a class="list-group-item text-primary text-center text-md-left" href="powerpack.php?op=instant_message&amp;to_userid='.$posterdata["uname"].'" title="'.translate("Envoyer un message interne").'" data-toggle="tooltip"><i class="far fa-envelope fa-2x align-middle"></i><span class="ml-3 d-none d-md-inline">'.translate("Message").'</span></a>';
             if ($posterdata['femail']!='')
-               $useroutils .= '<a class="list-group-item text-primary text-center text-md-left" href="mailto:'.anti_spam($posterdata['femail'],1).'" target="_blank" title="'.translate("Email").'" data-toggle="tooltip"><i class="fa fa-at fa-2x align-middle"></i><span class="ml-3 d-none d-md-inline">'.translate("Email").'</span></a>';
+               $useroutils .= '<a class="list-group-item text-primary text-center text-md-left" href="mailto:'.spam::anti_spam($posterdata['femail'],1).'" target="_blank" title="'.translate("Email").'" data-toggle="tooltip"><i class="fa fa-at fa-2x align-middle"></i><span class="ml-3 d-none d-md-inline">'.translate("Email").'</span></a>';
             if ($myrow['poster_id']!=1 and array_key_exists($ch_lat, $posterdata_extend)) {
                if ($posterdata_extend[$ch_lat] !='')
                   $useroutils .= '<a class="list-group-item list-group-item-action text-primary text-center text-md-left" href="modules.php?ModPath=geoloc&amp;ModStart=geoloc&amp;op='.$posterdata['uname'].'" title="'.translate("Localisation").'" ><i class="fas fa-map-marker-alt fa-2x align-middle"></i><span class="ml-3 d-none d-md-inline">'.translate("Localisation").'</span></a>';
@@ -169,11 +180,11 @@ if ($mycount) {
                if (stristr($posterdata['user_avatar'],"users_private"))
                    $imgtmp=$posterdata['user_avatar'];
                else {
-                  if ($ibid=theme_image("forum/avatar/".$posterdata['user_avatar'])) {$imgtmp=$ibid;} else {$imgtmp="assets/images/forum/avatar/".$posterdata['user_avatar'];}
+                  if ($ibid=theme::theme_image("forum/avatar/".$posterdata['user_avatar'])) {$imgtmp=$ibid;} else {$imgtmp="assets/images/forum/avatar/".$posterdata['user_avatar'];}
                }
             }
             echo '
-            <a style="position:absolute; top:1rem;" tabindex="0" data-toggle="popover" data-trigger="focus" data-html="true" data-title="'.$posterdata['uname'].'" data-content=\'<div class="my-2 border rounded p-2">'.member_qualif($posterdata['uname'], $posts,$posterdata['rang']).'</div><div class="list-group mb-3 text-center">'.$useroutils.'</div><div class="mx-auto text-center" style="max-width:170px;">'.$my_rs.'</div>\'><img class=" btn-outline-primary img-thumbnail img-fluid n-ava" src="'.$imgtmp.'" alt="'.$posterdata['uname'].'" /></a>
+            <a style="position:absolute; top:1rem;" tabindex="0" data-toggle="popover" data-trigger="focus" data-html="true" data-title="'.$posterdata['uname'].'" data-content=\'<div class="my-2 border rounded p-2">'.forumauth::member_qualif($posterdata['uname'], $posts,$posterdata['rang']).'</div><div class="list-group mb-3 text-center">'.$useroutils.'</div><div class="mx-auto text-center" style="max-width:170px;">'.$my_rs.'</div>\'><img class=" btn-outline-primary img-thumbnail img-fluid n-ava" src="'.$imgtmp.'" alt="'.$posterdata['uname'].'" /></a>
             <span style="position:absolute; left:6em;" class="text-muted"><strong>'.$posterdata['uname'].'</strong></span>';
          } else {
             echo '
@@ -186,19 +197,19 @@ if ($mycount) {
          else
             echo '<span class="text-muted"><strong>'.$anonymous.'</strong></span>';
       }
-      if ($ibid=theme_image("forum/subject/00.png")) {$imgtmp=$ibid;} else {$imgtmp="assets/images/forum/subject/00.png";}
+      if ($ibid=theme::theme_image("forum/subject/00.png")) {$imgtmp=$ibid;} else {$imgtmp="assets/images/forum/subject/00.png";}
 
       echo '
                   <span class="float-right"><img class="n-smil" src="'.$imgtmp.'" alt="" /></span>
                </div>';
       $message=stripslashes($myrow['post_text']);
-      $date_post=convertdateTOtimestamp($myrow['post_time']);
+      $date_post=date::convertdateTOtimestamp($myrow['post_time']);
       echo '
                <div class="card-body">
                   <div class="card-text pt-3">';
       if ($allow_bbcode) {
-         $message = smilie($message);
-         $message = aff_video_yt($message);
+         $message = pixel::smilie($message);
+         $message = video::aff_video_yt($message);
       }
       if(array_key_exists('user_sig', $posterdata))
          $message=str_replace("[addsig]", '<div class="n-signature">'.nl2br($posterdata['user_sig']).'</div>', $message);
@@ -210,7 +221,7 @@ if ($mycount) {
                </div>
                <div class="card-footer">
                   <div class="row">
-                     <div class=" col-sm-6 text-muted small">'.post_convertdate($date_post).'</div>
+                     <div class=" col-sm-6 text-muted small">'.date::post_convertdate($date_post).'</div>
                      <div class=" col-sm-6 text-right">';
       if ($allow_to_post)
          echo '<a class="mr-3" href="modules.php?ModPath=comments&amp;ModStart=reply&amp;topic='.$topic.'&amp;file_name='.$file_name.'&amp;archive='.$archive.'" title="'.translate("Commentaire").'" data-toggle="tooltip"><i class="far fa-comment fa-lg"></i></a>';
@@ -252,7 +263,7 @@ if ($mycount) {
             </ul>
          </nav>';
    if ($total > $comments_per_page)
-      echo paginate(rawurldecode($url_ret).'&amp;C_start=', '', $nbPages, $current, 2, $comments_per_page, $C_start);
+      echo pagination::paginate(rawurldecode($url_ret).'&amp;C_start=', '', $nbPages, $current, 2, $comments_per_page, $C_start);
    echo '
       </div>';
    if ($allow_to_post)
