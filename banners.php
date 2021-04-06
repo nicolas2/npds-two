@@ -18,7 +18,10 @@ use npds\utility\str;
 use npds\mailler\mailler;
 
 
-include_once("boot/bootstrap.php");
+if (!function_exists('Mysql_Connexion'))
+{
+    include ('boot/bootstrap.php');
+}
 
 /**
  * [viewbanner description]

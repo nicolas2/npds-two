@@ -20,9 +20,9 @@
 // token_de_securite = encrypt(serialize(gp_id)) 
 // Permet d'éviter le lancement du Chat sans autorisation
 
-if (!function_exists("Mysql_Connexion"))
+if (!function_exists('Mysql_Connexion'))
 {
-    include ("boot/bootstrap.php");
+    include ('boot/bootstrap.php');
 }
 
 $Titlesitename = 'Npds Two';

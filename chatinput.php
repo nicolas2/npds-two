@@ -17,9 +17,9 @@ use npds\security\ip;
 use npds\pixels\pixel;
 
 
-if (!function_exists("Mysql_Connexion"))
+if (!function_exists('Mysql_Connexion'))
 {
-    include ("boot/bootstrap.php");
+    include ('boot/bootstrap.php');
 }
 
 // chatbox avec salon privatif 

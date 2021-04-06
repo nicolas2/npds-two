@@ -10,9 +10,9 @@
  */
 
 
-if (!function_exists("Mysql_Connexion"))
+if (!function_exists('Mysql_Connexion'))
 {
-    include ("boot/bootstrap.php");
+    include ('boot/bootstrap.php');
 }
 
 global $admin, $not_admin_count;

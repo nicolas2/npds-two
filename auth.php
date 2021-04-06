@@ -12,7 +12,7 @@ use npds\cache\cache;
 use npds\cookie\cookie;
 
 
-if (!function_exists("Mysql_Connexion"))
+if (!function_exists('Mysql_Connexion'))
 {
     header("location: ".site_url('index.php'));
 }

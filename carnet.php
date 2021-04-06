@@ -12,9 +12,9 @@ use npds\utility\crypt;
 use npds\assets\css;
 
 
-if (!function_exists("Mysql_Connexion"))
+if (!function_exists('Mysql_Connexion'))
 {
-    include ("boot/bootstrap.php");
+    include ('boot/bootstrap.php');
 }
 
 /**
