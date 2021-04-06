@@ -12,327 +12,224 @@ use npds\assets\css;
 use npds\language\language;
 use npds\security\hack;
 use npds\editeur\tiny;
+use npds\views\theme;
 
-//if (!function_exists("Mysql_Connexion")) {
-//   include ("mainfile.php");
-//   die();
-//}
+
+if (!function_exists('Mysql_Connexion'))
+{
+    include ('boot/bootstrap.php');
+}
 
 settype($m_keywords, 'string');
 settype($m_description, 'string');
+
 $skin = '';
 
-function head($tiny_mce_init, $css_pages_ref, $css, $tmp_theme, $skin, $js, $m_description,$m_keywords) {
-   global $slogan, $Titlesitename, $banners, $Default_Theme, $theme, $gzhandler, $language;
-   global $topic, $hlpfile, $user, $hr, $bgcolor1, $bgcolor2, $bgcolor3, $bgcolor4, $bgcolor5, $bgcolor6, $textcolor1, $textcolor2, $long_chain;
-   global $bargif, $theme_width, $bloc_width, $page_width;
+function head($tiny_mce_init, $css_pages_ref, $css, $tmp_theme, $skin, $js, $m_description,$m_keywords) 
+{
+    global $slogan, $Titlesitename, $banners, $Default_Theme, $theme, $gzhandler, $language, $topic, $hlpfile, $user, $hr, $bgcolor1, $bgcolor2, $bgcolor3, $bgcolor4, $bgcolor5, $bgcolor6, $textcolor1, $textcolor2, $long_chain, $bargif, $theme_width, $bloc_width, $page_width;
    
-   settype($m_keywords, 'string');
-   settype($m_description, 'string');
-   if ($gzhandler==1) ob_start("ob_gzhandler");
-   include(BASEPATH."themes/$tmp_theme/theme.php");
+    settype($m_keywords, 'string');
+    settype($m_description, 'string');
+   
+    if ($gzhandler == 1)
+    { 
+        ob_start("ob_gzhandler");
+    }
 
-   // Meta
-   if (file_exists(BASEPATH."config/meta.php")) {
-      $meta_op='';
-      include (BASEPATH."config/meta.php");
-   }
+    include("themes/$tmp_theme/theme.php");
 
-   // Favicon
-   if (file_exists(BASEPATH."themes/$tmp_theme/images/favicon.ico"))
-      $favico="themes/$tmp_theme/images/favicon.ico";
-   else
-      $favico='assets/images/favicon.ico';
-   echo '
-<link rel="shortcut icon" href="'.$favico.'" type="image/x-icon" />';
+    // Meta
+    if (file_exists("config/meta.php")) 
+    {
+        $meta_op = '';
+        include ("config/meta.php");
+    }
 
-   // Syndication RSS & autres
-   global $sitename, $nuke_url, $REQUEST_URI;
+    // Favicon
+    if (file_exists("themes/$tmp_theme/images/favicon.ico"))
+    {
+        $favico = "themes/$tmp_theme/images/favicon.ico";
+    }
+    else
+    {
+        $favico = 'assets/images/favicon.ico';
+    }
+   
+    echo '<link rel="shortcut icon" href="'.$favico.'" type="image/x-icon" />';
 
-   // Canonical
-   $uri = $REQUEST_URI;
-   $drname=dirname($uri);
-   if ($drname=='.')
-      $uri=$nuke_url.'/'.$uri;
-   elseif($drname=='/')
-      $uri=$nuke_url.$uri;
-   else
-      $uri='http://'.$_SERVER['SERVER_NAME'].$uri;
-   echo '
-<link rel="canonical" href="'.str_replace('&','&amp;',str_replace('&amp;','&',$uri)).'" />';
+    // Syndication RSS & autres
+    global $sitename, $nuke_url, $REQUEST_URI;
 
-   // humans.txt
-   if (file_exists(BASEPATH."humans.txt"))
-      echo '
-<link type="text/plain" rel="author" href="'.$nuke_url.'/humans.txt" />';
+    // Canonical
+    $uri = $REQUEST_URI;
+    $drname = dirname($uri);
+    if ($drname == '.')
+    {
+        $uri = $nuke_url.'/'.$uri;
+    }
+    elseif($drname == '/')
+    {
+        $uri = $nuke_url.$uri;
+    }
+    else
+    {
+        $uri = 'http://'.$_SERVER['SERVER_NAME'].$uri;
+    }
 
-   echo '
-<link href="backend.php?op=RSS0.91" title="'.$sitename.' - RSS 0.91" rel="alternate" type="text/xml" />
-<link href="backend.php?op=RSS1.0" title="'.$sitename.' - RSS 1.0" rel="alternate" type="text/xml" />
-<link href="backend.php?op=RSS2.0" title="'.$sitename.' - RSS 2.0" rel="alternate" type="text/xml" />
-<link href="backend.php?op=ATOM" title="'.$sitename.' - ATOM" rel="alternate" type="application/atom+xml" />
-';
+    echo '<link rel="canonical" href="'.str_replace('&','&amp;',str_replace('&amp;','&',$uri)).'" />';
 
-   // Tiny_mce
-   if ($tiny_mce_init)
-      echo tiny::aff_editeur("tiny_mce", "begin");
+    // humans.txt
+    if (file_exists("humans.txt"))
+    {
+        echo '<link type="text/plain" rel="author" href="'.$nuke_url.'/humans.txt" />';
+    }
 
-   // include externe JAVASCRIPT file from lib/include or themes/.../include for functions, codes in the <body onload="..." event...
-   $body_onloadH ='
-   <script type="text/javascript">
-      //<![CDATA[
-         function init() {';
-   $body_onloadF ='
-         }
-      //]]>
-   </script>';
-   if (file_exists("themes/include/body_onload.inc")) {
-      echo $body_onloadH;
-      include ("themes/include/body_onload.inc");
-      echo $body_onloadF;
-   }
-   if (file_exists("themes/$tmp_theme/include/body_onload.inc")) {
-      echo $body_onloadH;
-      include ("themes/$tmp_theme/include/body_onload.inc");
-      echo $body_onloadF;
-   }
+    echo '
+    <link href="backend.php?op=RSS0.91" title="'.$sitename.' - RSS 0.91" rel="alternate" type="text/xml" />
+    <link href="backend.php?op=RSS1.0" title="'.$sitename.' - RSS 1.0" rel="alternate" type="text/xml" />
+    <link href="backend.php?op=RSS2.0" title="'.$sitename.' - RSS 2.0" rel="alternate" type="text/xml" />
+    <link href="backend.php?op=ATOM" title="'.$sitename.' - ATOM" rel="alternate" type="application/atom+xml" />';
 
-   // include externe file from lib/include or themes/.../include for functions, codes ... - skin motor
-   if (file_exists("themes/include/header_head.inc")) {
-      ob_start();
-      include "themes/include/header_head.inc";
-      $hH = ob_get_contents();
-      ob_end_clean();
+    // Tiny_mce
+    if ($tiny_mce_init)
+    {
+        echo tiny::aff_editeur("tiny_mce", "begin");
+    }
 
-      if ($skin!='' and substr($tmp_theme,-3)=="_sk") {
-         $hH=str_replace ('assets/shared/bootstrap/dist/css/bootstrap.min.css','themes/_skins/'.$skin.'/bootstrap.min.css',$hH);
-         $hH=str_replace ('assets/shared/bootstrap/dist/css/extra.css','themes/_skins/'.$skin.'/extra.css',$hH);
-      }
-      echo $hH;
-   }
-   if (file_exists("themes/$tmp_theme/include/header_head.inc")) {include ("themes/$tmp_theme/include/header_head.inc");}
-
-   echo css::import_css($tmp_theme, $language, '', $css_pages_ref, $css);
-
-   // Mod by Jireck - Chargeur de JS via PAGES.PHP
-   if ($js) {
-      if (is_array($js)) {
-         foreach ($js as $k=>$tab_js) {
-            if (stristr($tab_js, 'http://')||stristr($tab_js, 'https://'))
-               echo '
-      <script type="text/javascript" src="'.$tab_js.'"></script>';
-            else {
-               if (file_exists("themes/$tmp_theme/js/$tab_js") and ($tab_js!=''))
-                  echo '
-      <script type="text/javascript" src="themes/'.$tmp_theme.'/js/'.$tab_js.'"></script>';
-               elseif (file_exists("$tab_js") and ($tab_js!=""))
-                  echo '
-      <script type="text/javascript" src="'.$tab_js.'"></script>';
+    // include externe JAVASCRIPT file from 
+    // lib/include or themes/.../include for 
+    // functions, codes in the <body onload="..." event...
+    $body_onloadH = '
+    <script type="text/javascript">
+        //<![CDATA[
+            function init() {';
+   
+    $body_onloadF = '
             }
-         }
-      } else {
-         if (file_exists("themes/$tmp_theme/js/$js"))
-            echo '
-      <script type="text/javascript" src="themes/'.$tmp_theme.'/js/'.$js.'"></script>';
-         elseif (file_exists("$js"))
-            echo '
-      <script type="text/javascript" src="'.$js.'"></script>';
-      }
-   }
-   echo '
-   </head>';
-   include("themes/$tmp_theme/header.php");
+        //]]>
+    </script>';
+   
+    if (file_exists("themes/include/body_onload.inc")) 
+    {
+        echo $body_onloadH;
+        include ("themes/include/body_onload.inc");
+        echo $body_onloadF;
+    }
+
+    if (file_exists("themes/$tmp_theme/include/body_onload.inc")) 
+    {
+        echo $body_onloadH;
+        include ("themes/$tmp_theme/include/body_onload.inc");
+        echo $body_onloadF;
+    }
+
+    // include externe file from lib/include or 
+    // themes/.../include for functions, codes ... - skin motor
+    if (file_exists("themes/include/header_head.inc")) 
+    {
+        ob_start();
+            include "themes/include/header_head.inc";
+            $hH = ob_get_contents();
+        ob_end_clean();
+
+        if ($skin != '' and substr($tmp_theme, -3) == "_sk") 
+        {
+           $hH = str_replace(
+            'assets/shared/bootstrap/dist/css/bootstrap.min.css',
+            'themes/_skins/'.$skin.'/bootstrap.min.css', $hH
+        );
+           $hH = str_replace(
+            'assets/shared/bootstrap/dist/css/extra.css',
+            'themes/_skins/'.$skin.'/extra.css', $hH
+        );
+        }
+        echo $hH;
+    }
+
+    if (file_exists("themes/$tmp_theme/include/header_head.inc")) 
+    {
+        include ("themes/$tmp_theme/include/header_head.inc");
+    }
+
+    echo css::import_css($tmp_theme, $language, '', $css_pages_ref, $css);
+
+    // Mod by Jireck - Chargeur de JS via PAGES.PHP
+    if ($js) 
+    {
+        if (is_array($js)) 
+        {
+            foreach ($js as $k => $tab_js) 
+            {
+                if (stristr($tab_js, 'http://') || stristr($tab_js, 'https://'))
+                {
+                    echo '<script type="text/javascript" src="'.$tab_js.'"></script>';
+                }
+                else 
+                {
+                    if (file_exists("themes/$tmp_theme/js/$tab_js") and ($tab_js != ''))
+                    {
+                        echo '<script type="text/javascript" src="themes/'.$tmp_theme.'/js/'.$tab_js.'"></script>';
+                    } 
+                    elseif (file_exists("$tab_js") and ($tab_js != "")) 
+                    {
+                        echo '<script type="text/javascript" src="'.$tab_js.'"></script>';
+                    }
+                }
+            }
+        } 
+        else 
+        {
+            if (file_exists("themes/$tmp_theme/js/$js")) 
+            {
+                echo '<script type="text/javascript" src="themes/'.$tmp_theme.'/js/'.$js.'"></script>';
+            } 
+            elseif (file_exists("$js")) 
+            {
+                echo '<script type="text/javascript" src="'.$js.'"></script>';
+            }
+        }
+    }
+
+    echo '
+    </head>';
+   
+    include("themes/$tmp_theme/header.php");
 }
 
-   // -----------------------
-   $header=1;
-   // -----------------------
-
-   // include externe file from lib/include for functions, codes ...
-   if (file_exists("themes/include/header_before.inc")) {include ("themes/include/header_before.inc");}
-
-   // take the right theme location !
-   // nouvel version de la gestion des Themes et Skins
-   global $Default_Theme, $Default_Skin, $user;
-   if (isset($user) and $user!='') {
-      global $cookie;
-      if($cookie[9] !='') {
-         $ibix=explode('+', urldecode($cookie[9]));
-         if (array_key_exists(0, $ibix)) $theme=$ibix[0]; else $theme=$Default_Theme;
-         if (array_key_exists(1, $ibix)) $skin=$ibix[1]; else $skin=$Default_Skin; //$skin=''; 
-         $tmp_theme=$theme;
-         if (!$file=@opendir("themes/$theme")) $tmp_theme=$Default_Theme;
-      } else 
-         $tmp_theme=$Default_Theme;
-   } else {
-      $theme=$Default_Theme;
-      $skin=$Default_Skin;
-      $tmp_theme=$theme;
-   }
+$header = 1;
    
-   // LOAD pages.php and Go ...
-   settype($PAGES, 'array');
-   global $pdst, $Titlesitename, $REQUEST_URI;
-   require_once("themes/pages.php");
+// include externe file from lib/include for functions, codes ...
+if (file_exists("themes/include/header_before.inc")) 
+{
+    include ("themes/include/header_before.inc");
+}
 
-   // import pages.php specif values from theme
-   if (file_exists("themes/".$tmp_theme."/pages.php"))
-      include ("themes/".$tmp_theme."/pages.php");
-
-   $page_uri=preg_split("#(&|\?)#",$REQUEST_URI);//var_dump($page_uri);
-   $Npage_uri=count($page_uri);
-   $pages_ref=basename($page_uri[0]);//var_dump($pages_ref);
-
-   // Static page and Module can have Bloc, Title ....
-   if ($pages_ref=="static.php")
-      $pages_ref=substr($REQUEST_URI,strpos($REQUEST_URI,"static.php"));
-   if ($pages_ref=="modules.php") {
-      if (isset($PAGES["modules.php?ModPath=$ModPath&ModStart=$ModStart*"]['title']))
-         $pages_ref="modules.php?ModPath=$ModPath&ModStart=$ModStart*";
-      else
-         $pages_ref=substr($REQUEST_URI,strpos($REQUEST_URI,"modules.php"));
-   }
-
-   // Admin function can have all the PAGES attributs except Title
-   if ($pages_ref=="admin.php") {
-      if (array_key_exists(1,$page_uri)) {
-         if (array_key_exists($pages_ref."?".$page_uri[1],$PAGES)) {
-            if (array_key_exists('title',$PAGES[$pages_ref."?".$page_uri[1]]))
-               $pages_ref.="?".$page_uri[1];
-         }
-      }
-   }
+// take the right theme location !
+// nouvel version de la gestion des Themes et Skins
+list($theme, $skin, $tmp_theme) = theme::getUsetOrDefaultThemeAndSkin();
    
-   // extend usage of pages.php : blocking script with part of URI for user, admin or with the value of a VAR
-   if ($Npage_uri>1) {
-      for ($uri=1; $uri<$Npage_uri; $uri++) {
-         if (array_key_exists($page_uri[$uri],$PAGES)) {
-            if (!$$PAGES[$page_uri[$uri]]['run']) {
-               header("location: ".$PAGES[$page_uri[$uri]]['title']);
-               die();
-            }
-         }
-      }
-   }
+include('pages.php');
 
-   // -----------------------
-   // A partir de ce niveau - $PAGES[$pages_ref] doit exister - sinon c'est que la page n'est pas dans pages.php
-   // -----------------------
-   if (array_key_exists($pages_ref,$PAGES)) {
-      // what a bloc ... left, right, both, ...
-      if (array_key_exists('blocs',$PAGES[$pages_ref]))
-         $pdst=$PAGES[$pages_ref]['blocs'];
+head($tiny_mce_init, $css_pages_ref, $css, $tmp_theme, $skin, $js, $m_description,$m_keywords);
 
-      // block execution of page with run attribute = no
-      if ($PAGES[$pages_ref]['run']=="no") {
-         if ($pages_ref=="index.php") {
-            $Titlesitename="NPDS";
-            if (file_exists("config/meta.php"))
-               include("config/meta.php");
-            if (file_exists("storage/static/webclosed.txt"))
-               include("storage/static/webclosed.txt");
-            die();
-         } else
-            header("location: index.php");
-      // run script to another 'location'
-      } elseif (($PAGES[$pages_ref]['run']!="yes") and (($PAGES[$pages_ref]['run']!="")))
-         header("location: ".$PAGES[$pages_ref]['run']);
+global $httpref, $nuke_url, $httprefmax, $admin, $NPDS_Prefix; 
+if ($httpref == 1) 
+{
+    $referer = htmlentities(strip_tags(hack::remove(getenv("HTTP_REFERER"))), ENT_QUOTES,cur_charset);
+    
+    if ($referer != '' 
+        and !strstr($referer, "unknown") 
+        and !stristr($referer, $_SERVER['SERVER_NAME'])) 
+    {
+        sql_query("INSERT INTO ".$NPDS_Prefix."referer VALUES (NULL, '$referer')");
+    }
+}
 
-      // Assure la gestion des titres ALTERNATIFS
-      $tab_page_ref=explode("|",$PAGES[$pages_ref]['title']);
-      if (count($tab_page_ref)>1) {
-         if (strlen($tab_page_ref[1])>1)
-            $PAGES[$pages_ref]['title']=$tab_page_ref[1];
-         else
-            $PAGES[$pages_ref]['title']=$tab_page_ref[0];
-         $PAGES[$pages_ref]['title']=strip_tags($PAGES[$pages_ref]['title']);
-      }
-      $fin_title=substr($PAGES[$pages_ref]['title'],-1);
-      $TitlesitenameX=language::aff_langue(substr($PAGES[$pages_ref]['title'],0,strlen($PAGES[$pages_ref]['title'])-1));
-      if ($fin_title=="+")
-         $Titlesitename=$TitlesitenameX." - ".$Titlesitename;
-      else if ($fin_title=='-')
-         $Titlesitename=$TitlesitenameX;
-      if ($Titlesitename=='') $Titlesitename=$sitename;
-      // globalisation de la variable title pour marquetapage mais protection pour la zone admin
-      if ($pages_ref!="admin.php")
-         global $title;
-      if (!$title) {
-         if ($fin_title=="+" or $fin_title=="-")
-            $title=$TitlesitenameX;
-         else
-            $title=language::aff_langue(substr($PAGES[$pages_ref]['title'],0,strlen($PAGES[$pages_ref]['title'])));
-      } else
-         $title=hack::remove($title);
-   
-      // meta description
-      settype($m_description, 'string');
-      if (array_key_exists('meta-description',$PAGES[$pages_ref]) and ($m_description==''))
-         $m_description=language::aff_langue($PAGES[$pages_ref]['meta-description']);
-      // meta keywords
-      settype($m_keywords, 'string');
-      if (array_key_exists('meta-keywords',$PAGES[$pages_ref]) and ($m_keywords==''))
-         $m_keywords=language::aff_langue($PAGES[$pages_ref]['meta-keywords']);
-   }
+include("counter.php");
 
-   // Initialisation de TinyMce
-   global $tiny_mce,$tiny_mce_theme,$tiny_mce_relurl;
-   if ($tiny_mce) {
-      if (array_key_exists($pages_ref,$PAGES)) {
-         if (array_key_exists('TinyMce',$PAGES[$pages_ref])) {
-            $tiny_mce_init=true;
-            if (array_key_exists('TinyMce-theme',$PAGES[$pages_ref]))
-               $tiny_mce_theme=$PAGES[$pages_ref]['TinyMce-theme'];
-            if (array_key_exists('TinyMceRelurl',$PAGES[$pages_ref]))
-               $tiny_mce_relurl=$PAGES[$pages_ref]['TinyMceRelurl'];
-         } else {
-            $tiny_mce_init=false;
-            $tiny_mce=false;
-         }
-      } else {
-         $tiny_mce_init=false;
-         $tiny_mce=false;
-      }
-   } else {
-      $tiny_mce_init=false;
-   }
-
-   // Chargeur de CSS via PAGES.PHP
-
-   if (array_key_exists($pages_ref,$PAGES)) {
-      if (array_key_exists('css',$PAGES[$pages_ref])) {
-         $css_pages_ref=$pages_ref;
-         $css=$PAGES[$pages_ref]['css'];
-      } else {
-         $css_pages_ref='';
-         $css='';
-      }
-   } else {
-      $css_pages_ref='';
-      $css='';
-   }
-
-   // Mod by Jireck - Chargeur de JS via PAGES.PHP
-   if (array_key_exists($pages_ref,$PAGES)) {
-      if (array_key_exists('js',$PAGES[$pages_ref])) {
-         $js=$PAGES[$pages_ref]['js'];
-         if ($js!='') { global $pages_js; $pages_js=$js; }
-      } else
-         $js='';
-   } else
-      $js='';
-
-   head($tiny_mce_init, $css_pages_ref, $css, $tmp_theme, $skin, $js, $m_description,$m_keywords);
-   global $httpref, $nuke_url, $httprefmax, $admin, $NPDS_Prefix;
-   if ($httpref==1) {
-      $referer= htmlentities(strip_tags(hack::remove(getenv("HTTP_REFERER"))),ENT_QUOTES,cur_charset);
-      if ($referer!='' and !strstr($referer,"unknown") and !stristr($referer,$_SERVER['SERVER_NAME'])) {
-         sql_query("INSERT INTO ".$NPDS_Prefix."referer VALUES (NULL, '$referer')");
-      }
-   }
-
-   include("counter.php");
-
-   // include externe file from lib/include for functions, codes ...
-   if (file_exists("themes/include/header_after.inc")) {include ("themes/include/header_after.inc");}
-?>
+// include externe file from lib/include for functions, codes ...
+if (file_exists("themes/include/header_after.inc")) 
+{
+    include ("themes/include/header_after.inc");
+}
