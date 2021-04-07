@@ -12,6 +12,7 @@ namespace npds\forum;
 
 use npds\views\theme;
 use npds\language\language;
+use npds\cache\cache;
 
 
 /*
@@ -192,7 +193,7 @@ class forumauth {
             return("None");
         }
         
-        $rowQ1 = Q_Select("SELECT uname FROM ".$NPDS_Prefix."users WHERE uid='$user_id'", 3600);
+        $rowQ1 = cache::Q_Select("SELECT uname FROM ".$NPDS_Prefix."users WHERE uid='$user_id'", 3600);
         $modslist = '';
         
         foreach($rowQ1 as $modnames) 

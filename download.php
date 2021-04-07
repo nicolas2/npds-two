@@ -76,8 +76,8 @@ function geninfo($did,$out_template)
         echo '
             <p><strong>'.translate("Taille du fichier").' : </strong>';
           
-        $Fichier = new File($durl);
-        $objZF = new FileManagement;
+        $Fichier = new file($durl);
+        $objZF = new filemanager;
           
         if ($dfilesize != 0)
         {
@@ -512,8 +512,8 @@ function listdownloads ($dcategory, $sortby, $sortorder)
     $result = sql_query($sql);
     while(list($did, $dcounter, $durl, $dfilename, $dfilesize, $ddate, $dweb, $duser, $dver, $dcat, $ddescription, $dperm) = sql_fetch_row($result)) 
     {
-        $Fichier = new File($durl);
-        $FichX = new FileManagement;
+        $Fichier = new file($durl);
+        $FichX = new filemanager;
         $okfile = '';
         
         if(!stristr($dperm, ',')) 

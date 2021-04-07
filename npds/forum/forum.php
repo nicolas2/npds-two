@@ -15,6 +15,7 @@ use npds\views\theme;
 use npds\utility\str;
 use npds\cache\cache;
 use npds\mailler\mailler;
+use npds\language\metalang;
 
 
 /*
@@ -174,7 +175,7 @@ class forum {
                                     $title_aff = false;
                                 }
                                 
-                                $forum_moderator = explode(' ', forumauht::get_moderator($myrow['forum_moderator']));
+                                $forum_moderator = explode(' ', forumauth::get_moderator($myrow['forum_moderator']));
                                 $Mmod = false;
                                 
                                 for ($i = 0; $i < count($forum_moderator); $i++) 
@@ -223,7 +224,7 @@ class forum {
                                     </span>';
                                 }
 
-                                $desc = stripslashes(meta_lang($myrow['forum_desc']));
+                                $desc = stripslashes(metalang::meta_lang($myrow['forum_desc']));
                                 
                                 if($desc != '')
                                 {

@@ -21,6 +21,7 @@ use npds\pixels\pixel;
 use npds\utility\code;
 use npds\security\hack;
 use npds\date\date;
+use npds\utiliry\str;
 
 
 if (!function_exists('Mysql_Connexion'))
@@ -277,7 +278,7 @@ else
             $message = str_replace("<br />", "\n", $message);
             $message = pixel::smile($message);
             $message = code::desaf_cod($message);
-            $message = undo_htmlspecialchars($message, ENT_COMPAT|ENT_HTML401, cur_charset);
+            $message = str::undo_htmlspecialchars($message, ENT_COMPAT|ENT_HTML401, cur_charset);
         } 
         else
         {

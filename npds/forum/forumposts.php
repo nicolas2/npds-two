@@ -11,6 +11,7 @@
 namespace npds\forum;
 
 use npds\error\error;
+use npds\cache\cache;
 
 
 /*
@@ -29,7 +30,7 @@ class forumposts {
     {
         global $NPDS_Prefix;
            
-        $rowQ1 = Q_Select("SELECT DISTINCT poster_id FROM ".$NPDS_Prefix."posts WHERE topic_id='$tid' AND forum_id='$fid'",2);
+        $rowQ1 = cache::Q_Select("SELECT DISTINCT poster_id FROM ".$NPDS_Prefix."posts WHERE topic_id='$tid' AND forum_id='$fid'",2);
         
         $posterids = '';
         

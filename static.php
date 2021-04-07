@@ -37,35 +37,58 @@
 /*    execute nl2br(str_replace(" ","&nbsp;",htmlentities($remp)))      */
 /*    avant d'afficher le fichier                                       */
 /************************************************************************/
-if (!function_exists("Mysql_Connexion"))
-   include ("mainfile.php");
+if (!function_exists('Mysql_Connexion'))
+{
+    include ('boot/bootstrap.php');
+}
 
    settype($npds,'integer');
    settype($op,'string');
    settype($metalang,'integer');
    settype($nl,'integer');
+
    $pdst=$npds;
    $remp='';
+
    include ("header.php");
+
    echo '
    <div id="static_cont">';
-   if (($op!='') and ($op)) {
+
+   if (($op!='') and ($op)) 
+   {
       // Troll Control for security
-      if (preg_match('#^[a-z0-9_\.-]#i',$op) and !stristr($op,".*://") and !stristr($op,"..") and !stristr($op,"../") and !stristr($op, "script") and !stristr($op, "cookie") and !stristr($op, "iframe") and  !stristr($op, "applet") and !stristr($op, "object") and !stristr($op, "meta")) {
-         if (file_exists("storage/static/$op")) {
+      if (preg_match('#^[a-z0-9_\.-]#i',$op) 
+         and !stristr($op,".*://") 
+         and !stristr($op,"..") 
+         and !stristr($op,"../") 
+         and !stristr($op, "script") 
+         and !stristr($op, "cookie") 
+         and !stristr($op, "iframe") 
+         and  !stristr($op, "applet") 
+         and !stristr($op, "object") 
+         and !stristr($op, "meta")) 
+      {
+         if (file_exists("storage/static/$op")) 
+         {
             if (!$metalang and !$nl)
                include ("storage/static/$op");
-            else {
+            else 
+            {
                ob_start();
                  include ("storage/static/$op");
                  $remp=ob_get_contents();
                ob_end_clean();
+               
                if ($metalang)
                   $remp=meta_lang(aff_code(aff_langue($remp)));
+               
                if ($nl)
                   $remp=nl2br(str_replace(' ','&nbsp;',htmlentities($remp,ENT_QUOTES,cur_charset)));
+               
                echo $remp;
             }
+
             echo '
       <div class=" my-3"><a href="print.php?sid=static:'.$op.'&amp;metalang='.$metalang.'&amp;nl='.$nl.'" data-toggle="tooltip" data-placement="right" title="'.translate("Page spéciale pour impression").'"><i class="fa fa-2x fa-print"></i></a></div>';
 
@@ -80,7 +103,8 @@ if (!function_exists("Mysql_Connexion"))
          echo '
       <div class="alert alert-danger">'.translate("Merci d'entrer l'information en fonction des spécifications").'</div>';
    }
+
    echo '
    </div>';
+   
    include ("footer.php");
-?>
