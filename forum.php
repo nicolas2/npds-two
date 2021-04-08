@@ -70,33 +70,33 @@ if (($cache_obj->genereting_output == 1)
         
     if ($catid != '') 
     {
-        if (file_exists("themes/$theme/html/forum-cat$catid.html")) 
+        if (file_exists("themes/$theme/views/forum-cat$catid.html")) 
         {
-            $inclusion = "themes/$theme/html/forum-cat$catid.html";
+            $inclusion = "themes/$theme/views/forum-cat$catid.html";
         } 
-        elseif (file_exists("themes/default/html/forum-cat$catid.html")) 
+        elseif (file_exists("themes/default/views/forum-cat$catid.html")) 
         {
-            $inclusion = "themes/default/html/forum-cat$catid.html";
+            $inclusion = "themes/default/views/forum-cat$catid.html";
         }      
     }
 
     if ($inclusion == false) 
     {
-        if (file_exists("themes/$theme/html/forum-adv.html")) 
+        if (file_exists("themes/$theme/views/forum-adv.html")) 
         {
-            $inclusion = "themes/$theme/html/forum-adv.html";
+            $inclusion = "themes/$theme/views/forum-adv.html";
         } 
-        elseif (file_exists("themes/$theme/html/forum.html")) 
+        elseif (file_exists("themes/$theme/views/forum.html")) 
         {
-            $inclusion = "themes/$theme/html/forum.html";
+            $inclusion = "themes/$theme/views/forum.html";
         } 
-        elseif (file_exists("themes/default/html/forum.html")) 
+        elseif (file_exists("themes/default/views/forum.html")) 
         {
-            $inclusion = "themes/default/html/forum.html";
+            $inclusion = "themes/default/views/forum.html";
         } 
         else 
         {
-            echo "html/forum.html / not find !<br />";
+            echo "views/forum.html / not find !<br />";
         }
     }
 

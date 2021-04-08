@@ -256,9 +256,9 @@ if (($cache_obj->genereting_output == 1)
        
     echo '<br />';
         
-    if (file_exists("lib/include/user.inc")) 
+    if (file_exists("theme/default/include/user.inc")) 
     {
-        include ("lib/include/user.inc");
+        include ("theme/default/include/user.inc");
     }
 }
 

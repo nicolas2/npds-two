@@ -75,7 +75,7 @@ $ContainerGlobal='
 <div id="container">';
 
 // Ne supprimez pas cette ligne / Don't remove this line
-   require_once("themes/themes-dynamic/header.php");
+   require_once("themes/default/header.php");
    
    global $powerpack;
    if (!isset($powerpack)) {include ("powerpack.php");}

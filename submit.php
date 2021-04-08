@@ -18,6 +18,7 @@ use npds\logs\logs;
 use npds\utility\str;
 use npds\security\hack;
 use npds\mailler\mailler;
+use npds\news\publication;
 
 
 if (!function_exists('Mysql_Connexion'))
@@ -159,7 +160,7 @@ function defaultDisplay()
    
     echo tiny::aff_editeur('bodytext', '');
    
-    publication('', '', '', '', 0);
+    publication::publication('', '', '', '', 0);
    
     echo '
         <div class="form-group row">
@@ -295,7 +296,7 @@ function PreviewStory($name, $subject, $story, $bodytext, $topic, $dd_pub, $fd_p
    
     echo tiny::aff_editeur('bodytext', '');
    
-    publication($dd_pub, $fd_pub, $dh_pub, $fh_pub, $epur);
+    publication::publication($dd_pub, $fd_pub, $dh_pub, $fh_pub, $epur);
    
     echo spam::Q_spambot();
    

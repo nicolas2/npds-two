@@ -14,6 +14,6 @@ $theme = 'npds-boost_sk';
 $long_chain = '34'; // Nombre de caractères affichés avant troncature pour certains blocs
 
 // ne pas supprimer cette ligne / Don't remove this line
-require_once('themes/themes-dynamic/theme.php');
+require_once('themes/default/theme.php');
 // ne pas supprimer cette ligne / Don't remove this line
 ?>

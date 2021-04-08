@@ -16,6 +16,7 @@ use npds\assets\css;
 use npds\views\theme;
 use npds\utility\str;
 use npds\mailler\mailler;
+use npds\banners\banner;
 
 
 if (!function_exists('Mysql_Connexion'))
@@ -165,7 +166,7 @@ function clickbanner($bid)
  */
 function clientlogin() 
 {
-    header_page();
+    banner::header_page();
     echo '
     <div class="card card-body mb-3">
     <h3 class="mb-4"><i class="fas fa-sign-in-alt fa-lg mr-3"></i>'.translate("Connection").'</h3>
@@ -195,78 +196,7 @@ function clientlogin()
     </div>';
     css::adminfoot('fv', '', '', 'no');
     
-    footer_page();
-}
-
-/**
- * [IncorrectLogin description]
- */
-function IncorrectLogin() 
-{
-    header_page();
-    
-    echo '<div class="alert alert-danger lead">'.translate("Identifiant incorrect !").'<br /><button class="btn btn-secondary mt-2" onclick="javascript:history.go(-1)" >'.translate("Retour en arrière").'</button></div>';
-    
-    footer_page();
-}
-
-function header_page() 
-{
-    global $Titlesitename, $Default_Theme, $language;
-    
-    include_once("modules/upload/upload.conf.php");
-    
-    include("config/meta.php");
-    
-    if ($url_upload_css) 
-    {
-        $url_upload_cssX = str_replace('style.css', $language.'-style.css', $url_upload_css);
-        
-        if (is_readable($url_upload.$url_upload_cssX))
-        {
-            $url_upload_css = $url_upload_cssX;
-        }
-        
-        print ("<link href=\"".$url_upload.$url_upload_css."\" title=\"default\" rel=\"stylesheet\" type=\"text/css\" media=\"all\" />\n");
-    }
-    
-    if(file_exists ('lib/include/header_head.inc'))
-    {
-        include('lib/include/header_head.inc');
-    }
-    
-    if(file_exists ('themes/'.$Default_Theme.'/include/header_head.inc'))
-    {
-        include('themes/'.$Default_Theme.'/include/header_head.inc');
-    }
-    
-    if(file_exists ('themes/'.$Default_Theme.'/style/style.css'))
-    {
-        echo '<link href="themes/'.$Default_Theme.'/style/style.css" rel="stylesheet" type=\"text/css\" media="all" />';
-    }
-
-    echo '
-    </head>
-    <body style="margin-top:64px;">
-        <div class="container-fluid">
-            <nav class="navbar fixed-top navbar-toggleable-md navbar-inverse bg-primary">
-                <a class="navbar-brand" href="index.php">Home</a>
-            </nav>
-            <h2 class="mt-4">'.translate("Bannières - Publicité").' @ '.$Titlesitename.'</h2>
-            <p align="center">';
-}
-
-/**
- * [footer_page description]
- * @return [type] [description]
- */
-function footer_page() 
-{
-   echo '    </p>
-        </div>
-        <script type="text/javascript" src="assets/js/npds_adapt.js"></script>
-    </body>
-    </html>';
+    banner::footer_page();
 }
 
 /**
@@ -284,13 +214,13 @@ function bannerstats($login, $pass)
     
     if ($login == '' AND $pass == '' OR $pass == '') 
     {
-        IncorrectLogin();
+        banner::IncorrectLogin();
     }  
     else 
     {
         if ($pass == $passwd) 
         {
-            header_page();
+            banner::header_page();
             echo '
             <h3>'.translate ("Bannières actives pour").' '.$name.'</h3>
             <table data-toggle="table" data-search="true" data-striped="true" data-mobile-responsive="true" data-show-export="true" data-show-columns="true" data-icons="icons" data-icons-prefix="fa">
@@ -449,11 +379,11 @@ function bannerstats($login, $pass)
             
             css::adminfoot('fv', '', '', 'no');
             
-            footer_page();
+            banner::footer_page();
         } 
         else 
         {
-            IncorrectLogin();
+            banner::IncorrectLogin();
         }
     }
 }
@@ -478,12 +408,12 @@ function EmailStats($login, $cid, $bid)
           
         if ($email == '') 
         {
-            header_page();
+            banner::header_page();
             
             echo "<p align=\"center\"><br />".translate("Les statistiques pour la bannières ID")." : $bid ".translate("ne peuvent pas être envoyées.")."<br /><br />
                 ".translate("Email non rempli pour : ")." $name<br /><br /><a href=\"javascript:history.go(-1)\" >".translate("Retour en arrière")."</a></p>";
             
-            footer_page();
+            banner::footer_page();
         } 
         else 
         {
@@ -518,11 +448,11 @@ function EmailStats($login, $cid, $bid)
             $message .= "Impressions ".translate("Réservées")." : $imptotal\nImpressions ".translate("Réalisées")." : $impmade\nImpressions ".translate("Restantes")." : $left\nClicks ".translate("Reçus")." : $clicks\nClicks ".translate("Pourcentage")." : $percent%\n\n";
             $message .= translate("Rapport généré le").' : '."$fecha\n\n";
             
-            include("signat.php");
+            include("config/signat.php");
 
             mailler::send_email($email, $subject, $message, '', true, 'text');
             
-            header_page();
+            banner::header_page();
              
             echo '
             <div class="jumbotron">
@@ -535,12 +465,12 @@ function EmailStats($login, $cid, $bid)
     } 
     else 
     {
-        header_page();
+        banner::header_page();
         
         echo "<p align=\"center\"><br />".translate("Identifiant incorrect !")."<br /><br />".translate("Merci de")." <a href=\"banners.php?op=login\" class=\"noir\">".translate("vous reconnecter.")."</a></p>";
     }
 
-    footer_page();
+    banner::footer_page();
 }
 
 /**
@@ -556,7 +486,7 @@ function change_banner_url_by_client($login, $pass, $cid, $bid, $url)
 {
     global $NPDS_Prefix;
         
-    header_page();
+    banner::header_page();
         
     $result = sql_query("SELECT passwd FROM ".$NPDS_Prefix."bannerclient WHERE cid='$cid'");
     list($passwd) = sql_fetch_row($result);
@@ -573,7 +503,7 @@ function change_banner_url_by_client($login, $pass, $cid, $bid, $url)
         echo "<p align=\"center\"><br />".translate("Identifiant incorrect !")."<br /><br />".translate("Merci de")." <a href=\"banners.php?op=login\" class=\"noir\">".translate("vous reconnecter.")."</a></p>";
     }
         
-    footer_page();
+    banner::footer_page();
 }
 
 settype($op, 'string');

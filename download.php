@@ -365,7 +365,7 @@ function SortLinks($dcategory, $sortby)
  * @param  [type] $sortorder [description]
  * @return [type]            [description]
  */
-function listdownloads ($dcategory, $sortby, $sortorder) 
+function listdownloads($dcategory, $sortby, $sortorder) 
 {
     global $perpage, $page, $download_cat, $user, $NPDS_Prefix;
 

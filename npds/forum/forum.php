@@ -155,8 +155,8 @@ class forum {
                                 {
                                     $title = stripslashes($row['cat_title']);
                                     
-                                    if ((file_exists("themes/$theme/html/forum-cat".$row['cat_id'].".html")) 
-                                        OR (file_exists("themes/default/html/forum-cat".$row['cat_id'].".html")))
+                                    if ((file_exists("themes/$theme/views/forum-cat".$row['cat_id'].".html")) 
+                                        OR (file_exists("themes/default/views/forum-cat".$row['cat_id'].".html")))
                                     {
                                         
                                         $ibid .= '

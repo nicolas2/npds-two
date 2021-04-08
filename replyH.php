@@ -277,7 +277,7 @@ if ($submitS)
             $message .= translate_ml($m['user_langue'], "Pour lire la réponse")." : ";
             $message .= "<a href=\"$nuke_url/viewtopicH.php?topic=$topic&forum=$forum\">$nuke_url/viewtopicH.php?topic=$topic&forum=$forum</a>\n\n";
          
-            include("signat.php");
+            include("config/signat.php");
 
             mailler::send_email($m['email'], $subject, $message, '', true, 'html');
             $sauf = $m['uid'];

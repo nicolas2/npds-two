@@ -41,17 +41,17 @@ if (($cache_obj->genereting_output == 1)
 {
     $inclusion = false;
       
-    if (file_exists("themes/$theme/html/top.html"))
+    if (file_exists("themes/$theme/views/top.html"))
     {
-        $inclusion = "themes/$theme/html/top.html";
+        $inclusion = "themes/$theme/views/top.html";
     }
-    elseif (file_exists("themes/default/html/top.html"))
+    elseif (file_exists("themes/default/views/top.html"))
     {
-        $inclusion = "themes/default/html/top.html";
+        $inclusion = "themes/default/views/top.html";
     }
     else
     {
-        echo "html/top.html / not find !<br />";
+        echo "views/top.html / not find !<br />";
     }
       
     if ($inclusion) 

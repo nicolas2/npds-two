@@ -25,17 +25,17 @@ if ($op != "maj_subscribe")
 
     $inclusion = false;
 
-    if (file_exists("themes/$theme/html/topics.html"))
+    if (file_exists("themes/$theme/views/topics.html"))
     {
-        $inclusion = "themes/$theme/html/topics.html";
+        $inclusion = "themes/$theme/views/topics.html";
     }
-    elseif (file_exists("themes/default/html/topics.html"))
+    elseif (file_exists("themes/default/views/topics.html"))
     {
-        $inclusion = "themes/default/html/topics.html";
+        $inclusion = "themes/default/views/topics.html";
     }
     else
     {
-        echo 'html/topics.html / not find !<br />';
+        echo 'views/topics.html / not find !<br />';
     }
       
     if ($inclusion) 

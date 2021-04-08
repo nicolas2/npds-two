@@ -13,13 +13,16 @@ use npds\cache\cacheEmpty;
 use npds\auth\auth;
 use npds\edito\edito;
 use npds\news\news;
-
+use npds\views\theme;
 
 if (!function_exists('Mysql_Connexion'))
 {
     include ('boot/bootstrap.php');
 }
  
+
+var_dump(theme::list());
+
 /**
  * Redirect for default Start Page of the portal 
  * look at Admin Preferences for choice

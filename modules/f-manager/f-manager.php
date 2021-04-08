@@ -191,8 +191,10 @@ if ($FmaRep) {
       if (file_exists("modules/$ModPath/users/".strtolower($FmaRep).".conf.php")) {
          // Est ce que je doit récupérer le theme si un utilisateur est connecté ?
          if (isset($user)) {
-             include("themes/list.php");
-             $themelist = explode(' ', $themelist);
+            //include("themes/list.php");
+            //$themelist = explode(' ', $themelist);
+
+            $themelist = explode(' ', theme::list());
              $pos=array_search($cookie[9],$themelist);
              if ($pos!==false)
                $Default_Theme=$themelist[$pos];

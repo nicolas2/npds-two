@@ -154,7 +154,7 @@ function SendStory($sid, $yname, $ymail, $fname, $fmail, $archive, $asb_question
     $fname = hack::remove($fname);
     $message = translate("Bonjour")." $fname :\n\n".translate("Votre ami")." $yname ".translate("a trouvé cet article intéressant et a souhaité vous l'envoyer.")."\n\n".language::aff_langue($title)."\n".translate("Date :")." $time\n".translate("Sujet : ")." ".language::aff_langue($topictext)."\n\n".translate("L'article")." : <a href=\"$nuke_url/article.php?sid=$sid&amp;archive=$archive\">$nuke_url/article.php?sid=$sid&amp;archive=$archive</a>\n\n";
       
-    include("signat.php");
+    include("config/signat.php");
       
     $fmail = hack::remove($fmail);
     $subject = hack::remove($subject);
@@ -316,7 +316,7 @@ function SendSite($yname, $ymail, $fname, $fmail, $asb_question, $asb_reponse)
     $fname = hack::remove($fname);
     $message = translate("Bonjour")." $fname :\n\n".translate("Votre ami")." $yname ".translate("a trouvé notre site")." $sitename ".translate("intéressant et a voulu vous le faire connaître.")."\n\n$sitename : <a href=\"$nuke_url\">$nuke_url</a>\n\n";
      
-    include("signat.php");
+    include("config/signat.php");
       
     $fmail = hack::remove($fmail);
     $subject = hack::remove($subject);

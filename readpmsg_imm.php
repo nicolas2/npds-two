@@ -112,7 +112,7 @@ function show_imm($op)
                 cache_ctrl();
 
                 include("config/meta.php");
-                include("lib/include/header_head.inc");
+                include("theme/default/include/header_head.inc");
                 
                 echo css::import_css($theme, $language, $site_font, '', '');
 

@@ -16,8 +16,10 @@ include ("modules/$ModPath/lang/f-manager-$language.php");
 include ("modules/$ModPath/class.navigator.php");
 
 if (isset($user)) {
-    include("themes/list.php");
-    $themelist = explode(' ', $themelist);
+    //include("themes/list.php");
+    //$themelist = explode(' ', $themelist);
+
+    $themelist = explode(' ', theme::list());
     $pos=array_search($cookie[9],$themelist);
     if ($pos!==false)
       $Default_Theme=$themelist[$pos];

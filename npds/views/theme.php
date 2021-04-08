@@ -48,9 +48,9 @@ class theme {
     {
         global $theme;
             
-        if (@file_exists("themes/$theme/images/$theme_img")) 
+        if (@file_exists("themes/$theme/assets/images/$theme_img")) 
         {
-            return "themes/$theme/images/$theme_img";
+            return "themes/$theme/assets/images/$theme_img";
         } 
         else 
         {
@@ -125,5 +125,27 @@ class theme {
         return [$theme, $skin, $tmp_theme];
     }
 
+    /**
+     * [theme_list description]
+     * @return [type] [description]
+     */
+    public static function list()
+    {
+        $handle = opendir('themes');
+        
+        while (false !== ($file = readdir($handle))) 
+        {
+            if (($file[0] !== '_') 
+                and (!strstr($file, '.')) 
+                and (!strstr($file, 'themes-dynamic'))
+                and (!strstr($file, 'default')))
+                $themelist[] = $file;
+        }
 
+        natcasesort($themelist);
+        $themelist = implode(' ', $themelist);
+        closedir($handle);
+
+        return $themelist;
+    }
 }

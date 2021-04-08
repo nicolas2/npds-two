@@ -98,10 +98,10 @@ if ($tiny_mce)
     echo tiny::aff_editeur('tiny_mce', 'end');
 }
    
-// include externe file from lib/include for functions, codes ...
-if (file_exists('themes/include/footer_before.inc'))
+// include externe file from theme/default/include for functions, codes ...
+if (file_exists('themes/default/include/footer_before.inc'))
 {
-    include ('themes/include/footer_before.inc');
+    include ('themes/default/include/footer_before.inc');
 } 
  
 foot();
@@ -115,9 +115,9 @@ if (isset($user))
     }
     else
     {
-        if (file_exists('themes/include/footer_after.inc'))
+        if (file_exists('themes/default/include/footer_after.inc'))
         { 
-            include ('themes/include/footer_after.inc');
+            include ('themes/default/include/footer_after.inc');
         }
     }
 }
@@ -129,9 +129,9 @@ else
     } 
     else
     {
-        if (file_exists('themes/include/footer_after.inc')) 
+        if (file_exists('themes/default/include/footer_after.inc')) 
         {
-            include ('themes/include/footer_after.inc');
+            include ('themes/default/include/footer_after.inc');
         }
     }
 }

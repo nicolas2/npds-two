@@ -156,7 +156,7 @@ else
                   
                         $message = translate_ml($user_langue, "Bonjour").'<br />'.translate_ml($user_langue, "Vous avez un nouveau message.").'<br />'.$time.'<br /><br /><b>'.$subject.'</b><br /><br /><a href="'.$nuke_url.'/viewpmsg.php">'.translate_ml($user_langue, "Cliquez ici pour lire votre nouveau message.").'</a><br /><br />';
                   
-                        include("signat.php");
+                        include("config/signat.php");
                   
                         mailler::copy_to_email($to_userid, $sujet, stripslashes($message));
                         $message = $old_message; // what this
@@ -201,7 +201,7 @@ else
                
                     $message = translate_ml($user_langue, "Bonjour").'<br />'.translate_ml($user_langue, "Vous avez un nouveau message.").'<br />'.$time.'<br /><br /><b>'.$subject.'</b><br /><br /><a href="'.$nuke_url.'/viewpmsg.php">'.translate_ml($user_langue, "Cliquez ici pour lire votre nouveau message.").'</a><br /><br />';
                
-                    include("signat.php");
+                    include("config/signat.php");
                     mailler::copy_to_email($to_userid, $sujet, stripslashes($message));
                 }
             }
@@ -324,8 +324,8 @@ else
       
         include("themes/$tmp_theme/theme.php");
         include("config/meta.php");
-        include("lib/include/header_before.inc");
-        include("lib/include/header_head.inc");
+        include("theme/default/include/header_before.inc");
+        include("theme/default/include/header_head.inc");
 
         echo css::import_css($tmp_theme, $language, $site_font, '', '');
         echo '

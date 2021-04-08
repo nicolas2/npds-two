@@ -117,4 +117,17 @@ class crypt {
         return $tmp;
     }
 
+    /**
+     * [L_encrypt description]
+     * @param [type] $txt [description]
+     */
+    public static function L_encrypt($txt) 
+    {
+        global $userdata;
+
+        $key = substr($userdata[2], 8, 8);
+        
+        return static::encryptK($txt, $key);
+    }
+
 }

@@ -13,6 +13,6 @@ if (!function_exists("Mysql_Connexion"))
    include ("mainfile.php");
 
 include ("header.php");
-   include_once('lib/sform/contact/contact.php');
+   include_once('modules/'.$ModPath.'/sform/contact/contact.php');
 include ("footer.php");
 ?>

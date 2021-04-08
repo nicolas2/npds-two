@@ -40,37 +40,37 @@ class css {
         }
            
         // CSS standard 
-        if (file_exists("themes/$tmp_theme/style/$language-style.css")) 
+        if (file_exists("themes/$tmp_theme/assets/css/$language-style.css")) 
         {
-            $tmp .= "<link href='themes/$tmp_theme/style/$language-style.css' title='default' rel='stylesheet' type='text/css' media='all' />\n";
+            $tmp .= "<link href='themes/$tmp_theme/assets/css/$language-style.css' title='default' rel='stylesheet' type='text/css' media='all' />\n";
               
-            if (file_exists("themes/$tmp_theme/style/$language-style-AA.css"))
+            if (file_exists("themes/$tmp_theme/assets/css/$language-style-AA.css"))
             {
-                $tmp .= "<link href='themes/$tmp_theme/style/$language-style-AA.css' title='alternate stylesheet' rel='alternate stylesheet' type='text/css' media='all' />\n";
+                $tmp .= "<link href='themes/$tmp_theme/assets/css/$language-style-AA.css' title='alternate stylesheet' rel='alternate stylesheet' type='text/css' media='all' />\n";
             }
               
-            if (file_exists("themes/$tmp_theme/style/$language-print.css"))
+            if (file_exists("themes/$tmp_theme/assets/css/$language-print.css"))
             {
-                $tmp .= "<link href='themes/$tmp_theme/style/$language-print.css' rel='stylesheet' type='text/css' media='print' />\n";
+                $tmp .= "<link href='themes/$tmp_theme/assets/css/$language-print.css' rel='stylesheet' type='text/css' media='print' />\n";
             }
         } 
-        else if (file_exists("themes/$tmp_theme/style/style.css")) 
+        else if (file_exists("themes/$tmp_theme/assets/css/style.css")) 
         {
-            $tmp .= "<link href='themes/$tmp_theme/style/style.css' title='default' rel='stylesheet' type='text/css' media='all' />\n";
+            $tmp .= "<link href='themes/$tmp_theme/assets/css/style.css' title='default' rel='stylesheet' type='text/css' media='all' />\n";
               
-            if (file_exists("themes/$tmp_theme/style/style-AA.css"))
+            if (file_exists("themes/$tmp_theme/assets/css/style-AA.css"))
             {
-                $tmp .= "<link href='themes/$tmp_theme/style/style-AA.css' title='alternate stylesheet' rel='alternate stylesheet' type='text/css' media='all' />\n";
+                $tmp .= "<link href='themes/$tmp_theme/assets/css/style-AA.css' title='alternate stylesheet' rel='alternate stylesheet' type='text/css' media='all' />\n";
             }
               
-            if (file_exists("themes/$tmp_theme/style/print.css"))
+            if (file_exists("themes/$tmp_theme/assets/css/print.css"))
             {
-                $tmp .= "<link href='themes/$tmp_theme/style/print.css' rel='stylesheet' type='text/css' media='print' />\n";
+                $tmp .= "<link href='themes/$tmp_theme/assets/css/print.css' rel='stylesheet' type='text/css' media='print' />\n";
             }
         } 
         else 
         {
-            $tmp .= "<link href='themes/default/style/style.css' title='default' rel='stylesheet' type='text/css' media='all' />\n";
+            $tmp .= "<link href='themes/default/assets/css/style.css' title='default' rel='stylesheet' type='text/css' media='all' />\n";
         }
            
         // Chargeur CSS spécifique
@@ -96,9 +96,9 @@ class css {
                     } 
                     else 
                     {
-                        if (file_exists("themes/$tmp_theme/style/$tab_css") and ($tab_css != '')) 
+                        if (file_exists("themes/$tmp_theme/assets/css/$tab_css") and ($tab_css != '')) 
                         {
-                            $admtmp = "<link href='themes/$tmp_theme/style/$tab_css' rel='stylesheet' type='text/css' media='all' />\n";
+                            $admtmp = "<link href='themes/$tmp_theme/assets/css/$tab_css' rel='stylesheet' type='text/css' media='all' />\n";
                         } 
                         elseif (file_exists("$tab_css") and ($tab_css != '')) 
                         {
@@ -125,15 +125,15 @@ class css {
                 $op = substr($oups, -1);
                 $css = substr($oups, 0, -1);
                 
-                if (($css != '') and (file_exists("themes/$tmp_theme/style/$css"))) 
+                if (($css != '') and (file_exists("themes/$tmp_theme/assets/css/$css"))) 
                 {
                     if ($op == '-')
                     {
-                        $tmp = "<link href='themes/$tmp_theme/style/$css' rel='stylesheet' type='text/css' media='all' />\n";
+                        $tmp = "<link href='themes/$tmp_theme/assets/css/$css' rel='stylesheet' type='text/css' media='all' />\n";
                     }
                     else
                     {
-                        $tmp .= "<link href='themes/$tmp_theme/style/$css' rel='stylesheet' type='text/css' media='all' />\n";
+                        $tmp .= "<link href='themes/$tmp_theme/assets/css/$css' rel='stylesheet' type='text/css' media='all' />\n";
                     }
                 }
             }

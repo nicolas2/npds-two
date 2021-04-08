@@ -41,7 +41,7 @@ else
 include("auth.php");
 global $NPDS_Prefix;
 
-$rowQ1 = cache::Q_Select ("SELECT forum_name, forum_moderator, forum_type, forum_pass, forum_access, arbre FROM ".$NPDS_Prefix."forums WHERE forum_id = '$forum'", 3600);
+$rowQ1 = cache::Q_Select("SELECT forum_name, forum_moderator, forum_type, forum_pass, forum_access, arbre FROM ".$NPDS_Prefix."forums WHERE forum_id = '$forum'", 3600);
 
 if (!$rowQ1)
 {

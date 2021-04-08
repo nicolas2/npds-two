@@ -93,7 +93,7 @@ class messenger {
 		        
 		        $message = $time.'<br />'.translate_ml($user_languex, "Bonjour").'<br />'.translate_ml($user_languex, "Vous avez un nouveau message.").'<br /><br /><b>'.$subject.'</b><br /><br /><a href="'.$nuke_url.'/viewpmsg.php">'.translate_ml($user_languex, "Cliquez ici pour lire votre nouveau message.").'</a><br />';
 		        
-		        include("signat.php");
+		        include("config/signat.php");
 		        
 		        mailler::copy_to_email($to_useridx, $sujet, stripslashes($message));
 		    }

@@ -17,19 +17,6 @@ if (!function_exists('Mysql_Connexion'))
     include ('boot/bootstrap.php');
 }
 
-/**
- * [L_encrypt description]
- * @param [type] $txt [description]
- */
-function L_encrypt($txt) 
-{
-    global $userdata;
-
-    $key = substr($userdata[2], 8, 8);
-    
-    return crypt::encryptK($txt, $key);
-}
-
 global $user, $Default_Theme;
 if (!$user)
 {

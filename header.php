@@ -47,9 +47,9 @@ function head($tiny_mce_init, $css_pages_ref, $css, $tmp_theme, $skin, $js, $m_d
     }
 
     // Favicon
-    if (file_exists("themes/$tmp_theme/images/favicon.ico"))
+    if (file_exists("themes/$tmp_theme/assets/images/favicon.ico"))
     {
-        $favico = "themes/$tmp_theme/images/favicon.ico";
+        $favico = "themes/$tmp_theme/assets/images/favicon.ico";
     }
     else
     {
@@ -98,7 +98,7 @@ function head($tiny_mce_init, $css_pages_ref, $css, $tmp_theme, $skin, $js, $m_d
     }
 
     // include externe JAVASCRIPT file from 
-    // lib/include or themes/.../include for 
+    // theme/default/include or themes/.../include for 
     // functions, codes in the <body onload="..." event...
     $body_onloadH = '
     <script type="text/javascript">
@@ -110,10 +110,10 @@ function head($tiny_mce_init, $css_pages_ref, $css, $tmp_theme, $skin, $js, $m_d
         //]]>
     </script>';
    
-    if (file_exists("themes/include/body_onload.inc")) 
+    if (file_exists("themes/default/include/body_onload.inc")) 
     {
         echo $body_onloadH;
-        include ("themes/include/body_onload.inc");
+        include ("themes/default/include/body_onload.inc");
         echo $body_onloadF;
     }
 
@@ -124,12 +124,12 @@ function head($tiny_mce_init, $css_pages_ref, $css, $tmp_theme, $skin, $js, $m_d
         echo $body_onloadF;
     }
 
-    // include externe file from lib/include or 
+    // include externe file from theme/default/include or 
     // themes/.../include for functions, codes ... - skin motor
-    if (file_exists("themes/include/header_head.inc")) 
+    if (file_exists("themes/default/include/header_head.inc")) 
     {
         ob_start();
-            include "themes/include/header_head.inc";
+            include "themes/default/include/header_head.inc";
             $hH = ob_get_contents();
         ob_end_clean();
 
@@ -167,9 +167,9 @@ function head($tiny_mce_init, $css_pages_ref, $css, $tmp_theme, $skin, $js, $m_d
                 }
                 else 
                 {
-                    if (file_exists("themes/$tmp_theme/js/$tab_js") and ($tab_js != ''))
+                    if (file_exists("themes/$tmp_theme/assets/js/$tab_js") and ($tab_js != ''))
                     {
-                        echo '<script type="text/javascript" src="themes/'.$tmp_theme.'/js/'.$tab_js.'"></script>';
+                        echo '<script type="text/javascript" src="themes/'.$tmp_theme.'/assets/js/'.$tab_js.'"></script>';
                     } 
                     elseif (file_exists("$tab_js") and ($tab_js != "")) 
                     {
@@ -180,9 +180,9 @@ function head($tiny_mce_init, $css_pages_ref, $css, $tmp_theme, $skin, $js, $m_d
         } 
         else 
         {
-            if (file_exists("themes/$tmp_theme/js/$js")) 
+            if (file_exists("themes/$tmp_theme/assets/js/$js")) 
             {
-                echo '<script type="text/javascript" src="themes/'.$tmp_theme.'/js/'.$js.'"></script>';
+                echo '<script type="text/javascript" src="themes/'.$tmp_theme.'/assets/js/'.$js.'"></script>';
             } 
             elseif (file_exists("$js")) 
             {
@@ -199,10 +199,10 @@ function head($tiny_mce_init, $css_pages_ref, $css, $tmp_theme, $skin, $js, $m_d
 
 $header = 1;
    
-// include externe file from lib/include for functions, codes ...
-if (file_exists("themes/include/header_before.inc")) 
+// include externe file from theme/default/include for functions, codes ...
+if (file_exists("themes/default/include/header_before.inc")) 
 {
-    include ("themes/include/header_before.inc");
+    include ("themes/default/include/header_before.inc");
 }
 
 // take the right theme location !
@@ -228,8 +228,8 @@ if ($httpref == 1)
 
 include("counter.php");
 
-// include externe file from lib/include for functions, codes ...
-if (file_exists("themes/include/header_after.inc")) 
+// include externe file from theme/default/include for functions, codes ...
+if (file_exists("themes/default/include/header_after.inc")) 
 {
-    include ("themes/include/header_after.inc");
+    include ("themes/default/include/header_after.inc");
 }

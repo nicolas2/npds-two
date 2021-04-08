@@ -24,91 +24,91 @@ class SformManager
      * form fields
      * @var integer
      */
-    protected $form_fields = array();
+    public $form_fields = array();
 
     /**
      * form title
      * @var integer
      */
-    protected $title;
+    public $title;
 
     /**
      * obligatoire message
      * @var integer
      */
-    protected $mess;
+    public $mess;
 
     /**
      * form title
      * @var integer
      */
-    protected $form_title;
+    public $form_title;
 
     /**
      * Form id (for custom css) Jireck add
      * @var integer
      */
-    protected $form_id;
+    public $form_id;
 
     /**
      * form method (Post or Get)
      * @var integer
      */
-    protected $form_method;
+    public $form_method;
 
     /**
      * form key (for mysql stockage)
      * @var integer
      */
-    protected $form_key;
+    public $form_key;
 
     /**
      * value of the form key (for mysql stockage)
      * @var integer
      */
-    protected $form_key_value;
+    public $form_key_value;
 
     /**
      * Status of the key (open or close)
      * @var integer
      */
-    protected $form_key_status = 'open';
+    public $form_key_status = 'open';
 
     /**
      * the name off all submit buttons of the form
      * @var integer
      */
-    protected $submit_value = '';
+    public $submit_value = '';
 
     /**
      * Protect the data with a password
      * @var integer
      */
-    protected $form_password_access = '';
+    public $form_password_access = '';
 
     /**
      * answer table
      * @var integer
      */
-    protected $answer = array();
+    public $answer = array();
 
     /**
      * sring which will be inserted into javascript check function
      * @var integer
      */
-    protected $form_check = 'true';
+    public $form_check = 'true';
 
     /**
      * path at 'action' option of form
      * @var integer
      */
-    protected $url;
+    public $url;
 
     /**
      * Value of the size attribute of a form-field
      * @var integer
      */
-    protected $field_size = 50;
+    public $field_size = 50;
   
 
     /**
@@ -814,7 +814,7 @@ class SformManager
                     break;
 
                     case 'Qspam':
-                        $str .= spam::qSpambot();
+                        $str .= spam::Q_spambot();
                         $str .= "\n";
                     break;
 
@@ -907,7 +907,7 @@ class SformManager
 
                     case 'upload':
                         $str .= '
-                            <div id="avava" class="form-group row" lang="'.Language::language_iso(2).'">
+                            <div id="avava" class="form-group row" lang="'.Language::language_iso(1,'','').'">
                                 <label class="col-form-label col-sm-4" for="'.$this->form_fields[$i]['name'].'">'.$this->form_fields[$i]['en'].'</label>
                                 <div class="col-sm-8">
                                     <div class="input-group mb-2 mr-sm-2">

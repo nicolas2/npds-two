@@ -105,7 +105,7 @@ class subscribe {
                 $message .= $resume;
                 $message .= $url;
                 
-                include("signat.php");
+                include("config/signat.php");
                 
                 mailler::send_email($email, $subject, $message, '', true, 'html');
             }

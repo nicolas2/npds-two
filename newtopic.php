@@ -183,7 +183,7 @@ if ($submitS)
         if ($myrow['forum_type'] == 8) 
         {
             $formulaire = $myrow['forum_pass'];
-            include ("lib/sform/forum/forum_extender.php");
+            include ("npds/sform/forum/forum_extender.php");
         }
 
         /*
@@ -476,7 +476,7 @@ else
         if ($myrow['forum_type'] == 8) 
         {
             $formulaire = $myrow['forum_pass'];
-            include ("lib/sform/forum/forum_extender.php");
+            include ("npds/sform/forum/forum_extender.php");
         } 
         else 
         {

@@ -144,7 +144,7 @@ function subscribe_ok($xemail)
                 $message = "".translate("Merci d'avoir consacré du temps pour vous enregistrer.")."\n\n";
                 $message .= "".translate("Pour supprimer votre abonnement à notre lettre, merci d'utiliser")." :\n $nuke_url/lnl.php?op=unsubscribe&email=$xemail\n\n";
                 
-                include("signat.php");
+                include("config/signat.php");
                 
                 mailler::send_email($xemail, $subject, $message, '', true, 'text');
                 
