@@ -8,6 +8,14 @@
  * @version 1.0
  * @date 02/04/2021
  */
+use npds\cache\cacheManager;
+use npds\cache\cacheEmpty;
+use npds\cache\cache;
+use npds\error\error;
+use npds\security\hack;
+use npds\groupes\groupe;
+use npds\date\date;
+use npds\assets\auto;
 
 
 if (!function_exists('Mysql_Connexion'))
@@ -21,23 +29,30 @@ if ($SuperCache)
 }
 else
 {
-    $cache_obj = new SuperCacheEmpty();
+    $cache_obj = new cacheEmpty();
 }
 
 include("auth.php");
 
 $Smax = '99';
 
-
+/**
+ * [ancre description]
+ * @param  [type] $forum_id       [description]
+ * @param  [type] $topic_id       [description]
+ * @param  [type] $post_id        [description]
+ * @param  [type] $posts_per_page [description]
+ * @return [type]                 [description]
+ */
 function ancre($forum_id, $topic_id, $post_id, $posts_per_page) 
 {
     global $NPDS_Prefix;
 
-    $rowQ1 = Q_Select ("SELECT post_id FROM ".$NPDS_Prefix."posts WHERE forum_id='$forum_id' and topic_id='$topic_id' order by post_id ASC", 600);
+    $rowQ1 = cache::Q_Select ("SELECT post_id FROM ".$NPDS_Prefix."posts WHERE forum_id='$forum_id' and topic_id='$topic_id' order by post_id ASC", 600);
    
     if (!$rowQ1)
     {
-        forumerror('0015');
+        error::forumerror('0015');
     }
 
     $i = 0;
@@ -60,7 +75,7 @@ include('header.php');
 
 settype($term, 'string');
 
-$term = removeHack(stripslashes(htmlspecialchars(urldecode($term), ENT_QUOTES, cur_charset))); // electrobug
+$term = hack::remove(stripslashes(htmlspecialchars(urldecode($term), ENT_QUOTES, cur_charset))); // electrobug
    
 echo '
 <h2>'.translate("Rechercher dans").' : Forums</h2>
@@ -102,11 +117,11 @@ echo '
             <select class="form-control custom-select" name="forum" id="forum">
                 <option value="all">'.translate("Rechercher dans tous les forums").'</option>';
    
-    $rowQ1 = Q_Select ("SELECT forum_name,forum_id FROM ".$NPDS_Prefix."forums", 3600);
+    $rowQ1 = cache::Q_Select("SELECT forum_name,forum_id FROM ".$NPDS_Prefix."forums", 3600);
     
     if (!$rowQ1)
     {
-        forumerror('0015');
+        error::forumerror('0015');
     }
 
     foreach($rowQ1 as $row) 
@@ -191,7 +206,7 @@ echo '
     if (isset($term) && $term != '') 
     {
         $andor = '';
-        $terms = explode(' ', stripslashes(removeHack(trim($term))));
+        $terms = explode(' ', stripslashes(hack::remove(trim($term))));
         $addquery = "( (p.post_text LIKE '%$terms[0]%' OR strcmp(soundex(p.post_text), soundex('$terms[0]'))=0)";
       
         if (isset($addterms)) 
@@ -230,11 +245,11 @@ echo '
 
     if (isset($username) && $username != '') 
     {
-        $username = removeHack(stripslashes(htmlspecialchars(urldecode($username), ENT_QUOTES, cur_charset))); // electrobug
+        $username = hack::remove(stripslashes(htmlspecialchars(urldecode($username), ENT_QUOTES, cur_charset))); // electrobug
       
         if (!$result = sql_query("SELECT uid FROM ".$NPDS_Prefix."users WHERE uname='$username'"))
         {
-            forumerror('0001');
+            error::forumerror('0001');
         }
       
         list($userid) = sql_fetch_row($result);
@@ -325,14 +340,14 @@ echo '
       
         echo '
             <table id="cherch_trouve" data-toggle="table" data-striped="true" data-search="true" data-show-toggle="true" data-mobile-responsive="true" data-buttons-class="outline-secondary" data-icons-prefix="fa" data-icons="icons">';
-      
+
         do 
         {
             if (($row['forum_type'] == 5) or ($row['forum_type'] == 7)) 
             {
                 $ok_affich = false;
-                $tab_groupe = valid_group($user);
-                $ok_affich = groupe_forum($row['forum_pass'], $tab_groupe);
+                $tab_groupe = groupe::valid_group($user);
+                $ok_affich = groupe::groupe_forum($row['forum_pass'], $tab_groupe);
             }
             else
             {
@@ -375,7 +390,7 @@ echo '
                 echo '
                     <td><a href="viewtopic'.$Hplus.'.php?topic='.$row['topic_id'].'&amp;forum='.$row['forum_id'].$ancre.'" >'.stripslashes($row['topic_title']).'</a></td>
                     <td><a href="user.php?op=userinfo&amp;uname='.$row['uname'].'" >'.$row['uname'].'</a></td>
-                    <td><small>'.convertdate($row['post_time']).'</small></td>
+                    <td><small>'.date::convertdate($row['post_time']).'</small></td>
                 </tr>';
             $count++;
         }
@@ -388,6 +403,6 @@ echo '
 }
 
 sql_free_result();
-echo auto_complete ('membre', 'uname', 'users', 'username', '86400');
+echo auto::auto_complete('membre', 'uname', 'users', 'username', '86400');
    
 include('footer.php');

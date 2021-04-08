@@ -10,6 +10,8 @@
  */
 namespace npds\views;
 
+use npds\language\metalang;
+
 
 /*
  * theme
@@ -66,7 +68,7 @@ class theme {
      */
     public static function themepreview($title, $hometext, $bodytext='', $notes='') 
     {
-        echo "<span class=\"titrea\">$title</span><br />".meta_lang($hometext)."<br />".meta_lang($bodytext)."<br />".meta_lang($notes);
+        echo "<span class=\"titrea\">$title</span><br />".metalang::meta_lang($hometext)."<br />".metalang::meta_lang($bodytext)."<br />".meta_lang($notes);
     }
 
     /**

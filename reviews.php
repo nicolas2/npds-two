@@ -8,12 +8,25 @@
  * @version 1.0
  * @date 02/04/2021
  */
+use npds\assets\css;
+use npds\security\hack;
+use npds\utility\str;
+use npds\utility\spam;
+use npds\language\language;
+use npds\logs\logs;
+use npds\mailler\mailler;
+
 
 if (!function_exists('Mysql_Connexion'))
 {
     include ('boot/bootstrap.php');
 }
 
+/**
+ * [display_score description]
+ * @param  [type] $score [description]
+ * @return [type]        [description]
+ */
 function display_score($score) 
 {
     $image = '<i class="fa fa-star"></i>';
@@ -49,6 +62,10 @@ function display_score($score)
     }
 }
 
+/**
+ * [write_review description]
+ * @return [type] [description]
+ */
 function write_review() 
 {
     global $admin, $sitename, $user, $cookie, $short_review, $NPDS_Prefix;
@@ -182,15 +199,29 @@ function write_review()
         inpandfieldlen("url_title_rev",50);
         inpandfieldlen("cover_rev",100);';
    
-    adminfoot('fv', '', $arg1, 'foo');
+    css::adminfoot('fv', '', $arg1, 'foo');
 }
 
+/**
+ * [preview_review description]
+ * @param  [type] $title     [description]
+ * @param  [type] $text      [description]
+ * @param  [type] $reviewer  [description]
+ * @param  [type] $email     [description]
+ * @param  [type] $score     [description]
+ * @param  [type] $cover     [description]
+ * @param  [type] $url       [description]
+ * @param  [type] $url_title [description]
+ * @param  [type] $hits      [description]
+ * @param  [type] $id        [description]
+ * @return [type]            [description]
+ */
 function preview_review($title, $text, $reviewer, $email, $score, $cover, $url, $url_title, $hits, $id) 
 {
     global $admin, $short_review;
 
     $title = stripslashes(strip_tags($title));
-    $text = stripslashes(removeHack(conv2br($text)));
+    $text = stripslashes(hack::remove(str::conv2br($text)));
     $reviewer = stripslashes(strip_tags($reviewer));
     $url_title = stripslashes(strip_tags($url_title));
     $error = '';
@@ -248,7 +279,7 @@ function preview_review($title, $text, $reviewer, $email, $score, $cover, $url, 
             echo '<div class="alert alert-danger">'.translate("Email non valide (ex.: prenom.nom@hotmail.com)").'</div>';
         }
 
-        if(checkdnsmail($email) === false) 
+        if(mailler::checkdnsmail($email) === false) 
         {
             $error = 1;
             echo '<div class="alert alert-danger">'.translate("Erreur : DNS ou serveur de mail incorrect").'</div>';
@@ -329,20 +360,20 @@ function preview_review($title, $text, $reviewer, $email, $score, $cover, $url, 
       
         if (!$admin) 
         {
-            echo Q_spambot();
+            echo spam::Q_spambot();
         }
 
         $consent = '[french]Pour conna&icirc;tre et exercer vos droits notamment de retrait de votre consentement &agrave; l\'utilisation des donn&eacute;es collect&eacute;es veuillez consulter notre <a href="static.php?op=politiqueconf.html&amp;npds=1&amp;metalang=1">politique de confidentialit&eacute;</a>.[/french][english]To know and exercise your rights, in particular to withdraw your consent to the use of the data collected, please consult our <a href="static.php?op=politiqueconf.html&amp;npds=1&amp;metalang=1">privacy policy</a>.[/english][spanish]Para conocer y ejercer sus derechos, en particular para retirar su consentimiento para el uso de los datos recopilados, consulte nuestra <a href="static.php?op=politiqueconf.html&amp;npds=1&amp;metalang=1">pol&iacute;tica de privacidad</a>.[/spanish][german]Um Ihre Rechte zu kennen und auszu&uuml;ben, insbesondere um Ihre Einwilligung zur Nutzung der erhobenen Daten zu widerrufen, konsultieren Sie bitte unsere <a href="static.php?op=politiqueconf.html&amp;npds=1&array_map(callback, arr1);metalang=1">Datenschutzerkl&auml;rung</a>.[/german][chinese]&#x8981;&#x4E86;&#x89E3;&#x5E76;&#x884C;&#x4F7F;&#x60A8;&#x7684;&#x6743;&#x5229;&#xFF0C;&#x5C24;&#x5176;&#x662F;&#x8981;&#x64A4;&#x56DE;&#x60A8;&#x5BF9;&#x6240;&#x6536;&#x96C6;&#x6570;&#x636E;&#x7684;&#x4F7F;&#x7528;&#x7684;&#x540C;&#x610F;&#xFF0C;&#x8BF7;&#x67E5;&#x9605;&#x6211;&#x4EEC;<a href="static.php?op=politiqueconf.html&#x26;npds=1&#x26;metalang=1">&#x7684;&#x9690;&#x79C1;&#x653F;&#x7B56;</a>&#x3002;[/chinese]';
       
         $accept = "[french]En soumettant ce formulaire j'accepte que les informations saisies soient exploit&#xE9;es dans le cadre de l'utilisation et du fonctionnement de ce site.[/french][english]By submitting this form, I accept that the information entered will be used in the context of the use and operation of this website.[/english][spanish]Al enviar este formulario, acepto que la informaci&oacute;n ingresada se utilizar&aacute; en el contexto del uso y funcionamiento de este sitio web.[/spanish][german]Mit dem Absenden dieses Formulars erkl&auml;re ich mich damit einverstanden, dass die eingegebenen Informationen im Rahmen der Nutzung und des Betriebs dieser Website verwendet werden.[/german][chinese]&#x63D0;&#x4EA4;&#x6B64;&#x8868;&#x683C;&#x5373;&#x8868;&#x793A;&#x6211;&#x63A5;&#x53D7;&#x6240;&#x8F93;&#x5165;&#x7684;&#x4FE1;&#x606F;&#x5C06;&#x5728;&#x672C;&#x7F51;&#x7AD9;&#x7684;&#x4F7F;&#x7528;&#x548C;&#x64CD;&#x4F5C;&#x8303;&#x56F4;&#x5185;&#x4F7F;&#x7528;&#x3002;[/chinese]";
-      
+     
         echo '
         <div class="form-group row">
             <div class="col-sm-12">
                 <div class="custom-control custom-checkbox">
                     <input class="custom-control-input" type="checkbox" id="consent" name="consent" value="1" required="required"/>
                     <label class="custom-control-label" for="consent">'
-                        .aff_langue($accept).'
+                        .language::aff_langue($accept).'
                         <span class="text-danger"> *</span>
                     </label>
                 </div>
@@ -355,7 +386,7 @@ function preview_review($title, $text, $reviewer, $email, $score, $cover, $url, 
             </div>
         </div>
         <div class="form-group row">
-            <div class="col small" >'.aff_langue($consent).'
+            <div class="col small" >'.language::aff_langue($consent).'
             </div>
         </div>';
       
@@ -381,9 +412,14 @@ function preview_review($title, $text, $reviewer, $email, $score, $cover, $url, 
     $arg1 = '
         var formulid = ["prevreview"];';
 
-    adminfoot('fv', '', $arg1, 'foo');
+    css::adminfoot('fv', '', $arg1, 'foo');
 }
 
+/**
+ * [reversedate description]
+ * @param  [type] $myrow [description]
+ * @return [type]        [description]
+ */
 function reversedate($myrow) 
 {
     if (substr($myrow, 2, 1) == '-') 
@@ -402,6 +438,23 @@ function reversedate($myrow)
     return ($year.'-'.$month.'-'.$day);
 }
 
+/**
+ * [send_review description]
+ * @param  [type] $date         [description]
+ * @param  [type] $title        [description]
+ * @param  [type] $text         [description]
+ * @param  [type] $reviewer     [description]
+ * @param  [type] $email        [description]
+ * @param  [type] $score        [description]
+ * @param  [type] $cover        [description]
+ * @param  [type] $url          [description]
+ * @param  [type] $url_title    [description]
+ * @param  [type] $hits         [description]
+ * @param  [type] $id           [description]
+ * @param  [type] $asb_question [description]
+ * @param  [type] $asb_reponse  [description]
+ * @return [type]               [description]
+ */
 function send_review($date, $title, $text, $reviewer, $email, $score, $cover, $url, $url_title, $hits, $id, $asb_question, $asb_reponse) 
 {
     global $admin, $user, $NPDS_Prefix;
@@ -409,19 +462,19 @@ function send_review($date, $title, $text, $reviewer, $email, $score, $cover, $u
     include ('header.php');
    
     $date = reversedate($date);
-    $title = stripslashes(FixQuotes(strip_tags($title)));
-    $text = stripslashes(Fixquotes(urldecode(removeHack($text))));
+    $title = stripslashes(str::FixQuotes(strip_tags($title)));
+    $text = stripslashes(str::Fixquotes(urldecode(hack::remove($text))));
 
     if (!$user and !$admin) 
     {
         //anti_spambot
-        if (!R_spambot($asb_question, $asb_reponse, $text)) 
+        if (!spam::R_spambot($asb_question, $asb_reponse, $text)) 
         {
-            Ecr_Log('security', 'Review Anti-Spam : title='.$title, '');
+            logs::Ecr_Log('security', 'Review Anti-Spam : title='.$title, '');
             redirect_url("index.php");
             die();
         }
-    }
+    } 
 
     if ($id != 0)
     {
@@ -470,6 +523,12 @@ function send_review($date, $title, $text, $reviewer, $email, $score, $cover, $u
     include ("footer.php");
 }
 
+/**
+ * [reviews description]
+ * @param  [type] $field [description]
+ * @param  [type] $order [description]
+ * @return [type]        [description]
+ */
 function reviews($field, $order) 
 {
     global $NPDS_Prefix;
@@ -512,8 +571,8 @@ function reviews($field, $order)
     echo '
     <h2>'.translate("Critiques").'<span class="badge badge-secondary float-right" title="'.$numresults.' '.translate("Critique(s) trouvée(s).").'" data-toggle="tooltip">'.$numresults.'</span></h2>
     <hr />
-    <h3>'.aff_langue($r_title).'</h3>
-    <p class="lead">'.aff_langue($r_description).'</p>
+    <h3>'.language::aff_langue($r_title).'</h3>
+    <p class="lead">'.language::aff_langue($r_description).'</p>
     <h4><a href="reviews.php?op=write_review"><i class="fa fa-edit"></i></a>&nbsp;'.translate("Ecrire une critique").'</h4><br />';
    
     echo'
@@ -599,6 +658,11 @@ function reviews($field, $order)
     include ("footer.php");
 }
 
+/**
+ * [f_date description]
+ * @param  [type] $xdate [description]
+ * @return [type]        [description]
+ */
 function f_date($xdate) 
 {
     $year = substr($xdate, 0, 4);
@@ -609,6 +673,11 @@ function f_date($xdate)
     return $fdate;
 }
 
+/**
+ * [showcontent description]
+ * @param  [type] $id [description]
+ * @return [type]     [description]
+ */
 function showcontent($id) 
 {
     global $admin, $NPDS_Prefix;
@@ -657,7 +726,7 @@ function showcontent($id)
    
     if ($reviewer != '')
     {
-        echo '<div class="mb-2"><strong>'.translate("Le critique").' :</strong> <a href="mailto:'.anti_spam($email,1).'" >'.$reviewer.'</a></div>';
+        echo '<div class="mb-2"><strong>'.translate("Le critique").' :</strong> <a href="mailto:'.spam::anti_spam($email,1).'" >'.$reviewer.'</a></div>';
     }
    
     if ($score != '')
@@ -713,6 +782,11 @@ function showcontent($id)
     include ("footer.php");
 }
 
+/**
+ * [mod_review description]
+ * @param  [type] $id [description]
+ * @return [type]     [description]
+ */
 function mod_review($id) 
 {
     global $admin, $NPDS_Prefix;
@@ -840,7 +914,7 @@ function mod_review($id)
         </div>
         </form>
         <script type="text/javascript" src="assets/shared/flatpickr/dist/flatpickr.min.js"></script>
-        <script type="text/javascript" src="assets/shared/flatpickr/dist/l10n/'.language_iso(1, '', '').'.js"></script>
+        <script type="text/javascript" src="assets/shared/flatpickr/dist/l10n/'.language::language_iso(1, '', '').'.js"></script>
         <script type="text/javascript">
             //<![CDATA[
                 $(document).ready(function() {
@@ -870,7 +944,7 @@ function mod_review($id)
             altInput: true,
             altFormat: "l j F Y",
             dateFormat:"Y-m-d",
-            "locale": "'.language_iso(1, '', '').'",
+            "locale": "'.language::language_iso(1, '', '').'",
             onChange: function() {
                 fvitem.revalidateField(\'date\');
             }
@@ -889,9 +963,14 @@ function mod_review($id)
         sql_free_result($result);
     }
 
-    adminfoot('fv', $fv_parametres, $arg1, 'foo');
+    css::adminfoot('fv', $fv_parametres, $arg1, 'foo');
 }
 
+/**
+ * [del_review description]
+ * @param  [type] $id_del [description]
+ * @return [type]         [description]
+ */
 function del_review($id_del) 
 {
     global $admin, $NPDS_Prefix;

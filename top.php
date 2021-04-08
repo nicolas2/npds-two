@@ -8,6 +8,10 @@
  * @version 1.0
  * @date 02/04/2021
  */
+use npds\cache\cacheManager;
+use npds\cache\cacheEmpty;
+use npds\language\language;
+use npds\language\metalang;
 
 
 if (!function_exists('Mysql_Connexion'))
@@ -21,7 +25,7 @@ if ($SuperCache)
 }
 else
 {
-    $cache_obj = new SuperCacheEmpty();
+    $cache_obj = new cacheEmpty();
 }
 
 include("header.php");
@@ -57,7 +61,7 @@ if (($cache_obj->genereting_output == 1)
             $Xcontent = ob_get_contents();
         ob_end_clean();
         
-        echo meta_lang(aff_langue($Xcontent));
+        echo metalang::meta_lang(language::aff_langue($Xcontent));
     }
 }
 

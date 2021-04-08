@@ -8,7 +8,7 @@
  * @version 1.0
  * @date 02/04/2021
  */
-use npds\error\error;
+use npds\error\access;
 
 
 if (!function_exists('Mysql_Connexion'))
@@ -30,7 +30,7 @@ function filtre_module($strtmp)
         || stristr($strtmp, 'applet') 
         || stristr($strtmp, 'object'))
     {
-        error::denied();
+        access::denied();
     }
     else 
     {
@@ -54,10 +54,10 @@ if (filtre_module($ModPath) and filtre_module($ModStart))
     } 
     else
     {
-        error::denied();
+        access::denied();
     }
 } 
 else
 {
-   error::denied();
+   access::denied();
 }

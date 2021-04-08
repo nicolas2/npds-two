@@ -8,6 +8,17 @@
  * @version 1.0
  * @date 02/04/2021
  */
+use npds\cache\cacheManager;
+use npds\cache\cacheEmpty;
+use npds\auth\auth;
+use npds\error\error;
+use npds\language\language;
+use npds\utility\spam;
+use npds\views\theme;
+use npds\forum\forumauth; 
+use npds\pixels\pixel;
+use npds\media\video;
+
 
 if (!function_exists('Mysql_Connexion'))
 {
@@ -21,7 +32,7 @@ if ($SuperCache)
 }
 else
 {
-   $cache_obj = new SuperCacheEmpty();
+   $cache_obj = new cacheEmpty();
 }
 
 include('auth.php');
@@ -36,7 +47,7 @@ else
       
     $userX = base64_decode($user);
     $userdata = explode(':', $userX);
-    $userdata = get_userdata($userdata[1]);
+    $userdata = auth::get_userdata($userdata[1]);
 
     settype($start, 'integer');
     settype($type, 'string');
@@ -69,7 +80,7 @@ else
       
     if (!$resultID)
     {
-        forumerror('0005');
+        error::forumerror('0005');
     }
     else 
     {
@@ -82,7 +93,7 @@ else
             
             if (!$result)
             {
-               forumerror('0005');
+               error::forumerror('0005');
             }
         }
     }
@@ -97,7 +108,7 @@ else
     {
         $Xdossier = StripSlashes($dossier);
     }
-      
+
     echo '
     <h3>'.translate("Message personnel").'</h3>
     <hr />';
@@ -110,18 +121,18 @@ else
     {
         echo '
         <p class="lead">
-            <a href="viewpmsg.php">'.translate("Messages personnels").'</a>&nbsp;&raquo;&raquo;&nbsp;'.$Xdossier.'&nbsp;&raquo;&raquo;&nbsp;'.aff_langue($myrow['subject']).'
+            <a href="viewpmsg.php">'.translate("Messages personnels").'</a>&nbsp;&raquo;&raquo;&nbsp;'.$Xdossier.'&nbsp;&raquo;&raquo;&nbsp;'.language::aff_langue($myrow['subject']).'
         </p>
         <div class="card mb-3">
             <div class="card-header">';
       
         if ($type == 'outbox')
         {
-            $posterdata = get_userdata_from_id($myrow['to_userid']);
+            $posterdata = auth::get_userdata_from_id($myrow['to_userid']);
         }
         else
         {
-            $posterdata = get_userdata_from_id($myrow['from_userid']);
+            $posterdata = auth::get_userdata_from_id($myrow['from_userid']);
         }
 
         $posts = $posterdata['posts'];
@@ -134,7 +145,7 @@ else
 
             if (!$short_user) 
             {
-                $posterdata_extend = get_userdata_extend_from_id($posterdata['uid']);
+                $posterdata_extend = auth::get_userdata_extend_from_id($posterdata['uid']);
                 
                 include('modules/reseaux-sociaux/reseaux-sociaux.conf.php');
                 
@@ -153,7 +164,7 @@ else
                     {
                         foreach($res_id as $y1) 
                         {
-                            $k = array_search( $y1[0],$v1);
+                            $k = array_search($y1[0], $v1);
                             if (false !== $k) 
                             {
                                 $my_rs .= '<a class="mr-3" href="';
@@ -200,7 +211,7 @@ else
             
             if ($posterdata['femail'] != '')
             {
-                $useroutils .= '<a class="list-group-item text-primary" href="mailto:'.anti_spam($posterdata['femail'],1).'" target="_blank" title="'.translate("Email").'" data-toggle="tooltip"><i class="fa fa-at fa-2x align-middle"></i><span class="ml-3 d-none d-md-inline">'.translate("Email").'</span></a>';
+                $useroutils .= '<a class="list-group-item text-primary" href="mailto:'.spam::anti_spam($posterdata['femail'],1).'" target="_blank" title="'.translate("Email").'" data-toggle="tooltip"><i class="fa fa-at fa-2x align-middle"></i><span class="ml-3 d-none d-md-inline">'.translate("Email").'</span></a>';
             }
             
             if ($posterdata['url'] != '')
@@ -225,7 +236,7 @@ else
                 } 
                 else 
                 {
-                    if ($ibid = theme_image("forum/avatar/".$posterdata['user_avatar'])) 
+                    if ($ibid = theme::theme_image("forum/avatar/".$posterdata['user_avatar'])) 
                     {
                         $imgtmp = $ibid; 
                     }
@@ -238,7 +249,7 @@ else
                 if ($posterdata['uid'] <> 1) 
                 {
                     echo '
-                    <a style="position:absolute; top:1rem;" tabindex="0" data-toggle="popover" data-trigger="focus" data-html="true" data-title="'.$posterdata['uname'].'" data-content=\''.member_qualif($posterdata['uname'], $posts, $posterdata['rang']).'<br /><div class="list-group">'.$useroutils.'</div><hr />'.$my_rsos[0].'\'><img class=" btn-secondary img-thumbnail img-fluid n-ava" src="'.$imgtmp.'" alt="'.$posterdata['uname'].'" /></a>';
+                    <a style="position:absolute; top:1rem;" tabindex="0" data-toggle="popover" data-trigger="focus" data-html="true" data-title="'.$posterdata['uname'].'" data-content=\''.forumauth::member_qualif($posterdata['uname'], $posts, $posterdata['rang']).'<br /><div class="list-group">'.$useroutils.'</div><hr />'.$my_rsos[0].'\'><img class=" btn-secondary img-thumbnail img-fluid n-ava" src="'.$imgtmp.'" alt="'.$posterdata['uname'].'" /></a>';
                 }
                 else 
                 {
@@ -264,7 +275,7 @@ else
         {
             if ($myrow['msg_image'] != '') 
             {
-                if ($ibid = theme_image("forum/subject/".$myrow['msg_image'])) 
+                if ($ibid = theme::theme_image("forum/subject/".$myrow['msg_image'])) 
                 {
                     $imgtmp = $ibid;
                 } 
@@ -277,7 +288,7 @@ else
             } 
             else 
             {
-                if ($ibid = theme_image("forum/subject/00.png")) 
+                if ($ibid = theme::theme_image("forum/subject/00.png")) 
                 {
                     $imgtmpPI = $ibid; 
                 }
@@ -295,17 +306,17 @@ else
             <div class="card-body">
                 <div class="card-text pt-2">
                     <div class="text-right small">'.translate("Envoyé").' : '.$myrow['msg_time'].'</div>
-                    <hr /><strong>'.aff_langue($myrow['subject']).'</strong><br />';
+                    <hr /><strong>'.language::aff_langue($myrow['subject']).'</strong><br />';
         
         $message = stripslashes($myrow['msg_text']);
         
         if ($allow_bbcode) 
         {
-            $message = smilie($message);
-            $message = aff_video_yt($message);
+            $message = pixel::smilie($message);
+            $message = video::aff_video_yt($message);
         }
-        
-        $message = str_replace('[addsig]', '<br />' . nl2br($posterdata['user_sig']), aff_langue($message));
+
+        $message = str_replace('[addsig]', '<br />' . nl2br($posterdata['user_sig']), language::aff_langue($message));
              
         echo $message;
         echo '

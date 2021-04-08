@@ -10,6 +10,8 @@
  */
 namespace npds\assets;
 
+use npds\cache\cache;
+
 
 /**
  * auto
@@ -41,7 +43,7 @@ class auto {
         $list_json = '';
         $list_json .= 'var '.$nom_array_js.' = [';
         
-        $res = Q_select("SELECT ".$nom_champ." FROM ".$NPDS_Prefix.$nom_tabl,$temps_cache);
+        $res = cache::Q_select("SELECT ".$nom_champ." FROM ".$NPDS_Prefix.$nom_tabl,$temps_cache);
         
         foreach($res as $ar_data) 
         {

@@ -18,6 +18,8 @@ $sql_nbREQ = 0;
  */
 function SQL_escape_string($arr) 
 {
+    global $dblink;
+    
     if (function_exists("mysqli_real_escape_string"))
     {
         @mysqli_real_escape_string($dblink, $arr);

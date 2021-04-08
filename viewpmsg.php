@@ -9,6 +9,12 @@
  * @version 1.0
  * @date 02/04/2021
  */
+use npds\cache\cacheManager;
+use npds\cache\cacheEmpty;
+use npds\auth\auth;
+use npds\error\error;
+use npds\views\theme;
+use npds\language\language;
 
 
 if (!function_exists('Mysql_Connexion')) {
@@ -21,7 +27,7 @@ if ($SuperCache)
 }
 else
 {
-    $cache_obj = new SuperCacheEmpty();
+    $cache_obj = new cacheEmpty();
 }
 
 include("auth.php");
@@ -36,7 +42,7 @@ else
 
     $userX = base64_decode($user);
     $userdata = explode(':', $userX);
-    $userdata = get_userdata($userdata[1]);
+    $userdata = auth::get_userdata($userdata[1]);
    
     $sqlT = "SELECT DISTINCT dossier FROM " . $NPDS_Prefix . "priv_msgs WHERE to_userid = '" . $userdata['uid'] . "' AND dossier!='...' AND type_msg='0' ORDER BY dossier";
     $resultT = sql_query($sqlT);
@@ -77,7 +83,7 @@ else
    
     while (list($dossierX) = sql_fetch_row($resultT)) 
     {
-        if (AddSlashes($dossierX) == $dossier)
+        if (Addslashes($dossierX) == $dossier)
         { 
             $sel = 'selected="selected"';
         }
@@ -124,8 +130,9 @@ else
     $sql = "SELECT * FROM " . $NPDS_Prefix . "priv_msgs WHERE to_userid='" . $userdata['uid'] . "' AND type_msg='0' $ibid ORDER BY msg_id DESC";
     $resultID = sql_query($sql);
    
-    if (!$resultID) {
-        forumerror('0005');
+    if (!$resultID) 
+    {
+        error::forumerror('0005');
     }
 
     if (!$total_messages = sql_num_rows($resultID)) 
@@ -173,7 +180,7 @@ else
         while ($myrow = sql_fetch_assoc($resultID)) 
         {
             $myrow['subject'] = strip_tags($myrow['subject']);
-            $posterdata = get_userdata_from_id($myrow['from_userid']);
+            $posterdata = auth::get_userdata_from_id($myrow['from_userid']);
          
             if ($dossier == "All") 
             {
@@ -208,7 +215,7 @@ else
             {
                 if ($myrow['msg_image'] != '') 
                 {
-                    if ($ibid = theme_image("forum/subject/" . $myrow['msg_image']))
+                    if ($ibid = theme::theme_image("forum/subject/" . $myrow['msg_image']))
                     { 
                         $imgtmp = $ibid;
                     }
@@ -224,7 +231,7 @@ else
                 }
             }
 
-             echo '<td>' . userpopover($posterdata['uname'], 40);
+            echo '<td>' . userpopover($posterdata['uname'], 40);
          
             if ($posterdata['uid'] <> 1)
             {
@@ -236,7 +243,7 @@ else
             }
          
             echo '</td>
-                    <td>' . aff_langue($myrow['subject']) . '</td>
+                    <td>' . language::aff_langue($myrow['subject']) . '</td>
                     <td class="small">' . $myrow['msg_time'] . '</td>
                 </tr>';
             
@@ -270,7 +277,7 @@ else
    
     if (!$resultID)
     {
-        forumerror('0005');
+        error::forumerror('0005');
     }
    
     $total_messages = sql_num_rows($resultID);
@@ -332,7 +339,7 @@ else
         {
             if ($myrow['msg_image'] != '') 
             {
-                if ($ibid = theme_image("forum/subject/" . $myrow['msg_image'])) 
+                if ($ibid = theme::theme_image("forum/subject/" . $myrow['msg_image'])) 
                 {
                     $imgtmp = $ibid;
                 } 
@@ -349,11 +356,11 @@ else
         }
 
         $myrow['subject'] = strip_tags($myrow['subject']);
-        $posterdata = get_userdata_from_id($myrow['to_userid']);
+        $posterdata = auth::get_userdata_from_id($myrow['to_userid']);
       
         echo '
                 <td><a href="readpmsg.php?start=' . $count . '&amp;total_messages=' . $total_messages . '&amp;type=outbox" >' . $posterdata['uname'] . '</a></td>
-                <td>' . aff_langue($myrow['subject']) . '</td>
+                <td>' . language::aff_langue($myrow['subject']) . '</td>
                 <td>' . $myrow['msg_time'] . '</td>
             </tr>';
         $count++;

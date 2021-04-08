@@ -8,7 +8,11 @@
  * @version 1.0
  * @date 02/04/2021
  */
-
+use npds\cache\cacheManager;
+use npds\cache\cacheEmpty;
+use npds\language\language;
+use npds\auth\auth;
+use npds\forum\forum;
 
 
 if (!function_exists('Mysql_Connexion'))
@@ -33,7 +37,7 @@ function mapsections()
         {
             if ($rubname != '')
             {
-                $tmp .= '<li>'.aff_langue($rubname);
+                $tmp .= '<li>'.language::aff_langue($rubname);
             }
               
             $result2 = sql_query("SELECT secid, secname, image, userlevel, intro FROM ".$NPDS_Prefix."sections WHERE rubid='$rubid' AND (userlevel='0' OR userlevel='') ORDER BY ordre");
@@ -41,15 +45,15 @@ function mapsections()
             {
                 while (list($secid, $secname, $userlevel) = sql_fetch_row($result2)) 
                 {
-                    if (autorisation($userlevel)) 
+                    if (auth::autorisation($userlevel)) 
                     {
-                        $tmp .= '<ul><li>'.aff_langue($secname);
+                        $tmp .= '<ul><li>'.language::aff_langue($secname);
                         $result3 = sql_query("SELECT artid, title FROM ".$NPDS_Prefix."seccont WHERE secid='$secid'");
                        
                         while (list($artid, $title) = sql_fetch_row($result3)) 
                         {
                             $tmp .= "<ul>
-                            <li><a href=\"sections.php?op=viewarticle&amp;artid=$artid\">".aff_langue($title).'</a></li></ul>';
+                            <li><a href=\"sections.php?op=viewarticle&amp;artid=$artid\">".language::aff_langue($title).'</a></li></ul>';
                         }
 
                         $tmp .= '</li>
@@ -90,7 +94,7 @@ function mapsections()
 function mapforum() 
 {
     $tmp = '';
-    $tmp .= RecentForumPosts_fab('', 10, 0, false, 50, false, '<li>', false);
+    $tmp .= forum::RecentForumPosts_fab('', 10, 0, false, 50, false, '<li>', false);
         
     if ($tmp != '')
     {
@@ -123,7 +127,7 @@ function maptopics()
         $result2 = sql_query("SELECT sid FROM ".$NPDS_Prefix."stories WHERE topic='$topicid'");
         $nb_article = sql_num_rows($result2);
         $lis_top .= '
-        <li><a href="search.php?query=&amp;topic='.$topicid.'">'.aff_langue($topictext).'</a>&nbsp;<span class="">('.$nb_article.')</span></li>';
+        <li><a href="search.php?query=&amp;topic='.$topicid.'">'.language::aff_langue($topictext).'</a>&nbsp;<span class="">('.$nb_article.')</span></li>';
     }
 
     if ($lis_top != '')
@@ -156,11 +160,13 @@ function mapcategories()
     $lis_cat = '';
     $result = sql_query("SELECT catid, title FROM ".$NPDS_Prefix."stories_cat ORDER BY title");
        
+    $result2 = null;
+
     while (list($catid, $title) = sql_fetch_row($result)) 
     {
         $result2 = sql_query("SELECT sid FROM stories WHERE catid='$catid'");
         $nb_article = sql_num_rows($result2);
-        $lis_cat .= '<li><a href="index.php?op=newindex&amp;catid='.$catid.'">'.aff_langue($title).'</a> <span class="float-right badge badge-secondary"> '.$nb_article.' </span></li>'."\n";
+        $lis_cat .= '<li><a href="index.php?op=newindex&amp;catid='.$catid.'">'.language::aff_langue($title).'</a> <span class="float-right badge badge-secondary"> '.$nb_article.' </span></li>'."\n";
     }
 
     if ($lis_cat != '')
@@ -179,7 +185,8 @@ function mapcategories()
     }
 
     sql_free_result($result);
-    sql_free_result($result2);// notice quand il n'y a pas de catégories !!
+    sql_free_result($result2);    
+ 
 }
 
 /**
@@ -195,7 +202,7 @@ function mapfaq()
         
     while (list($id_cat, $categories) = sql_fetch_row($result)) 
     {
-        $catname = aff_langue($categories);
+        $catname = language::aff_langue($categories);
         $lis_faq .= "<li><a href=\"faq.php?id_cat=$id_cat&amp;myfaq=yes&amp;categories=".urlencode($catname)."\">".$catname."</a></li>\n";
     }
 
@@ -230,7 +237,7 @@ if ($SuperCache)
 } 
 else
 {
-    $cache_obj = new SuperCacheEmpty();
+    $cache_obj = new cacheEmpty();
 }
 
 if (($cache_obj->genereting_output == 1) 

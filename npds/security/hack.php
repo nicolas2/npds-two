@@ -258,7 +258,7 @@ class hack
      * [MNSremoveHack description]
      * @param [type] $Xstring [description]
      */
-    public static function MNSremoveHack($Xstring)
+    public static function MNSremove($Xstring)
     {
         global $op, $userdata, $tiny_mce, $tiny_mce_theme, $tiny_mce_relurl;
 

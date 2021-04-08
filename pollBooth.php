@@ -8,6 +8,12 @@
  * @version 1.0
  * @date 02/04/2021
  */
+use npds\cookie\cookie;
+use npds\security\ip;
+use npds\language\language;
+use npds\utility\str;
+use npds\poolboth\poolboth;
+
 
 if (!function_exists('Mysql_Connexion'))
 {
@@ -47,7 +53,7 @@ function pollCollector($pollID, $voteID, $forwarder)
         } 
         else 
         {
-            setcookie("$cookieName", "1", time()+86400);
+            cookie::set("$cookieName", "1", time()+86400);
         }
 
         global $user;
@@ -64,7 +70,7 @@ function pollCollector($pollID, $voteID, $forwarder)
 
         if ($setCookies == "1") 
         {
-            $ip = getip();
+            $ip = ip::get();
            
             if ($dns_verif)
             {
@@ -85,7 +91,7 @@ function pollCollector($pollID, $voteID, $forwarder)
 
         if ($voteValid == "1") 
         {
-            $ip = getip();
+            $ip = ip::get();
 
             if ($dns_verif)
             {
@@ -131,7 +137,7 @@ function pollList()
         list ($sum) = sql_fetch_row($result2);
         
         echo '
-        <div class="col-sm-8">'.aff_langue($pollTitle).'</div>
+        <div class="col-sm-8">'.language::aff_langue($pollTitle).'</div>
         <div class="col-sm-4 text-right">(<a href="pollBooth.php?op=results&amp;pollID='.$id.'">'.translate("Résultats").'</a> - '.$sum.' '.translate("votes").')</div>';
     }
 
@@ -148,9 +154,13 @@ function pollResults($pollID)
 {
     global $NPDS_Prefix, $maxOptions, $setCookies;
 
-    if (!isset($pollID) OR empty($pollID)) $pollID = 1;
+    if (!isset($pollID) OR empty($pollID)) 
+    {
+        $pollID = 1;
+    }
+    
     $result = sql_query("SELECT pollID, pollTitle, timeStamp FROM ".$NPDS_Prefix."poll_desc WHERE pollID='$pollID'");
-      list(,$pollTitle) = sql_fetch_row($result);
+    list(,$pollTitle) = sql_fetch_row($result);
 
     echo '
     <h3 class="my-3">'.$pollTitle.'</h3>';
@@ -183,9 +193,9 @@ function pollResults($pollID)
             
             echo '
             <div class="row">
-                <div class="col-sm-5 mt-3">'.aff_langue($optionText).'</div>
+                <div class="col-sm-5 mt-3">'.language::aff_langue($optionText).'</div>
                 <div class="col-sm-7">
-                    <span class="badge badge-secondary mb-1">'.wrh($optionCount).'</span>
+                    <span class="badge badge-secondary mb-1">'.str::wrh($optionCount).'</span>
                     <div class="progress">
                         <span class="progress-bar" role="progressbar" aria-valuenow="'.$percentInt.'%" aria-valuemin="0" aria-valuemax="100" style="width:'.$percentInt.'%;" title="'.$percentInt.'%" data-toggle="tooltip"></span>
                     </div>
@@ -242,7 +252,7 @@ function pollboxbooth($pollID, $pollClose)
     }
     
     $boxContent .= '
-         <h4>'.aff_langue($pollTitle).'</h4>';
+         <h4>'.language::aff_langue($pollTitle).'</h4>';
 
     $result = sql_query("SELECT pollID, optionText, optionCount, voteID FROM ".$NPDS_Prefix."poll_data WHERE (pollID='$pollID' AND optionText<>'') ORDER BY voteID");
     
@@ -259,7 +269,7 @@ function pollboxbooth($pollID, $pollClose)
             $boxContent .= '
                <div class="custom-control custom-radio">
                   <input type="radio" class="custom-control-input" id="voteID'.$j.'" name="voteID" value="'.$object['voteID'].'" />
-                  <label class="custom-control-label" for="voteID'.$j.'">'.aff_langue($object['optionText']).'</label>
+                  <label class="custom-control-label" for="voteID'.$j.'">'.language::aff_langue($object['optionText']).'</label>
                </div>';
             
             $sum = $sum + $object['optionCount'];
@@ -274,7 +284,7 @@ function pollboxbooth($pollID, $pollClose)
     {
         while($object = sql_fetch_assoc($result)) 
         {
-            $boxContent .= "&nbsp;".aff_langue($object['optionText'])."<br />\n";
+            $boxContent .= "&nbsp;".language::aff_langue($object['optionText'])."<br />\n";
             $sum = $sum + $object['optionCount'];
         }
     }
@@ -345,7 +355,7 @@ if (isset($forwarder))
 } 
 elseif ($op == 'results') 
 {
-    list($ibid, $pollClose) = pollSecur($pollID);
+    list($ibid, $pollClose) = poolboth::pollSecur($pollID);
     if ($pollID == $ibid) 
     {
         include ("header.php");

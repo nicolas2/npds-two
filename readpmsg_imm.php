@@ -8,6 +8,17 @@
  * @version 1.0
  * @date 02/04/2021
  */
+use npds\cache\cacheManager;
+use npds\cache\cacheEmpty;
+use npds\auth\auth;
+use npds\assets\css;
+use npds\forum\forumauth;
+use npds\views\theme;
+use npds\lnguage\language;
+use npds\pixels\pixel;
+use npds\media\video;
+use npds\error\error;
+
 
 if (!function_exists('Mysql_Connexion'))
 {
@@ -21,11 +32,15 @@ if ($SuperCache)
 }
 else
 {
-   $cache_obj = new SuperCacheEmpty();
+   $cache_obj = new cacheEmpty();
 }
 
 include('auth.php');
 
+/**
+ * [cache_ctrl description]
+ * @return [type] [description]
+ */
 function cache_ctrl() 
 {
     global $cache_verif;
@@ -39,6 +54,11 @@ function cache_ctrl()
     }
 }
 
+/**
+ * [show_imm description]
+ * @param  [type] $op [description]
+ * @return [type]     [description]
+ */
 function show_imm($op) 
 {
     global $smilies, $user, $allow_bbcode, $language, $Default_Theme, $theme, $site_font, $short_user, $Titlesitename, $NPDS_Prefix;
@@ -70,8 +90,8 @@ function show_imm($op)
 
         include("themes/$theme/theme.php");
         
-        $userdata = get_userdata($userdata[1]);
-        
+        $userdata = auth::get_userdata($userdata[1]);
+
         if ($op != 'new_msg') 
         {
             $sql = "SELECT * FROM ".$NPDS_Prefix."priv_msgs WHERE to_userid = '".$userdata['uid']."' AND read_msg='1' AND type_msg='0' AND dossier='...' ORDER BY msg_id DESC";
@@ -94,15 +114,15 @@ function show_imm($op)
                 include("config/meta.php");
                 include("lib/include/header_head.inc");
                 
-                echo import_css($theme, $language, $site_font, '', '');
-                
+                echo css::import_css($theme, $language, $site_font, '', '');
+
                 echo '
                     </head>
                     <body>
                     <div class="card card-body">';
             }
 
-            $posterdata = get_userdata_from_id($myrow['from_userid']);
+            $posterdata = auth::get_userdata_from_id($myrow['from_userid']);
             
             echo '
                 <div class="card mb-3">
@@ -126,9 +146,9 @@ function show_imm($op)
             
             if ($posterdata['uid'] <> 1) 
             {
-                echo member_qualif($posterdata['uname'], $posts, $posterdata['rang']);
+                echo forumauth::member_qualif($posterdata['uname'], $posts, $posterdata['rang']);
             }
-            
+
             echo '<br /><br />';
             
             if ($smilies) 
@@ -141,7 +161,7 @@ function show_imm($op)
                     } 
                     else 
                     {
-                        if ($ibid = theme_image("forum/avatar/".$posterdata['user_avatar'])) 
+                        if ($ibid = theme::theme_image("forum/avatar/".$posterdata['user_avatar'])) 
                         {
                             $imgtmp = $ibid;
                         } 
@@ -159,7 +179,7 @@ function show_imm($op)
             {
                 if ($myrow['msg_image'] != '') 
                 {
-                    if ($ibid = theme_image("forum/subject/".$myrow['msg_image'])) 
+                    if ($ibid = theme::theme_image("forum/subject/".$myrow['msg_image'])) 
                     {
                         $imgtmp = $ibid;
                     } 
@@ -173,17 +193,17 @@ function show_imm($op)
             }
 
             echo translate("Envoyé").' : '.$myrow['msg_time'].'&nbsp;&nbsp;&nbsp';
-            echo '<h4>'.aff_langue($myrow['subject']).'</h4>';
+            echo '<h4>'.language::aff_langue($myrow['subject']).'</h4>';
             
             $message = stripslashes($myrow['msg_text']);
-            
+
             if ($allow_bbcode) 
             {
-                $message = smilie($message);
-                $message = aff_video_yt($message);
+                $message = pixel::smilie($message);
+                $message = video::aff_video_yt($message);
             }
 
-            $message = str_replace("[addsig]", "<br /><br />" . nl2br($posterdata['user_sig']), aff_langue($message));
+            $message = str_replace("[addsig]", "<br /><br />" . nl2br($posterdata['user_sig']), language::aff_langue($message));
             
             echo $message.'<br />';
 
@@ -223,6 +243,11 @@ function show_imm($op)
     </html>';
 }
 
+/**
+ * [sup_imm description]
+ * @param  [type] $msg_id [description]
+ * @return [type]         [description]
+ */
 function sup_imm($msg_id) 
 {
     global $cookie, $NPDS_Prefix;
@@ -237,11 +262,17 @@ function sup_imm($msg_id)
         
         if (!sql_query($sql))
         {
-            forumerror('0021');
+            error::forumerror('0021');
         }
     }
 }
 
+/**
+ * [read_imm description]
+ * @param  [type] $msg_id [description]
+ * @param  [type] $sub_op [description]
+ * @return [type]         [description]
+ */
 function read_imm($msg_id, $sub_op) 
 {
     global $cookie, $NPDS_Prefix;
@@ -256,7 +287,7 @@ function read_imm($msg_id, $sub_op)
         
         if (!sql_query($sql))
         {
-            forumerror('0021');
+            error::forumerror('0021');
         }
         
         if ($sub_op == 'reply') 

@@ -10,7 +10,6 @@
  */
 use npds\utility\crypt;
 use npds\assets\css;
-use npds\language\utf8;
 
 
 if (!function_exists('Mysql_Connexion'))
@@ -185,7 +184,7 @@ switch($apli)
       
       if (cur_charset == "utf-8")
       {
-         $mot = utf8::utf8_decode($mot);
+         $mot = utf8_decode($mot);
       }
       
       imagestring($img, $font, 1 , 1, $mot, $noir);

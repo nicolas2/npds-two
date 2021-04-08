@@ -8,6 +8,16 @@
  * @version 1.0
  * @date 02/04/2021
  */
+use npds\auth\auth;
+use npds\language\language;
+use npds\editeur\tiny; 
+use npds\utility\code;
+use npds\views\theme;
+use npds\utility\spam;
+use npds\logs\logs;
+use npds\utility\str;
+use npds\security\hack;
+use npds\mailler\mailler;
 
 
 if (!function_exists('Mysql_Connexion'))
@@ -17,7 +27,7 @@ if (!function_exists('Mysql_Connexion'))
 
 include ("publication.php");
 /*
-settype($admin,'string');
+settype($admin, 'string');
 */
 settype($user, 'string');
 
@@ -51,6 +61,10 @@ if ($mod_admin_news > 0)
     }
 }
 
+/**
+ * [defaultDisplay description]
+ * @return [type] [description]
+ */
 function defaultDisplay() 
 {
     global $NPDS_Prefix;
@@ -61,7 +75,7 @@ function defaultDisplay()
 
     if ($user) 
     {
-        $userinfo = getusrinfo($user);
+        $userinfo = auth::getusrinfo($user);
     }
 
     echo '
@@ -112,7 +126,7 @@ function defaultDisplay()
       
         if($topics != '') 
         {
-            echo aff_langue($topics); 
+            echo language::aff_langue($topics); 
         }
         else 
         {
@@ -133,8 +147,8 @@ function defaultDisplay()
             </div>
         </div>';
    
-    echo aff_editeur('story', '');
-   
+    echo tiny::aff_editeur('story', '');
+
     echo'
         <div class="form-group row">
             <label class="col-form-label col-sm-12" for="bodytext">'.translate("Texte complet").'</label>
@@ -143,7 +157,7 @@ function defaultDisplay()
             </div>
         </div>';
    
-    echo aff_editeur('bodytext', '');
+    echo tiny::aff_editeur('bodytext', '');
    
     publication('', '', '', '', 0);
    
@@ -159,12 +173,25 @@ function defaultDisplay()
     include ('footer.php');
 }
 
+/**
+ * [PreviewStory description]
+ * @param [type] $name     [description]
+ * @param [type] $subject  [description]
+ * @param [type] $story    [description]
+ * @param [type] $bodytext [description]
+ * @param [type] $topic    [description]
+ * @param [type] $dd_pub   [description]
+ * @param [type] $fd_pub   [description]
+ * @param [type] $dh_pub   [description]
+ * @param [type] $fh_pub   [description]
+ * @param [type] $epur     [description]
+ */
 function PreviewStory($name, $subject, $story, $bodytext, $topic, $dd_pub, $fd_pub, $dh_pub, $fh_pub, $epur) 
 {
     global $tipath, $NPDS_Prefix, $topictext, $topicimage;
 
-    $topiclogo = '<span class="badge badge-secondary float-right"><strong>'.aff_langue($topictext).'</strong></span>';
-   
+    $topiclogo = '<span class="badge badge-secondary float-right"><strong>'.language::aff_langue($topictext).'</strong></span>';
+
     include ('header.php');
    
     $subject = stripslashes(str_replace('"', '&quot;', (strip_tags($subject))));
@@ -193,7 +220,7 @@ function PreviewStory($name, $subject, $story, $bodytext, $topic, $dd_pub, $fd_p
 
     if ($topicimage !== '') 
     { 
-        if (!$imgtmp = theme_image('topics/'.$topicimage)) 
+        if (!$imgtmp = theme::theme_image('topics/'.$topicimage)) 
         {
             $imgtmp = $tipath.$topicimage;
         }
@@ -206,14 +233,14 @@ function PreviewStory($name, $subject, $story, $bodytext, $topic, $dd_pub, $fd_p
         }
     }
 
-    $storyX = aff_code($story);
-    $bodytextX = aff_code($bodytext);
-   
-    themepreview('<h3>'.$subject.$topiclogo.'</h3>','<div class="text-muted">'.$storyX.'</div>', $bodytextX);
+    $storyX = code::aff_code($story);
+    $bodytextX = code::aff_code($bodytext);
+
+    theme::themepreview('<h3>'.$subject.$topiclogo.'</h3>','<div class="text-muted">'.$storyX.'</div>', $bodytextX);
     
     //if ($no_img) 
     //{
-    //    echo '<strong>'.aff_langue($topictext).'</strong>';
+    //    echo '<strong>'.language::aff_langue($topictext).'</strong>';
     //}
    
     echo '
@@ -240,7 +267,7 @@ function PreviewStory($name, $subject, $story, $bodytext, $topic, $dd_pub, $fd_p
             $sel = 'selected="selected" '; 
         }
 
-        echo '<option '.$sel.' value="'.$topicid.'">'.aff_langue($topics).'</option>';
+        echo '<option '.$sel.' value="'.$topicid.'">'.language::aff_langue($topics).'</option>';
         $sel = '';
     }
 
@@ -255,7 +282,7 @@ function PreviewStory($name, $subject, $story, $bodytext, $topic, $dd_pub, $fd_p
                 <span class="help-block">'.translate("Les spécialistes peuvent utiliser du HTML, mais attention aux erreurs").'</span>
                 <textarea class="tin form-control" rows="25" name="story">'.$story.'</textarea>';
    
-    echo aff_editeur('story', '');
+    echo tiny::aff_editeur('story', '');
    
     echo '</div>
         </div>
@@ -266,11 +293,11 @@ function PreviewStory($name, $subject, $story, $bodytext, $topic, $dd_pub, $fd_p
             </div>
         </div>';
    
-    echo aff_editeur('bodytext', '');
+    echo tiny::aff_editeur('bodytext', '');
    
     publication($dd_pub, $fd_pub, $dh_pub, $fh_pub, $epur);
    
-    echo Q_spambot();
+    echo spam::Q_spambot();
    
     echo '
         <div class="form-group row">
@@ -284,6 +311,19 @@ function PreviewStory($name, $subject, $story, $bodytext, $topic, $dd_pub, $fd_p
     include ('footer.php');
 }
 
+/**
+ * [submitStory description]
+ * @param  [type] $subject      [description]
+ * @param  [type] $story        [description]
+ * @param  [type] $bodytext     [description]
+ * @param  [type] $topic        [description]
+ * @param  [type] $date_debval  [description]
+ * @param  [type] $date_finval  [description]
+ * @param  [type] $epur         [description]
+ * @param  [type] $asb_question [description]
+ * @param  [type] $asb_reponse  [description]
+ * @return [type]               [description]
+ */
 function submitStory($subject, $story, $bodytext, $topic, $date_debval, $date_finval, $epur, $asb_question, $asb_reponse) 
 {
     global $user, $EditedMessage, $anonymous, $notify, $NPDS_Prefix;
@@ -300,17 +340,17 @@ function submitStory($subject, $story, $bodytext, $topic, $date_debval, $date_fi
         $name = $anonymous;
       
         //anti_spambot
-        if (!R_spambot($asb_question, $asb_reponse, '')) 
+        if (!spam::R_spambot($asb_question, $asb_reponse, '')) 
         {
-            Ecr_Log('security', "Submit Anti-Spam : name=".$yname." / mail=".$ymail, '');
+            logs::Ecr_Log('security', "Submit Anti-Spam : name=".$yname." / mail=".$ymail, '');
             redirect_url("index.php");
             die();
         }
     }
 
-    $subject = removeHack(stripslashes(FixQuotes(str_replace("\"", "&quot;", (strip_tags($subject))))));
-    $story = removeHack(stripslashes(FixQuotes($story)));
-    $bodytext = removeHack(stripslashes(FixQuotes($bodytext)));
+    $subject = hack::remove(stripslashes(str::FixQuotes(str_replace("\"", "&quot;", (strip_tags($subject))))));
+    $story = hack::remove(stripslashes(str::FixQuotes($story)));
+    $bodytext = hack::remove(stripslashes(str::FixQuotes($bodytext)));
 
     $result = sql_query("INSERT INTO ".$NPDS_Prefix."queue VALUES (NULL, '$uid', '$name', '$subject', '$story', '$bodytext', now(), '$topic','$date_debval','$date_finval','$epur')");
    
@@ -320,7 +360,7 @@ function submitStory($subject, $story, $bodytext, $topic, $date_debval, $date_fi
         {
             global $notify_email, $notify_subject, $notify_message, $notify_from;
          
-            send_email($notify_email, $notify_subject, $notify_message, $notify_from , false, "text");
+            mailler::send_email($notify_email, $notify_subject, $notify_message, $notify_from , false, "text");
         }
 
         include ('header.php');
@@ -348,7 +388,7 @@ switch ($op)
     case translate("Prévisualiser"):
         if ($user) 
         {
-            $userinfo = getusrinfo($user);
+            $userinfo = auth::getusrinfo($user);
             $name = $userinfo['uname'];
         } 
         else

@@ -8,7 +8,11 @@
  * @version 1.0
  * @date 02/04/2021
  */
-
+use npds\auth\auth;
+use npds\views\theme;
+use npds\security\hack;
+use npds\utility\spam;
+use npds\mailler\mailler;
 
 
 if (!function_exists('Mysql_Connexion'))
@@ -17,7 +21,7 @@ if (!function_exists('Mysql_Connexion'))
 }
 
 // Make Member_list Private or not
-if (!AutoReg()) 
+if (!auth::AutoReg()) 
 {
     unset($user);
 }
@@ -54,7 +58,7 @@ function alpha()
 {
     global $sortby, $list, $gr_from_ws, $uid_from_ws;
 
-    $alphabet = array (translate("Tous"), "A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z",translate("Autres"));
+    $alphabet = array(translate("Tous"), "A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z",translate("Autres"));
     $num = count($alphabet) - 1;
     $counter = 0;
        
@@ -232,7 +236,7 @@ function avatar($user_avatar)
     }
     else 
     {
-        if ($ibid = theme_image("forum/avatar/$user_avatar"))
+        if ($ibid = theme::theme_image("forum/avatar/$user_avatar"))
         {
             $imgtmp = $ibid;
         } 
@@ -247,7 +251,7 @@ function avatar($user_avatar)
         }
     }
 
-    return ($imgtmp);
+    return $imgtmp;
 }
 
 include("header.php");
@@ -258,14 +262,14 @@ if (!isset($letter) or ($letter == ''))
     $letter = translate("Tous");
 }
 
-$letter = removeHack(stripslashes(htmlspecialchars($letter, ENT_QUOTES, cur_charset)));
+$letter = hack::remove(stripslashes(htmlspecialchars($letter, ENT_QUOTES, cur_charset)));
 
 if (!isset($sortby)) 
 {
     $sortby = 'uid DESC';
 }
 
-$sortby = removeHack($sortby);
+$sortby = hack::remove($sortby);
 
 if (!isset($page))
 {
@@ -434,9 +438,10 @@ if ( $letter != 'front' )
             $posterdata_extend = array();
             $res_id = array();
             $my_rs = '';
+            
             if (!$short_user) 
             {
-                $posterdata_extend = get_userdata_extend_from_id($temp_user['uid']);
+                $posterdata_extend = auth::get_userdata_extend_from_id($temp_user['uid']);
                 
                 include('modules/reseaux-sociaux/reseaux-sociaux.conf.php');
                 include('modules/geoloc/geoloc_conf.php');
@@ -493,7 +498,7 @@ if ( $letter != 'front' )
              
             if ($temp_user['femail'] != '')
             {
-                $useroutils .= '<a class="list-group-item text-primary text-center text-md-left" href="mailto:'.anti_spam($temp_user['femail'],1).'" target="_blank" title="'.translate("Email").'" ><i class="fa fa-at fa-2x align-middle fa-fw"></i><span class="ml-3 d-none d-md-inline">'.translate("Email").'</span></a>';
+                $useroutils .= '<a class="list-group-item text-primary text-center text-md-left" href="mailto:'.spam::anti_spam($temp_user['femail'],1).'" target="_blank" title="'.translate("Email").'" ><i class="fa fa-at fa-2x align-middle fa-fw"></i><span class="ml-3 d-none d-md-inline">'.translate("Email").'</span></a>';
             }
              
             if ($temp_user['url'] != '')
@@ -564,24 +569,24 @@ if ( $letter != 'front' )
                 {
                     if ($admin) 
                     {
-                        if(isbadmailuser($temp_user['uid']) === true)
+                        if(mailler::isbadmailuser($temp_user['uid']) === true)
                         {
                             echo '<td class="table-danger"><small>'.$temp_user['email'].'</small></td>';
                         }
                         else
                         {
-                            echo '<td><small>'.preg_anti_spam($temp_user['email']).'</small></td>';
+                            echo '<td><small>'.spam::preg_anti_spam($temp_user['email']).'</small></td>';
                         }
                     } 
                     else 
                     {
                         if ($temp_user['user_viewemail']) 
                         {
-                            echo '<td><small>'.preg_anti_spam($temp_user['email']).'</small></td>';
+                            echo '<td><small>'.spam::preg_anti_spam($temp_user['email']).'</small></td>';
                         } 
                         else 
                         {
-                            echo '<td><small>'.substr($temp_user['femail'],0,strpos($temp_user['femail'],"@")).'</small></td>';
+                            echo '<td><small>'.substr($temp_user['femail'], 0, strpos($temp_user['femail'], "@")).'</small></td>';
                         }
                     }
                 } 

@@ -8,6 +8,14 @@
  * @version 1.0
  * @date 02/04/2021
  */
+use npds\cache\cacheManager;
+use npds\cache\cacheEmpty;
+use npds\cache\cache;
+use npds\error\error;
+use npds\forum\forumauth;
+use npds\forum\forumupload;
+use npds\utility\spam;
+
 
 if (!function_exists('Mysql_Connexion'))
 {
@@ -20,7 +28,7 @@ if ($SuperCache)
 }
 else
 {
-    $cache_obj = new SuperCacheEmpty();
+    $cache_obj = new cacheEmpty();
 }
 
 include('auth.php');
@@ -73,21 +81,21 @@ else
          
         settype($forum, 'integer');
          
-        $rowQ1 = Q_Select ("SELECT forum_name, forum_moderator, forum_type, forum_pass, forum_access, arbre FROM ".$NPDS_Prefix."forums WHERE forum_id = '$forum'", 3600);
+        $rowQ1 = cache::Q_Select("SELECT forum_name, forum_moderator, forum_type, forum_pass, forum_access, arbre FROM ".$NPDS_Prefix."forums WHERE forum_id = '$forum'", 3600);
          
         if (!$rowQ1)
         {
-            forumerror('0001');
+            error::forumerror('0001');
         }
          
         $myrow = $rowQ1[0];
-        $moderator = explode(' ', get_moderator($myrow['forum_moderator']));
+        $moderator = explode(' ', forumauth::get_moderator($myrow['forum_moderator']));
          
         for ($i = 0; $i < count($moderator); $i++) 
         {
             if (($userdata[1] == $moderator[$i])) 
             {
-                if (user_is_moderator($userdata[0], $userdata[2], $myrow['forum_access']))
+                if (forumauth::user_is_moderator($userdata[0], $userdata[2], $myrow['forum_access']))
                 {
                     $Mmod = true;
                 }
@@ -98,7 +106,7 @@ else
 
     if ((!$Mmod) and ($adminforum == 0))
     {
-        forumerror('0007');
+        error::forumerror('0007');
     }
 //}
   
@@ -108,21 +116,21 @@ if ((isset($submit)) and ($mode == 'move'))
       
     if (!$r = sql_query($sql))
     {
-        forumerror('0010');
+        error::forumerror('0010');
     }
       
     $sql = "UPDATE ".$NPDS_Prefix."posts SET forum_id='$newforum' WHERE topic_id='$topic' AND forum_id='$forum'";
       
     if (!$r = sql_query($sql))
     {
-        forumerror('0010');
+        error::forumerror('0010');
     }
       
     $sql = "DELETE FROM ".$NPDS_Prefix."forum_read where topicid='$topic'";
       
     if (!$r = sql_query($sql))
     {
-        forumerror('0001');
+        error::forumerror('0001');
     }
       
     $sql = "UPDATE $upload_table SET forum_id='$newforum' WHERE apli='forum_npds' AND topic_id='$topic' AND forum_id='$forum'";
@@ -148,12 +156,12 @@ if ((isset($submit)) and ($mode == 'move'))
     <hr /><a href="'.$url_ret.'?topic='.$topic.'&amp;forum='.$newforum.'" class="alert-link">'.translate("Cliquez ici pour voir le nouveau sujet.").'</a><br /><a href="forum.php" class="alert-link">'.translate("Cliquez ici pour revenir à l'index des Forums.").'</a>
     </div>';
       
-    Q_Clean();
+    cache::Q_Clean();
     include("footer.php");
 } 
 else 
 {
-    if ((isset($Mmod) and $Mmod===true) or ($adminforum==1)) 
+    if ((isset($Mmod) and $Mmod === true) or ($adminforum == 1)) 
     {
         switch ($mode) 
         {
@@ -213,24 +221,24 @@ else
                 
                 if (!$result = sql_query($sql))
                 {
-                    forumerror('0009');
+                    error::forumerror('0009');
                 }
                
                 $sql = "DELETE FROM ".$NPDS_Prefix."forumtopics WHERE topic_id='$topic'";
                
                 if (!$result = sql_query($sql))
                 {
-                    forumerror('0010');
+                    error::forumerror('0010');
                 }
                
                 $sql = "DELETE FROM ".$NPDS_Prefix."forum_read WHERE topicid='$topic'";
                 
                 if (!$r = sql_query($sql))
                 {
-                  forumerror('0001');
+                    error::forumerror('0001');
                 }
                
-                control_efface_post ("forum_npds", "",$topic,"");
+                forumupload::control_efface_post("forum_npds", "",$topic,"");
                 header("location: viewforum.php?forum=$forum");
             break;
 
@@ -239,7 +247,7 @@ else
                
                 if (!$r = sql_query($sql))
                 {
-                    forumerror('0011');
+                    error::forumerror('0011');
                 }
                
                 header("location: $url_ret?topic=$topic&forum=$forum");
@@ -252,11 +260,11 @@ else
                
                 $topic_title = str_replace("[".translate("Résolu")."] - ", "", $r['topic_title']);
                
-                $sql = "UPDATE ".$NPDS_Prefix."forumtopics SET topic_status = '0', topic_first='1', topic_title='".addslashes ($topic_title)."' WHERE topic_id = '$topic'";
+                $sql = "UPDATE ".$NPDS_Prefix."forumtopics SET topic_status = '0', topic_first='1', topic_title='".addslashes($topic_title)."' WHERE topic_id = '$topic'";
                
                 if (!$r = sql_query($sql))
                 {
-                    forumerror('0012');
+                    error::forumerror('0012');
                 }
                
                 header("location: $url_ret?topic=$topic&forum=$forum");
@@ -267,7 +275,7 @@ else
                
                 if (!$r = sql_query($sql))
                 {
-                    forumerror('0011');
+                    error::forumerror('0011');
                 }
                
                 header("location: $url_ret?topic=$topic&forum=$forum");
@@ -281,12 +289,12 @@ else
                
                 if (!$r = sql_query($sql))
                 {
-                    forumerror('0013');
+                    error::forumerror('0013');
                 }
                
                 if (!$m = sql_fetch_assoc($r))
                 {
-                    forumerror('0014');
+                    error::forumerror('0014');
                 }
                
                 echo '
@@ -316,15 +324,15 @@ else
                
                 if (!$r = sql_query($sql))
                 {
-                    forumerror('0013');
+                    error::forumerror('0013');
                 }
                
                 if (!$m = sql_fetch_assoc($r))
                 {
-                    forumerror('0014');
+                    error::forumerror('0014');
                 }
                
-                L_spambot($m['poster_ip'],"ban");
+                spam::L_spambot($m['poster_ip'],"ban");
                 header("location: $url_ret?topic=$topic&forum=$forum");
             break;
 

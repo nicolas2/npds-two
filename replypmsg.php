@@ -8,6 +8,19 @@
  * @version 1.0
  * @date 02/04/2021
  */
+use npds\cache\cacheManager;
+use npds\cache\cacheEmpty;
+use npds\auth\auth;
+use npds\error\error;
+use npds\security\hack;
+use npds\utility\code;
+use npds\pixels\pixel;
+use npds\media\video;
+use npds\forum\forumaddon;
+use npds\mailler\mailler;
+use npds\assets\css;
+use npds\assets\java;
+use npds\assets\auto;
 
 
 if (!function_exists('Mysql_Connexion'))
@@ -21,7 +34,7 @@ if ($SuperCache)
 }
 else
 {
-    $cache_obj = new SuperCacheEmpty();
+    $cache_obj = new cacheEmpty();
 }
 
 include('auth.php');
@@ -57,29 +70,29 @@ else
 {
     $userX = base64_decode($user);
     $userdataX = explode(':', $userX);
-    $userdata = get_userdata($userdataX[1]);
-    $usermore = get_userdata_from_id($cookie[0]);
+    $userdata = auth::get_userdata($userdataX[1]);
+    $usermore = auth::get_userdata_from_id($cookie[0]);
 
     if ($submitS) 
     {
         if ($subject == '')
         {
-            forumerror('0017');
+            error::forumerror('0017');
         }
       
-        $subject = removeHack($subject);
+        $subject = hack::remove($subject);
 
         if ($smilies) 
         {
             if ($image_subject == '' )
             {
-                forumerror('0018');
+                error::forumerror('0018');
             }
         }
 
         if ($message == '')
         {
-            forumerror('0019');
+            error::forumerror('0019');
         }
 
         if ($allow_html == 0 || isset($html)) 
@@ -92,16 +105,16 @@ else
             $message .= '<br /><br />'.$userdata['user_sig'];
         }
       
-        $message = aff_code($message);
+        $message = code::aff_code($message);
         $message = str_replace("\n", '<br />', $message);
-      
+
         if ($allow_bbcode)
         {
-            $message = smile($message);
+            $message = pixel::smile($message);
         }
       
-        $message = make_clickable($message);
-        $message = removeHack(addslashes($message));
+        $message = forumaddon::make_clickable($message);
+        $message = hack::remove(addslashes($message));
         $time = date(translate("dateinternal"), time()+((integer)$gmt*3600));
 
         include_once("language/lang-multi.php");
@@ -121,7 +134,7 @@ else
                
                     if(!$result = sql_query($sql))
                     {
-                        forumerror('0020');
+                        error::forumerror('0020');
                     }
                
                     if ($copie) 
@@ -131,7 +144,7 @@ else
                   
                         if (!$result = sql_query($sql))
                         {
-                            forumerror('0020');
+                            error::forumerror('0020');
                         }
                     }
 
@@ -145,7 +158,7 @@ else
                   
                         include("signat.php");
                   
-                        copy_to_email($to_userid, $sujet, stripslashes($message));
+                        mailler::copy_to_email($to_userid, $sujet, stripslashes($message));
                         $message = $old_message; // what this
                     }
                 }
@@ -158,7 +171,7 @@ else
 
             if (($to_userid == '') or ($to_userid == 1))
             {
-                forumerror('0016');
+                error::forumerror('0016');
             }
             else 
             {
@@ -167,7 +180,7 @@ else
             
                 if (!$result = sql_query($sql))
                 {
-                    forumerror('0020');
+                    error::forumerror('0020');
                 }
             
                 if ($copie) 
@@ -177,7 +190,7 @@ else
                
                     if (!$result = sql_query($sql))
                     {
-                        forumerror('0020');
+                        error::forumerror('0020');
                     }
                 }
 
@@ -189,7 +202,7 @@ else
                     $message = translate_ml($user_langue, "Bonjour").'<br />'.translate_ml($user_langue, "Vous avez un nouveau message.").'<br />'.$time.'<br /><br /><b>'.$subject.'</b><br /><br /><a href="'.$nuke_url.'/viewpmsg.php">'.translate_ml($user_langue, "Cliquez ici pour lire votre nouveau message.").'</a><br /><br />';
                
                     include("signat.php");
-                    copy_to_email($to_userid, $sujet, stripslashes($message));
+                    mailler::copy_to_email($to_userid, $sujet, stripslashes($message));
                 }
             }
         }
@@ -226,7 +239,7 @@ else
          
             if (!sql_query($sql))
             {
-                forumerror('0021');
+                error::forumerror('0021');
             }
             else
             {
@@ -259,7 +272,7 @@ else
       
         if (!sql_query($sql))
         {
-            forumerror('0021');
+            error::forumerror('0021');
         }
         else
         {
@@ -282,7 +295,7 @@ else
 
         if (!$result)
         {
-            forumerror('0005');
+            error::forumerror('0005');
         }
 
         header("Location: viewpmsg.php");
@@ -313,8 +326,8 @@ else
         include("config/meta.php");
         include("lib/include/header_before.inc");
         include("lib/include/header_head.inc");
-      
-        echo import_css($tmp_theme, $language, $site_font, '', '');
+
+        echo css::import_css($tmp_theme, $language, $site_font, '', '');
         echo '
         </head>
         <body class="my-4 mx-4">';
@@ -338,31 +351,31 @@ else
          
             if (!$result)
             {
-                forumerror('0022');
+                error::forumerror('0022');
             }
          
             $row = sql_fetch_assoc($result);
          
             if (!$row)
             {
-                forumerror('0023');
+                error::forumerror('0023');
             }
          
-            $fromuserdata = get_userdata_from_id($row['from_userid']);
+            $fromuserdata = auth::get_userdata_from_id($row['from_userid']);
          
             if(array_key_exists(0, $fromuserdata)) 
             {
                 if ($fromuserdata[0] == 1)
                 {
-                    forumerror('0101');
+                    error::forumerror('0101');
                 }
             }
 
-            $touserdata = get_userdata_from_id($row['to_userid']);
+            $touserdata = auth::get_userdata_from_id($row['to_userid']);
          
             if (($user) and ($userdata['uid'] != $touserdata['uid']))
             {
-                forumerror('0024');
+                error::forumerror('0024');
             }
         }
 
@@ -393,16 +406,16 @@ else
                 $Xmessage .= '<div class="n-signature">'.nl2br($userdata['user_sig']).'</div>';
             }
 
-            $Xmessage = aff_code($Xmessage);
+            $Xmessage = code::aff_code($Xmessage);
             $Xmessage = str_replace("\n", '<br />', $Xmessage);
          
             if ($allow_bbcode) 
             {
-                $Xmessage = smilie($Xmessage);
-                $Xmessage = aff_video_yt($Xmessage);
+                $Xmessage = pixel::smilie($Xmessage);
+                $Xmessage = video::aff_video_yt($Xmessage);
             }
 
-            $Xmessage = make_clickable($Xmessage);
+            $Xmessage = forumaddon::make_clickable($Xmessage);
             echo $Xmessage;
             echo '<hr />';
         }
@@ -438,7 +451,7 @@ else
 
         if (!$reply) 
         {
-            $carnet = JavaPopUp("carnet.php","CARNET", 300, 350);
+            $carnet = java::JavaPopUp("carnet.php","CARNET", 300, 350);
             $carnet = '<a href="javascript:void(0);" onclick="window.open('.$carnet.'); ">';
             echo $carnet.'<span class="small">'.translate("Carnet d'adresses").'</span></a>';
         }
@@ -504,7 +517,7 @@ else
                 <label class="col-form-label col-sm-12">'.translate("Icone du message").'</label>
                 <div class="col-sm-12">
                     <div class="border rounded pt-3 px-2 n-fond_subject d-flex flex-row flex-wrap">
-                        '.emotion_add($image_subject).'
+                        '.pixel::emotion_add($image_subject).'
                     </div>
                 </div>
             </div>';
@@ -519,7 +532,7 @@ else
          
         if ($allow_html == 1)
         {
-            echo '<span class="text-success float-right" title="HTML '.translate("Activé").'" data-toggle="tooltip"><i class="fa fa-code fa-lg"></i></span>'.HTML_Add();
+            echo '<span class="text-success float-right" title="HTML '.translate("Activé").'" data-toggle="tooltip"><i class="fa fa-code fa-lg"></i></span>'.forumaddon::HTML_Add();
         }
         else
         {
@@ -540,7 +553,7 @@ else
             if ($result = sql_query($sql)) 
             {
                 $row = sql_fetch_assoc($result);
-                $text = smile($row['msg_text']);
+                $text = pixel::smile($row['msg_text']);
                 $text = str_replace("<br />", "\n", $text);
                 $text = str_replace("<BR />", "\n", $text);
                 $text = str_replace("<BR>", "\n", $text);
@@ -594,7 +607,7 @@ else
          
         if ($allow_bbcode)
         {
-            putitems('ta_replypm');
+            pixel::putitems('ta_replypm');
         }
          
         echo '
@@ -688,7 +701,7 @@ else
         {
             echo '
             <input class="btn btn-danger ml-2" type="submit" name="cancel" value="'.translate("Annuler l'envoi").'" />';
-            echo auto_complete('membre', 'uname', 'users', 'to_user', '86400');
+            echo auto::auto_complete('membre', 'uname', 'users', 'to_user', '86400');
         }
          
         echo '
@@ -700,6 +713,6 @@ else
             var formulid=["pmessage"]
             inpandfieldlen("subject",100);';
 
-        adminfoot('', '', $arg1, 'foo');
+        css::adminfoot('', '', $arg1, 'foo');
     }
 }

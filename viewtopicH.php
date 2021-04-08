@@ -8,6 +8,19 @@
  * @version 1.0
  * @date 02/04/2021
  */
+use npds\cache\cacheManager;
+use npds\cache\cacheEmpty;
+use npds\cache\cache;
+use npds\error\error;
+use npds\groupe\groupe;
+use npds\forum\forumauth;
+use npds\forum\forumposts;
+use npds\auth\auth;
+use npds\utility\spam;
+use npds\views\theme;
+use npds\date\date;
+use npds\pixels\pixel;
+use npds\media\video;
 
 
 if (!function_exists('Mysql_Connexion'))
@@ -21,7 +34,7 @@ if ($SuperCache)
 }
 else
 {
-    $cache_obj = new SuperCacheEmpty();
+    $cache_obj = new cacheEmpty();
 }
 
 include('auth.php');
@@ -33,21 +46,21 @@ if ($allow_upload_forum)
     include("modules/upload/upload_forum.php");
 }
 
-$rowQ1 = Q_Select ("SELECT forum_id FROM ".$NPDS_Prefix."forumtopics WHERE topic_id='$topic'", 3600);
+$rowQ1 = cache::Q_Select("SELECT forum_id FROM ".$NPDS_Prefix."forumtopics WHERE topic_id='$topic'", 3600);
 
 if (!$rowQ1)
 {
-    forumerror('0001');
+    error::forumerror('0001');
 }
 
 $myrow = $rowQ1[0];
 $forum = $myrow['forum_id'];
 
-$rowQ1 = Q_Select ("SELECT forum_name, forum_moderator, forum_type, forum_pass, forum_access, arbre FROM ".$NPDS_Prefix."forums WHERE forum_id = '$forum'", 3600);
+$rowQ1 = cache::Q_Select("SELECT forum_name, forum_moderator, forum_type, forum_pass, forum_access, arbre FROM ".$NPDS_Prefix."forums WHERE forum_id = '$forum'", 3600);
 
 if (!$rowQ1)
 {
-    forumerror('0001');
+    error::forumerror('0001');
 }
 
 $myrow = $rowQ1[0];
@@ -64,8 +77,8 @@ if (($forum_type == 1) and ($Forum_passwd != $myrow['forum_pass']))
 if (($forum_type == 5) or ($forum_type == 7)) 
 {
     $ok_affiche = false;
-    $tab_groupe = valid_group($user);
-    $ok_affiche = groupe_forum($myrow['forum_pass'], $tab_groupe);
+    $tab_groupe = groupe::valid_group($user);
+    $ok_affiche = groupe::groupe_forum($myrow['forum_pass'], $tab_groupe);
    
     if (!$ok_affiche)
     {
@@ -85,7 +98,7 @@ if (isset($user))
     $userdata = explode(':', $userX);
 }
 
-$moderator = get_moderator($mod);
+$moderator = forumauth::get_moderator($mod);
 $moderator = explode(' ', $moderator);
 $Mmod = false;
 
@@ -102,7 +115,7 @@ if (isset($user))
 }
 
 $sql = "SELECT topic_title, topic_status, topic_poster FROM ".$NPDS_Prefix."forumtopics WHERE topic_id = '$topic'";
-$total = get_total_posts($forum, $topic, "topic", $Mmod);
+$total = forumposts::get_total_posts($forum, $topic, "topic", $Mmod);
 
 if ($total > $posts_per_page) 
 {
@@ -117,7 +130,7 @@ if ($total > $posts_per_page)
 
 if (!$result = sql_query($sql))
 {
-    forumerror('0001');
+    error::forumerror('0001');
 }
 
 $myrow = sql_fetch_assoc($result);
@@ -125,10 +138,17 @@ $topic_subject = stripslashes($myrow['topic_title']);
 $lock_state = $myrow['topic_status'];
 $original_poster = $myrow['topic_poster'];
 
-$contributeurs = get_contributeurs($forum, $topic);
+$contributeurs = forumposts::get_contributeurs($forum, $topic);
 $contributeurs = explode(' ', $contributeurs);
 $total_contributeurs = count($contributeurs);
 
+/**
+ * [maketree description]
+ * @param  [type] $rootcatid [description]
+ * @param  [type] $sql       [description]
+ * @param  [type] $maxlevel  [description]
+ * @return [type]            [description]
+ */
 function maketree($rootcatid, $sql, $maxlevel)
 {
 global $idtog,$clas;
@@ -150,6 +170,17 @@ global $idtog,$clas;
     return $resultX;
 }
 
+/**
+ * [makebranch description]
+ * @param  [type] $parcat      [description]
+ * @param  [type] $table       [description]
+ * @param  [type] $level       [description]
+ * @param  [type] $maxlevel    [description]
+ * @param  [type] $max_post_id [description]
+ * @param  [type] $clas        [description]
+ * @param  [type] $idtog       [description]
+ * @return [type]              [description]
+ */
 function makebranch($parcat, $table, $level, $maxlevel, $max_post_id, $clas, $idtog) 
 {
     global $imgtmpPI, $imgtmpNE, $user;
@@ -187,7 +218,7 @@ function makebranch($parcat, $table, $level, $maxlevel, $max_post_id, $clas, $id
             $idtog = ($level+1).($count+1);
         }
 
-        $posterdata = get_userdata_from_id($myrow['poster_id']);
+        $posterdata = auth::get_userdata_from_id($myrow['poster_id']);
       
         if($myrow['poster_id'] !== '0') 
         {
@@ -199,12 +230,12 @@ function makebranch($parcat, $table, $level, $maxlevel, $max_post_id, $clas, $id
          
             if (!$short_user) 
             {
-                $posterdata_extend = get_userdata_extend_from_id($myrow['poster_id']);
+                $posterdata_extend = auth::get_userdata_extend_from_id($myrow['poster_id']);
             
                 include('modules/reseaux-sociaux/reseaux-sociaux.conf.php');
                 include('modules/geoloc/geoloc_conf.php');
             
-                if($user or autorisation(-127)) 
+                if($user or auth::autorisation(-127)) 
                 {
                     if (array_key_exists('M2', $posterdata_extend)) 
                     {
@@ -256,7 +287,7 @@ function makebranch($parcat, $table, $level, $maxlevel, $max_post_id, $clas, $id
 
             $useroutils = '';
          
-            if($user or autorisation(-127)) 
+            if($user or auth::autorisation(-127)) 
             {
                 if ($posterdata['uid'] != 1 and $posterdata['uid'] != '')
                 {
@@ -270,7 +301,7 @@ function makebranch($parcat, $table, $level, $maxlevel, $max_post_id, $clas, $id
             
                 if ($posterdata['femail'] != '')
                 {
-                    $useroutils .= '<a class="list-group-item list-group-item-action text-primary text-center text-md-left" href="mailto:'.anti_spam($posterdata['femail'],1).'" target="_blank" title="'.translate("Email").'" data-toggle="tooltip"><i class="fa fa-at fa-2x align-middle fa-fw"></i><span class="ml-3 d-none d-md-inline">'.translate("Email").'</span></a>';
+                    $useroutils .= '<a class="list-group-item list-group-item-action text-primary text-center text-md-left" href="mailto:'.spam::anti_spam($posterdata['femail'],1).'" target="_blank" title="'.translate("Email").'" data-toggle="tooltip"><i class="fa fa-at fa-2x align-middle fa-fw"></i><span class="ml-3 d-none d-md-inline">'.translate("Email").'</span></a>';
                 }
             
                 if ($myrow['poster_id'] != 1 and array_key_exists($ch_lat, $posterdata_extend))
@@ -338,7 +369,7 @@ function makebranch($parcat, $table, $level, $maxlevel, $max_post_id, $clas, $id
                     }
                     else 
                     {
-                        if ($ibid = theme_image("forum/avatar/".$posterdata['user_avatar'])) 
+                        if ($ibid = theme::theme_image("forum/avatar/".$posterdata['user_avatar'])) 
                         {
                             $imgtmp = $ibid; 
                         } 
@@ -350,7 +381,7 @@ function makebranch($parcat, $table, $level, $maxlevel, $max_post_id, $clas, $id
                 }
 
                 echo '
-                <a style="position:absolute; top:1rem;" tabindex="0" data-toggle="popover" data-trigger="focus" data-html="true" data-title="'.$posterdata['uname'].'" data-content=\'<div class="my-2 border rounded p-2">'.member_qualif($posterdata['uname'], $posts,$posterdata['rang']).'</div><div class="list-group mb-3 text-center">'.$useroutils.'</div><div class="mx-auto text-center" style="max-width:170px;">'.$my_rs.'</div>\'><img class=" btn-outline-primary img-thumbnail img-fluid n-ava" src="'.$imgtmp.'" alt="'.$posterdata['uname'].'" /></a><span style="position:absolute; left:6em;" class="text-muted"><strong>'.$posterdata['uname'].'</strong></span>';
+                <a style="position:absolute; top:1rem;" tabindex="0" data-toggle="popover" data-trigger="focus" data-html="true" data-title="'.$posterdata['uname'].'" data-content=\'<div class="my-2 border rounded p-2">'.forumauth::member_qualif($posterdata['uname'], $posts,$posterdata['rang']).'</div><div class="list-group mb-3 text-center">'.$useroutils.'</div><div class="mx-auto text-center" style="max-width:170px;">'.$my_rs.'</div>\'><img class=" btn-outline-primary img-thumbnail img-fluid n-ava" src="'.$imgtmp.'" alt="'.$posterdata['uname'].'" /></a><span style="position:absolute; left:6em;" class="text-muted"><strong>'.$posterdata['uname'].'</strong></span>';
             } 
             else 
             {
@@ -374,7 +405,7 @@ function makebranch($parcat, $table, $level, $maxlevel, $max_post_id, $clas, $id
          
         if ($myrow['image'] != '') 
         {
-            if ($ibid = theme_image("forum/subject/".$myrow['image'])) 
+            if ($ibid = theme::theme_image("forum/subject/".$myrow['image'])) 
             {
                 $imgtmp = $ibid;
             } 
@@ -398,8 +429,8 @@ function makebranch($parcat, $table, $level, $maxlevel, $max_post_id, $clas, $id
             <div class="card-body">
                 <div class="card-text pt-2">';
       
-        $date_post = convertdateTOtimestamp($myrow['post_time']);
-      
+        $date_post = date::convertdateTOtimestamp($myrow['post_time']);
+
         if ($last_read != '') 
         {
             if (($last_read <= $date_post) AND $userdata[3] != '' AND $last_read != "0" AND $userdata[0] != $myrow['poster_id']) 
@@ -415,8 +446,8 @@ function makebranch($parcat, $table, $level, $maxlevel, $max_post_id, $clas, $id
       
         if (($allow_bbcode) and ($forum_type != 6) and ($forum_type != 5)) 
         {
-            $message = smilie($message);
-            $message = aff_video_yt($message);
+            $message = pixel::smilie($message);
+            $message = video::aff_video_yt($message);
         }
 
         if (($forum_type == '6') or ($forum_type == '5'))
@@ -446,7 +477,7 @@ function makebranch($parcat, $table, $level, $maxlevel, $max_post_id, $clas, $id
             </div>
             <div class="card-footer">
                 <div class="row">
-                    <div class=" col-sm-6 text-muted small">'.post_convertdate($date_post).'</div>
+                    <div class=" col-sm-6 text-muted small">'.date::post_convertdate($date_post).'</div>
                     <div class=" col-sm-6 text-right">';
       
         if ($forum_access != 9) 
@@ -526,6 +557,15 @@ function makebranch($parcat, $table, $level, $maxlevel, $max_post_id, $clas, $id
     return $result;
 }
 
+/**
+ * [aff_pub description]
+ * @param  [type] $lock_state [description]
+ * @param  [type] $topic      [description]
+ * @param  [type] $forum      [description]
+ * @param  [type] $post       [description]
+ * @param  [type] $bouton     [description]
+ * @return [type]             [description]
+ */
 function aff_pub($lock_state, $topic, $forum, $post, $bouton) 
 {
     global $language;
@@ -547,6 +587,14 @@ function aff_pub($lock_state, $topic, $forum, $post, $bouton)
     return $ibid;
 }
 
+/**
+ * [aff_pub_in description]
+ * @param  [type] $lock_state [description]
+ * @param  [type] $topic      [description]
+ * @param  [type] $forum      [description]
+ * @param  [type] $post       [description]
+ * @return [type]             [description]
+ */
 function aff_pub_in($lock_state, $topic, $forum, $post) 
 {
     global $language;
@@ -561,7 +609,7 @@ function aff_pub_in($lock_state, $topic, $forum, $post)
     return $ibid;
 }
 
-$contributeurs = get_contributeurs($forum, $topic);
+$contributeurs = forumposts::get_contributeurs($forum, $topic);
 $contributeurs = explode(' ', $contributeurs);
 $total_contributeurs = count($contributeurs);
 
@@ -589,7 +637,7 @@ if ($forum_access != 9)
     } 
     elseif ($forum_access == 2) 
     {
-        if (user_is_moderator($userdata[0], $userdata[2], $forum_access)) 
+        if (forumauth::user_is_moderator($userdata[0], $userdata[2], $forum_access)) 
         {
             $allow_to_post = true;
         }
@@ -617,7 +665,7 @@ if ($forum_access != 9)
    
 for ($i = 0; $i < $total_contributeurs; $i++) 
 {
-    $contri = get_userdata_from_id($contributeurs[$i]);
+    $contri = auth::get_userdata_from_id($contributeurs[$i]);
     if($contributeurs[$i] !== '0') 
     {
         if ($contri['user_avatar'] != '') 
@@ -628,7 +676,7 @@ for ($i = 0; $i < $total_contributeurs; $i++)
             } 
             else 
             {
-                if ($ibid = theme_image("forum/avatar/".$contri['user_avatar'])) 
+                if ($ibid = theme::theme_image("forum/avatar/".$contri['user_avatar'])) 
                 {
                     $imgtmp = $ibid;
                 } 
@@ -659,7 +707,7 @@ echo '
    
 for ($i = 0; $i < $ibidcountmod; $i++) 
 {
-    $modera = get_userdata($moderator[$i]);
+    $modera = auth::get_userdata($moderator[$i]);
     if ($modera['user_avatar'] != '') 
     {
         if (stristr($modera['user_avatar'],"users_private"))
@@ -668,7 +716,7 @@ for ($i = 0; $i < $ibidcountmod; $i++)
         }
         else 
         {
-            if ($ibid = theme_image("forum/avatar/".$modera['user_avatar'])) 
+            if ($ibid = theme::theme_image("forum/avatar/".$modera['user_avatar'])) 
             {
                 $imgtmp = $ibid;
             } 
@@ -711,7 +759,7 @@ if (isset($user))
     }
 }
 
-if ($ibid = theme_image("forum/icons/posticon.gif")) 
+if ($ibid = theme::theme_image("forum/icons/posticon.gif")) 
 {
     $imgtmpPI = $ibid;
 } 
@@ -720,7 +768,7 @@ else
     $imgtmpPI = "assets/images/forum/icons/posticon.gif";
 }
    
-if ($ibid = theme_image("forum/icons/new.gif")) 
+if ($ibid = theme::theme_image("forum/icons/new.gif")) 
 {
     $imgtmpNE = $ibid;
 } 

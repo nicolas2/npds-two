@@ -8,6 +8,10 @@
  * @version 1.0
  * @date 02/04/2021
  */
+use npds\utility\code;
+use npds\language\language;
+use npde\views\theme;
+
 
 /**
  * [code_aff description]
@@ -21,12 +25,12 @@ function code_aff($subject, $story, $bodytext, $notes)
 {
     global $local_user_language;
     
-    $subjectX = aff_code(preview_local_langue($local_user_language, $subject));
-    $storyX = aff_code(preview_local_langue($local_user_language, $story));
-    $bodytextX = aff_code(preview_local_langue($local_user_language, $bodytext));
-    $notesX = aff_code(preview_local_langue($local_user_language, $notes));
+    $subjectX = code::aff_code(language::preview_local_langue($local_user_language, $subject));
+    $storyX = code::aff_code(language::preview_local_langue($local_user_language, $story));
+    $bodytextX = code::aff_code(language::preview_local_langue($local_user_language, $bodytext));
+    $notesX = code::aff_code(language::preview_local_langue($local_user_language, $notes));
     
-    themepreview($subjectX, $storyX, $bodytextX, $notesX);
+    theme::themepreview($subjectX, $storyX, $bodytextX, $notesX);
 }
 
 /**
@@ -174,7 +178,7 @@ function publication($dd_pub, $fd_pub, $dh_pub, $fh_pub, $epur)
         </div>
     </div>
     <script type="text/javascript" src="assets/shared/flatpickr/dist/flatpickr.min.js"></script>
-    <script type="text/javascript" src="assets/shared/flatpickr/dist/l10n/'.language_iso(1,'','').'.js"></script>
+    <script type="text/javascript" src="assets/shared/flatpickr/dist/l10n/'.language::language_iso(1, '', '').'.js"></script>
     <script type="text/javascript" src="assets/js/bootstrap-clockpicker.min.js" async="async"></script>
     <script type="text/javascript">
         //<![CDATA[
@@ -191,7 +195,7 @@ function publication($dd_pub, $fd_pub, $dh_pub, $fh_pub, $epur)
                 altInput: true,
                 altFormat: "l j F Y",
                 dateFormat:"Y-m-d",
-                "locale": "'.language_iso(1,'','').'",
+                "locale": "'.language::language_iso(1, '', '').'",
             });
         //]]>
     </script>

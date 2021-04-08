@@ -16,7 +16,10 @@ use npds\utility\spam;
 use npds\utility\str;
 use npds\utility\crypt;
 use npds\auth\auth;
-use npds\view\theme;
+use npds\views\theme;
+use npds\cache\cache;
+use npds\users\online;
+use npds\assets\java;
 
 
 /*
@@ -37,7 +40,7 @@ class groupe {
         if ($xuser) 
         {    
             $userdata = explode(':', base64_decode($xuser));
-            $user_temp = Q_select("SELECT groupe FROM ".$NPDS_Prefix."users_status WHERE uid='$userdata[0]'",3600);
+            $user_temp = cache::Q_select("SELECT groupe FROM ".$NPDS_Prefix."users_status WHERE uid='$userdata[0]'",3600);
             
             $groupe = $user_temp[0];
             $tab_groupe = explode(',', $groupe['groupe']);
@@ -175,7 +178,7 @@ class groupe {
         <div class="my-4">
             <a data-toggle="collapse" data-target="#lst_mb_ws_'.$gr.'" class="text-primary" id="show_lst_mb_ws_'.$gr.'" title="'.translate("Déplier la liste").'"><i id="i_lst_mb_ws_'.$gr.'" class="toggle-icon fa fa-caret-down fa-2x" >&nbsp;</i></a><i class="fa fa-users fa-2x text-muted ml-3 align-middle" title="'.translate("Liste des membres du groupe.").'" data-toggle="tooltip"></i>&nbsp;<a href="memberslist.php?gr_from_ws='.$gr.'" class="text-uppercase">'.translate("Membres").'</a><span class="badge badge-secondary float-right">'.$nb_mb.'</span>';
            
-        $tab = online_members();
+        $tab = online::online_members();
         $li_mb .= '
         <ul id="lst_mb_ws_'.$gr.'" class=" ul_bloc_ws collapse ">';
            
@@ -190,7 +193,7 @@ class groupe {
             {
                 include_once('functions.php');
                 
-                $posterdata_extend = get_userdata_extend_from_id($uid);
+                $posterdata_extend = auth::get_userdata_extend_from_id($uid);
                 
                 include('modules/reseaux-sociaux/reseaux-sociaux.conf.php');
                 
@@ -461,7 +464,7 @@ class groupe {
            
         if ($rsql['groupe_chat'] == 1) 
         {
-            $PopUp = JavaPopUp("chat.php?id=$gr&amp;auto=".crypt::encrypt(serialize ($gr)), "chat".$gr, 380, 480);
+            $PopUp = java::JavaPopUp("chat.php?id=$gr&amp;auto=".crypt::encrypt(serialize ($gr)), "chat".$gr, 380, 480);
             
             if (array_key_exists('chat_info_'.$gr, $_COOKIE))
             {

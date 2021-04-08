@@ -25,7 +25,7 @@ class extract {
      */
     public static function user() 
     {
-        $user = cookie::get('user');
+        $user = cookie::get('user', null);
 
         if (isset($user)) 
         {
@@ -34,7 +34,7 @@ class extract {
             return base64_encode(str_replace("%3A", ":", urlencode(base64_decode($user))));
         }
 
-        return;
+        return null;
     }
     
     /**
@@ -43,7 +43,7 @@ class extract {
      */
     public static function user_language() 
     {
-        $user_language = cookie::get('user_language');
+        $user_language = cookie::get('user_language', null);
 
         if (isset($user_language)) 
         {
@@ -52,7 +52,7 @@ class extract {
             return str_replace("%3A", ":", urlencode($user_language));
         }
 
-        return;
+        return null;
     }
 
     /**
@@ -61,7 +61,7 @@ class extract {
      */
     public static function admin() 
     {
-        $admin = cookie::get('admin');
+        $admin = cookie::get('admin', null);
 
         if (isset($admin)) 
         {
@@ -70,7 +70,7 @@ class extract {
             return base64_encode(str_replace('%3A', ':', urlencode(base64_decode($admin))));
         }
 
-        return;
+        return null;
     }
 
 }

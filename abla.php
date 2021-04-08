@@ -314,7 +314,7 @@ if ($admin)
             do 
             {
                 $num_for++;
-                $last_post = get_last_post($myrow['forum_id'], 'forum', 'infos', true);
+                $last_post = forumtopics::get_last_post($myrow['forum_id'], 'forum', 'infos', true);
                 
                 echo '
                 <tr>';

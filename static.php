@@ -37,6 +37,11 @@
 /*    execute nl2br(str_replace(" ","&nbsp;",htmlentities($remp)))      */
 /*    avant d'afficher le fichier                                       */
 /************************************************************************/
+use npds\language\language;               
+use npds\language\metalang;
+use npds\utility\code;
+
+
 if (!function_exists('Mysql_Connexion'))
 {
     include ('boot/bootstrap.php');
@@ -84,7 +89,7 @@ if (($op != '') and ($op))
                
                 if ($metalang)
                 {
-                    $remp = meta_lang(aff_code(aff_langue($remp)));
+                    $remp = metalang::meta_lang(code::aff_code(language::aff_langue($remp)));
                 }
                
                 if ($nl)
@@ -100,7 +105,7 @@ if (($op != '') and ($op))
 
             // Si vous voulez tracer les appels au pages statiques : 
             // supprimer les // devant la ligne ci-dessous
-            // Ecr_Log("security", "storage/static/$op", "");
+            // logs::Ecr_Log("security", "storage/static/$op", "");
         }
         else
         {

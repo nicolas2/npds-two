@@ -8,6 +8,20 @@
  * @version 1.0
  * @date 02/04/2021
  */
+use npds\cache\cacheManager;
+use npds\cache\cacheEmpty;
+use npds\cache\cache;
+use npds\error\error;
+use npds\forum\forumauth;
+use npds\forum\forumposts;
+use npds\forum\forumtopics;
+use npds\forum\forumbox;
+use npds\security\hack;
+use npds\groupes\groupe;
+use npds\auth\auth;
+use npds\views\theme;
+use npds\assets\css;
+use npds\pagination\pagination;
 
 
 if (!function_exists('Mysql_Connexion'))
@@ -21,7 +35,7 @@ if ($SuperCache)
 }
 else 
 {
-    $cache_obj = new SuperCacheEmpty();
+    $cache_obj = new cacheEmpty();
 }
 
 include('auth.php');
@@ -92,17 +106,17 @@ if ($forum == "index")
 
 settype($forum, "integer");
 
-$rowQ1 = Q_Select ("SELECT forum_name, forum_moderator, forum_type, forum_pass, forum_access, arbre FROM ".$NPDS_Prefix."forums WHERE forum_id = '$forum'", 3600);
+$rowQ1 = cache::Q_Select ("SELECT forum_name, forum_moderator, forum_type, forum_pass, forum_access, arbre FROM ".$NPDS_Prefix."forums WHERE forum_id = '$forum'", 3600);
 
 if (!$rowQ1)
 {
-    forumerror('0002');
+    error::forumerror('0002');
 }
 
 $myrow = $rowQ1[0];
 
 $forum_name = stripslashes($myrow['forum_name']);
-$moderator = get_moderator($myrow['forum_moderator']);
+$moderator = forumauth::get_moderator($myrow['forum_moderator']);
 $forum_access = $myrow['forum_access'];
   
 if (($op == "solved") and ($topic_id) and ($forum) and ($sec_clef)) 
@@ -113,11 +127,11 @@ if (($op == "solved") and ($topic_id) and ($forum) and ($sec_clef))
       
         if ($local_sec_clef == $sec_clef) 
         {
-            $sqlS = "UPDATE ".$NPDS_Prefix."forumtopics SET topic_status='2', topic_title='[".translate("Résolu")."] - ".removehack($topic_title)."' WHERE topic_id='$topic_id'";
+            $sqlS = "UPDATE ".$NPDS_Prefix."forumtopics SET topic_status='2', topic_title='[".translate("Résolu")."] - ".hack::remove($topic_title)."' WHERE topic_id='$topic_id'";
          
             if (!$r = sql_query($sqlS))
             {
-                forumerror('0011');
+                error::forumerror('0011');
             }
         }
         unset($local_sec_clef);
@@ -134,8 +148,8 @@ if (($myrow['forum_type'] == 5) or ($myrow['forum_type'] == 7))
    
     if(isset($user)) 
     {
-        $tab_groupe = valid_group($user);
-        $ok_affiche = groupe_forum($myrow['forum_pass'], $tab_groupe);
+        $tab_groupe = groupe::valid_group($user);
+        $ok_affiche = groupe::groupe_forum($myrow['forum_pass'], $tab_groupe);
     }
 
     if ($ok_affiche)
@@ -160,7 +174,7 @@ if (($myrow['forum_type'] == 1)
     or ($Forum_passwd != $myrow['forum_pass']))) 
 {
     include('header.php');
-   
+
     echo '
     <h3 class="mb-3">'.stripslashes($forum_name).'</h3>
         <p class="lead">'.translate("Modéré par : ").'';
@@ -169,7 +183,7 @@ if (($myrow['forum_type'] == 1)
    
     for ($i = 0; $i < count($moderator_data); $i++) 
     {
-        $modera = get_userdata($moderator_data[$i]);
+        $modera = auth::get_userdata($moderator_data[$i]);
       
         if ($modera['user_avatar'] != '')
         {
@@ -179,7 +193,7 @@ if (($myrow['forum_type'] == 1)
             }
             else 
             {
-                if ($ibid = theme_image("forum/avatar/".$modera['user_avatar'])) 
+                if ($ibid = theme::theme_image("forum/avatar/".$modera['user_avatar'])) 
                 {
                     $imgtmp = $ibid;
                 } 
@@ -219,7 +233,7 @@ if (($myrow['forum_type'] == 1)
         var formulid=["privforumentry"];
         inpandfieldlen("forum_pass",60);';
    
-    adminfoot('fv', '', $arg1, '');
+    css::adminfoot('fv', '', $arg1, '');
 }
 elseif (($Forum_passwd == $myrow['forum_pass']) or ($adminforum == 1)) 
 {
@@ -268,7 +282,7 @@ elseif (($Forum_passwd == $myrow['forum_pass']) or ($adminforum == 1))
       
         if ($forum_access == 2)
         {
-            if (!user_is_moderator($userR[0], $userR[2], $forum_access)) 
+            if (!forumauth::user_is_moderator($userR[0], $userR[2], $forum_access)) 
             {
                 $allow_to_post = false;
             }
@@ -297,7 +311,7 @@ elseif (($Forum_passwd == $myrow['forum_pass']) or ($adminforum == 1))
 
     for ($i = 0; $i < count($moderator_data); $i++) 
     {
-        $modera = get_userdata($moderator_data[$i]);
+        $modera = auth::get_userdata($moderator_data[$i]);
         if ($modera['user_avatar'] != '') 
         {
             if (stristr($modera['user_avatar'], 'users_private')) 
@@ -306,7 +320,7 @@ elseif (($Forum_passwd == $myrow['forum_pass']) or ($adminforum == 1))
             } 
             else 
             {
-                if ($ibid = theme_image("forum/avatar/".$modera['user_avatar'])) 
+                if ($ibid = theme::theme_image("forum/avatar/".$modera['user_avatar'])) 
                 {
                     $imgtmp = $ibid;
                 } 
@@ -341,10 +355,10 @@ elseif (($Forum_passwd == $myrow['forum_pass']) or ($adminforum == 1))
    
     if (!$result = sql_query($sql))
     {
-        forumerror('0004');
+        error::forumerror('0004');
     }
 
-    if ($ibid = theme_image("forum/icons/red_folder.gif")) 
+    if ($ibid = theme::theme_image("forum/icons/red_folder.gif")) 
     {
         $imgtmpR = $ibid;
     } 
@@ -353,7 +367,7 @@ elseif (($Forum_passwd == $myrow['forum_pass']) or ($adminforum == 1))
         $imgtmpR = "assets/images/forum/icons/red_folder.gif";
     }
    
-    if ($ibid = theme_image("forum/icons/posticon.gif")) 
+    if ($ibid = theme::theme_image("forum/icons/posticon.gif")) 
     {
         $imgtmpP = $ibid;
     } 
@@ -385,7 +399,7 @@ elseif (($Forum_passwd == $myrow['forum_pass']) or ($adminforum == 1))
             echo '
             <tr>';
          
-            $replys = get_total_posts($forum, $myrow['topic_id'], "topic", $Mmod);
+            $replys = forumposts::get_total_posts($forum, $myrow['topic_id'], "topic", $Mmod);
             $replys--;
          
             if ($replys >= 0) 
@@ -394,7 +408,7 @@ elseif (($Forum_passwd == $myrow['forum_pass']) or ($adminforum == 1))
 
                 if ($smilies) 
                 {
-                    $rowQ1 = Q_Select ("SELECT image FROM ".$NPDS_Prefix."posts WHERE topic_id='".$myrow['topic_id']."' AND forum_id='$forum' LIMIT 0,1", 86400);
+                    $rowQ1 = cache::Q_Select("SELECT image FROM ".$NPDS_Prefix."posts WHERE topic_id='".$myrow['topic_id']."' AND forum_id='$forum' LIMIT 0,1", 86400);
                     $image_subject = $rowQ1[0]['image'];
                 }
 
@@ -448,7 +462,7 @@ elseif (($Forum_passwd == $myrow['forum_pass']) or ($adminforum == 1))
             
             if ($image_subject != '') 
             {
-                if ($ibid = theme_image("forum/subject/$image_subject")) 
+                if ($ibid = theme::theme_image("forum/subject/$image_subject")) 
                 {
                     $imgtmp = $ibid;
                 } 
@@ -509,7 +523,7 @@ elseif (($Forum_passwd == $myrow['forum_pass']) or ($adminforum == 1))
                 }
                 else 
                 {
-                    $rowQ1 = Q_Select ("SELECT uname FROM ".$NPDS_Prefix."users WHERE uid='".$myrow['topic_poster']."'", 3600);
+                    $rowQ1 = cache::Q_Select("SELECT uname FROM ".$NPDS_Prefix."users WHERE uid='".$myrow['topic_poster']."'", 3600);
                   
                     if($rowQ1) 
                     {
@@ -533,7 +547,7 @@ elseif (($Forum_passwd == $myrow['forum_pass']) or ($adminforum == 1))
             else
             {
                 echo '
-                    <td class="small">'.get_last_post($myrow['topic_id'],"topic","infos",$Mmod).'</td>
+                    <td class="small">'.forumtopics::get_last_post($myrow['topic_id'],"topic","infos",$Mmod).'</td>
                 </tr>';
             }
         } 
@@ -563,7 +577,7 @@ elseif (($Forum_passwd == $myrow['forum_pass']) or ($adminforum == 1))
        
     if (!$r = sql_query($sql))
     { 
-        forumerror('0001');
+        error::forumerror('0001');
     }
        
     list($all_topics) = sql_fetch_row($r);
@@ -596,9 +610,9 @@ elseif (($Forum_passwd == $myrow['forum_pass']) or ($adminforum == 1))
         $current = $nbPages;
     }
 
-    echo '<div class="mb-2"></div>'.paginate('viewforum.php?forum='.$forum.'&amp;start=', $closol, $nbPages, $current, 1, $topics_per_page, $start);
+    echo '<div class="mb-2"></div>'.pagination::paginate('viewforum.php?forum='.$forum.'&amp;start=', $closol, $nbPages, $current, 1, $topics_per_page, $start);
 
-    echo searchblock();
+    echo forumbox::searchblock();
        
     echo '<blockquote class="blockquote my-3">';
        

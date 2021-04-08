@@ -8,6 +8,8 @@
  * @version 1.0
  * @date 02/04/2021
  */
+use npds\language\language;
+use npds\language\metalang;
 
 
 if (!function_exists('Mysql_Connexion'))
@@ -43,7 +45,7 @@ if ($op != "maj_subscribe")
             $Xcontent = ob_get_contents();
         ob_end_clean();
         
-        echo meta_lang(aff_langue($Xcontent));
+        echo metalang::meta_lang(language::aff_langue($Xcontent));
     }
 
     include("footer.php");

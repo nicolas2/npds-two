@@ -167,7 +167,7 @@ if (($cache_obj->genereting_output == 1)
         $next_tab = news::news_aff("archive","WHERE sid>'$sid' ORDER BY sid ASC ", 0, 1);
     }
 
-    if (array_key_exists(0,$previous_tab))
+    if (array_key_exists(0, $previous_tab))
     {
         list($previous_sid) = $previous_tab[0];
     }

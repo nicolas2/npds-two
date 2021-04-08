@@ -8,6 +8,8 @@
  * @version 1.0
  * @date 02/04/2021
  */
+use npds\assets\css;
+use npds\pixels\pixel;
 
 
 if (!function_exists('Mysql_Connexion'))
@@ -43,13 +45,13 @@ include('config/meta.php');
 global $site_font;
    
 echo '<link rel="stylesheet" href="themes/_skins/default/bootstrap.min.css">';
-echo import_css($tmp_theme, $language, $site_font, '', '');
+echo css::import_css($tmp_theme, $language, $site_font, '', '');
    
 include('assets/formhelp.java.php');
    
 echo '
     </head>
     <body class="p-2">
-    '.putitems_more().'
+    '.pixel::putitems_more().'
     </body>
 </html>';

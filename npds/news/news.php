@@ -602,7 +602,7 @@ class news {
         fwrite($file, "General purpose self-explanatory file with news headlines\n");
         
         $storynum = $storyhome;
-        $xtab = staic::news_aff('index', "WHERE ihome='0' AND archive='0'", $storyhome, '');
+        $xtab = static::news_aff('index', "WHERE ihome='0' AND archive='0'", $storyhome, '');
         $story_limit = 0;
         
         while (($story_limit < $storynum) and ($story_limit < sizeof($xtab))) 

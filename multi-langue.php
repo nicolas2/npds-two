@@ -8,6 +8,7 @@
  * @version 1.0
  * @date 02/04/2021
  */
+use npds\cookie\cookie;
 
 
 // Multi-language
@@ -42,7 +43,7 @@ if (isset($choice_user_language))
       
         if ((stristr($languageslist, $choice_user_language)) and ($choice_user_language != ' ')) 
         {
-            setcookie('user_language', $choice_user_language, $timeX);
+            cookie::set('user_language', $choice_user_language, $timeX);
             $user_language = $choice_user_language;
         }
     }

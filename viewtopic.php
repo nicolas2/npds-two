@@ -8,6 +8,22 @@
  * @version 1.0
  * @date 02/04/2021
  */
+use npds\cache\cacheManager;
+use npds\cache\cacheEmpty;
+use npds\cache\cache;
+use npds\error\error;
+use npds\groupe\groupe;
+use npds\forum\forumauth;
+use npds\forum\forumposts;
+use npds\auth\auth;
+use npds\views\theme;
+use npds\pagination\pagination;
+use npds\utility\spam; 
+use npds\date\date;
+use npds\pixels\pixel;
+use npds\utility\code;
+use npds\media\video;
+
 
 if (!function_exists('Mysql_Connexion'))
 {
@@ -20,7 +36,7 @@ if ($SuperCache)
 }
 else 
 {
-    $cache_obj = new SuperCacheEmpty();
+    $cache_obj = new cacheEmpty();
 }
 
 include('auth.php');
@@ -61,21 +77,21 @@ if ($admin)
 }
 // droits des admin sur les forums (superadmin et admin avec droit gestion forum)
 
-$rowQ1 = Q_Select ("SELECT forum_id FROM ".$NPDS_Prefix."forumtopics WHERE topic_id='$topic'", 3600);
+$rowQ1 = cache::Q_Select("SELECT forum_id FROM ".$NPDS_Prefix."forumtopics WHERE topic_id='$topic'", 3600);
 
 if (!$rowQ1)
 {
-    forumerror('0001');
+    error::forumerror('0001');
 }
 
 $myrow = $rowQ1[0];
 $forum = $myrow['forum_id'];
 
-$rowQ1 = Q_Select ("SELECT forum_name, forum_moderator, forum_type, forum_pass, forum_access, arbre FROM ".$NPDS_Prefix."forums WHERE forum_id = '$forum'", 3600);
+$rowQ1 = cache::Q_Select("SELECT forum_name, forum_moderator, forum_type, forum_pass, forum_access, arbre FROM ".$NPDS_Prefix."forums WHERE forum_id = '$forum'", 3600);
 
 if (!$rowQ1)
 {
-    forumerror('0001');
+    error::forumerror('0001');
 }
 
 $myrow = $rowQ1[0];
@@ -95,8 +111,8 @@ if (($forum_type == 5) or ($forum_type == 7))
    
     if(isset($user))
     {
-        $tab_groupe = valid_group($user);// en ano et admin $user n'existe pas ?  notice ....
-        $ok_affiche = groupe_forum($myrow['forum_pass'], $tab_groupe);
+        $tab_groupe = groupe::valid_group($user);// en ano et admin $user n'existe pas ?  notice ....
+        $ok_affiche = groupe::groupe_forum($myrow['forum_pass'], $tab_groupe);
     }
 
     //:: ici 
@@ -118,7 +134,7 @@ if (isset($user))
     $userdata = explode(':', $userX);
 }
 
-$moderator = get_moderator($mod);
+$moderator = forumauth::get_moderator($mod);
 $moderator = explode(' ', $moderator);
 $Mmod = false;
 $countmoderator = count($moderator);
@@ -136,7 +152,7 @@ if (isset($user))
 }
 
 $sql = "SELECT topic_title, topic_status, topic_poster FROM ".$NPDS_Prefix."forumtopics WHERE topic_id = '$topic'";
-$total = get_total_posts($forum, $topic, "topic",$Mmod);
+$total = forumposts::get_total_posts($forum, $topic, "topic",$Mmod);
 
 if ($total > $posts_per_page) 
 {
@@ -182,7 +198,7 @@ else
 
 if (!$result = sql_query($sql))
 {
-    forumerror('0001');
+    error::forumerror('0001');
 }
 
 $myrow = sql_fetch_assoc($result);
@@ -190,6 +206,14 @@ $topic_subject = stripslashes($myrow['topic_title']);
 $lock_state = $myrow['topic_status'];
 $original_poster = $myrow['topic_poster'];
 
+/**
+ * [aff_pub description]
+ * @param  [type] $lock_state [description]
+ * @param  [type] $topic      [description]
+ * @param  [type] $forum      [description]
+ * @param  [type] $mod        [description]
+ * @return [type]             [description]
+ */
 function aff_pub($lock_state, $topic, $forum, $mod) 
 {
     global $language;
@@ -204,6 +228,14 @@ function aff_pub($lock_state, $topic, $forum, $mod)
     }
 }
 
+/**
+ * [aff_pub_in description]
+ * @param  [type] $lock_state [description]
+ * @param  [type] $topic      [description]
+ * @param  [type] $forum      [description]
+ * @param  [type] $mod        [description]
+ * @return [type]             [description]
+ */
 function aff_pub_in($lock_state, $topic, $forum, $mod) 
 {
     global $language;
@@ -214,7 +246,7 @@ function aff_pub_in($lock_state, $topic, $forum, $mod)
     }
 }
 
-$contributeurs = get_contributeurs($forum, $topic);
+$contributeurs = forumposts::get_contributeurs($forum, $topic);
 $contributeurs = explode(' ', $contributeurs);
 $total_contributeurs = count($contributeurs);
 
@@ -247,7 +279,7 @@ if ($forum_access != 9)
     }
     elseif ($forum_access == 2) 
     {
-        if (user_is_moderator($userdata[0], $userdata[2], $forum_access)) 
+        if (forumauth::user_is_moderator($userdata[0], $userdata[2], $forum_access)) 
         {
             $allow_to_post = true;
         }
@@ -277,7 +309,7 @@ if ($forum_access != 9)
     }
     elseif ($forum_access == 2) 
     {
-        if (user_is_moderator($userdata[0], $userdata[2], $forum_access))
+        if (forumauth::user_is_moderator($userdata[0], $userdata[2], $forum_access))
         {
             $allow_to_post = true;
         }
@@ -296,10 +328,10 @@ echo '
     <div class="d-flex ">
         <div class=" align-self-center badge badge-secondary mx-2 col-2 col-md-3 col-xl-2 bg-white text-muted py-2"><span class=" mr-1 lead">'.$total_contributeurs.'<i class="fa fa-edit fa-fw fa-lg ml-1 d-inline d-md-none" title="'.translate("Contributeur(s)").'" data-toggle="tooltip"></i></span><span class=" d-none d-md-inline">'.translate("Contributeur(s)").'</span></div>
         <div class=" align-self-center mr-auto">';
-   
+
 for ($i = 0; $i < $total_contributeurs; $i++) 
 {
-    $contri = get_userdata_from_id($contributeurs[$i]);
+    $contri = auth::get_userdata_from_id($contributeurs[$i]);
     if($contributeurs[$i] !== '0') 
     {
         if ($contri['user_avatar'] != '') 
@@ -310,7 +342,7 @@ for ($i = 0; $i < $total_contributeurs; $i++)
             } 
             else 
             {
-                if ($ibid = theme_image("forum/avatar/".$contri['user_avatar'])) 
+                if ($ibid = theme::theme_image("forum/avatar/".$contri['user_avatar'])) 
                 {
                     $imgtmp = $ibid;
                 } 
@@ -334,7 +366,7 @@ echo '
 </div>';
    
 $ibidcountmod = count($moderator);
-   
+
 echo '
 <div class="d-flex">
     <div class="badge badge-secondary align-self-center mx-2 col-2 col-md-3 col-xl-2 bg-white text-muted py-2"><span class="mr-1 lead">'.$ibidcountmod.' <i class="fa fa-balance-scale fa-fw fa-lg ml-1 d-inline d-md-none" title="'.translate("Modérateur(s)").'" data-toggle="tooltip"></i></span><span class=" d-none d-md-inline">'.translate("Modérateur(s)").'</span></div>
@@ -342,7 +374,7 @@ echo '
    
 for ($i = 0; $i < $ibidcountmod; $i++) 
 {
-    $modera = get_userdata($moderator[$i]);
+    $modera = auth::get_userdata($moderator[$i]);
     if ($modera['user_avatar'] != '') 
     {
         if (stristr($modera['user_avatar'], "users_private"))
@@ -351,7 +383,7 @@ for ($i = 0; $i < $ibidcountmod; $i++)
         }
         else 
         {
-            if ($ibid = theme_image("forum/avatar/".$modera['user_avatar'])) 
+            if ($ibid = theme::theme_image("forum/avatar/".$modera['user_avatar'])) 
             {
                 $imgtmp = $ibid;
             } 
@@ -389,8 +421,8 @@ if ($total > $posts_per_page)
                 </li>
             </ul>
         </div>';
-      
-    echo paginate('viewtopic.php?topic='.$topic.'&amp;forum='.$forum.'&amp;start=', '', $nbPages, $current, $adj=3, $posts_per_page, $start);
+
+    echo pagination::paginate('viewtopic.php?topic='.$topic.'&amp;forum='.$forum.'&amp;start=', '', $nbPages, $current, $adj=3, $posts_per_page, $start);
       
     echo '
     </div>';
@@ -429,7 +461,7 @@ else
 
 if (!$result = sql_query($sql))
 {
-    forumerror('0001');
+    error::forumerror('0001');
 }
    
 $mycount = sql_num_rows($result);
@@ -475,7 +507,7 @@ if (isset($user))
     }
 }
 
-if ($ibid = theme_image('forum/rank/post.gif')) 
+if ($ibid = theme::theme_image('forum/rank/post.gif')) 
 {
     $imgtmpP = $ibid;
 } 
@@ -484,7 +516,7 @@ else
     $imgtmpP = 'assets/images/forum/rank/post.gif';
 }
    
-if ($ibid = theme_image("forum/icons/posticon.gif")) 
+if ($ibid = theme::theme_image("forum/icons/posticon.gif")) 
 {
     $imgtmpPI = $ibid;
 } 
@@ -493,7 +525,7 @@ else
     $imgtmpPI = "assets/images/forum/icons/posticon.gif";
 }
    
-if ($ibid = theme_image("forum/icons/new.gif")) 
+if ($ibid = theme::theme_image("forum/icons/new.gif")) 
 {
     $imgtmpNE = $ibid;
 } 
@@ -504,7 +536,7 @@ else
    
 do 
 {
-    $posterdata = get_userdata_from_id($myrow['poster_id']);
+    $posterdata = auth::get_userdata_from_id($myrow['poster_id']);
       
     if($myrow['poster_id'] !== '0') 
     {
@@ -516,12 +548,12 @@ do
          
         if (!$short_user) 
         {
-            $posterdata_extend = get_userdata_extend_from_id($myrow['poster_id']);
+            $posterdata_extend = auth::get_userdata_extend_from_id($myrow['poster_id']);
             
             include('modules/reseaux-sociaux/reseaux-sociaux.conf.php');
             include('modules/geoloc/geoloc_conf.php');
             
-            if($user or autorisation(-127)) 
+            if($user or auth::autorisation(-127)) 
             {
                 if (array_key_exists('M2', $posterdata_extend)) 
                 {
@@ -572,7 +604,7 @@ do
         settype($ch_lat, 'string');
 
         $useroutils = '';
-        if($user or autorisation(-127)) 
+        if($user or auth::autorisation(-127)) 
         {
             if ($posterdata['uid'] != 1 and $posterdata['uid'] != '')
             {
@@ -586,9 +618,9 @@ do
             
             if ($posterdata['femail'] != '')
             {
-                $useroutils .= '<a class="list-group-item list-group-item-action text-primary text-center text-md-left" href="mailto:'.anti_spam($posterdata['femail'],1).'" target="_blank" title="'.translate("Email").'" data-toggle="tooltip"><i class="fa fa-at fa-2x align-middle fa-fw"></i><span class="ml-3 d-none d-md-inline">'.translate("Email").'</span></a>';
+                $useroutils .= '<a class="list-group-item list-group-item-action text-primary text-center text-md-left" href="mailto:'.spam::anti_spam($posterdata['femail'],1).'" target="_blank" title="'.translate("Email").'" data-toggle="tooltip"><i class="fa fa-at fa-2x align-middle fa-fw"></i><span class="ml-3 d-none d-md-inline">'.translate("Email").'</span></a>';
             }
-            
+
             if ($myrow['poster_id'] != 1 and array_key_exists($ch_lat, $posterdata_extend)) 
             {
                 if ($posterdata_extend[$ch_lat] != '')
@@ -635,7 +667,7 @@ do
                 }
                 else 
                 {
-                    if ($ibid = theme_image('forum/avatar/'.$posterdata['user_avatar']))
+                    if ($ibid = theme::theme_image('forum/avatar/'.$posterdata['user_avatar']))
                     {
                         $imgtmp = $ibid;
                     } 
@@ -647,7 +679,7 @@ do
             }
 
             echo '
-            <a style="position:absolute; top:1rem;" tabindex="0" data-toggle="popover" data-trigger="focus" data-html="true" data-title="'.$posterdata['uname'].'" data-content=\'<div class="my-2 border rounded p-2">'.member_qualif($posterdata['uname'], $posts,$posterdata['rang']).'</div><div class="list-group mb-3 text-center">'.$useroutils.'</div><div class="mx-auto text-center" style="max-width:170px;">'.$my_rs.'</div> \'><img class=" btn-outline-primary img-thumbnail img-fluid n-ava" src="'.$imgtmp.'" alt="'.$posterdata['uname'].'" /></a>
+            <a style="position:absolute; top:1rem;" tabindex="0" data-toggle="popover" data-trigger="focus" data-html="true" data-title="'.$posterdata['uname'].'" data-content=\'<div class="my-2 border rounded p-2">'.forumauth::member_qualif($posterdata['uname'], $posts,$posterdata['rang']).'</div><div class="list-group mb-3 text-center">'.$useroutils.'</div><div class="mx-auto text-center" style="max-width:170px;">'.$my_rs.'</div> \'><img class=" btn-outline-primary img-thumbnail img-fluid n-ava" src="'.$imgtmp.'" alt="'.$posterdata['uname'].'" /></a>
           <span style="position:absolute; left:6em;" class="text-muted"><strong>'.$posterdata['uname'].'</strong></span>';
         } 
         else 
@@ -672,7 +704,7 @@ do
      
     if ($myrow['image'] != '') 
     {
-        if ($ibid = theme_image("forum/subject/".$myrow['image'])) 
+        if ($ibid = theme::theme_image("forum/subject/".$myrow['image'])) 
         {
             $imgtmp = $ibid;
         } 
@@ -696,8 +728,8 @@ do
         <div class="card-body">
             <div class="card-text pt-2">';
       
-    $date_post = convertdateTOtimestamp($myrow['post_time']);
-      
+    $date_post = date::convertdateTOtimestamp($myrow['post_time']);
+
     if (isset($last_read)) 
     {
         if (($last_read <= $date_post) AND $userdata[3] != '' AND $last_read != '0' AND $userdata[0] != $myrow['poster_id']) 
@@ -713,9 +745,9 @@ do
 
     if (($allow_bbcode) and ($forum_type != 6) and ($forum_type != 5)) 
     {
-        $message = smilie($message);
-        $message = aff_video_yt($message);
-        $message = af_cod($message);
+        $message = pixel::smilie($message);
+        $message = video::aff_video_yt($message);
+        $message = code::af_cod($message);
         $message = str_replace("\n", '<br />', $message);
     }
 
@@ -748,7 +780,7 @@ do
         </div>
         <div class="card-footer">
             <div class="row">
-                <div class=" col-sm-6 text-muted small">'.post_convertdate($date_post).'</div>
+                <div class=" col-sm-6 text-muted small">'.date::post_convertdate($date_post).'</div>
                     <div class=" col-sm-6 text-right">';
 
    
@@ -768,7 +800,7 @@ do
         } 
         elseif ($forum_access == 2) 
         {
-            if (user_is_moderator($userdata[0], $userdata[2], $forum_access))
+            if (forumauth::user_is_moderator($userdata[0], $userdata[2], $forum_access))
             {
                 $allow_to_post = true;
             }
@@ -848,7 +880,7 @@ do
 } 
 while($myrow = sql_fetch_assoc($result));
    
-unset ($tmp_imp);
+unset($tmp_imp);
 $sql = "UPDATE ".$NPDS_Prefix."forumtopics SET topic_views = topic_views + 1 WHERE topic_id = '$topic'";
 sql_query($sql);
    
@@ -866,7 +898,7 @@ if ($total > $posts_per_page)
             </li>
         </ul>
         </nav>'
-        .paginate('viewtopic.php?topic='.$topic.'&amp;forum='.$forum.'&amp;start=', '', $nbPages, $current, $adj=3, $posts_per_page, $start).'
+        .pagination::paginate('viewtopic.php?topic='.$topic.'&amp;forum='.$forum.'&amp;start=', '', $nbPages, $current, $adj=3, $posts_per_page, $start).'
     </div>';
 }
 

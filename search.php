@@ -8,6 +8,13 @@
  * @version 1.0
  * @date 02/04/2021
  */
+use npds\cache\cacheManager;
+use npds\cache\cacheEmpty;
+use npds\security\hack;
+use npds\language\language;
+use npds\auth\auth;
+use npds\time\time;
+use npds\cache\cache;
 
 
 if (!function_exists('Mysql_Connexion'))
@@ -42,8 +49,8 @@ if (!isset($query))
 } 
 else 
 {
-    $query_title = removeHack(stripslashes(urldecode($query))); // electrobug
-    $query_body = removeHack(stripslashes(htmlentities(urldecode($query), ENT_NOQUOTES, cur_charset))); // electrobug
+    $query_title = hack::remove(stripslashes(urldecode($query))); // electrobug
+    $query_body = hack::remove(stripslashes(htmlentities(urldecode($query), ENT_NOQUOTES, cur_charset))); // electrobug
     $query = $query_body;
     $limit = '';
 }
@@ -81,9 +88,9 @@ elseif ($type == 'archive')
 }
 else
 {
-    echo '<h2 class="mb-3">'.translate("Rechercher dans").' '.aff_langue($topictext).'</h2><hr />';
+    echo '<h2 class="mb-3">'.translate("Rechercher dans").' '.language::aff_langue($topictext).'</h2><hr />';
 }
-   
+  
 echo '
 <form action="search.php" method="get">';
    
@@ -121,7 +128,7 @@ while(list($topicid, $topics) = sql_fetch_row($toplist))
         $sel = 'selected="selected" ';
     }
       
-    echo '<option '.$sel.' value="'.$topicid.'">'.substr_replace(aff_langue($topics), '...', 25, -1).'</option>';
+    echo '<option '.$sel.' value="'.$topicid.'">'.substr_replace(language::aff_langue($topics), '...', 25, -1).'</option>';
     $sel = '';
 }
 
@@ -145,7 +152,7 @@ while (list($catid, $title) = sql_fetch_row($catlist))
         $sel = 'selected="selected" ';
     }
       
-    echo '<option '.$sel.' value="'.$catid.'">'.aff_langue($title).'</option>';
+    echo '<option '.$sel.' value="'.$catid.'">'.language::aff_langue($title).'</option>';
     $sel = '';
 }
 
@@ -345,7 +352,7 @@ if ($type == "stories" OR $type == "archive" OR !$type)
     } 
     else
     {
-        $cache_obj = new SuperCacheEmpty();
+        $cache_obj = new cacheEmpty();
     }
       
     if (($cache_obj->genereting_output == 1) 
@@ -358,7 +365,7 @@ if ($type == "stories" OR $type == "archive" OR !$type)
         {
             while (list($sid, $aid, $title, $time, $url, $topic, $informant, $ihome) = sql_fetch_row($result)) 
             {
-                if (ctrl_aff($ihome, 0)) 
+                if (auth::ctrl_aff($ihome, 0)) 
                 {
                     $tab_sid[$x]['sid'] = $sid;
                     $tab_sid[$x]['aid'] = $aid;
@@ -411,11 +418,11 @@ if ($type == "stories" OR $type == "archive" OR !$type)
             $furl .= '&amp;archive=1';
         }
          
-        formatTimestamp($tab_sid[$i]['time']);
+        time::formatTimestamp($tab_sid[$i]['time']);
          
         echo '
         <tr>
-            <td><span>['.($i+1).']</span>&nbsp;'.translate("Contribution de").' <a href="user.php?op=userinfo&amp;uname='.$tab_sid[$i]['informant'].'">'.$tab_sid[$i]['informant'].'</a> :<br /><strong><a href="'.$furl.'">'.aff_langue($tab_sid[$i]['title']).'</a></strong><br /><span>'.translate("Posté par ").'<a href="'.$tab_sid[$i]['url'].'" >'.$tab_sid[$i]['aid'].'</a></span> '.translate("le").' '.$datetime.'</td>
+            <td><span>['.($i+1).']</span>&nbsp;'.translate("Contribution de").' <a href="user.php?op=userinfo&amp;uname='.$tab_sid[$i]['informant'].'">'.$tab_sid[$i]['informant'].'</a> :<br /><strong><a href="'.$furl.'">'.language::aff_langue($tab_sid[$i]['title']).'</a></strong><br /><span>'.translate("Posté par ").'<a href="'.$tab_sid[$i]['url'].'" >'.$tab_sid[$i]['aid'].'</a></span> '.translate("le").' '.$datetime.'</td>
         </tr>';
     }
 
@@ -548,10 +555,10 @@ elseif ($type == 'sections')
          
         while (list($artid, $secid, $title, $content) = sql_fetch_row($result)) 
         {
-            $rowQ2 = Q_Select ("SELECT secname, rubid FROM ".$NPDS_Prefix."sections WHERE secid='$secid'", 3600);
+            $rowQ2 = cache::Q_Select ("SELECT secname, rubid FROM ".$NPDS_Prefix."sections WHERE secid='$secid'", 3600);
             $row2 = $rowQ2[0];
            
-            $rowQ3 = Q_Select ("SELECT rubname FROM ".$NPDS_Prefix."rubriques WHERE rubid='".$row2['rubid']."'", 3600);
+            $rowQ3 = cache::Q_Select ("SELECT rubname FROM ".$NPDS_Prefix."rubriques WHERE rubid='".$row2['rubid']."'", 3600);
             $row3 = $rowQ3[0];
             
             if ($row3['rubname'] != 'Divers' AND $row3['rubname'] != 'Presse-papiers') 
@@ -561,7 +568,7 @@ elseif ($type == 'sections')
                
                 echo '
                 <tr>
-                    <td><a href="'.$furl.'">'.aff_langue($title).'</a> '.translate("dans la sous-rubrique").' <a href="'.$surl.'">'.aff_langue($row2['secname']).'</a></td>
+                    <td><a href="'.$furl.'">'.language::aff_langue($title).'</a> '.translate("dans la sous-rubrique").' <a href="'.$surl.'">'.language::aff_langue($row2['secname']).'</a></td>
                     </tr>';
                 $x++;
             }

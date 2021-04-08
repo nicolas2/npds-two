@@ -126,4 +126,37 @@ class forumtopics {
 		}
 	}
 
+	/**
+	 * [does_exists description]
+	 * @param  [type] $id   [description]
+	 * @param  [type] $type [description]
+	 * @return [type]       [description]
+	 */
+	public static function does_exists($id, $type) 
+	{
+	   	global $NPDS_Prefix;
+
+	   	switch($type) 
+	   	{
+	      	case 'forum':
+	           	$sql = "SELECT forum_id FROM ".$NPDS_Prefix."forums WHERE forum_id = '$id'";
+	        break;
+	      	case 'topic':
+	           	$sql = "SELECT topic_id FROM ".$NPDS_Prefix."forumtopics WHERE topic_id = '$id'";
+	        break;
+	   	}
+
+	   	if (!$result = sql_query($sql))
+	   	{
+	      	return(0);
+	   	}
+
+	   	if (!$myrow = sql_fetch_row($result))
+	   	{
+	      	return(0);
+	   	}
+
+	   	return(1);
+	}
+
 }

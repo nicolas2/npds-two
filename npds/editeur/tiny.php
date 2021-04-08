@@ -10,7 +10,7 @@
  */
 namespace npds\editeur;
 
-use npds\language\languge;
+use npds\language\language;
 
 
 /*

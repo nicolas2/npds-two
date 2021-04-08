@@ -8,6 +8,10 @@
  * @version 1.0
  * @date 02/04/2021
  */
+use npds\messenger\messenger;
+use npds\cache\cache;
+use npds\utility\str;
+
 
 if (!function_exists('Mysql_Connexion'))
 {
@@ -23,7 +27,7 @@ switch ($op)
 {
     // Instant Members Message
     case 'instant_message':
-        Form_instant_message($to_userid);
+        messenger::Form_instant_message($to_userid);
     break;
 
     case 'write_instant_message':
@@ -32,17 +36,17 @@ switch ($op)
         
         if ($user) 
         {
-            $rowQ1 = Q_Select("SELECT uid FROM ".$NPDS_Prefix."users WHERE uname='$cookie[1]'", 3600);
+            $rowQ1 = cache::Q_Select("SELECT uid FROM ".$NPDS_Prefix."users WHERE uname='$cookie[1]'", 3600);
             list(, $uid) = each($rowQ1); // Note : each
 
             $from_userid = $uid['uid'];
             
             if (($subject != '') or ($message != '')) 
             {
-                $subject = FixQuotes($subject).'';
-                $messages = FixQuotes($messages).'';
+                $subject = str::FixQuotes($subject).'';
+                $messages = str::FixQuotes($messages).'';
                
-                writeDB_private_message($to_userid, '', $subject, $from_userid, $message, $copie);
+                messenger::writeDB_private_message($to_userid, '', $subject, $from_userid, $message, $copie);
             }
         }
 

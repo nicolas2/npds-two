@@ -8,12 +8,26 @@
  * @version 1.0
  * @date 02/04/2021
  */
+use npds\news\news;
+use npds\security\hack; 
+use npds\language\metalang;
+use npds\language\language;
+use npds\utility\code;
+use npds\time\time;
+
 
 if (!function_exists('Mysql_Connexion'))
 {
     include ('boot/bootstrap.php');
 }
 
+/**
+ * [PrintPage description]
+ * @param [type] $oper [description]
+ * @param [type] $DB   [description]
+ * @param [type] $nl   [description]
+ * @param [type] $sid  [description]
+ */
 function PrintPage($oper, $DB, $nl, $sid) 
 {
     global $user,$cookie, $theme,$Default_Theme, $language, $site_logo, $sitename, $datetime, $nuke_url, $site_font, $Titlesitename, $NPDS_Prefix;
@@ -21,7 +35,7 @@ function PrintPage($oper, $DB, $nl, $sid)
     $aff = true;
     if ($oper == 'news') 
     {
-        $xtab = news_aff('libre', "where sid='$sid'", 1, 1);
+        $xtab = news::news_aff('libre', "where sid='$sid'", 1, 1);
         list($sid, $catid, $aid, $title, $time, $hometext, $bodytext, $comments, $counter, $topic, $informant, $notes) = $xtab[0];
         
         if ($topic != '') 
@@ -37,7 +51,7 @@ function PrintPage($oper, $DB, $nl, $sid)
         
     if ($oper == 'archive') 
     {
-        $xtab = news_aff('archive', "WHERE sid='$sid'", 1, 1);
+        $xtab = news::news_aff('archive', "WHERE sid='$sid'", 1, 1);
         list($sid, $catid, $aid, $title, $time, $hometext, $bodytext, $comments, $counter, $topic, $informant, $notes) = $xtab[0];
            
         if ($topic != '') 
@@ -50,10 +64,10 @@ function PrintPage($oper, $DB, $nl, $sid)
             $aff = false;
         }
     }
-    
+
     if ($oper == 'links') 
     {
-        $DB = removeHack(stripslashes(htmlentities(urldecode($DB),ENT_NOQUOTES,cur_charset)));
+        $DB = hack::remove(stripslashes(htmlentities(urldecode($DB), ENT_NOQUOTES, cur_charset)));
         $result = sql_query("SELECT url, title, description, date FROM ".$DB."links_links WHERE lid='$sid'");
         list($url, $title, $description, $time) = sql_fetch_row($result);
         
@@ -82,14 +96,14 @@ function PrintPage($oper, $DB, $nl, $sid)
                  
                 if ($DB)
                 {
-                    $remp = meta_lang(aff_code(aff_langue($remp)));
+                    $remp = metalang::meta_lang(code::aff_code(language::aff_langue($remp)));
                 }
                  
                 if ($nl)
                 {
                    $remp = nl2br(str_replace(' ', '&nbsp;', htmlentities($remp, ENT_QUOTES, cur_charset)));
                 }
-                 
+
                 $title = $sid;
             } 
             else 
@@ -110,7 +124,7 @@ function PrintPage($oper, $DB, $nl, $sid)
            
         if (isset($time))
         {
-            formatTimestamp($time);
+            time::formatTimestamp($time);
         }
         
         include("config/meta.php");
@@ -161,17 +175,17 @@ function PrintPage($oper, $DB, $nl, $sid)
         }
            
         echo '
-            <h1 class="d-block text-center my-4">'.aff_langue($title).'</h1>';
+            <h1 class="d-block text-center my-4">'.language::aff_langue($title).'</h1>';
            
         if (($oper == 'news') or ($oper == 'archive')) 
         {
-            $hometext = meta_lang(aff_code(aff_langue($hometext)));
-            $bodytext = meta_lang(aff_code(aff_langue($bodytext)));
+            $hometext = metalang::meta_lang(code::aff_code(language::aff_langue($hometext)));
+            $bodytext = metalang::meta_lang(code::aff_code(language::aff_langue($bodytext)));
             
             echo '
                     <span class="float-right text-capitalize" style="font-size: .8rem;"> '.$datetime.'</span><br />
                     <hr />
-                    <h2 class="mb-3">'.translate("Sujet : ").' '.aff_langue($topictext).'</h2>
+                    <h2 class="mb-3">'.translate("Sujet : ").' '.language::aff_langue($topictext).'</h2>
                 </div>
                 <div>'.$hometext.'<br /><br />';
             
@@ -180,7 +194,7 @@ function PrintPage($oper, $DB, $nl, $sid)
                 echo $bodytext.'<br /><br />';
             }
               
-            echo meta_lang(aff_code(aff_langue($notes)));
+            echo metalang::meta_lang(code::aff_code(language::aff_langue($notes)));
             
             echo '
             </div>';
@@ -215,7 +229,7 @@ function PrintPage($oper, $DB, $nl, $sid)
             }
               
             echo '
-            <div>'.aff_langue($description).'</div>
+            <div>'.language::aff_langue($description).'</div>
             <hr />
             <p class="text-center">'.translate("Cet article provient de").' '.$sitename.'<br />
             <a href="'.$nuke_url.'">'.$nuke_url.'</a></p>';
@@ -248,15 +262,15 @@ if (!empty($sid))
     $tab = explode(':', $sid);
     if ($tab[0] == "static") 
     {
-        settype ($metalang, 'integer');
-        settype ($nl, 'integer');
+        settype($metalang, 'integer');
+        settype($nl, 'integer');
         
         PrintPage("static", $metalang, $nl, $tab[1]);
     } 
     else 
     {
-        settype ($sid, 'integer');
-        settype ($archive, 'string');
+        settype($sid, 'integer');
+        settype($archive, 'string');
         
         if (!$archive) 
         {
@@ -270,7 +284,7 @@ if (!empty($sid))
 } 
 elseif (!empty($lid)) 
 {
-    settype ($lid, "integer");
+    settype($lid, "integer");
     
     PrintPage("links", $DB, '', $lid);
 } 

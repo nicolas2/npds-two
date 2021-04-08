@@ -21,7 +21,7 @@ use npds\pixels\pixel;
 use npds\utility\code;
 use npds\security\hack;
 use npds\date\date;
-use npds\utiliry\str;
+use npds\utility\str;
 
 
 if (!function_exists('Mysql_Connexion'))

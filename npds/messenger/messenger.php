@@ -16,9 +16,9 @@ use npds\mailler\mailler;
 
 
 /*
- * amessenger
+ * messenger
  */
-class amessenger {
+class messenger {
 
 
 	/**

@@ -8,6 +8,26 @@
  * @version 1.0
  * @date 02/04/2021
  */
+use npds\mailler\mailler;
+use npds\security\hack;
+use npds\logs\logs;
+use npds\utility\spam;
+use npds\auth\auth;
+use npds\views\theme;
+use npds\language\language;
+use npds\language\metalang;
+use npds\date\date;
+use npds\pixels\pixel;
+use npds\media\video;
+use npds\news\news;
+use npds\groupes\groupe;
+use npds\cookie\cookie;
+use npds\assets\css;
+use npds\security\ip;
+use npds\utility\crypt;
+use npds\utility\str;
+use npds\editeur\tiny;
+use npds\cache\cacheManager;
 
 
 if (!function_exists("Mysql_Connexion"))
@@ -133,9 +153,7 @@ function nav($mns)
 function userCheck($uname, $email) 
 {
     global $NPDS_Prefix;
-
-    include_once('functions.php');
-   
+  
     $stop = '';
    
     if ((!$email) || ($email=='') || (!preg_match('#^[_\.0-9a-z-]+@[0-9a-z-\.]+\.+[a-z]{2,4}$#i',$email)))
@@ -148,7 +166,7 @@ function userCheck($uname, $email)
         $stop = '<i class="fa fa-exclamation mr-2"></i>'.translate("Erreur : une adresse Email ne peut pas contenir d'espaces");
     }
    
-    if(checkdnsmail($email) === false)
+    if(mailler::checkdnsmail($email) === false)
     {
         $stop = translate("Erreur : DNS ou serveur de mail incorrect") .'!<br />';
     }
@@ -233,7 +251,7 @@ function showimage()
                 return
             document.images.avatar.src=\n";
    
-    if ($ibid = theme_image("forum/avatar/blank.gif"))
+    if ($ibid = theme::theme_image("forum/avatar/blank.gif"))
     {
         $imgtmp = substr($ibid, 0, strrpos($ibid, "/")+1); 
     }
@@ -298,7 +316,7 @@ function Only_NewUser()
         echo '
         </div>';
        
-        adminfoot('fv', $fv_parametres, $arg1, '');
+        css::adminfoot('fv', $fv_parametres, $arg1, '');
     } 
     else
     {
@@ -322,29 +340,29 @@ function hidden_form()
     echo '
     <form action="user.php" method="post">
         <input type="hidden" name="uname" value="'.$uname.'" />
-        <input type="hidden" name="name" value="'.removeHack($name).'" />
+        <input type="hidden" name="name" value="'.hack::remove($name).'" />
         <input type="hidden" name="email" value="'.$email.'" />
         <input type="hidden" name="user_avatar" value="'.$user_avatar.'" />
-        <input type="hidden" name="user_from" value="'.StripSlashes(removeHack($user_from)).'" />
-        <input type="hidden" name="user_occ" value="'.StripSlashes(removeHack($user_occ)).'" />
-        <input type="hidden" name="user_intrest" value="'.StripSlashes(removeHack($user_intrest)).'" />
-        <input type="hidden" name="user_sig" value="'.StripSlashes(removeHack($user_sig)).'" />
+        <input type="hidden" name="user_from" value="'.StripSlashes(hack::remove($user_from)).'" />
+        <input type="hidden" name="user_occ" value="'.StripSlashes(hack::remove($user_occ)).'" />
+        <input type="hidden" name="user_intrest" value="'.StripSlashes(hack::remove($user_intrest)).'" />
+        <input type="hidden" name="user_sig" value="'.StripSlashes(hack::remove($user_sig)).'" />
         <input type="hidden" name="user_viewemail" value="'.$user_viewemail.'" />
-        <input type="hidden" name="pass" value="'.removeHack($pass).'" />
-        <input type="hidden" name="user_lnl" value="'.removeHack($user_lnl).'" />
-        <input type="hidden" name="C1" value="'.StripSlashes(removeHack($C1)).'" />
-        <input type="hidden" name="C2" value="'.StripSlashes(removeHack($C2)).'" />
-        <input type="hidden" name="C3" value="'.StripSlashes(removeHack($C3)).'" />
-        <input type="hidden" name="C4" value="'.StripSlashes(removeHack($C4)).'" />
-        <input type="hidden" name="C5" value="'.StripSlashes(removeHack($C5)).'" />
-        <input type="hidden" name="C6" value="'.StripSlashes(removeHack($C6)).'" />
-        <input type="hidden" name="C7" value="'.StripSlashes(removeHack($C7)).'" />
-        <input type="hidden" name="C8" value="'.StripSlashes(removeHack($C8)).'" />
-        <input type="hidden" name="M1" value="'.StripSlashes(removeHack($M1)).'" />
-        <input type="hidden" name="M2" value="'.StripSlashes(removeHack($M2)).'" />
-        <input type="hidden" name="T1" value="'.StripSlashes(removeHack($T1)).'" />
-        <input type="hidden" name="T2" value="'.StripSlashes(removeHack($T2)).'" />
-        <input type="hidden" name="B1" value="'.StripSlashes(removeHack($B1)).'" />';
+        <input type="hidden" name="pass" value="'.hack::remove($pass).'" />
+        <input type="hidden" name="user_lnl" value="'.hack::remove($user_lnl).'" />
+        <input type="hidden" name="C1" value="'.StripSlashes(hack::remove($C1)).'" />
+        <input type="hidden" name="C2" value="'.StripSlashes(hack::remove($C2)).'" />
+        <input type="hidden" name="C3" value="'.StripSlashes(hack::remove($C3)).'" />
+        <input type="hidden" name="C4" value="'.StripSlashes(hack::remove($C4)).'" />
+        <input type="hidden" name="C5" value="'.StripSlashes(hack::remove($C5)).'" />
+        <input type="hidden" name="C6" value="'.StripSlashes(hack::remove($C6)).'" />
+        <input type="hidden" name="C7" value="'.StripSlashes(hack::remove($C7)).'" />
+        <input type="hidden" name="C8" value="'.StripSlashes(hack::remove($C8)).'" />
+        <input type="hidden" name="M1" value="'.StripSlashes(hack::remove($M1)).'" />
+        <input type="hidden" name="M2" value="'.StripSlashes(hack::remove($M2)).'" />
+        <input type="hidden" name="T1" value="'.StripSlashes(hack::remove($T1)).'" />
+        <input type="hidden" name="T2" value="'.StripSlashes(hack::remove($T2)).'" />
+        <input type="hidden" name="B1" value="'.StripSlashes(hack::remove($B1)).'" />';
 }
 
 /**
@@ -481,15 +499,15 @@ function finishNewUser($uname, $name, $email, $user_avatar, $user_occ, $user_fro
 
     if(!isset($_SERVER['HTTP_REFERER'])) 
     {
-        Ecr_Log('security','Ghost form in user.php registration. => NO REFERER','');
-        L_spambot('', "false");
+        logs::Ecr_Log('security','Ghost form in user.php registration. => NO REFERER','');
+        spam::L_spambot('', "false");
         include('admin/die.php');
         die();
     }
     else if ($_SERVER['HTTP_REFERER'].$NPDS_Key !== $nuke_url.'/user.php'.$NPDS_Key) 
     {
-        Ecr_Log('security', 'Ghost form in user.php registration. => '.$_SERVER["HTTP_REFERER"], '');
-        L_spambot('', "false");
+        logs::Ecr_Log('security', 'Ghost form in user.php registration. => '.$_SERVER["HTTP_REFERER"], '');
+        spam::L_spambot('', "false");
         include('admin/die.php');
         die();
     }
@@ -509,10 +527,10 @@ function finishNewUser($uname, $name, $email, $user_avatar, $user_occ, $user_fro
         {
             $makepass = $pass;
         }
-          
+
         $AlgoCrypt = PASSWORD_BCRYPT;
         $min_ms = 100;
-        $options = ['cost' => getOptimalBcryptCostParameter($makepass, $AlgoCrypt, $min_ms)];
+        $options = ['cost' => auth::getOptimalBcryptCostParameter($makepass, $AlgoCrypt, $min_ms)];
         $hashpass = password_hash($makepass, $AlgoCrypt, $options);
         $cryptpass = crypt($makepass, $hashpass);
         
@@ -583,28 +601,28 @@ function finishNewUser($uname, $name, $email, $user_avatar, $user_occ, $user_fro
                 
                 if(isset($C1) and $C1 != '')
                 {
-                    $message .= aff_langue('[french]Activit&#x00E9; professionnelle[/french][english]Professional activity[/english][spanish]Actividad profesional[/spanish][german]Berufliche T&#xE4;tigkeit[/german]').' : '.$C1."\n";
+                    $message .= language::aff_langue('[french]Activit&#x00E9; professionnelle[/french][english]Professional activity[/english][spanish]Actividad profesional[/spanish][german]Berufliche T&#xE4;tigkeit[/german]').' : '.$C1."\n";
                 }
                 
                 if(isset($C2) and $C2 != '')
                 {
-                    $message .= aff_langue('[french]Code postal[/french][english]Postal code[/english][spanish]C&#xF3;digo postal[/spanish][german]Postleitzahl[/german]').' : '.$C2."\n";
+                    $message .= language::aff_langue('[french]Code postal[/french][english]Postal code[/english][spanish]C&#xF3;digo postal[/spanish][german]Postleitzahl[/german]').' : '.$C2."\n";
                 }
                 
                 if(isset($T1) and $T1 != '')
                 {
-                    $message .= aff_langue('[french]Date de naissance[/french][english]Birth date[/english][spanish]Fecha de nacimiento[/spanish][german]Geburtsdatum[/german]').' : '.$T1."\n";
+                    $message .= language::aff_langue('[french]Date de naissance[/french][english]Birth date[/english][spanish]Fecha de nacimiento[/spanish][german]Geburtsdatum[/german]').' : '.$T1."\n";
                 }
                 
-                $message .= "\n\n\n".aff_langue("[french]Conform&eacute;ment aux articles 38 et suivants de la loi fran&ccedil;aise n&deg; 78-17 du 6 janvier 1978 relative &agrave; l'informatique, aux fichiers et aux libert&eacute;s, tout membre dispose d&rsquo; un droit d&rsquo;acc&egrave;s, peut obtenir communication, rectification et/ou suppression des informations le concernant.[/french][english]In accordance with Articles 38 et seq. Of the French law n &deg; 78-17 of January 6, 1978 relating to data processing, files and freedoms, any member has a right of access, can obtain communication, rectification and / or deletion of information about him.[/english][chinese]&#26681;&#25454;1978&#24180;1&#26376;6&#26085;&#20851;&#20110;&#25968;&#25454;&#22788;&#29702;&#65292;&#26723;&#26696;&#21644;&#33258;&#30001;&#30340;&#27861;&#22269;78-17&#21495;&#27861;&#24459;&#65292;&#20219;&#20309;&#25104;&#21592;&#37117;&#26377;&#26435;&#36827;&#20837;&#65292;&#21487;&#20197;&#33719;&#24471;&#36890;&#20449;&#65292;&#32416;&#27491;&#21644;/&#25110; &#21024;&#38500;&#26377;&#20851;&#20182;&#30340;&#20449;&#24687;&#12290;[/chinese][spanish]De conformidad con los art&iacute;culos 38 y siguientes de la ley francesa n &deg; 78-17 del 6 de enero de 1978, relativa al procesamiento de datos, archivos y libertades, cualquier miembro tiene derecho de acceso, puede obtener comunicaci&oacute;n, rectificaci&oacute;n y / o supresi&oacute;n de informaci&oacute;n sobre &eacute;l.[/spanish][german]Gem&auml;&szlig; den Artikeln 38 ff. Des franz&ouml;sischen Gesetzes Nr. 78-17 vom 6. Januar 1978 in Bezug auf Datenverarbeitung, Akten und Freiheiten hat jedes Mitglied ein Recht auf Zugang, kann Kommunikation, Berichtigung und / oder L&ouml;schung von Informationen &uuml;ber ihn.[/german]");
+                $message .= "\n\n\n".language::aff_langue("[french]Conform&eacute;ment aux articles 38 et suivants de la loi fran&ccedil;aise n&deg; 78-17 du 6 janvier 1978 relative &agrave; l'informatique, aux fichiers et aux libert&eacute;s, tout membre dispose d&rsquo; un droit d&rsquo;acc&egrave;s, peut obtenir communication, rectification et/ou suppression des informations le concernant.[/french][english]In accordance with Articles 38 et seq. Of the French law n &deg; 78-17 of January 6, 1978 relating to data processing, files and freedoms, any member has a right of access, can obtain communication, rectification and / or deletion of information about him.[/english][chinese]&#26681;&#25454;1978&#24180;1&#26376;6&#26085;&#20851;&#20110;&#25968;&#25454;&#22788;&#29702;&#65292;&#26723;&#26696;&#21644;&#33258;&#30001;&#30340;&#27861;&#22269;78-17&#21495;&#27861;&#24459;&#65292;&#20219;&#20309;&#25104;&#21592;&#37117;&#26377;&#26435;&#36827;&#20837;&#65292;&#21487;&#20197;&#33719;&#24471;&#36890;&#20449;&#65292;&#32416;&#27491;&#21644;/&#25110; &#21024;&#38500;&#26377;&#20851;&#20182;&#30340;&#20449;&#24687;&#12290;[/chinese][spanish]De conformidad con los art&iacute;culos 38 y siguientes de la ley francesa n &deg; 78-17 del 6 de enero de 1978, relativa al procesamiento de datos, archivos y libertades, cualquier miembro tiene derecho de acceso, puede obtener comunicaci&oacute;n, rectificaci&oacute;n y / o supresi&oacute;n de informaci&oacute;n sobre &eacute;l.[/spanish][german]Gem&auml;&szlig; den Artikeln 38 ff. Des franz&ouml;sischen Gesetzes Nr. 78-17 vom 6. Januar 1978 in Bezug auf Datenverarbeitung, Akten und Freiheiten hat jedes Mitglied ein Recht auf Zugang, kann Kommunikation, Berichtigung und / oder L&ouml;schung von Informationen &uuml;ber ihn.[/german]");
                 
-                $message .= "\n\n\n".aff_langue("[french]Ce message et les pi&egrave;ces jointes sont confidentiels et &eacute;tablis &agrave; l'attention exclusive de leur destinataire (aux adresses sp&eacute;cifiques auxquelles il a &eacute;t&eacute; adress&eacute;). Si vous n'&ecirc;tes pas le destinataire de ce message, vous devez imm&eacute;diatement en avertir l'exp&eacute;diteur et supprimer ce message et les pi&egrave;ces jointes de votre syst&egrave;me.[/french][english]This message and any attachments are confidential and intended to be received only by the addressee. If you are not the intended recipient, please notify immediately the sender by reply and delete the message and any attachments from your system.[/english][chinese]&#27492;&#28040;&#24687;&#21644;&#20219;&#20309;&#38468;&#20214;&#37117;&#26159;&#20445;&#23494;&#30340;&#65292;&#24182;&#19988;&#25171;&#31639;&#30001;&#25910;&#20214;&#20154;&#25509;&#25910;&#12290; &#22914;&#26524;&#24744;&#19981;&#26159;&#39044;&#26399;&#25910;&#20214;&#20154;&#65292;&#35831;&#31435;&#21363;&#36890;&#30693;&#21457;&#20214;&#20154;&#24182;&#22238;&#22797;&#37038;&#20214;&#21644;&#31995;&#32479;&#20013;&#30340;&#25152;&#26377;&#38468;&#20214;&#12290;[/chinese][spanish]Este mensaje y cualquier adjunto son confidenciales y est&aacute;n destinados a ser recibidos por el destinatario. Si no es el destinatario deseado, notif&iacute;quelo al remitente de inmediato y responda al mensaje y cualquier archivo adjunto de su sistema.[/spanish][german]Diese Nachricht und alle Anh&auml;nge sind vertraulich und sollen vom Empf&auml;nger empfangen werden. Wenn Sie nicht der beabsichtigte Empf&auml;nger sind, benachrichtigen Sie bitte sofort den Absender und antworten Sie auf die Nachricht und alle Anlagen von Ihrem System.[/german]")."\n\n\n";
+                $message .= "\n\n\n".language::aff_langue("[french]Ce message et les pi&egrave;ces jointes sont confidentiels et &eacute;tablis &agrave; l'attention exclusive de leur destinataire (aux adresses sp&eacute;cifiques auxquelles il a &eacute;t&eacute; adress&eacute;). Si vous n'&ecirc;tes pas le destinataire de ce message, vous devez imm&eacute;diatement en avertir l'exp&eacute;diteur et supprimer ce message et les pi&egrave;ces jointes de votre syst&egrave;me.[/french][english]This message and any attachments are confidential and intended to be received only by the addressee. If you are not the intended recipient, please notify immediately the sender by reply and delete the message and any attachments from your system.[/english][chinese]&#27492;&#28040;&#24687;&#21644;&#20219;&#20309;&#38468;&#20214;&#37117;&#26159;&#20445;&#23494;&#30340;&#65292;&#24182;&#19988;&#25171;&#31639;&#30001;&#25910;&#20214;&#20154;&#25509;&#25910;&#12290; &#22914;&#26524;&#24744;&#19981;&#26159;&#39044;&#26399;&#25910;&#20214;&#20154;&#65292;&#35831;&#31435;&#21363;&#36890;&#30693;&#21457;&#20214;&#20154;&#24182;&#22238;&#22797;&#37038;&#20214;&#21644;&#31995;&#32479;&#20013;&#30340;&#25152;&#26377;&#38468;&#20214;&#12290;[/chinese][spanish]Este mensaje y cualquier adjunto son confidenciales y est&aacute;n destinados a ser recibidos por el destinatario. Si no es el destinatario deseado, notif&iacute;quelo al remitente de inmediato y responda al mensaje y cualquier archivo adjunto de su sistema.[/spanish][german]Diese Nachricht und alle Anh&auml;nge sind vertraulich und sollen vom Empf&auml;nger empfangen werden. Wenn Sie nicht der beabsichtigte Empf&auml;nger sind, benachrichtigen Sie bitte sofort den Absender und antworten Sie auf die Nachricht und alle Anlagen von Ihrem System.[/german]")."\n\n\n";
                 
                 include ("signat.php");
                 
                 $subject = translate("Inscription")." $uname";
                 
-                send_email($email, $subject, $message, '', true, 'html');
+                mailler::send_email($email, $subject, $message, '', true, 'html');
             } 
             else 
             {
@@ -614,7 +632,7 @@ function finishNewUser($uname, $name, $email, $user_avatar, $user_occ, $user_fro
                  
                 $subject = translate("Mot de passe utilisateur pour")." $uname";
                  
-                send_email($email, $subject, $message, '', true, 'html');
+                mailler::send_email($email, $subject, $message, '', true, 'html');
 
                 echo '
                 <h2>'.translate("Utilisateur").'</h2>
@@ -629,7 +647,7 @@ function finishNewUser($uname, $name, $email, $user_avatar, $user_occ, $user_fro
                 global $gmt;
                  
                 $time = date(translate("dateinternal"), time()+((integer)$gmt*3600));
-                $message = meta_lang(AddSlashes(str_replace("\n", "<br />", $message)));
+                $message = metalang::meta_lang(AddSlashes(str_replace("\n", "<br />", $message)));
                 
                 $sql = "INSERT INTO ".$NPDS_Prefix."priv_msgs (msg_image, subject, from_userid, to_userid, msg_time, msg_text) ";
                  
@@ -637,7 +655,7 @@ function finishNewUser($uname, $name, $email, $user_avatar, $user_occ, $user_fro
                 sql_query($sql);
             }
               
-            send_email($adminmail, "Inscription sur $sitename", "Infos :
+            mailler::send_email($adminmail, "Inscription sur $sitename", "Infos :
                 Nom : $name
                 ID : $uname
                 Email : $email", false, "text");
@@ -662,7 +680,7 @@ function userinfo($uname)
     global $user, $sitename, $smilies, $short_user;
     global $name, $email, $url, $bio, $user_avatar, $user_from, $user_occ, $user_intrest, $user_sig, $user_journal;
 
-    $uname = removeHack($uname);
+    $uname = hack::remove($uname);
     $result = sql_query("SELECT uid, name, femail, url, bio, user_avatar, user_from, user_occ, user_intrest, user_sig, user_journal, mns FROM ".$NPDS_Prefix."users WHERE uname='$uname'");
        
     list($uid, $name, $femail, $url, $bio, $user_avatar, $user_from, $user_occ, $user_intrest, $user_sig, $user_journal, $mns) = sql_fetch_row($result);
@@ -675,17 +693,16 @@ function userinfo($uname)
     global $cookie;
        
     include("header.php");
-    include_once("functions.php");
 
-    $email = removeHack($femail);
-    $name = stripslashes(removeHack($name));
-    $url = removeHack($url);
-    $bio = stripslashes(removeHack($bio));
-    $user_from = stripslashes(removeHack($user_from));
-    $user_occ = stripslashes(removeHack($user_occ));
-    $user_intrest = stripslashes(removeHack($user_intrest));
-    $user_sig = nl2br(removeHack($user_sig));
-    $user_journal = stripslashes(removeHack($user_journal));
+    $email = hack::remove($femail);
+    $name = stripslashes(hack::remove($name));
+    $url = hack::remove($url);
+    $bio = stripslashes(hack::remove($bio));
+    $user_from = stripslashes(hack::remove($user_from));
+    $user_occ = stripslashes(hack::remove($user_occ));
+    $user_intrest = stripslashes(hack::remove($user_intrest));
+    $user_sig = nl2br(hack::remove($user_sig));
+    $user_journal = stripslashes(hack::remove($user_journal));
     $op = 'userinfo';
 
     if (stristr($user_avatar, "users_private"))
@@ -700,7 +717,7 @@ function userinfo($uname)
           
         if (function_exists("theme_image")) 
         {
-            if (theme_image("forum/avatar/blank.gif"))
+            if (theme::theme_image("forum/avatar/blank.gif"))
             {
                 $direktori = "themes/$theme/images/forum/avatar/";
             }
@@ -711,7 +728,7 @@ function userinfo($uname)
     $posterdata_extend = array(); 
     $res_id = array(); 
     $my_rs = '';
-    $posterdata_extend = get_userdata_extend_from_id($uid);
+    $posterdata_extend = auth::get_userdata_extend_from_id($uid);
        
     if (!$short_user) 
     {
@@ -759,7 +776,7 @@ function userinfo($uname)
         }
     }
 
-    $posterdata = get_userdata_from_id($uid);
+    $posterdata = auth::get_userdata_from_id($uid);
     $useroutils = '';
        
     if (($user) and ($uid != 1))
@@ -769,7 +786,7 @@ function userinfo($uname)
        
     if ($posterdata['femail'] != '')
     {
-        $useroutils .= '<a class=" text-primary mr-3" href="mailto:'.anti_spam($posterdata['femail'],1).'" target="_blank" ><i class="fa fa-at fa-2x" title="'.translate("Email").'" data-toggle="tooltip"></i></a>&nbsp;';
+        $useroutils .= '<a class=" text-primary mr-3" href="mailto:'.spam::anti_spam($posterdata['femail'],1).'" target="_blank" ><i class="fa fa-at fa-2x" title="'.translate("Email").'" data-toggle="tooltip"></i></a>&nbsp;';
     }
        
     if ($posterdata['url'] != '')
@@ -839,7 +856,7 @@ function userinfo($uname)
                 $content = '';
                 $content .='
                 <div class="col-md-6">
-                    <div id="map_user" tabindex="300" style="width:100%; height:400px;" lang="'.language_iso(1,0,0).'">
+                    <div id="map_user" tabindex="300" style="width:100%; height:400px;" lang="'.language::language_iso(1, 0, 0).'">
                         <div id="ol_popup"></div>
                     </div>
                     <script type="module">
@@ -951,7 +968,7 @@ function userinfo($uname)
                 </div>
             </div>';
              
-            $content = aff_langue($content);
+            $content = language::aff_langue($content);
             echo $content;
         }
         // openlayers implementation
@@ -965,7 +982,7 @@ function userinfo($uname)
             echo '
             <br />
             <h4>'.translate("Journal en ligne de ").' '.$uname.'.</h4>
-            <div id="online_user_journal" class="card card-body mb-3">'.meta_lang($user_journal).'</div>';
+            <div id="online_user_journal" class="card card-body mb-3">'.metalang::meta_lang($user_journal).'</div>';
         }
 
         $file = '';
@@ -997,10 +1014,10 @@ function userinfo($uname)
         {
             $url = str_replace("#topic#", $topic_id, $filelist[$forum_id]);
           
-            echo '<p><a href="'.$url.'">'.translate("Posté : ").convertdate($post_time).'</a></p>';
-          
-            $message = smilie(stripslashes($post_text));
-            $message = aff_video_yt($message);
+            echo '<p><a href="'.$url.'">'.translate("Posté : ").date::convertdate($post_time).'</a></p>';
+
+            $message = pixel::smilie(stripslashes($post_text));
+            $message = video::aff_video_yt($message);
             $message = str_replace('[addsig]', '', $message);
           
             if (stristr($message, "<a href")) 
@@ -1015,7 +1032,7 @@ function userinfo($uname)
         <h4 class="my-3">'.translate("Les derniers articles de").' '.$uname.'.</h4>
         <div id="last_article_by" class="card card-body mb-3">';
        
-        $xtab = news_aff("libre", "WHERE informant='$uname' ORDER BY sid DESC LIMIT 10", '', 10);
+        $xtab = news::news_aff("libre", "WHERE informant='$uname' ORDER BY sid DESC LIMIT 10", '', 10);
         $story_limit = 0;
        
         while (($story_limit < 10) and ($story_limit < sizeof($xtab))) 
@@ -1026,7 +1043,7 @@ function userinfo($uname)
           
             echo '
             <div class="d-flex">
-                <div class="p-2"><a href="article.php?sid='.$sid.'">'.aff_langue($title).'</a></div>
+                <div class="p-2"><a href="article.php?sid='.$sid.'">'.language::aff_langue($title).'</a></div>
                 <div class="ml-auto p-2">'.$time.'</div>
             </div>';
         }
@@ -1064,8 +1081,8 @@ function userinfo($uname)
             if (($forum_type == '5') or ($forum_type == '7')) 
             {
                 $ok_affich = false;
-                $tab_groupe = valid_group($user);
-                $ok_affich = groupe_forum($forum_pass, $tab_groupe);
+                $tab_groupe = groupe::valid_group($user);
+                $ok_affich = groupe::groupe_forum($forum_pass, $tab_groupe);
             }
             else 
             {
@@ -1088,7 +1105,7 @@ function userinfo($uname)
                 {
                     $image = '<a title="'.translate("Lu").'" data-toggle="tooltip"><i class="fa fa-file-o fa-lg "></i></a>';
                 }
-            
+
                 $content .= '
                 <p class="mb-0 list-group-item list-group-item-action flex-column align-items-start" >
                     <span class="d-flex w-100 mt-1">
@@ -1174,9 +1191,9 @@ function main($user)
             echo "<script type=\"text/javascript\">\n//<![CDATA[\ndocument.userlogin.uname.focus();\n//]]>\n</script>";
 
             // include externe file from lib/include for functions, codes ...
-            if (file_exists("lib/include/user.inc"))
+            if (file_exists("theme/include/user.inc"))
             {
-                include ("lib/include/user.inc");
+                include ("theme/include/user.inc");
             }
         }
 
@@ -1184,7 +1201,7 @@ function main($user)
     } 
     elseif (isset($user)) 
     {
-        $cookie = cookiedecode($user);
+        $cookie = cookie::decode($user);
         userinfo($cookie[1]);
     }
 }
@@ -1202,10 +1219,10 @@ function logout()
         sql_query("DELETE FROM ".$NPDS_Prefix."session WHERE username='$cookie[1]'");
     }
 
-    setcookie('user', '', 0);
+    cookie::destroy('user');
     unset($user);
        
-    setcookie('user_language', '', 0);
+    cookie::destroy('user_language');
     unset($user_language);
        
     Header('Location: index.php');
@@ -1264,7 +1281,7 @@ function ForgetPassword()
     $arg1 = '
         var formulid = ["forgetpassword"];';
        
-    adminfoot('fv', $fv_parametres, $arg1, 'foo');
+    css::adminfoot('fv', $fv_parametres, $arg1, 'foo');
        
     include ('footer.php');
 }
@@ -1279,7 +1296,7 @@ function mail_password($uname, $code)
 {
     global $NPDS_Prefix, $sitename, $nuke_url;
 
-    $uname = removeHack(stripslashes(htmlspecialchars(urldecode($uname), ENT_QUOTES, cur_charset)));
+    $uname = hack::remove(stripslashes(htmlspecialchars(urldecode($uname), ENT_QUOTES, cur_charset)));
         $result = sql_query("SELECT uname,email,pass FROM ".$NPDS_Prefix."users WHERE uname='$uname'");
     $tmp_result = sql_fetch_row($result);
         
@@ -1289,12 +1306,12 @@ function mail_password($uname, $code)
     }
     else 
     {
-        $host_name = getip();
-           
+        $host_name = ip::get();
+
         list($uname, $email, $pass) = $tmp_result;
            
         // On envoie une URL avec dans le contenu : username, email, le MD5 du passwd retenu et le timestamp
-        $url = "$nuke_url/user.php?op=validpasswd&code=".urlencode(encrypt($uname)."#fpwd#".encryptK($email."#fpwd#".$code."#fpwd#".time(), $pass));
+        $url = "$nuke_url/user.php?op=validpasswd&code=".urlencode(crypt::encrypt($uname)."#fpwd#".crypt::encryptK($email."#fpwd#".$code."#fpwd#".time(), $pass));
 
         $message = translate("Le compte utilisateur").' '.$uname.' '.translate("at").' '.$sitename.' '.translate("est associé à votre Email.")."\n\n";
         $message .= translate("Un utilisateur web ayant l'adresse IP ")." $host_name ".translate("vient de demander une confirmation pour changer de mot de passe.")."\n\n".translate("Votre url de confirmation est :")." <a href=\"$url\">$url</a> \n\n".translate("Si vous n'avez rien demandé, ne vous inquiétez pas. Effacez juste ce Email. ")."\n\n";
@@ -1303,11 +1320,11 @@ function mail_password($uname, $code)
 
         $subject = translate("Confirmation du code pour").' '.$uname;
 
-        send_email($email, $subject, $message, '', true, 'html');
+        mailler::send_email($email, $subject, $message, '', true, 'html');
            
         message_pass('<div class="alert alert-success lead text-center"><i class="fa fa-exclamation"></i>&nbsp;'.translate("Confirmation du code pour").' '.$uname.' '.translate("envoyée par courrier.").'</div>');
            
-        Ecr_Log('security', 'Lost_password_request : '.$uname, '');
+        logs::Ecr_Log('security', 'Lost_password_request : '.$uname, '');
     }
 }
 
@@ -1321,13 +1338,13 @@ function valid_password ($code)
     global $NPDS_Prefix;
 
     $ibid = explode("#fpwd#",$code);
-    $result = sql_query("SELECT email,pass FROM ".$NPDS_Prefix."users WHERE uname='".decrypt($ibid[0])."'");
+    $result = sql_query("SELECT email,pass FROM ".$NPDS_Prefix."users WHERE uname='".crypt::decrypt($ibid[0])."'");
        
     list($email, $pass) = sql_fetch_row($result);
        
     if ($email != '')
     {
-        $ibid = explode("#fpwd#", decryptK($ibid[1], $pass));
+        $ibid = explode("#fpwd#", crypt::decryptK($ibid[1], $pass));
         if ($email == $ibid[0]) 
         {
             include("header.php");
@@ -1364,13 +1381,13 @@ function valid_password ($code)
         else 
         {
             message_pass('<div class="alert alert-danger lead text-center">'.translate("Erreur").'</div>');
-            Ecr_Log('security', 'Lost_password_valid NOK Mail not match : '.$ibid[0], '');
+            logs::Ecr_Log('security', 'Lost_password_valid NOK Mail not match : '.$ibid[0], '');
         }
     } 
     else 
     {
         message_pass('<div class="alert alert-danger lead text-center">'.translate("Erreur").'</div>');
-        Ecr_Log('security', 'Lost_password_valid NOK Bad hash : '.$ibid[0], '');
+        logs::Ecr_Log('security', 'Lost_password_valid NOK Bad hash : '.$ibid[0], '');
     }
 }
 
@@ -1385,14 +1402,14 @@ function update_password ($code, $passwd)
     global $NPDS_Prefix;
 
     $ibid = explode("#fpwd#", $code);
-    $uname = urlencode(decrypt($ibid[0]));
+    $uname = urlencode(crypt::decrypt($ibid[0]));
 
     $result = sql_query("SELECT email,pass FROM ".$NPDS_Prefix."users WHERE uname='$uname'");
     list($email, $pass) = sql_fetch_row($result);
         
     if ($email != '') 
     {
-        $ibid = explode("#fpwd#", decryptK($ibid[1], $pass));
+        $ibid = explode("#fpwd#", crypt::decryptK($ibid[1], $pass));
         if ($email == $ibid[0]) 
         {
             // Le lien doit avoir été généré dans les 24H00
@@ -1403,7 +1420,7 @@ function update_password ($code, $passwd)
                 {
                     $AlgoCrypt = PASSWORD_BCRYPT;
                     $min_ms = 100;
-                    $options = ['cost' => getOptimalBcryptCostParameter($ibid[1], $AlgoCrypt, $min_ms),];
+                    $options = ['cost' => auth::getOptimalBcryptCostParameter($ibid[1], $AlgoCrypt, $min_ms),];
                     $hashpass = password_hash($ibid[1], $AlgoCrypt, $options);
                     $cryptpass = crypt($ibid[1], $hashpass);
                    
@@ -1411,34 +1428,34 @@ function update_password ($code, $passwd)
 
                         message_pass('<div class="alert alert-success lead text-center"><a class="alert-link" href="user.php"><i class="fa fa-exclamation mr-2"></i>'.translate ("Mot de passe mis à jour. Merci de vous re-connecter").'<i class="fas fa-sign-in-alt fa-lg ml-2"></i></a></div>');
                     
-                        Ecr_Log('security', 'Lost_password_update OK : '.$uname, '');
+                        logs::Ecr_Log('security', 'Lost_password_update OK : '.$uname, '');
                 } 
                 else 
                 {
                     message_pass('<div class="alert alert-danger lead text-center">'.translate("Erreur").' : '.translate("Les mots de passe sont différents. Ils doivent être identiques.").'</div>');
                     
-                    Ecr_Log('security', 'Lost_password_update Password not match : '.$uname, '');
+                    logs::Ecr_Log('security', 'Lost_password_update Password not match : '.$uname, '');
                 }
             } 
             else 
             {
                 message_pass('<div class="alert alert-danger lead text-center">'.translate("Erreur").' : '.translate("Votre url de confirmation est expirée").' > 24 h</div>');
                  
-                Ecr_Log('security', 'Lost_password_update NOK Time > 24H00 : '.$uname, '');
+                logs::Ecr_Log('security', 'Lost_password_update NOK Time > 24H00 : '.$uname, '');
             }
         } 
         else 
         {
             message_pass('<div class="alert alert-danger lead text-center">'.translate("Erreur : Email invalide").'</div>');
               
-            Ecr_Log('security', 'Lost_password_update NOK Mail not match : '.$uname, '');
+            logs::Ecr_Log('security', 'Lost_password_update NOK Mail not match : '.$uname, '');
         }
     } 
     else 
     {
         message_pass('<div class="alert alert-danger lead text-center">'.translate("Erreur").'</div>');
            
-        Ecr_Log('security', 'Lost_password_update NOK Empty Mail or bad user : '.$uname, '');
+        logs::Ecr_Log('security', 'Lost_password_update NOK Empty Mail or bad user : '.$uname, '');
     }
 }
 
@@ -1471,11 +1488,11 @@ function docookie($setuid, $setuname, $setpass, $setstorynum, $setumode, $setuor
  
     $timeX = time()+(3600*$user_cook_duration);
        
-    setcookie("user", "$info", $timeX);
+    cookie::set("user", "$info", $timeX);
        
     if ($user_langue != '')
     {
-        setcookie('user_language', "$user_langue", $timeX);
+        cookie::set('user_language', "$user_langue", $timeX);
     }
 }
 
@@ -1513,7 +1530,7 @@ function login($uname, $pass)
             {
                 $AlgoCrypt = PASSWORD_BCRYPT;
                 $min_ms = 100;
-                $options = ['cost' => getOptimalBcryptCostParameter($pass, $AlgoCrypt, $min_ms)];
+                $options = ['cost' => auth::getOptimalBcryptCostParameter($pass, $AlgoCrypt, $min_ms)];
                 $hashpass = password_hash($pass, $AlgoCrypt, $options);
                 $pass = crypt($pass, $hashpass);
 
@@ -1547,7 +1564,7 @@ function login($uname, $pass)
 
         docookie($setinfo['uid'], $setinfo['uname'], $CryptpPWD, $setinfo['storynum'], $setinfo['umode'], $setinfo['uorder'], $setinfo['thold'], $setinfo['noscore'], $setinfo['ublockon'], $setinfo['theme'], $setinfo['commentmax'], $setinfo['user_langue']);
 
-        $ip = getip();
+        $ip = ip::get();
         $result = sql_query("SELECT * FROM ".$NPDS_Prefix."session WHERE host_addr='$ip' AND guest='1'");
           
         if (sql_num_rows($result) == 1)
@@ -1573,7 +1590,7 @@ function edituser()
     
     include("header.php");
 
-    $userinfo = getusrinfo($user);
+    $userinfo = auth::getusrinfo($user);
     nav($userinfo['mns']);
 
     global $C1, $C2, $C3, $C4, $C5, $C6, $C7, $C8, $M1, $M2, $T1, $T2,$B1;
@@ -1629,7 +1646,7 @@ function saveuser($uid, $name, $uname, $email, $femail, $url, $pass, $vpass, $bi
 {
     global $NPDS_Prefix, $user, $userinfo, $minpass, $oldpw;
 
-    $cookie = cookiedecode($user);
+    $cookie = cookie::decode($user);
     $check = $cookie[1];
 
     $result = sql_query("SELECT uid, email FROM ".$NPDS_Prefix."users WHERE uname='$check'");
@@ -1670,7 +1687,7 @@ function saveuser($uid, $name, $uname, $email, $femail, $url, $pass, $vpass, $bi
                 
                 if ($bio) 
                 {
-                    $bio = FixQuotes(strip_tags($bio));
+                    $bio = str::FixQuotes(strip_tags($bio));
                 }
                 
                 if ($attach) 
@@ -1761,7 +1778,7 @@ function saveuser($uid, $name, $uname, $email, $femail, $url, $pass, $vpass, $bi
                    
                    if (($suffix == 'gif') or ($suffix == 'jpg') or ($suffix == 'png')) 
                    {
-                        $field1_filename = removeHack(preg_replace('#[/\\\:\*\?"<>|]#i', '',  rawurldecode($field1_filename)));
+                        $field1_filename = hack::remove(preg_replace('#[/\\\:\*\?"<>|]#i', '',  rawurldecode($field1_filename)));
                         $field1_filename = preg_replace('#\.{2}|config.php|/etc#i', '', $field1_filename);
                       
                         if ($field1_filename) 
@@ -1821,15 +1838,15 @@ function saveuser($uid, $name, $uname, $email, $femail, $url, $pass, $vpass, $bi
 
                 if ($pass != '') 
                 {
-                    cookiedecode($user);
+                    cookie::decode($user);
                    
                     $AlgoCrypt = PASSWORD_BCRYPT;
                     $min_ms = 100;
-                    $options = ['cost' => getOptimalBcryptCostParameter($pass, $AlgoCrypt, $min_ms),];
+                    $options = ['cost' => auth::getOptimalBcryptCostParameter($pass, $AlgoCrypt, $min_ms),];
                     $hashpass = password_hash($pass, PASSWORD_BCRYPT, $options);
                     $pass = crypt($pass, $hashpass);
 
-                    sql_query("UPDATE ".$NPDS_Prefix."users SET name='$name', email='$email', femail='".removeHack($femail)."', url='".removeHack($url)."', pass='$pass', hashkey='1', bio='".removeHack($bio)."', user_avatar='$user_avatar', user_occ='".removeHack($user_occ)."', user_from='".removeHack($user_from)."', user_intrest='".removeHack($user_intrest)."', user_sig='".removeHack($user_sig)."', user_viewemail='$a', send_email='$u', is_visible='$v', user_lnl='$w' WHERE uid='$uid'");
+                    sql_query("UPDATE ".$NPDS_Prefix."users SET name='$name', email='$email', femail='".hack::remove($femail)."', url='".hack::remove($url)."', pass='$pass', hashkey='1', bio='".hack::remove($bio)."', user_avatar='$user_avatar', user_occ='".hack::remove($user_occ)."', user_from='".hack::remove($user_from)."', user_intrest='".hack::remove($user_intrest)."', user_sig='".hack::remove($user_sig)."', user_viewemail='$a', send_email='$u', is_visible='$v', user_lnl='$w' WHERE uid='$uid'");
                    
                     $result = sql_query("SELECT uid, uname, pass, storynum, umode, uorder, thold, noscore, ublockon, theme FROM ".$NPDS_Prefix."users WHERE uname='$uname' AND pass='$pass'");
                    
@@ -1842,20 +1859,20 @@ function saveuser($uid, $name, $uname, $email, $femail, $url, $pass, $vpass, $bi
                 } 
                 else 
                 {
-                    sql_query("UPDATE ".$NPDS_Prefix."users SET name='$name', email='$email', femail='".removeHack($femail)."', url='".removeHack($url)."', bio='".removeHack($bio)."', user_avatar='$user_avatar', user_occ='".removeHack($user_occ)."', user_from='".removeHack($user_from)."', user_intrest='".removeHack($user_intrest)."', user_sig='".removeHack($user_sig)."', user_viewemail='$a', send_email='$u', is_visible='$v', user_lnl='$w' WHERE uid='$uid'");
+                    sql_query("UPDATE ".$NPDS_Prefix."users SET name='$name', email='$email', femail='".hack::remove($femail)."', url='".hack::remove($url)."', bio='".hack::remove($bio)."', user_avatar='$user_avatar', user_occ='".hack::remove($user_occ)."', user_from='".hack::remove($user_from)."', user_intrest='".hack::remove($user_intrest)."', user_sig='".hack::remove($user_sig)."', user_viewemail='$a', send_email='$u', is_visible='$v', user_lnl='$w' WHERE uid='$uid'");
                   
                 }
-                  
+
                 sql_query("UPDATE ".$NPDS_Prefix."users_status SET attachsig='$t' WHERE uid='$uid'");
                 $result = sql_query("SELECT uid FROM ".$NPDS_Prefix."users_extend WHERE uid='$uid'");
                   
                 if (sql_num_rows($result) == 1) 
                 {
-                    sql_query("UPDATE ".$NPDS_Prefix."users_extend SET C1='".removeHack($C1)."', C2='".removeHack($C2)."', C3='".removeHack($C3)."', C4='".removeHack($C4)."', C5='".removeHack($C5)."', C6='".removeHack($C6)."', C7='".removeHack($C7)."', C8='".removeHack($C8)."', M1='".removeHack($M1)."', M2='".removeHack($M2)."', T1='".removeHack($T1)."', T2='".removeHack($T2)."', B1='$B1' WHERE uid='$uid'");
+                    sql_query("UPDATE ".$NPDS_Prefix."users_extend SET C1='".hack::remove($C1)."', C2='".hack::remove($C2)."', C3='".hack::remove($C3)."', C4='".hack::remove($C4)."', C5='".hack::remove($C5)."', C6='".hack::remove($C6)."', C7='".hack::remove($C7)."', C8='".hack::remove($C8)."', M1='".hack::remove($M1)."', M2='".hack::remove($M2)."', T1='".hack::remove($T1)."', T2='".hack::remove($T2)."', B1='$B1' WHERE uid='$uid'");
                 } 
                 else 
                 {
-                    $result = sql_query("INSERT INTO ".$NPDS_Prefix."users_extend VALUES ('$uid','".removeHack($C1)."', '".removeHack($C2)."', '".removeHack($C3)."', '".removeHack($C4)."', '".removeHack($C5)."', '".removeHack($C6)."', '".removeHack($C7)."', '".removeHack($C8)."', '".removeHack($M1)."', '".removeHack($M2)."', '".removeHack($T1)."', '".removeHack($T2)."', '$B1')");
+                    $result = sql_query("INSERT INTO ".$NPDS_Prefix."users_extend VALUES ('$uid','".hack::remove($C1)."', '".hack::remove($C2)."', '".hack::remove($C3)."', '".hack::remove($C4)."', '".hack::remove($C5)."', '".hack::remove($C6)."', '".hack::remove($C7)."', '".hack::remove($C8)."', '".hack::remove($M1)."', '".hack::remove($M2)."', '".hack::remove($T1)."', '".hack::remove($T2)."', '$B1')");
                 }
 
                 if ($pass != '') 
@@ -1889,7 +1906,7 @@ function edithome()
 
     include ("header.php");
 
-    $userinfo = getusrinfo($user);
+    $userinfo = auth::getusrinfo($user);
     nav($userinfo['mns']);
        
     if ($userinfo['theme'] == '') 
@@ -1963,7 +1980,7 @@ function edithome()
     $arg1 = '
         var formulid=["changehome"];';
        
-    adminfoot('fv', $fv_parametres, $arg1, 'foo');
+    css::adminfoot('fv', $fv_parametres, $arg1, 'foo');
 }
 
 /**
@@ -1980,7 +1997,7 @@ function savehome($uid, $uname, $theme, $storynum, $ublockon, $ublock)
 {
     global $NPDS_Prefix, $user;
 
-    $cookie = cookiedecode($user);
+    $cookie = cookie::decode($user);
     $check = $cookie[1];
     $result = sql_query("SELECT uid FROM ".$NPDS_Prefix."users WHERE uname='$check'");
        
@@ -1996,11 +2013,11 @@ function savehome($uid, $uname, $theme, $storynum, $ublockon, $ublock)
             $ublockon = 0;
         }
 
-        $ublock = FixQuotes($ublock);
+        $ublock = str::FixQuotes($ublock);
         
         sql_query("UPDATE ".$NPDS_Prefix."users SET storynum='$storynum', ublockon='$ublockon', ublock='$ublock' WHERE uid='$uid'");
           
-        $userinfo = getusrinfo($user);
+        $userinfo = auth::getusrinfo($user);
           
         docookie($userinfo['uid'], $userinfo['uname'], $userinfo['pass'], $userinfo['storynum'], $userinfo['umode'], $userinfo['uorder'], $userinfo['thold'], $userinfo['noscore'], $userinfo['ublockon'], $userinfo['theme'], $userinfo['commentmax'], '');
           
@@ -2026,7 +2043,7 @@ function chgtheme()
 
     include ("header.php");
 
-    $userinfo = getusrinfo($user);
+    $userinfo = auth::getusrinfo($user);
        
     // nouvel version de la gestion des Themes et Skins
     $ibid = explode('+', $userinfo['theme']);
@@ -2178,14 +2195,14 @@ function savetheme($uid, $theme)
 {
     global $NPDS_Prefix, $user;
          
-    $cookie = cookiedecode($user);
+    $cookie = cookie::decode($user);
     $result = sql_query("SELECT uid FROM ".$NPDS_Prefix."users WHERE uname='$cookie[1]'");
     list($vuid) = sql_fetch_row($result);
        
     if ($uid == $vuid) 
     {
         sql_query("UPDATE ".$NPDS_Prefix."users SET theme='$theme' WHERE uid='$uid'");
-        $userinfo = getusrinfo($user);
+        $userinfo = auth::getusrinfo($user);
           
         docookie($userinfo['uid'], $userinfo['uname'], $userinfo['pass'], $userinfo['storynum'], $userinfo['umode'], $userinfo['uorder'], $userinfo['thold'], $userinfo['noscore'], $userinfo['ublockon'], $theme, $userinfo['commentmax'], '');
           
@@ -2211,7 +2228,7 @@ function editjournal()
 
     include("header.php");
 
-    $userinfo = getusrinfo($user);
+    $userinfo = auth::getusrinfo($user);
     nav($userinfo['mns']);
        
     echo '
@@ -2220,7 +2237,7 @@ function editjournal()
         <div class="form-group row">
             <div class="col-sm-12">
                 <textarea class="tin form-control" rows="25" name="journal">'.$userinfo['user_journal'].'</textarea>'
-                .aff_editeur('journal', '').'
+                .tiny::aff_editeur('journal', '').'
             </div>
         </div>
         <input type="hidden" name="uname" value="'.$userinfo['uname'].'" />
@@ -2255,13 +2272,13 @@ function savejournal($uid, $journal, $datetime)
 {
     global $NPDS_Prefix, $user;
     
-    $cookie = cookiedecode($user);
+    $cookie = cookie::decode($user);
     $result = sql_query("SELECT uid FROM ".$NPDS_Prefix."users WHERE uname='$cookie[1]'");
     list($vuid) = sql_fetch_row($result);
        
     if ($uid == $vuid) 
     {
-        $journal = removeHack(stripslashes(FixQuotes($journal)));
+        $journal = hack::remove(stripslashes(str::FixQuotes($journal)));
         if ($datetime) 
         {
             $journalentry = $journal;
@@ -2277,7 +2294,7 @@ function savejournal($uid, $journal, $datetime)
             sql_query("UPDATE ".$NPDS_Prefix."users SET user_journal='$journal' WHERE uid='$uid'");
         }
 
-        $userinfo = getusrinfo($user);
+        $userinfo = auth::getusrinfo($user);
           
         Header("Location: user.php");
     } 
@@ -2301,7 +2318,7 @@ switch ($op)
         settype($user_lnl,'integer');
         settype($pass,'string');
         settype($vpass,'string');
-        confirmNewUser($uname, $name, $email, $user_avatar, $user_occ, $user_from, $user_intrest, $user_sig, $user_viewemail, $pass, $vpass, $user_lnl, $C1 $C2, $C3, $C4, $C5, $C6, $C7, $C8, $M1, $M2, $T1, $T2, $B1);
+        confirmNewUser($uname, $name, $email, $user_avatar, $user_occ, $user_from, $user_intrest, $user_sig, $user_viewemail, $pass, $vpass, $user_lnl, $C1, $C2, $C3, $C4, $C5, $C6, $C7, $C8, $M1, $M2, $T1, $T2, $B1);
     break;
 
     case 'finish':
@@ -2478,7 +2495,7 @@ switch ($op)
     break;
        
     default:
-        if (!AutoReg()) 
+        if (!auth::AutoReg()) 
         {
             unset($user);
         }

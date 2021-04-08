@@ -8,6 +8,15 @@
  * @version 1.0
  * @date 02/04/2021
  */
+use npds\utility\code;
+use npds\pixels\pixel;
+use npds\media\video;
+use npds\security\hack;
+use npds\forum\forumaddon;
+use npds\forum\forumauth;
+use npds\auth\auth;
+use npds\error\error; 
+use npds\views\theme;
 
 
 $userdatat = $userdata;
@@ -22,7 +31,7 @@ switch ($acc)
         {
             $formulaire = $myrow['forum_pass'];
             
-            include ("lib/sform/forum/forum_extender.php");
+            include ("modules/sform/forum/forum_extender.php");
         }
 
         /*
@@ -39,29 +48,29 @@ switch ($acc)
         
         if (($forum_type != 6) and ($forum_type != 5)) 
         {
-            $messageP = af_cod($messageP);
+            $messageP = code::af_cod($messageP);
             $messageP = str_replace("\n", '<br />', $messageP);
         }
 
         if (($allow_bbcode) and ($forum_type != 6) and ($forum_type != 5))
         {
-            $messageP = smile($messageP);
+            $messageP = pixel::smile($messageP);
         }
          
         if (($forum_type != 6) and ($forum_type != 5)) 
         {
-            $messageP = make_clickable($messageP);
-            $messageP = removeHack($messageP);
+            $messageP = forumaddon::make_clickable($messageP);
+            $messageP = hack::remove($messageP);
             
             if ($allow_bbcode) 
             {
-                $messageP = aff_video_yt($messageP);
+                $messageP = video::aff_video_yt($messageP);
             }
         }
 
         if (!isset($Mmod))
         {
-            $subject = removeHack(strip_tags($subject));
+            $subject = hack::remove(strip_tags($subject));
         }
 
         $subject = htmlspecialchars($subject, ENT_COMPAT|ENT_HTML401, cur_charset);
@@ -71,7 +80,7 @@ switch ($acc)
         //if (array_key_exists(1,$userdata))
         // why make an error ? 
         // car le tableau est déclaré après le array key exist ...
-        $userdata = get_userdata($userdata[1]);
+        $userdata = auth::get_userdata($userdata[1]);
          
         if ($allow_html == 0 || isset($html)) 
         {
@@ -85,23 +94,23 @@ switch ($acc)
         
         if (($forum_type != '6') and ($forum_type != '5')) 
         {
-            $messageP = af_cod($messageP);
+            $messageP = code::af_cod($messageP);
             $messageP = str_replace("\n", '<br />', $messageP);
         }
         
         if (($allow_bbcode) and ($forum_type != '6') and ($forum_type != '5'))
         {
-            $messageP = smile($messageP);
+            $messageP = pixel::smile($messageP);
         }
          
         if (($forum_type != 6) and ($forum_type != 5))
         {
-            $messageP = make_clickable($messageP);
-            $messageP = removeHack($messageP);
+            $messageP = forumaddon::make_clickable($messageP);
+            $messageP = hack::remove($messageP);
             
             if ($allow_bbcode) 
             {
-                $messageP = aff_video_yt($messageP);
+                $messageP = video::aff_video_yt($messageP);
             }
         }
 
@@ -109,7 +118,7 @@ switch ($acc)
     break;
 
     case 'editpost' :
-        $userdata = get_userdata($userdata[1]);
+        $userdata = auth::get_userdata($userdata[1]);
          
         settype($post_id, "integer");
          
@@ -118,7 +127,7 @@ switch ($acc)
          
         if (!$result)
         {
-            forumerror('0022');
+            error::forumerror('0022');
         }
          
         $row2 = sql_fetch_assoc($result);
@@ -138,18 +147,18 @@ switch ($acc)
          
         if (($allow_bbcode) and ($forum_type != 6) and ($forum_type != 5))
         {
-            $messageP = smile($messageP);
+            $messageP = pixel::smile($messageP);
         }
 
         if (($forum_type != 6) and ($forum_type != 5)) 
         {
-            $messageP = af_cod($messageP);
-            $messageP = str_replace("\n", '<br />', removeHack($messageP));
+            $messageP = code::af_cod($messageP);
+            $messageP = str_replace("\n", '<br />', hack::remove($messageP));
             $messageP .= '<br /><div class=" text-muted text-right small"><i class="fa fa-edit"></i> '.translate("Message édité par").' : '.$userdata['uname'].'</div';
             
             if ($allow_bbcode)
             { 
-                $messageP = aff_video_yt($messageP);
+                $messageP = video::aff_video_yt($messageP);
             }
         } 
         else
@@ -161,7 +170,7 @@ switch ($acc)
     break;
 }
 
-$theposterdata = get_userdata_from_id($userdatat[0]);
+$theposterdata = auth::get_userdata_from_id($userdatat[0]);
          
 echo '
 <div class="mb-3">
@@ -181,7 +190,7 @@ if ($smilies)
         } 
         else 
         {
-            if ($ibid = theme_image("forum/avatar/".$theposterdata['user_avatar'])) 
+            if ($ibid = theme::theme_image("forum/avatar/".$theposterdata['user_avatar'])) 
             {
                 $imgtmp = $ibid;
             } 
@@ -190,9 +199,9 @@ if ($smilies)
                 $imgtmp = "assets/images/forum/avatar/".$theposterdata['user_avatar'];
             }
         }
-        
+
         echo '
-        <a style="position:absolute; top:1rem;" tabindex="0" data-toggle="popover" data-html="true" data-title="'.$theposterdata['uname'].'" data-content=\''.member_qualif($theposterdata['uname'], $theposterdata['posts'], $theposterdata['rang']).'\'><img class=" btn-secondary img-thumbnail img-fluid n-ava" src="'.$imgtmp.'" alt="'.$theposterdata['uname'].'" /></a>';
+        <a style="position:absolute; top:1rem;" tabindex="0" data-toggle="popover" data-html="true" data-title="'.$theposterdata['uname'].'" data-content=\''.forumauth::member_qualif($theposterdata['uname'], $theposterdata['posts'], $theposterdata['rang']).'\'><img class=" btn-secondary img-thumbnail img-fluid n-ava" src="'.$imgtmp.'" alt="'.$theposterdata['uname'].'" /></a>';
     }
 }
 
@@ -202,7 +211,7 @@ echo'
          
 if (isset($image_subject)) 
 {
-    if ($ibid = theme_image("forum/subject/$image_subject")) 
+    if ($ibid = theme::theme_image("forum/subject/$image_subject")) 
     {
         $imgtmp = $ibid;
     } 
@@ -215,7 +224,7 @@ if (isset($image_subject))
 } 
 else 
 {
-    if ($ibid = theme_image("forum/icons/posticon.gif")) 
+    if ($ibid = theme::theme_image("forum/icons/posticon.gif")) 
     {
         $imgtmpP = $ibid;
     } 
@@ -243,7 +252,7 @@ else
 {
     if ($allow_bbcode) 
     {
-        $messageP = smilie($messageP);
+        $messageP = pixel::smilie($messageP);
     }
             
     $messageP = str_replace('[addsig]', '<div class="n-signature">'.nl2br($theposterdata['user_sig']).'</div>', $messageP);

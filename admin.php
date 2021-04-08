@@ -723,7 +723,7 @@ function GraphicAdmin($hlpfile)
                     </button>
                 </div>
                 <div class="modal-body">
-                    <p>Vous utilisez NPDS '.$Version_Sub.' '.$Version_Num.'</p>
+                    <p>Vous utilisez Npds Two '.$Version_Sub.' '.$Version_Num.'</p>
                     <p>'.adm_translate("Une nouvelle version de NPDS est disponible !").'</p>
                     <p class="lead mt-3">'.$versus_info[1].' '.$versus_info[2].'</p>
                     <p class="my-3">

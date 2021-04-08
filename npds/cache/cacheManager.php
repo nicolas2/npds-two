@@ -173,7 +173,7 @@ class cacheManager {
      * @param  [type] $refresh [description]
      * @return [type]          [description]
      */
-    public function checkCache($request,$refresh) 
+    public function checkCache($request, $refresh) 
     {
         global $CACHE_CONFIG, $language;
 

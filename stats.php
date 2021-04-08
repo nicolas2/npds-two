@@ -8,6 +8,8 @@
  * @version 1.0
  * @date 02/04/2021
  */
+use npds\utility\str;
+use npds\views\theme;
 
 
 if (!function_exists('Mysql_Connexion'))
@@ -146,7 +148,7 @@ echo '
 <h2>'.translate("Statistiques").'</h2>
 <div class="card card-body lead">
     <div>
-        '.translate("Nos visiteurs ont visualisé").' <span class="badge badge-secondary">'.wrh($total).'</span> '.translate("pages depuis le").' '.$startdate.'
+        '.translate("Nos visiteurs ont visualisé").' <span class="badge badge-secondary">'.str::wrh($total).'</span> '.translate("pages depuis le").' '.$startdate.'
     </div>
 </div>
 <h3 class="my-4">'.translate("Navigateurs web").'</h3>
@@ -160,7 +162,7 @@ echo '
     </thead>
     <tbody>';
    
-if ($ibid = theme_image("stats/explorer.gif"))
+if ($ibid = theme::theme_image("stats/explorer.gif"))
 { 
     $imgtmpb= $ibid; 
 }
@@ -178,10 +180,10 @@ echo '
             <div class="progress-bar progress-bar-striped" role="progressbar" aria-valuenow="'.$msie[1].'" aria-valuemin="0" aria-valuemax="100" style="width:'.$msie[1].'%; height:1rem;"></div>
         </div>
     </td>
-    <td>'.wrh($msie[0]).'</td>
+    <td>'.str::wrh($msie[0]).'</td>
 </tr>';
    
-if ($ibid = theme_image("stats/firefox.gif")) 
+if ($ibid = theme::theme_image("stats/firefox.gif")) 
 {
     $imgtmp = $ibid; 
 }
@@ -199,10 +201,10 @@ echo '
             <div class="progress-bar progress-bar-striped" role="progressbar" aria-valuenow="'.$netscape[1].'" aria-valuemin="0" aria-valuemax="100" style="width:'.$netscape[1].'%; height:1rem;"></div>
         </div>
     </td>
-    <td> '.wrh($netscape[0]).'</td>
+    <td> '.str::wrh($netscape[0]).'</td>
 </tr>';
    
-if ($ibid = theme_image("stats/opera.gif")) 
+if ($ibid = theme::theme_image("stats/opera.gif")) 
 {
     $imgtmp = $ibid; 
 }
@@ -220,10 +222,10 @@ echo '
             <div class="progress-bar progress-bar-striped" role="progressbar" aria-valuenow="'.$opera[1].'" aria-valuemin="0" aria-valuemax="100" style="width:'.$opera[1].'%; height:1rem;"></div>
         </div>
     </td>
-    <td>'.wrh($opera[0]).'</td>
+    <td>'.str::wrh($opera[0]).'</td>
 </tr>';
    
-if ($ibid = theme_image("stats/chrome.gif")) 
+if ($ibid = theme::theme_image("stats/chrome.gif")) 
 {
     $imgtmp = $ibid; 
 }
@@ -241,10 +243,10 @@ echo '
             <div class="progress-bar progress-bar-striped" role="progressbar" aria-valuenow="'.$chrome[1].'" aria-valuemin="0" aria-valuemax="100" style="width:'.$chrome[1].'%; height:1rem;"></div>
         </div>
     </td>
-    <td>'.wrh($chrome[0]).'</td>
+    <td>'.str::wrh($chrome[0]).'</td>
 </tr>';
    
-if ($ibid = theme_image("stats/safari.gif")) 
+if ($ibid = theme::theme_image("stats/safari.gif")) 
 {
     $imgtmp = $ibid; 
 }
@@ -262,10 +264,10 @@ echo '
             <div class="progress-bar progress-bar-striped" role="progressbar" aria-valuenow="'.$safari[1].'" aria-valuemin="0" aria-valuemax="100" style="width:'.$safari[1].'%; height:1rem;"></div>
         </div>
     </td>
-    <td>'.wrh($safari[0]).'</td>
+    <td>'.str::wrh($safari[0]).'</td>
 </tr>';
    
-if ($ibid = theme_image("stats/webtv.gif")) 
+if ($ibid = theme::theme_image("stats/webtv.gif")) 
 {
     $imgtmp = $ibid; 
 }
@@ -283,10 +285,10 @@ echo '
             <div class="progress-bar progress-bar-striped" role="progressbar" aria-valuenow="'.$webtv[1].'" aria-valuemin="0" aria-valuemax="100" style="width:'.$webtv[1].'%; height:1rem;"></div>
         </div>
     </td>
-    <td>'.wrh($webtv[0]).'</td>
+    <td>'.str::wrh($webtv[0]).'</td>
 </tr>';
    
-if ($ibid = theme_image("stats/konqueror.gif")) 
+if ($ibid = theme::theme_image("stats/konqueror.gif")) 
 {
     $imgtmp = $ibid; 
 }
@@ -304,10 +306,10 @@ echo '
             <div class="progress-bar progress-bar-striped" role="progressbar" aria-valuenow="'.$konqueror[1].'" aria-valuemin="0" aria-valuemax="100" style="width:'.$konqueror[1].'%; height:1rem;"></div>
         </div>
     </td>
-    <td>'.wrh($konqueror[0]).'</td>
+    <td>'.str::wrh($konqueror[0]).'</td>
 </tr>';
    
-if ($ibid = theme_image("stats/lynx.gif")) 
+if ($ibid = theme::theme_image("stats/lynx.gif")) 
 {
     $imgtmp = $ibid; 
 }
@@ -325,10 +327,10 @@ echo '
             <div class="progress-bar progress-bar-striped" role="progressbar" aria-valuenow="'.$lynx[1].'" aria-valuemin="0" aria-valuemax="100" style="width:'.$lynx[1].'%; height:1rem;"></div>
         </div>
     </td>
-    <td>'.wrh($lynx[0]).'</td>
+    <td>'.str::wrh($lynx[0]).'</td>
 </tr>';
    
-if ($ibid = theme_image("stats/altavista.gif"))
+if ($ibid = theme::theme_image("stats/altavista.gif"))
 {
     $imgtmp = $ibid; 
 }
@@ -346,7 +348,7 @@ echo '
             <div class="progress-bar progress-bar-striped" role="progressbar" aria-valuenow="'.$bot[1].'" aria-valuemin="0" aria-valuemax="100" style="width:'.$bot[1].'%; height:1rem;"></div>
         </div>
     </td>
-    <td>'.wrh($bot[0]).'</td>
+    <td>'.str::wrh($bot[0]).'</td>
 </tr>
 <tr>
     <td><i class="fa fa-question fa-3x align-middle"></i> '.translate("Inconnu").' </td>
@@ -356,7 +358,7 @@ echo '
             <div class="progress-bar progress-bar-striped" role="progressbar" aria-valuenow="'.$b_other[1].'" aria-valuemin="0" aria-valuemax="100" style="width:'.$b_other[1].'%; height:1rem;"></div>
         </div>
     </td>
-    <td>'.wrh($b_other[0]).'</td>
+    <td>'.str::wrh($b_other[0]).'</td>
 </tr>
 </tbody>
 </table>
@@ -365,14 +367,14 @@ echo '
 <table data-toggle="table" data-mobile-responsive="true" >
 <thead>
     <tr>
-        <th data-sortable="true" >'.translate("Systèmes d'exploitation").'</th>
+        <th data-sortable="true">'.translate("Systèmes d'exploitation").'</th>
         <th data-sortable="true" data-halign="center" data-align="right">%</th>
         <th data-align="right"></th>
     </tr>
 </thead>
 <tbody>';
    
-if ($ibid = theme_image("stats/windows.gif"))
+if ($ibid = theme::theme_image("stats/windows.gif"))
 {
     $imgtmp = $ibid; 
 }
@@ -383,17 +385,17 @@ else
 
 echo '
 <tr>
-    <td ><img src="'.$imgtmp.'"  alt="Windows" />&nbsp;Windows</td>
+    <td><img src="'.$imgtmp.'"  alt="Windows" />&nbsp;Windows</td>
     <td>
         <div class="text-center small">'.$windows[1].' %</div>
         <div class="progress bg-light">
             <div class="progress-bar progress-bar-striped" role="progressbar" aria-valuenow="'.$windows[1].'" aria-valuemin="0" aria-valuemax="100" style="width:'.$windows[1].'%; height:1rem;"></div>
         </div>
     </td>
-    <td>'.wrh($windows[0]).'</td>
+    <td>'.str::wrh($windows[0]).'</td>
 </tr>';
    
-if ($ibid = theme_image("stats/linux.gif")) 
+if ($ibid = theme::theme_image("stats/linux.gif")) 
 {
     $imgtmp = $ibid; 
 }
@@ -411,10 +413,10 @@ echo '
             <div class="progress-bar progress-bar-striped" role="progressbar" aria-valuenow="'.$linux[1].'" aria-valuemin="0" aria-valuemax="100" style="width:'.$linux[1].'%; height:1rem;"></div>
         </div>
     </td>
-    <td>'.wrh($linux[0]).'</td>
+    <td>'.str::wrh($linux[0]).'</td>
 </tr>';
    
-if ($ibid = theme_image("stats/mac.gif")) 
+if ($ibid = theme::theme_image("stats/mac.gif")) 
 {
     $imgtmp = $ibid; 
 }
@@ -432,10 +434,10 @@ echo '
             <div class="progress-bar progress-bar-striped" role="progressbar" aria-valuenow="'.$mac[1].'" aria-valuemin="0" aria-valuemax="100" style="width:'.$mac[1].'%; height:1rem;"></div>
         </div>
     </td>
-    <td>'.wrh($mac[0]).'</td>
+    <td>'.str::wrh($mac[0]).'</td>
 </tr>';
    
-if ($ibid = theme_image("stats/bsd.gif")) 
+if ($ibid = theme::theme_image("stats/bsd.gif")) 
 { 
     $imgtmp = $ibid; 
 }
@@ -453,10 +455,10 @@ echo '
             <div class="progress-bar progress-bar-striped" role="progressbar" aria-valuenow="'.$freebsd[1].'" aria-valuemin="0" aria-valuemax="100" style="width:'.$freebsd[1].'%; height:1rem;"></div>
         </div>
     </td>
-    <td>'.wrh($freebsd[0]).'</td>
+    <td>'.str::wrh($freebsd[0]).'</td>
 </tr>';
    
-if ($ibid = theme_image("stats/sun.gif"))
+if ($ibid = theme::theme_image("stats/sun.gif"))
 {
     $imgtmp = $ibid; 
 }
@@ -474,10 +476,10 @@ echo '
             <div class="progress-bar progress-bar-striped" role="progressbar" aria-valuenow="'.$sunos[1].'" aria-valuemin="0" aria-valuemax="100" style="width:'.$sunos[1].'%; height:1rem;"></div>
         </div>
     </td>
-    <td>'.wrh($sunos[0]).'</td>
+    <td>'.str::wrh($sunos[0]).'</td>
 </tr>';
    
-if ($ibid = theme_image("stats/irix.gif"))
+if ($ibid = theme::theme_image("stats/irix.gif"))
 {
     $imgtmp = $ibid; 
 }
@@ -495,10 +497,10 @@ echo '
             <div class="progress-bar progress-bar-striped" role="progressbar" aria-valuenow="'.$irix[1].'" aria-valuemin="0" aria-valuemax="100" style="width:'.$irix[1].'%; height:1rem;"></div>
         </div>
     </td>
-    <td>'.wrh($irix[0]).'</td>
+    <td>'.str::wrh($irix[0]).'</td>
 </tr>';
    
-if ($ibid = theme_image("stats/be.gif")) 
+if ($ibid = theme::theme_image("stats/be.gif")) 
 {
     $imgtmp = $ibid; 
 }
@@ -516,10 +518,10 @@ echo '
             <div class="progress-bar progress-bar-striped" role="progressbar" aria-valuenow="'.$beos[1].'" aria-valuemin="0" aria-valuemax="100" style="width:'.$beos[1].'%; height:1rem;"></div>
         </div>
     </td>
-    <td>'.wrh($beos[0]).'</td>
+    <td>'.str::wrh($beos[0]).'</td>
 </tr>';
    
-if ($ibid = theme_image("stats/os2.gif")) 
+if ($ibid = theme::theme_image("stats/os2.gif")) 
 {
     $imgtmp = $ibid; 
 }
@@ -537,10 +539,10 @@ echo '
             <div class="progress-bar progress-bar-striped" role="progressbar" aria-valuenow="'.$os2[1].'" aria-valuemin="0" aria-valuemax="100" style="width:'.$os2[1].'%; height:1rem;"></div>
         </div>
     </td>
-    <td>'.wrh($os2[0]).'</td>
+    <td>'.str::wrh($os2[0]).'</td>
 </tr>';
    
-if ($ibid = theme_image("stats/aix.gif")) 
+if ($ibid = theme::theme_image("stats/aix.gif")) 
 {
     $imgtmp = $ibid; 
 }
@@ -558,10 +560,10 @@ echo '
             <div class="progress-bar progress-bar-striped" role="progressbar" aria-valuenow="'.$aix[1].'" aria-valuemin="0" aria-valuemax="100" style="width:'.$aix[1].'%; height:1rem;"></div>
         </div>
     </td>
-    <td>'.wrh($aix[0]).'</td>
+    <td>'.str::wrh($aix[0]).'</td>
 </tr>';
    
-if ($ibid = theme_image("stats/android.gif")) 
+if ($ibid = theme::theme_image("stats/android.gif")) 
 {
     $imgtmp = $ibid; 
 }
@@ -579,10 +581,10 @@ echo '
             <div class="progress-bar progress-bar-striped" role="progressbar" aria-valuenow="'.$andro[1].'" aria-valuemin="0" aria-valuemax="100" style="width:'.$andro[1].'%; height:1rem;"></div>
         </div>
     </td>
-    <td>'.wrh($andro[0]).'</td>
+    <td>'.str::wrh($andro[0]).'</td>
 </tr>';
    
-if ($ibid = theme_image("stats/ios.gif")) 
+if ($ibid = theme::theme_image("stats/ios.gif")) 
 {
     $imgtmp = $ibid; 
 }
@@ -600,17 +602,17 @@ echo '
             <div class="progress-bar progress-bar-striped" role="progressbar" aria-valuenow="'.$ios[1].'" aria-valuemin="0" aria-valuemax="100" style="width:'.$ios[1].'%; height:1rem;"></div>
         </div>
     </td>
-    <td>'.wrh($ios[0]).'</td>
+    <td>'.str::wrh($ios[0]).'</td>
 </tr>
 <tr>
-    td><i class="fa fa-question fa-3x align-middle"></i>&nbsp;'.translate("Inconnu").'</td>
+    <td><i class="fa fa-question fa-3x align-middle"></i>&nbsp;'.translate("Inconnu").'</td>
     <td>
         <div class="text-center small">'.$os_other[1].' %</div>
         <div class="progress bg-light">
             <div class="progress-bar progress-bar-striped" role="progressbar" aria-valuenow="'.$os_other[1].'" aria-valuemin="0" aria-valuemax="100" style="width:'.$os_other[1].'%; height:1rem;"></div>
         </div>
     </td>
-    <td>'.wrh($os_other[0]).'</td>
+    <td>'.str::wrh($os_other[0]).'</td>
 </tr>
 </tbody>
 </table>
@@ -635,7 +637,7 @@ while(list($themelist) = sql_fetch_row($resultX))
         $ibix = explode('+', $themelist);
 
          
-        if (is_dir("themes/$ibix[0]")
+        if (is_dir("themes/$ibix[0]"))
         { 
             $T_exist = ''; 
         }
@@ -650,20 +652,28 @@ while(list($themelist) = sql_fetch_row($resultX))
             
             if ($result) 
             {
-                $themeD1 = sql_num_rows($result); else $themeD1=0;
+                $themeD1 = sql_num_rows($result); 
+            }
+            else 
+            {
+                $themeD1 = 0;
             }
             
             $result = sql_query("SELECT uid FROM ".$NPDS_Prefix."users WHERE theme=''");
             
             if ($result) 
             {
-                $themeD2 = sql_num_rows($result); else $themeD2=0;
+                $themeD2 = sql_num_rows($result);
             }
-            
+            else 
+            {
+                $themeD2 = 0;
+            }
+
             echo '
             <tr>
                <td>'.$themelist.' <b>('.translate("par défaut").')</b></td>
-               <td><b>'.wrh(($themeD1+$themeD2)).'</b></td>
+               <td><b>'.str::wrh(($themeD1+$themeD2)).'</b></td>
                <td>'.$T_exist.'</td>
             </tr>';
         } 
@@ -692,7 +702,7 @@ while(list($themelist) = sql_fetch_row($resultX))
             }
             
             echo '
-                <td><b>'.wrh($themeU).'</b></td>
+                <td><b>'.str::wrh($themeU).'</b></td>
                 <td>'.$T_exist.'</td>
             </tr>';
         }
@@ -818,10 +828,10 @@ $cat = $cat1+$cat2;
 echo '
 <h3 class="my-4">'.translate("Statistiques diverses").'</h3>
 <ul class="list-group">
-    <li class="list-group-item d-flex justify-content-start align-items-center"><i class="fa fa-users fa-2x text-muted"></i>&nbsp;'.translate("Utilisateurs enregistrés : ").' <span class="badge badge-secondary ml-auto">'.wrh($unum).' </span></li>
-    <li class="list-group-item d-flex justify-content-start align-items-center"><i class="fa fa-user fa-2x text-muted"></i>&nbsp;<i class="fas fa-pencil-alt fa-lg text-muted"></i>&nbsp;'.translate("Auteurs actifs : ").' <span class="badge badge-secondary ml-auto">'.wrh($anum).' </span></li>';
+    <li class="list-group-item d-flex justify-content-start align-items-center"><i class="fa fa-users fa-2x text-muted"></i>&nbsp;'.translate("Utilisateurs enregistrés : ").' <span class="badge badge-secondary ml-auto">'.str::wrh($unum).' </span></li>
+    <li class="list-group-item d-flex justify-content-start align-items-center"><i class="fa fa-user fa-2x text-muted"></i>&nbsp;<i class="fas fa-pencil-alt fa-lg text-muted"></i>&nbsp;'.translate("Auteurs actifs : ").' <span class="badge badge-secondary ml-auto">'.str::wrh($anum).' </span></li>';
    
-if ($ibid = theme_image("stats/postnew.png")) 
+if ($ibid = theme::theme_image("stats/postnew.png")) 
 {
     $imgtmp = $ibid; 
 }
@@ -831,9 +841,9 @@ else
 }
    
 echo '
-    <li class="list-group-item d-flex justify-content-start align-items-center"><img src="'.$imgtmp.'" alt="" />&nbsp;'.translate("Articles publiés : ").' <span class="badge badge-secondary ml-auto">'.wrh($snum).' </span></li>';
+    <li class="list-group-item d-flex justify-content-start align-items-center"><img src="'.$imgtmp.'" alt="" />&nbsp;'.translate("Articles publiés : ").' <span class="badge badge-secondary ml-auto">'.str::wrh($snum).' </span></li>';
    
-if ($ibid = theme_image("stats/topicsman.png")) 
+if ($ibid = theme::theme_image("stats/topicsman.png")) 
 {
     $imgtmp = $ibid; 
 }
@@ -843,10 +853,10 @@ else
 }
    
 echo '
-    <li class="list-group-item d-flex justify-content-start align-items-center"><img src="'.$imgtmp.'" alt="" />&nbsp;'.translate("Sujets actifs : ").' <span class="badge badge-secondary ml-auto">'.wrh($tnum).' </span></li>
-    <li class="list-group-item d-flex justify-content-start align-items-center"><i class="fa fa-comments fa-2x text-muted"></i>&nbsp;'.translate("Commentaires postés : ").' <span class="badge badge-secondary ml-auto">'.wrh($cnum).' </span></li>';
+    <li class="list-group-item d-flex justify-content-start align-items-center"><img src="'.$imgtmp.'" alt="" />&nbsp;'.translate("Sujets actifs : ").' <span class="badge badge-secondary ml-auto">'.str::wrh($tnum).' </span></li>
+    <li class="list-group-item d-flex justify-content-start align-items-center"><i class="fa fa-comments fa-2x text-muted"></i>&nbsp;'.translate("Commentaires postés : ").' <span class="badge badge-secondary ml-auto">'.str::wrh($cnum).' </span></li>';
    
-if ($ibid = theme_image("stats/sections.png")) 
+if ($ibid = theme::theme_image("stats/sections.png")) 
 {
     $imgtmpS = $ibid; 
 }
@@ -856,9 +866,9 @@ else
 }
    
 echo '
-    <li class="list-group-item d-flex justify-content-start align-items-center"><img src="'.$imgtmpS.'" alt="" />&nbsp;'.translate("Rubriques spéciales : ").' <span class="badge badge-secondary ml-auto">'.wrh($secnum).' </span></li>';
+    <li class="list-group-item d-flex justify-content-start align-items-center"><img src="'.$imgtmpS.'" alt="" />&nbsp;'.translate("Rubriques spéciales : ").' <span class="badge badge-secondary ml-auto">'.str::wrh($secnum).' </span></li>';
    
-if ($ibid = theme_image("stats/sections.png")) 
+if ($ibid = theme::theme_image("stats/sections.png")) 
 {
     $imgtmp = $ibid; 
 }
@@ -868,12 +878,12 @@ else
 }
 
 echo '
-    <li class="list-group-item d-flex justify-content-start align-items-center"><img src="'.$imgtmp.'" alt="" />&nbsp;'.translate("Articles présents dans les rubriques : ").' <span class="badge badge-secondary ml-auto">'.wrh($secanum).' </span></li>';
+    <li class="list-group-item d-flex justify-content-start align-items-center"><img src="'.$imgtmp.'" alt="" />&nbsp;'.translate("Articles présents dans les rubriques : ").' <span class="badge badge-secondary ml-auto">'.str::wrh($secanum).' </span></li>';
 echo '
-    <li class="list-group-item d-flex justify-content-start align-items-center"><i class="fa fa-link fa-2x text-muted"></i>&nbsp;'.translate("Liens présents dans la rubrique des liens web : ").' <span class="badge badge-secondary ml-auto">'.wrh($links).' </span></li>
-    <li class="list-group-item d-flex justify-content-start align-items-center"><i class="fa fa-link fa-2x text-muted"></i>&nbsp;'.translate("Catégories dans la rubrique des liens web : ").' <span class="badge badge-secondary ml-auto">'.wrh($cat).' </span></li>';
+    <li class="list-group-item d-flex justify-content-start align-items-center"><i class="fa fa-link fa-2x text-muted"></i>&nbsp;'.translate("Liens présents dans la rubrique des liens web : ").' <span class="badge badge-secondary ml-auto">'.str::wrh($links).' </span></li>
+    <li class="list-group-item d-flex justify-content-start align-items-center"><i class="fa fa-link fa-2x text-muted"></i>&nbsp;'.translate("Catégories dans la rubrique des liens web : ").' <span class="badge badge-secondary ml-auto">'.str::wrh($cat).' </span></li>';
    
-if ($ibid = theme_image("stats/submissions.png")) 
+if ($ibid = theme::theme_image("stats/submissions.png")) 
 {
     $imgtmp = $ibid; 
 }
@@ -883,7 +893,7 @@ else
 }
    
 echo '
-    <li class="list-group-item d-flex justify-content-start align-items-center"><img src="'.$imgtmp.'"  alt="" />&nbsp;'.translate("Article en attente d'édition : ").' <span class="badge badge-secondary ml-auto">'.wrh($subnum).' </span></li>
+    <li class="list-group-item d-flex justify-content-start align-items-center"><img src="'.$imgtmp.'"  alt="" />&nbsp;'.translate("Article en attente d'édition : ").' <span class="badge badge-secondary ml-auto">'.str::wrh($subnum).' </span></li>
     <li class="list-group-item d-flex justify-content-start align-items-center"><i class="fa fa-cogs fa-2x text-muted"></i>&nbsp;Version Num <span class="badge badge-danger ml-auto">'.$Version_Num.'</span></li>
     <li class="list-group-item d-flex justify-content-start align-items-center"><i class="fa fa-cogs fa-2x text-muted"></i>&nbsp;Version Id <span class="badge badge-danger ml-auto">'.$Version_Id.'</span></li>
     <li class="list-group-item d-flex justify-content-start align-items-center"><i class="fa fa-cogs fa-2x text-muted"></i>&nbsp;Version Sub <span class="badge badge-danger ml-auto">'.$Version_Sub.'</span></li>

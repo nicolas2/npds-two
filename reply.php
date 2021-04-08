@@ -8,6 +8,25 @@
  * @version 1.0
  * @date 02/04/2021
  */
+use npds\cache\cacheManager;
+use npds\cache\cacheEmpty;
+use npds\cache\cache;
+use npds\error\error;
+use npds\forum\forumtopics;
+use npds\auth\auth;
+use npds\forum\forumauth;
+use npds\forum\forumaddon;
+use npds\security\ip;
+use npds\logs\logs;
+use npds\utility\spam;
+use npds\pixels\pixel;
+use npds\security\hack;
+use npds\mailler\mailler;
+use npds\subscribe\subscribe;
+use npds\views\theme;
+use npds\date\date;
+use npds\media\video;
+use npds\utility\code;
 
 
 if (!function_exists('Mysql_Connexion'))
@@ -21,7 +40,7 @@ if ($SuperCache)
 }
 else
 {
-    $cache_obj = new SuperCacheEmpty();
+    $cache_obj = new cacheEmpty();
 }
 
 include('auth.php');
@@ -35,11 +54,11 @@ if ($cancel)
     header("Location: viewtopic.php?topic=$topic&forum=$forum");
 }
 
-$rowQ1 = Q_Select ("SELECT forum_name, forum_moderator, forum_type, forum_pass, forum_access, arbre FROM ".$NPDS_Prefix."forums WHERE forum_id = '$forum'", 3600);
+$rowQ1 = cache::Q_Select("SELECT forum_name, forum_moderator, forum_type, forum_pass, forum_access, arbre FROM ".$NPDS_Prefix."forums WHERE forum_id = '$forum'", 3600);
 
 if (!$rowQ1)
 {
-    forumerror('0001');
+    error::forumerror('0001');
 }
 
 $myrow = $rowQ1[0];
@@ -58,14 +77,14 @@ if ($forum_access == 9)
     header("Location: forum.php");
 }
 
-if (is_locked($topic))
+if (forumtopics::is_locked($topic))
 {
-    forumerror('0025');
+    error::forumerror('0025');
 }
 
-if (!does_exists($forum, "forum") || !does_exists($topic, "topic"))
+if (!forumtopics::does_exists($forum, "forum") || !forumtopics::does_exists($topic, "topic"))
 {
-    forumerror('0026');
+    error::forumerror('0026');
 }
 
 settype($submitS, 'string');
@@ -91,7 +110,7 @@ if ($submitS)
         {
             if (($username == '') or ($password == ''))
             {
-                forumerror('0027');
+                error::forumerror('0027');
             }
             else 
             {
@@ -100,11 +119,11 @@ if ($submitS)
 
                 if ((password_verify($password, $pass)) and ($pass != '')) 
                 {
-                    $userdata = get_userdata($username);
+                    $userdata = auth::get_userdata($username);
                     
                     if ($userdata['uid'] == 1)
                     {
-                        forumerror('0027');
+                        error::forumerror('0027');
                     }
                     else
                     {
@@ -113,16 +132,16 @@ if ($submitS)
                 }
                 else
                 {
-                    forumerror('0028');
+                    error::forumerror('0028');
                 }
 
-                $modo = user_is_moderator($username, $pass, $forum_access);
+                $modo = forumauth::user_is_moderator($username, $pass, $forum_access);
             
                 if ($forum_access == 2) 
                 {
                     if (!$modo)
                     {
-                        forumerror('0027');
+                        error::forumerror('0027');
                     }
                 }
             }
@@ -132,17 +151,17 @@ if ($submitS)
     {
         $userX = base64_decode($user);
         $userdata = explode(':', $userX);
-        $modo = user_is_moderator($userdata[0], $userdata[2], $forum_access);
+        $modo = forumauth::user_is_moderator($userdata[0], $userdata[2], $forum_access);
       
         if ($forum_access == 2) 
         {
             if (!$modo)
             {
-                forumerror('0027');
+                error::forumerror('0027');
             }
         }
 
-        $userdata = get_userdata($userdata[1]);
+        $userdata = auth::get_userdata($userdata[1]);
       
         include("header.php");
     }
@@ -150,7 +169,7 @@ if ($submitS)
     // Either valid user/pass, or valid session. continue with post.
     if ($stop != 1) 
     {
-        $poster_ip = getip();
+        $poster_ip = ip::get();
       
         if ($dns_verif)
         {
@@ -162,12 +181,12 @@ if ($submitS)
         }
 
         // anti flood
-        anti_flood($modo, $anti_flood, $poster_ip, $userdata, $gmt);
+        forumaddon::anti_flood($modo, $anti_flood, $poster_ip, $userdata, $gmt);
       
         //anti_spambot
-        if (!R_spambot($asb_question, $asb_reponse, $message)) 
+        if (!spam::R_spambot($asb_question, $asb_reponse, $message)) 
         {
-            Ecr_Log('security', 'Forum Anti-Spam : forum='.$forum.' / topic='.$topic, '');
+            logs::Ecr_Log('security', 'Forum Anti-Spam : forum='.$forum.' / topic='.$topic, '');
             redirect_url("index.php");
             die();
         }
@@ -190,16 +209,16 @@ if ($submitS)
       
         if (($allow_bbcode == 1) and ($forum_type != '6') and ($forum_type != '5'))
         {
-            $message = smile($message);
+            $message = pixel::smile($message);
         }
       
         if (($forum_type != '6') and ($forum_type != '5'))
         {
-            $message = make_clickable($message);
-            $message = removeHack($message);
+            $message = forumaddon::make_clickable($message);
+            $message = hack::remove($message);
         }
 
-        $image_subject = removeHack($image_subject);
+        $image_subject = hack::remove($image_subject);
         $message = addslashes($message);
         $time = date("Y-m-d H:i:s", time()+((integer)$gmt*3600));
 
@@ -207,7 +226,7 @@ if ($submitS)
       
         if (!$result = sql_query($sql))
         {
-            forumerror('0020');
+            error::forumerror('0020');
         }
         else
         {
@@ -218,14 +237,14 @@ if ($submitS)
       
         if (!$result = sql_query($sql))
         {
-            forumerror('0020');
+            error::forumerror('0020');
         }
       
         $sql = "UPDATE ".$NPDS_Prefix."forum_read SET status='0' where topicid = '$topic' and uid <> '".$userdata['uid']."'";
       
         if (!$r = sql_query($sql))
         {
-            forumerror('0001');
+            error::forumerror('0001');
         }
 
         $sql = "UPDATE ".$NPDS_Prefix."users_status SET posts=posts+1 WHERE (uid = '".$userdata['uid']."')";
@@ -233,14 +252,14 @@ if ($submitS)
       
         if (!$result)
         {
-            forumerror('0029');
+            error::forumerror('0029');
         }
       
         $sql = "SELECT t.topic_notify, u.email, u.uname, u.uid, u.user_langue FROM ".$NPDS_Prefix."forumtopics t, ".$NPDS_Prefix."users u WHERE t.topic_id = '$topic' AND t.topic_poster = u.uid";
       
         if (!$result = sql_query($sql))
         {
-            forumerror('0022');
+            error::forumerror('0022');
         }
 
         $m = sql_fetch_assoc($result);
@@ -251,7 +270,7 @@ if ($submitS)
             include_once("language/lang-multi.php");
          
             $resultZ = sql_query("SELECT topic_title FROM ".$NPDS_Prefix."forumtopics WHERE topic_id='$topic'");
-            list($title_topic)=sql_fetch_row($resultZ);
+            list($title_topic) = sql_fetch_row($resultZ);
             
             $subject = strip_tags($forum_name)."/".$title_topic." : ".translate_ml($m['user_langue'], "Une réponse à votre dernier Commentaire a été posté.");
          
@@ -262,18 +281,18 @@ if ($submitS)
             
             include("signat.php");
 
-            send_email($m['email'], $subject, $message, '', true, "html");
+            mailler::send_email($m['email'], $subject, $message, '', true, "html");
             $sauf = $m['uid'];
         }
 
         global $subscribe;
         if ($subscribe) 
         {
-            if (subscribe_query($userdata['uid'], "forum", $forum)) 
+            if (subscribe::subscribe_query($userdata['uid'], "forum", $forum)) 
             {
                 $sauf = $userdata['uid'];
             }
-            subscribe_mail('forum', $topic, $forum, '', $sauf);
+            subscribe::subscribe_mail('forum', $topic, $forum, '', $sauf);
         }
 
         if (isset($upload)) 
@@ -310,8 +329,8 @@ else
     
     $userdata = explode(':', $userX);
    
-    $posterdata = get_userdata_from_id($userdata[0]);
-   
+    $posterdata = auth::get_userdata_from_id($userdata[0]);
+
     if ($smilies) 
     {
         if(isset($user)) 
@@ -324,7 +343,7 @@ else
                 }
                 else
                 {
-                    if ($ibid = theme_image("forum/avatar/".$posterdata['user_avatar'])) 
+                    if ($ibid = theme::theme_image("forum/avatar/".$posterdata['user_avatar'])) 
                     {
                         $imgava = $ibid;
                     } 
@@ -337,7 +356,7 @@ else
         }
         else 
         {
-            if ($ibid = theme_image("forum/avatar/blank.gif")) 
+            if ($ibid = theme::theme_image("forum/avatar/blank.gif")) 
             {
                 $imgava = $ibid;
             } 
@@ -348,7 +367,7 @@ else
         }
     }
 
-    $moderator = get_moderator($mod);
+    $moderator = forumauth::get_moderator($mod);
     $moderator = explode(' ', $moderator);
     $Mmod = false;
    
@@ -363,7 +382,7 @@ else
    
     for ($i = 0; $i < count($moderator); $i++) 
     {
-        $modera = get_userdata($moderator[$i]);
+        $modera = auth::get_userdata($moderator[$i]);
       
         if ($modera['user_avatar'] != '') 
         {
@@ -373,7 +392,7 @@ else
             } 
             else 
             {
-                if ($ibid = theme_image("forum/avatar/".$modera['user_avatar'])) 
+                if ($ibid = theme::theme_image("forum/avatar/".$modera['user_avatar'])) 
                 {
                     $imgtmp = $ibid;
                 } 
@@ -433,7 +452,7 @@ else
     } 
     elseif ($forum_access == 2) 
     {
-        if (user_is_moderator($userdata[0], $userdata[2], $forum_access))
+        if (forumauth::user_is_moderator($userdata[0], $userdata[2], $forum_access))
         {
             $allow_to_reply = true;
         }
@@ -470,7 +489,7 @@ else
                 <label class="form-control-label col-sm-12">'.translate("Icone du message").'</label>
                 <div class="col-sm-12">
                     <div class="border rounded pt-3 px-2 n-fond_subject d-flex flex-row flex-wrap">
-                        '.emotion_add($image_subject).'
+                        '.pixel::emotion_add($image_subject).'
                     </div>
                 </div>
             </div>';
@@ -484,13 +503,13 @@ else
                         <div class="card-header">
                             <div class="float-left">';
    
-        putitems('ta_replypost');
+        pixel::putitems('ta_replypost');
       
         echo '</div>';
    
         if ($allow_html == 1)
         {
-            echo '<span class="text-success float-right mt-2" title="HTML '.translate("Activé").'" data-toggle="tooltip"><i class="fa fa-code fa-lg"></i></span>'.HTML_Add();
+            echo '<span class="text-success float-right mt-2" title="HTML '.translate("Activé").'" data-toggle="tooltip"><i class="fa fa-code fa-lg"></i></span>'.forumaddon::HTML_Add();
         }
         else
         {
@@ -512,7 +531,7 @@ else
            
                 if (($allow_bbcode) and ($forum_type != 6) and ($forum_type != 5)) 
                 {
-                    $text = smile($text);
+                    $text = pixel::smile($text);
                     $text = str_replace('<br />', "\n", $text);
                 } 
                 else
@@ -637,7 +656,7 @@ else
         echo '
             </div>
         </div>
-        '.Q_spambot().'
+        '.spam::Q_spambot().'
         <div class="form-group row">
             <div class="col-sm-12">
                 <input type="hidden" name="forum" value="'.$forum.'" />
@@ -674,7 +693,7 @@ else
       
         if (!$result = sql_query($sql))
         {
-            forumerror('0001');
+            error::forumerror('0001');
         }
       
         $myrow = sql_fetch_assoc($result);
@@ -688,7 +707,7 @@ else
                     <div class="card mb-3">
                         <div class="card-header">';
          
-            $posterdata = get_userdata_from_id($myrow['poster_id']);
+            $posterdata = auth::get_userdata_from_id($myrow['poster_id']);
          
             if($myrow['poster_id'] !== '0') 
             {
@@ -700,11 +719,11 @@ else
 
                 if (!$short_user) 
                 {
-                    $posterdata_extend = get_userdata_extend_from_id($myrow['poster_id']);
+                    $posterdata_extend = auth::get_userdata_extend_from_id($myrow['poster_id']);
                
                     include('modules/reseaux-sociaux/reseaux-sociaux.conf.php');
                
-                    if($user or autorisation(-127)) 
+                    if($user or auth::autorisation(-127)) 
                     {
                         if (array_key_exists('M2', $posterdata_extend)) 
                         {
@@ -763,7 +782,7 @@ else
                     $useroutils .= '<hr />';
                 }
             
-                if($user or autorisation(-127)) 
+                if($user or auth::autorisation(-127)) 
                 {
                     if ($posterdata['uid'] != 1 and $posterdata['uid'] != '')
                     {
@@ -777,7 +796,7 @@ else
                
                     if ($posterdata['femail'] != '')
                     {
-                        $useroutils .= '<a class="list-group-item text-primary text-center text-md-left" href="mailto:'.anti_spam($posterdata['femail'],1).'" target="_blank" title="'.translate("Email").'" data-toggle="tooltip"><i class="fa fa-at fa-2x align-middle fa-fw"></i><span class="ml-3 d-none d-md-inline">'.translate("Email").'</span></a>';
+                        $useroutils .= '<a class="list-group-item text-primary text-center text-md-left" href="mailto:'.spam::anti_spam($posterdata['femail'],1).'" target="_blank" title="'.translate("Email").'" data-toggle="tooltip"><i class="fa fa-at fa-2x align-middle fa-fw"></i><span class="ml-3 d-none d-md-inline">'.translate("Email").'</span></a>';
                     }
                
                     if ($myrow['poster_id'] != 1 and array_key_exists($ch_lat, $posterdata_extend)) 
@@ -812,7 +831,7 @@ else
                         }
                         else 
                         {
-                            if ($ibid = theme_image("forum/avatar/".$posterdata['user_avatar'])) 
+                            if ($ibid = theme::theme_image("forum/avatar/".$posterdata['user_avatar'])) 
                             {
                                 $imgtmp = $ibid;
                             } 
@@ -824,7 +843,7 @@ else
                     }
 
                     echo '
-                    <a style="position:absolute; top:1rem;" tabindex="0" data-toggle="popover" data-trigger="focus" data-html="true" data-title="'.$posterdata['uname'].'" data-content=\'<div class="my-2 border rounded p-2">'.member_qualif($posterdata['uname'], $posts, $posterdata['rang']).'</div><div class="list-group mb-3 text-center">'.$useroutils.'</div><div class="mx-auto text-center" style="max-width:170px;">'.$my_rs.'</div>\'><img class=" btn-outline-primary img-thumbnail img-fluid n-ava" src="'.$imgtmp.'" alt="'.$posterdata['uname'].'" /></a><span style="position:absolute; left:6em;" class="text-muted"><strong>'.$posterdata['uname'].'</strong></span>';
+                    <a style="position:absolute; top:1rem;" tabindex="0" data-toggle="popover" data-trigger="focus" data-html="true" data-title="'.$posterdata['uname'].'" data-content=\'<div class="my-2 border rounded p-2">'.forumauth::member_qualif($posterdata['uname'], $posts, $posterdata['rang']).'</div><div class="list-group mb-3 text-center">'.$useroutils.'</div><div class="mx-auto text-center" style="max-width:170px;">'.$my_rs.'</div>\'><img class=" btn-outline-primary img-thumbnail img-fluid n-ava" src="'.$imgtmp.'" alt="'.$posterdata['uname'].'" /></a><span style="position:absolute; left:6em;" class="text-muted"><strong>'.$posterdata['uname'].'</strong></span>';
                 } 
                 else 
                 {
@@ -849,7 +868,7 @@ else
          
             if ($myrow['image'] != '') 
             {
-                if ($ibid = theme_image("forum/subject/".$myrow['image'])) 
+                if ($ibid = theme::theme_image("forum/subject/".$myrow['image'])) 
                 {
                     $imgtmp = $ibid;
                 } 
@@ -862,7 +881,7 @@ else
             } 
             else 
             {
-                if ($ibid = theme_image("forum/subject/icons/posticon.gif")) 
+                if ($ibid = theme::theme_image("forum/subject/icons/posticon.gif")) 
                 {
                     $imgtmp = $ibid;
                 } 
@@ -878,16 +897,16 @@ else
                 </span>
             </div>
             <div class="card-body">
-                <span class="text-muted float-right small" style="margin-top:-1rem;">'.translate("Posté : ").convertdate($myrow['post_time']).'</span>
+                <span class="text-muted float-right small" style="margin-top:-1rem;">'.translate("Posté : ").date::convertdate($myrow['post_time']).'</span>
                 <div class="card-text pt-4">';
          
             $message = stripslashes($myrow['post_text']);
-         
+
             if (($allow_bbcode) and ($forum_type != 6) and ($forum_type != 5)) 
             {
-                $message = smilie($message);
-                $message = aff_video_yt($message);
-                $message = af_cod($message);
+                $message = pixel::smilie($message);
+                $message = video::aff_video_yt($message);
+                $message = code::af_cod($message);
                 $message = str_replace("\n", '<br />', $message);
             }
 

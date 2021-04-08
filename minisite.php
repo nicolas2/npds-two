@@ -9,6 +9,14 @@
  * @version 1.0
  * @date 02/04/2021
  */
+use npds\language\language;
+use npds\language\metalang;
+use npds\auth\auth;
+use npds\views\theme;
+use npds\groupes\groupe;
+use npds\security\hack;
+use npds\media\video;
+
 
 if (!function_exists('Mysql_Connexion')) {
     include('boot/bootstrap.php');
@@ -16,6 +24,7 @@ if (!function_exists('Mysql_Connexion')) {
 
 settype($gr_name, 'string');
 settype($new_pages, 'string');
+
 define('CITRON', 'tarteaucitron');
 
 /**
@@ -40,7 +49,7 @@ function convert_ressources($Xcontent)
         }
     }
 
-    return aff_langue($Xcontent);
+    return language::aff_langue($Xcontent);
 }
 
 // Npds Two copyright ... don't remove !
@@ -58,7 +67,7 @@ if (($op != '') and ($op))
         and !stristr($op, "script")
         and !stristr($op, "cookie")
         and !stristr($op, "iframe")
-        and  !stristr($op, "applet")
+        and !stristr($op, "applet")
         and !stristr($op, "object")
         and !stristr($op, "meta")
     ) 
@@ -79,7 +88,7 @@ if (($op != '') and ($op))
         if (dirname($op) != 'groupe') 
         {
             // single user
-            $userdata = get_userdata($op);
+            $userdata = auth::get_userdata($op);
             if ($userdata['mns'] == true) 
             {
                 $affich = true;
@@ -94,7 +103,7 @@ if (($op != '') and ($op))
                     $direktori = 'assets/images/forum/avatar/';
                     if (function_exists("theme_image")) 
                     {
-                        if (theme_image("forum/avatar/blank.gif"))
+                        if (theme::theme_image("forum/avatar/blank.gif"))
                         {
                             $direktori = "themes/$theme/images/forum/avatar/";
                         }
@@ -126,7 +135,7 @@ if (($op != '') and ($op))
                 {
                 }
 
-                $gX = liste_group();
+                $gX = groupe::liste_group();
 
                 foreach ($gX as $g_id => $g_name) 
                 {
@@ -137,7 +146,7 @@ if (($op != '') and ($op))
                 }
             }
 
-            $tabgp = valid_group($user);
+            $tabgp = groupe::valid_group($user);
             if (is_array($tabgp)) 
             {
                 foreach ($tabgp as $auto) 
@@ -176,7 +185,7 @@ if ($affich)
         if (defined('CITRON')) 
         {
             echo '
-            <script type="text/javascript"> var tarteaucitronForceLanguage = "' . language_iso(1, '', '') . '"; </script>
+            <script type="text/javascript"> var tarteaucitronForceLanguage = "' . language::language_iso(1, '', '') . '"; </script>
             <script type="text/javascript" src="assets/shared/tarteaucitron/tarteaucitron.js"></script>
             <script type="text/javascript">
                 //<![CDATA[
@@ -311,7 +320,7 @@ if ($affich)
             "'!copyright!'i"          => $copyright,
             "'!avatar!'i"             => $avatar_mns,
             "'!id_mns!'i"             => $op,
-            "'!gr_name!'i"            => aff_langue($gr_name)
+            "'!gr_name!'i"            => language::aff_langue($gr_name)
         );
 
         $Xcontent = preg_replace(
@@ -320,7 +329,7 @@ if ($affich)
             $Xcontent
         );
 
-        $Xcontent = meta_lang(MNSremoveHack($Xcontent));
+        $Xcontent = metalang::meta_lang(hack::MNSremove($Xcontent));
          
         //applique aff_video que sur la partie affichage
         $rupt = strpos($Xcontent, '#v_yt#');
@@ -332,7 +341,7 @@ if ($affich)
 
         //echo $a.$b;         
         echo substr($Xcontent, 0, $rupt);
-        echo aff_video_yt(substr($Xcontent, $rupt + 6));
+        echo video::aff_video_yt(substr($Xcontent, $rupt + 6));
 
         if ($adminblog)
         {

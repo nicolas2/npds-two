@@ -8,9 +8,11 @@
  * @version 1.0
  * @date 02/04/2021
  */
-use npds\miller\mailler;
+use npds\mailler\mailler;
 use npds\utility\spam;
 use npds\security\ip;
+use npds\html\htmltable;
+use npds\logs\logs;
 
 
 if (!function_exists('Mysql_Connexion'))
@@ -144,12 +146,12 @@ function subscribe_ok($xemail)
                 
                 include("signat.php");
                 
-                send_email($xemail, $subject, $message, '', true, 'text');
+                mailler::send_email($xemail, $subject, $message, '', true, 'text');
                 
-                opentable();
+                htmltable::opentable();
                 echo translate("Merci d'avoir consacré du temps pour vous enregistrer.")."<br /><br />";
                 echo "<a href=\"index.php\" class=\"noir\">".translate("Retour en arrière")."</a>";
-                closetable();
+                htmltable::closetable();
             } 
             else 
             {
@@ -205,10 +207,10 @@ function unsubscribe($xemail)
                 
                 include("header.php");
                 
-                opentable();
+                htmltable::opentable();
                 echo translate("Merci")."<br /><br />";
                 echo "<a href=\"index.php\" class=\"noir\">".translate("Retour en arrière")."</a>";
-                closetable();
+                htmltable::closetable();
                 
                 include("footer.php");
             } 
@@ -243,9 +245,9 @@ switch ($op)
 
     case 'subscribeOK':
         //anti_spambot
-        if (!R_spambot($asb_question, $asb_reponse,"")) 
+        if (!spam::R_spambot($asb_question, $asb_reponse,"")) 
         {
-            Ecr_Log("security", "LNL Anti-Spam : email=".$email, "");
+            logs::Ecr_Log("security", "LNL Anti-Spam : email=".$email, "");
             redirect_url("index.php");
             die();
         }
