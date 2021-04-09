@@ -26,7 +26,7 @@ class forumposts {
      * @param  [type] $tid [description]
      * @return [type]      [description]
      */
-    function get_contributeurs($fid, $tid) 
+    public static function get_contributeurs($fid, $tid) 
     {
         global $NPDS_Prefix;
            
@@ -59,7 +59,7 @@ class forumposts {
         
         if ($Mmod)
         {
-               $post_aff = '';
+            $post_aff = '';
         }
         else
         {
@@ -83,7 +83,7 @@ class forumposts {
 
         if (!$result = sql_query($sql))
         {
-               return "ERROR";
+            return "ERROR";
         }
 
         if (!$myrow = sql_fetch_assoc($result))

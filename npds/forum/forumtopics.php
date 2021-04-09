@@ -86,7 +86,7 @@ class forumtopics {
 		    }
 		    else 
 		    {
-		        $rowQ1 = cache::Q_Select ($sql2."'".$myrow[1]."'", 3600);
+		        $rowQ1 = cache::Q_Select($sql2."'".$myrow[1]."'", 3600);
 		        $val = date::convertdate($myrow[0]).' '.userpopover($rowQ1[0]['uname'], 40);
 		    }
 		}

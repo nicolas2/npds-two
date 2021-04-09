@@ -47,7 +47,7 @@ class theme {
     public static function theme_image($theme_img) 
     {
         global $theme;
-            
+
         if (@file_exists("themes/$theme/assets/images/$theme_img")) 
         {
             return "themes/$theme/assets/images/$theme_img";

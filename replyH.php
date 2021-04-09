@@ -17,7 +17,7 @@ use npds\forum\forumauth;
 use npds\forum\forumaddon;
 use npds\auth\auth;
 use npds\security\ip;
-use npds\security\spam;
+use npds\utility\spam;
 use npds\logs\logs;
 use npds\utility\code;
 use npds\security\hack;

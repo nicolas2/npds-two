@@ -219,7 +219,7 @@ function makebranch($parcat, $table, $level, $maxlevel, $max_post_id, $clas, $id
         }
 
         $posterdata = auth::get_userdata_from_id($myrow['poster_id']);
-      
+
         if($myrow['poster_id'] !== '0') 
         {
             $posts = $posterdata['posts'];
@@ -665,12 +665,14 @@ if ($forum_access != 9)
    
 for ($i = 0; $i < $total_contributeurs; $i++) 
 {
-    $contri = auth::get_userdata_from_id($contributeurs[$i]);
     if($contributeurs[$i] !== '0') 
     {
+        $contri = auth::get_userdata_from_id($contributeurs[$i]);
+
+if ($contri['uid'] > 1) {         
         if ($contri['user_avatar'] != '') 
         {
-            if (stristr($contri['user_avatar'],"users_private")) 
+            if (stristr($contri['user_avatar'], "users_private")) 
             {
                $imgtmp = $contri['user_avatar'];
             } 
@@ -687,6 +689,11 @@ for ($i = 0; $i < $total_contributeurs; $i++)
             }
         }
         echo '<img class="img-thumbnail img-fluid n-ava-small mr-1 mb-1" src="'.$imgtmp.'" alt="'.$contri['uname'].'" title="'.$contri['uname'].'" data-toggle="tooltip" />';
+} 
+else 
+{
+    echo '<img class="img-thumbnail img-fluid n-ava-small mb-1" src="assets/images/forum/avatar/blank.gif" alt="'.$anonymous.'" title="'.$anonymous.'" data-toggle="tooltip" />';
+}    
     }
     else 
     {

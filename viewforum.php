@@ -437,120 +437,121 @@ elseif (($Forum_passwd == $myrow['forum_pass']) or ($adminforum == 1))
                         $image = sql_num_rows(sql_query($sqlR)) == 0 ?
                             '<a href="'.$last_post_url.'#lastpost" title="'.translate("Dernières contributions").'" data-toggle="tooltip" data-placement="right"><i class="fas fa-lg fa-file-alt faa-shake animated"></i></a>' :
                             '<a href="'.$last_post_url.'#lastpost" title="'.translate("Dernières contributions").'" data-toggle="tooltip" data-placement="right"><i class="fas fa-lg fa-file-alt"></i></a>';
-                }
-                else
-                {
-                    $image = sql_num_rows(sql_query($sqlR)) == 0 ?
+                    }
+                    else
+                    {
+                        $image = sql_num_rows(sql_query($sqlR)) == 0 ?
                         '<a href="'.$last_post_url.'#lastpost" title="'.translate("Dernières contributions").'" data-toggle="tooltip" data-placement="right"><i class="far fa-lg fa-file-alt faa-shake animated"></i></a>' :
                         '<a href="'.$last_post_url.'#lastpost" title="'.translate("Dernières contributions").'" data-toggle="tooltip" data-placement="right"><i class="far fa-lg fa-file-alt"></i></a>';
-                }
-            } 
-            else
-            {
-                $image = ($replys >= $hot_threshold) ?
-                  '<a href="'.$last_post_url.'#lastpost" title="'.translate("Dernières contributions").'" data-toggle="tooltip" data-placement="right"><i class="fas fa-lg fa-file-alt"></i></a>' :
-                  '<a href="'.$last_post_url.'#lastpost" title="'.translate("Dernières contributions").'" data-toggle="tooltip" data-placement="right"><i class="far fa-lg fa-file-alt"></i></a>';
-            }
-
-            if ($myrow['topic_status'] != 0)
-            {
-                $image = '<i class="fa fa-lg fa-lock text-danger"></i>';
-            }
-            
-            echo '
-               <td>'.$image.'</td>';
-            
-            if ($image_subject != '') 
-            {
-                if ($ibid = theme::theme_image("forum/subject/$image_subject")) 
+                    }
+                } 
+                else
                 {
-                    $imgtmp = $ibid;
+                    $image = ($replys >= $hot_threshold) ?
+                        '<a href="'.$last_post_url.'#lastpost" title="'.translate("Dernières contributions").'" data-toggle="tooltip" data-placement="right"><i class="fas fa-lg fa-file-alt"></i></a>' :
+                        '<a href="'.$last_post_url.'#lastpost" title="'.translate("Dernières contributions").'" data-toggle="tooltip" data-placement="right"><i class="far fa-lg fa-file-alt"></i></a>';
+                }
+
+                if ($myrow['topic_status'] != 0)
+                {
+                    $image = '<i class="fa fa-lg fa-lock text-danger"></i>';
+                }
+            
+                echo '
+                    <td>'.$image.'</td>';
+            
+                if ($image_subject != '') 
+                {
+                    if ($ibid = theme::theme_image("forum/subject/$image_subject")) 
+                    {
+                        $imgtmp = $ibid;
+                    } 
+                    else 
+                    {
+                        $imgtmp = "assets/images/forum/subject/$image_subject";
+                    }
+                    
+                    echo '
+                    <td><img class="n-smil" src="'.$imgtmp.'" alt="" /></td>';
                 } 
                 else 
                 {
-                    $imgtmp = "assets/images/forum/subject/$image_subject";
+                    echo '
+                    <td><img class="n-smil" src="'.$imgtmpP.'" alt="" /></td>';
                 }
-                  
-                echo '
-                <td><img class="n-smil" src="'.$imgtmp.'" alt="" /></td>';
-            } 
-            else 
-            {
-                echo '
-                <td><img class="n-smil" src="'.$imgtmpP.'" alt="" /></td>';
-            }
             
-            $topic_title = stripslashes($myrow['topic_title']);
-           
-            if (!stristr($topic_title, '<a href=')) 
-            {
-                $last_post_url = "$hrefX?topic=".$myrow['topic_id']."&amp;forum=$forum";
-                echo '<td><a href="'.$last_post_url.'" >'.ucfirst($topic_title).'</a></td>';
-                $Sredirection = false;
-            } 
-            else 
-            {
-                echo '<td>'.$topic_title.'</td>';
-                $Sredirection = true;
-            }
-
-            if ($Sredirection)
-            {
-                echo '<td>&nbsp;</td>';
-            }
-            else
-            {
-                echo '<td>'.$replys.'</td>';
-            }
+                $topic_title = stripslashes($myrow['topic_title']);
             
-            if ($Sredirection) 
-            {
-                if (!$Mmod) 
+                if (!stristr($topic_title, '<a href=')) 
                 {
+                    $last_post_url = "$hrefX?topic=".$myrow['topic_id']."&amp;forum=$forum";
+                    echo '<td><a href="'.$last_post_url.'" >'.ucfirst($topic_title).'</a></td>';
+                    $Sredirection = false;
+                } 
+                else 
+                {
+                    echo '<td>'.$topic_title.'</td>';
+                    $Sredirection = true;
+                }
+
+                if ($Sredirection)
+                {
+                    echo '<td>&nbsp;</td>';
+                }
+                else
+                {
+                    echo '<td>'.$replys.'</td>';
+                }
+            
+                if ($Sredirection) 
+                {
+                    if (!$Mmod) 
+                    {
+                        echo '<td>&nbsp;</td>';
+                    } 
+                    else 
+                    {
+                        echo "<td>[ <a href=\"$hrefX?topic=".$myrow['topic_id']."&amp;forum=$forum\">".translate("Editer")."</a> ]</td>";
+                    }
                     echo '<td>&nbsp;</td>';
                 } 
                 else 
                 {
-                    echo "<td>[ <a href=\"$hrefX?topic=".$myrow['topic_id']."&amp;forum=$forum\">".translate("Editer")."</a> ]</td>";
-                }
-                echo '<td>&nbsp;</td>';
-            } 
-            else 
-            {
-                if($myrow['topic_poster'] == 1)
-                {
-                    echo '<td></td>';
-                }
-                else 
-                {
-                    $rowQ1 = cache::Q_Select("SELECT uname FROM ".$NPDS_Prefix."users WHERE uid='".$myrow['topic_poster']."'", 3600);
-                  
-                    if($rowQ1) 
+                    if($myrow['topic_poster'] == 1)
                     {
-                        echo '<td>'.userpopover($rowQ1[0]['uname'], 40).$rowQ1[0]['uname'].'</td>';
-                    } 
-                    else
-                    {
-                        echo '<td>'.$anonymous.'</td>';
+                        echo '<td></td>';
                     }
+                    else 
+                    {
+                        $rowQ1 = cache::Q_Select("SELECT uname FROM ".$NPDS_Prefix."users WHERE uid='".$myrow['topic_poster']."'", 3600);
+                    
+                        if($rowQ1) 
+                        {
+                            echo '<td>'.userpopover($rowQ1[0]['uname'], 40).$rowQ1[0]['uname'].'</td>';
+                        } 
+                        else
+                        {
+                            echo '<td>'.$anonymous.'</td>';
+                        }
+                    }
+
+                    echo '<td>'.$myrow['topic_views'].'</td>';
                 }
 
-                echo '<td>'.$myrow['topic_views'].'</td>';
+                if ($Sredirection)
+                {
+                    echo '
+                        <td>&nbsp;</td>
+                    </tr>';
+                }
+                else
+                {
+                    echo '
+                        <td class="small">'.forumtopics::get_last_post($myrow['topic_id'],"topic","infos",$Mmod).'</td>
+                    </tr>';
+                }
             }
-
-            if ($Sredirection)
-            {
-                echo '
-                    <td>&nbsp;</td>
-                </tr>';
-            }
-            else
-            {
-                echo '
-                    <td class="small">'.forumtopics::get_last_post($myrow['topic_id'],"topic","infos",$Mmod).'</td>
-                </tr>';
-            }
-        } 
+        }  
         while($myrow = sql_fetch_assoc($result));
       
         sql_free_result($result);

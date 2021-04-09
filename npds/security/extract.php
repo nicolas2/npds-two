@@ -31,7 +31,9 @@ class extract {
         {
             $ibid = explode(':', base64_decode($user));
             array_walk($ibid, [protect::class, 'url']);
-            return base64_encode(str_replace("%3A", ":", urlencode(base64_decode($user))));
+            $user = base64_encode(str_replace("%3A", ":", urlencode(base64_decode($user))));
+        
+            return $user;
         }
 
         return null;
@@ -49,7 +51,9 @@ class extract {
         {
             $ibid = explode(':', $user_language);
             array_walk($ibid, [protect::class, 'url']);
-            return str_replace("%3A", ":", urlencode($user_language));
+            $user_language = str_replace("%3A", ":", urlencode($user_language));
+        
+            return $user_language;
         }
 
         return null;
@@ -67,7 +71,9 @@ class extract {
         {
             $ibid = explode(':', base64_decode($admin));
             array_walk($ibid, [protect::class, 'url']);
-            return base64_encode(str_replace('%3A', ':', urlencode(base64_decode($admin))));
+            $admin = base64_encode(str_replace('%3A', ':', urlencode(base64_decode($admin))));
+        
+            return $damin;
         }
 
         return null;

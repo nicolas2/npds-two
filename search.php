@@ -555,10 +555,10 @@ elseif ($type == 'sections')
          
         while (list($artid, $secid, $title, $content) = sql_fetch_row($result)) 
         {
-            $rowQ2 = cache::Q_Select ("SELECT secname, rubid FROM ".$NPDS_Prefix."sections WHERE secid='$secid'", 3600);
+            $rowQ2 = cache::Q_Select("SELECT secname, rubid FROM ".$NPDS_Prefix."sections WHERE secid='$secid'", 3600);
             $row2 = $rowQ2[0];
            
-            $rowQ3 = cache::Q_Select ("SELECT rubname FROM ".$NPDS_Prefix."rubriques WHERE rubid='".$row2['rubid']."'", 3600);
+            $rowQ3 = cache::Q_Select("SELECT rubname FROM ".$NPDS_Prefix."rubriques WHERE rubid='".$row2['rubid']."'", 3600);
             $row3 = $rowQ3[0];
             
             if ($row3['rubname'] != 'Divers' AND $row3['rubname'] != 'Presse-papiers') 
@@ -582,12 +582,12 @@ elseif ($type == 'sections')
         {
             echo '
             <div class="alert alert-danger lead">'.translate("Aucune correspondance à votre recherche n'a été trouvée").'</div>';
-        } 
-        else
-        {
-            echo '
-            <div class="alert alert-danger lead">'.translate("Aucune correspondance à votre recherche n'a été trouvée").'</div>';
         }
+    } 
+    else
+    {
+        echo '
+        <div class="alert alert-danger lead">'.translate("Aucune correspondance à votre recherche n'a été trouvée").'</div>';
         
         $prev = $min-$offset;
       
@@ -607,10 +607,11 @@ elseif ($type == 'sections')
             echo '
             <li class="page-item"><a class="page-link" href="search.php?author='.$author.'&amp;topic='.$t.'&amp;min='.$max.'&amp;query='.$query.'&amp;type='.$type.'">'.translate("réponses suivantes").'</a></li>';
         }
-
-        echo '
-            </ul>
-        </p>';
+    }
+    
+    echo '
+        </ul>
+    </p>';
 // users
 }
 elseif ($type == 'users') 

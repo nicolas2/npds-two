@@ -21,7 +21,7 @@ if (!function_exists('Mysql_Connexion'))
 }
  
 
-var_dump(theme::list());
+//var_dump(theme::list());
 
 /**
  * Redirect for default Start Page of the portal 

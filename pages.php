@@ -17,12 +17,14 @@ settype($PAGES, 'array');
 
 global $pdst, $Titlesitename, $REQUEST_URI;
 
-require_once("themes/pages.php");
-
 // import pages.php specif values from theme
 if (file_exists("themes/".$tmp_theme."/pages.php"))
 {
     include ("themes/".$tmp_theme."/pages.php");
+}
+else
+{
+    include ("config/pages.php");
 }
 
 $page_uri = preg_split("#(&|\?)#", $REQUEST_URI);

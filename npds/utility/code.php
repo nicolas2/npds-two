@@ -51,16 +51,21 @@ class code {
     {
         $pat = '#(<)(\w+)\s+(class="language-)([^">]*)(">)(.*?)\1/\2>#';
         
-        function rechange_cod($r) 
-        {
-            return '['.$r[2].' '.$r[4].']'.$r[6].'[/'.$r[2].']';
-        }
-
-        $ibid = preg_replace_callback($pat, 'rechange_cod', $ibid, -1);
+        $ibid = preg_replace_callback($pat, [code::class, 'rechange_cod'], $ibid, -1);
         
         return $ibid;
     }
  
+    /**
+     * [rechange_cod description]
+     * @param  [type] $r [description]
+     * @return [type]    [description]
+     */
+    public static function rechange_cod($r) 
+    {
+        return '['.$r[2].' '.$r[4].']'.$r[6].'[/'.$r[2].']';
+    }
+
     /**
      * Analyse le contenu d'une chaîne et converti les balises [code]...[/code]
      * @param  [type] $ibid [description]

@@ -687,7 +687,7 @@ function userinfo($uname)
        
     if (!$uid)
     {
-        header("location: index.php");
+       // header("location: index.php");
     }
        
     global $cookie;
@@ -2372,6 +2372,7 @@ switch ($op)
     break;
 
     case 'userinfo':
+
         if (($member_list == 1) AND ((!isset($user)) AND (!isset($admin)))) 
         {
             Header("Location: index.php");
