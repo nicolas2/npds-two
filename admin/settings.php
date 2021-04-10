@@ -11,6 +11,7 @@
 use npds\error\access;
 use npds\language\language;
 use npds\assets\css;
+use npds\views\theme;
 
 
 if (!stristr($_SERVER['PHP_SELF'], 'admin.php')) 
@@ -215,7 +216,7 @@ function Configure() {
             <label class="col-form-label col-sm-4" for="xDefault_Theme">'.adm_translate("Thème d'affichage par défaut").'</label>
             <div class="col-sm-8">
                <select class="custom-select form-control" id="xDefault_Theme" name="xDefault_Theme">';
-   include("themes/list.php");
+   $themelist = theme::list();
    $themelist = explode(" ", $themelist);
    for ($i=0; $i < sizeof($themelist); $i++) {
       if($themelist[$i]!='') {
