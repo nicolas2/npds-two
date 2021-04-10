@@ -73,7 +73,7 @@ class extract {
             array_walk($ibid, [protect::class, 'url']);
             $admin = base64_encode(str_replace('%3A', ':', urlencode(base64_decode($admin))));
         
-            return $damin;
+            return $admin;
         }
 
         return null;

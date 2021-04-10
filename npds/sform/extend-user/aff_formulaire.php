@@ -34,7 +34,7 @@ if ($op != 'userinfo')
 if (($op == 'userinfo') and ($user)) 
 {
     global $act_uname;
-    $act_uname = "<a href='powerpack.php?op=instant_message&amp;to_userid=$uname' title='".translate("Envoyer un message interne")."'>$uname</a>";
+    $act_uname = "<a href='two_api.php?op=instant_message&amp;to_userid=$uname' title='".translate("Envoyer un message interne")."'>$uname</a>";
     
     $m->add_field('act_uname', translate("ID utilisateur (pseudo)"), $act_uname, 'text', true, 25, '', '');
 } 

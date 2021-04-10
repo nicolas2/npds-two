@@ -9,11 +9,14 @@
  * @date 02/04/2021
  */
 
-// OBJET : Ce fichier vous permet d'envoyer un MI personnalisé lorsqu'un nouveau membre s'inscrit sur votre site
+// OBJET : Ce fichier vous permet d'envoyer un MI personnalisé lorsqu'un 
+// nouveau membre s'inscrit sur votre site
 // Configuration :
-// $emetteur_id : id de l'émetteur du Message Interne lorsque un nouveau membre est créé : 1 = anonyme
+// $emetteur_id : id de l'émetteur du Message Interne lorsque un nouveau 
+// membre est créé : 1 = anonyme
 // $sujet       : sujet du MI
-// $message     : contenu du message (html, meta-mot, ...) SANS les <br />, NPDS fera le nécessaire
+// $message     : contenu du message (html, meta-mot, ...) 
+// SANS les <br />, Npds Two fera le nécessaire
 
 
 $emetteur_id = "1";
@@ -34,4 +37,3 @@ El equipo del sitio.[/spanish][german]Sie sind jetzt Vollmitglied.
 Diese Website bietet Ihnen viele Ressourcen, also berauben Sie sich nicht: Machen Sie mit!
 
 Das Site-Team.[/german]";
-?>

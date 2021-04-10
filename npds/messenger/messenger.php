@@ -110,7 +110,7 @@ class messenger {
 		echo '
 		<h2>'.translate("Message à un membre").'</h2>
 		<h3><i class="fa fa-at mr-1"></i>'.$to_userid.'</h3>
-		<form id="sh_priv_mess" action="powerpack.php" method="post">
+		<form id="sh_priv_mess" action="two_api.php" method="post">
 		    <div class="form-group row">
 		        <label class="col-form-label col-sm-12" for="subject" >'.translate("Sujet").'</label>
 		        <div class="col-sm-12">

@@ -641,9 +641,9 @@ function GraphicAdmin($hlpfile)
                 var button = $(event.relatedTarget); 
                 var id = button.data('id');
                 $('#messageModalId').val(id);
-                $('#messageModalForm').attr('action', '".site_url('npds_api.php?op=alerte_update')."');
+                $('#messageModalForm').attr('action', '".site_url('two_api.php?op=alerte_update')."');
                 $.ajax({
-                    url:\"".site_url('npds_api.php?op=alerte_api')."\",
+                    url:\"".site_url('two_api.php?op=alerte_api')."\",
                     method: \"POST\",
                     data:{id:id},
                     dataType:\"JSON\",

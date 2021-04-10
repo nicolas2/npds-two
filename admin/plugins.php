@@ -8,15 +8,24 @@
  * @version 1.0
  * @date 02/04/2021
  */
+use npds\error\access;
+
 
 if (!stristr($_SERVER['PHP_SELF'], 'admin.php')) 
-	Access_Error();
+{
+	access::error();
+}
 
 include ("header.php");
 
-if ($ModPath != '') {
+if ($ModPath != '') 
+{
     if (file_exists("modules/$ModPath/$ModStart.php"))
+    {
         include("modules/$ModPath/$ModStart.php");
-} else
+    }
+} 
+else
+{
     redirect_url(urldecode($ModStart));
-?>
+}

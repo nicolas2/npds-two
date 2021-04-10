@@ -336,7 +336,7 @@ if (isset($submitS)) {
 
             $posterdata = get_userdata_from_id($myrow['poster_id']);
             if ($posterdata['uname']!=$anonymous)
-               echo "<a href=\"powerpack.php?op=instant_message&amp;to_userid=".$posterdata['uname']."\" class=\"noir\">".$posterdata['uname']."</a>";
+               echo "<a href=\"two_api.php?op=instant_message&amp;to_userid=".$posterdata['uname']."\" class=\"noir\">".$posterdata['uname']."</a>";
             else
                echo $posterdata['uname'];
             echo '<br />';

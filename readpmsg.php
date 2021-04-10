@@ -206,7 +206,7 @@ else
             
             if ($posterdata['uid'] != 1)
             {
-                $useroutils .= '<a class="list-group-item text-primary" href="powerpack.php?op=instant_message&amp;to_userid='.$posterdata["uname"].'" title="'.translate("Envoyer un message interne").'" data-toggle="tooltip"><i class="far fa-envelope fa-2x align-middle "></i><span class="ml-3 d-none d-md-inline">'.translate("Message").'</span></a>';
+                $useroutils .= '<a class="list-group-item text-primary" href="two_api.php?op=instant_message&amp;to_userid='.$posterdata["uname"].'" title="'.translate("Envoyer un message interne").'" data-toggle="tooltip"><i class="far fa-envelope fa-2x align-middle "></i><span class="ml-3 d-none d-md-inline">'.translate("Message").'</span></a>';
             }
             
             if ($posterdata['femail'] != '')

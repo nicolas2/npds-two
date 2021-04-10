@@ -8,9 +8,13 @@
  * @version 1.0
  * @date 02/04/2021
  */
+use npds\error\access;
+use npds\assets\css;
+use npds\logs\logs;
+
 
    if (!stristr($_SERVER['PHP_SELF'], 'admin.php')) 
-    Access_Error();
+    access::error();
 
    $f_meta_nom = 'OptimySQL';
    $f_titre = adm_translate("Optimisation de la base de données").' : '.$dbname;
@@ -141,8 +145,7 @@
    </tbody>
    </table>';
    
-   adminfoot('', '', '', '');
+   css::adminfoot('', '', '', '');
    
    global $aid;
-   Ecr_Log('security', "OptiMySql() by AID : $aid", '');
-?>
+   logs::Ecr_Log('security', "OptiMySql() by AID : $aid", '');

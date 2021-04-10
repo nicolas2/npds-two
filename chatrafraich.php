@@ -104,6 +104,7 @@ if ($aff_entetes == '1')
     list($theme, $skin, $tmp_theme) = theme::getUsetOrDefaultThemeAndSkin();
 
     $Xthing .= $l_meta;
+    //$Xthing .= $hH;
     $Xthing .= str_replace("\n", "", css::import_css_javascript($tmp_theme, $language, $skin, basename($_SERVER['PHP_SELF']),""));
     $Xthing .= "</head><body id='chat'>";
     $Xthing = "\"".str_replace("'", "\'", $Xthing)."\"";

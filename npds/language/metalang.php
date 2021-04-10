@@ -338,7 +338,7 @@ class metalang {
 
                 // Cword est un meta-mot ? (il en reste qui n'ont pas été interprétés 
                 // par la passe du dessus ... ceux avec params !)
-                /*if (substr($Cword, 0, 1) == "!") 
+                if (substr($Cword, 0, 1) == "!") 
                 {
                     $car_meta = strpos($Cword, "!", 1);
                     
@@ -359,7 +359,7 @@ class metalang {
                             $type_meta = '';
                         }
                     }
-                }*/
+                }
 
                 // Cword commence par function ?
                 if (substr($Cword, 0, 9) == "function ") 
@@ -479,10 +479,10 @@ class metalang {
         $Xcontent = str_replace("!/!", "", $Xcontent);
 
         // traitement [code] ... [/code]
-        if (strstr($Xcontent, "[code]"))
-        {
-            $Xcontent = code::aff_code($Xcontent);
-        }
+        //if (strstr($Xcontent, "[code]"))
+        //{
+        //    $Xcontent = code::aff_code($Xcontent);
+        //}
 
         $NPDS_debug_cycle++;
        

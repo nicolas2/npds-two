@@ -1,4 +1,12 @@
-03/15/2021 23:39:35 admin.php=>ChangeMainBlock(Menu) by AID : Root               IP=>::1   
-03/15/2021 23:40:03 admin.php=>ChangeMainBlock(Menu) by AID : Root               IP=>::1   
-03/16/2021 19:32:40 admin.php=>ConfigSave() by AID : Root                        IP=>::1   
-03/16/2021 20:01:32 admin.php=>ChangeSuperCache(false, 300, 300, 300, 86400, 28800, 3600, 1800, 3600) by AID : Root IP=>::1   
+04/09/2021 10:52:33 replyH.php=>Forum Anti-Spam : forum=2 / topic=5              IP=>::1   
+04/09/2021 10:53:43 newtopic.php=>Forum Anti-Spam : forum=1 / topic_title=dfgsdfgsdf IP=>::1   
+04/09/2021 15:27:48 newtopic.php=>Forum Anti-Spam : forum=1 / topic_title=vqsdfsqdf IP=>::1   
+04/09/2021 19:53:23 admin.php=>admin/auth.inc.php/Admin_alert : Passwd not in DB#1 : Root IP=>::1   
+04/09/2021 22:31:20 admin.php=>editoSave () by AID : Root                        IP=>::1   
+04/09/2021 22:32:33 admin.php=>editoSave () by AID : Root                        IP=>::1   
+04/09/2021 22:48:46 admin.php=>editoSave () by AID : Root                        IP=>::1   
+04/10/2021 17:44:04 admin.php=>OptiMySql() by AID : Root                         IP=>::1   
+04/10/2021 17:44:28 admin.php=>OptiMySql() by AID : Root                         IP=>::1   
+04/10/2021 18:30:29 admin.php=>CreateGroupe(3, my two) by AID : Root             IP=>::1   
+04/10/2021 18:30:45 admin.php=>AddMemberToGroup(3, user) by AID : Root           IP=>::1   
+04/10/2021 18:58:03 admin.php=>SaveConfigFile(cache.config) by AID : Root        IP=>::1   

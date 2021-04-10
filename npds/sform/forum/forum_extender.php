@@ -8,12 +8,11 @@
  * @version 1.0
  * @date 02/04/2021
  */
+use npds\sform\SformManager;
 
-$sform_path='lib/sform/';
-include_once($sform_path."sform.php");
 
 global $m;
-$m=new form_handler();
+$m = new SformManager();
 
 $m->add_form_title("Bugs_Report");
 $m->add_form_method("post");
@@ -22,9 +21,13 @@ $m->add_mess(" * d&eacute;signe un champ obligatoire ");
 $m->add_submit_value("submitS");
 $m->add_url("newtopic.php");
 
-include($sform_path."forum/$formulaire");
+include("npds/sform/forum/$formulaire");
 
 if (!$submitS)
+{
    echo $m->print_form('');
+}
 else
-   $message=$m->aff_response('','not_echo','');
+{
+   $message = $m->aff_response('', 'not_echo', '');
+}

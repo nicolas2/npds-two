@@ -53,6 +53,18 @@ if (file_exists(BASEPATH."config/constant.php"))
     include (BASEPATH."config/constant.php");
 }
 
+// include cache config
+if (file_exists(BASEPATH."config/cache.config.php")) 
+{
+    include_once(BASEPATH.'config/cache.config.php');
+}
+
+// include cache timing
+if (file_exists(BASEPATH."config/cache.timings.php")) 
+{
+    include_once(BASEPATH.'config/cache.timings.php');
+}
+
 // Get values, slash, filter and extract
 if (!empty($_GET)) 
 {

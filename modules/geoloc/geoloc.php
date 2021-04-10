@@ -169,7 +169,7 @@ while ($row = sql_fetch_array($membre)) {
       //=== menu fenetre info
       $imm = '<a href="user.php?op=userinfo&amp;uname='.$us_uname.'"  target="_blank" ><i class="fa fa-user fa-lg mr-2" title="'.translate("Profil").'" data-toggle="tooltip"></i></a>';
       if ($user)
-         $imm .= '<a href="powerpack.php?op=instant_message&to_userid='.$us_uname.'" title="Envoyez moi un message interne"><i class="far fa-envelope fa-lg mr-2"></i></a>';
+         $imm .= '<a href="two_api.php?op=instant_message&to_userid='.$us_uname.'" title="Envoyez moi un message interne"><i class="far fa-envelope fa-lg mr-2"></i></a>';
       if ($us_url != '')
          $imm .= '<a href="'.$us_url.'" target="_blank" title="Visitez mon site"><i class="fas fa-external-link-alt fa-lg mr-2"></i></a>';
       if ($us_mns != '')
@@ -280,7 +280,7 @@ while ($row = sql_fetch_array($result)) {
       //=== menu fenetre info
       $imm = ' <a href="user.php?op=userinfo&amp;uname='.$users_uname.'"  target="_blank" ><i class="fa fa-user fa-2x mr-2" title="'.translate("Profil").'" data-toggle="tooltip"></i></a>';
       if ($user)
-         $imm .= ' <a href="powerpack.php?op=instant_message&to_userid='.$users_uname.'" title="Envoyez moi un message interne"><i class="far fa-envelope fa-2x mr-2"></i></a>';
+         $imm .= ' <a href="two_api.php?op=instant_message&to_userid='.$users_uname.'" title="Envoyez moi un message interne"><i class="far fa-envelope fa-2x mr-2"></i></a>';
       if ($us_url != '')
          $imm .= ' <a href="'.$us_url.'" target="_blank" title="Visitez mon site"><i class="fas fa-external-link-alt fa-2x mr-2"></i></a>';
       if ($us_mns != '')

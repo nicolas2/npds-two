@@ -11,7 +11,7 @@
 use npds\language\language;
 
 
-define('CITRON','tarteaucitron');
+define('CITRON', 'tarteaucitron');
 
 // since NPDS Rev 16 this ressources are required dont remove //
 echo '
@@ -31,35 +31,70 @@ echo '
 <script type="text/javascript" src="assets/js/jquery.min.js"></script>
 ';
 
-if(defined('CITRON')){
+if(defined('CITRON'))
+{
 
-   if (method_exists(language::class, 'language_iso'))
-      echo '
-<script type="text/javascript"> var tarteaucitronForceLanguage = "'.language::language_iso(1, '', '').'"; </script>
-<script type="text/javascript" src="assets/shared/tarteaucitron/tarteaucitron.js"></script>
-<script type="text/javascript">
-   //<![CDATA[
-   tarteaucitron.init({
-       "privacyUrl": "", /* Privacy policy url */
-       "hashtag": "#tarteaucitron", /* Ouverture automatique du panel avec le hashtag */
-       "cookieName": "tarteaucitron", /* Cookie name */
-       "orientation": "top", /* le bandeau doit être en haut (top) ou en bas (bottom) ? */
-       "showAlertSmall": true, /* afficher le petit bandeau en bas à droite ? */
-       "cookieslist": true, /* Afficher la liste des cookies installés ? */
-       "showIcon": false, /* Show cookie icon to manage cookies */
-       "iconPosition": "BottomRight", /* BottomRight, BottomLeft, TopRight and TopLeft */
-       "adblocker": false, /* Afficher un message si un adblocker est détecté */
-       "AcceptAllCta" : true, /* Show the accept all button when highPrivacy on */
-       "highPrivacy": false, /* désactiver le consentement implicite (en naviguant) ? */
-       "handleBrowserDNTRequest": false, /* If Do Not Track == 1, disallow all */
-       "removeCredit": true, /* supprimer le lien vers la source ? */
-       "moreInfoLink": true, /* Show more info link */
-       "useExternalCss": false, /* If false, the tarteaucitron.css file will be loaded */
-       "cookieDomain": "", /* Nom de domaine sur lequel sera posé le cookie - pour les multisites / sous-domaines - Facultatif */
-       "readmoreLink": "static.php?op=politiqueconf.html&npds=1&metalang=1", /* Change the default readmore link */
-       "mandatory": true, /* Show a message about mandatory cookies */
-   });
-   //]]
-</script>'; //RGPD tool
+    if (method_exists(language::class, 'language_iso'))
+        echo '
+        <script type="text/javascript"> var tarteaucitronForceLanguage = "'.language::language_iso(1, '', '').'"; </script>
+        <script type="text/javascript" src="assets/shared/tarteaucitron/tarteaucitron.js"></script>
+        <script type="text/javascript">
+            //<![CDATA[
+                tarteaucitron.init({
+                    /* Privacy policy url */
+                    "privacyUrl": "", 
+                    
+                    /* Ouverture automatique du panel avec le hashtag */
+                    "hashtag": "#tarteaucitron", 
+                    
+                    /* Cookie name */
+                    "cookieName": "tarteaucitron", 
+                    
+                    /* le bandeau doit être en haut (top) ou en bas (bottom) ? */
+                    "orientation": "top", 
+                    
+                    /* afficher le petit bandeau en bas à droite ? */
+                    "showAlertSmall": true,
+
+                    /* Afficher la liste des cookies installés ? */
+                    "cookieslist": true, 
+
+                    /* Show cookie icon to manage cookies */
+                    "showIcon": false, 
+
+                    /* BottomRight, BottomLeft, TopRight and TopLeft */
+                    "iconPosition": "BottomRight", 
+
+                    /* Afficher un message si un adblocker est détecté */
+                    "adblocker": false, 
+
+                    /* Show the accept all button when highPrivacy on */
+                    "AcceptAllCta" : true, 
+
+                    /* désactiver le consentement implicite (en naviguant) ? */
+                    "highPrivacy": false, 
+
+                    /* If Do Not Track == 1, disallow all */
+                    "handleBrowserDNTRequest": false, 
+
+                    /* supprimer le lien vers la source ? */
+                    "removeCredit": true, 
+
+                    /* Show more info link */
+                    "moreInfoLink": true, 
+
+                    /* If false, the tarteaucitron.css file will be loaded */
+                    "useExternalCss": false, 
+
+                    /* Nom de domaine sur lequel sera posé le cookie - pour les multisites / sous-domaines - Facultatif */
+                    "cookieDomain": "", 
+
+                    /* Change the default readmore link */
+                    "readmoreLink": "static.php?op=politiqueconf.html&npds=1&metalang=1", 
+                    
+                    /* Show a message about mandatory cookies */
+                    "mandatory": true,
+                });
+            //]]
+        </script>'; //RGPD tool
 }
-?>

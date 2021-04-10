@@ -556,7 +556,7 @@ function adminblock()
 
         $content .= '
         <div class="d-flex justify-content-start flex-wrap" id="adm_block">
-            '.$bloc_foncts_A.'<a class="btn btn-outline-primary btn-sm mr-2 my-1" title="'.translate("Vider la table chatBox").'" data-toggle="tooltip" href="powerpack.php?op=admin_chatbox_write&amp;chatbox_clearDB=OK" ><img src="assets/images/admin/chat.png" class="adm_img" />&nbsp;<span class="badge badge-danger ml-1">X</span></a>
+            '.$bloc_foncts_A.'<a class="btn btn-outline-primary btn-sm mr-2 my-1" title="'.translate("Vider la table chatBox").'" data-toggle="tooltip" href="two_api.php?op=admin_chatbox_write&amp;chatbox_clearDB=OK" ><img src="assets/images/admin/chat.png" class="adm_img" />&nbsp;<span class="badge badge-danger ml-1">X</span></a>
         </div>
         <div class="mt-3">
             <small class="text-muted"><i class="fas fa-user-cog fa-2x align-middle"></i> '.$aid.'</small>
@@ -612,9 +612,9 @@ function adminblock()
                     var button = $(event.relatedTarget); 
                     var id = button.data("id");
                     $("#bl_messageModalId").val(id);
-                    $("#bl_messageModalForm").attr("action", "'.$nuke_url.'/npds_api.php?op=alerte_update");
+                    $("#bl_messageModalForm").attr("action", "'.$nuke_url.'/two_api.php?op=alerte_update");
                     $.ajax({
-                        url:"'.$nuke_url.'/npds_api.php?op=alerte_api",
+                        url:"'.$nuke_url.'/two_api.php?op=alerte_api",
                         method: "POST",
                         data:{id:id},
                         dataType:"JSON",
@@ -1771,7 +1771,7 @@ function instant_members_message()
                 }
 
                 $boxstuff .= '
-                <li class="">'.$timex.'&nbsp;<a href="powerpack.php?op=instant_message&amp;to_userid='.$N.'" title="'.translate("Envoyer un message interne").'" data-toggle="tooltip" >'.$M.'</a><span class="float-right">'.$icon.'</span></li>';
+                <li class="">'.$timex.'&nbsp;<a href="two_api.php?op=instant_message&amp;to_userid='.$N.'" title="'.translate("Envoyer un message interne").'" data-toggle="tooltip" >'.$M.'</a><span class="float-right">'.$icon.'</span></li>';
             }//suppression temporaire ... rank  '.$tmpR.'
         }
 

@@ -8,6 +8,9 @@
  * @version 1.0
  * @date 02/04/2021
  */
+use npds\error\access;
+use npds\news\sendfile;
+
 
 /*********************************************************************************************/
 /* NPDS V - SavemySQL_Databases 0.5     (20040611)                                           */
@@ -16,7 +19,7 @@
 /* Adapted by : M. PASCAL aKa EBH (plan.net@free.fr)                                         */
 /*********************************************************************************************/
 if (!stristr($_SERVER['PHP_SELF'], 'admin.php')) 
-   Access_Error();
+   access::error();
 
 $f_meta_nom = 'SavemySQL';
 
@@ -24,7 +27,6 @@ $f_meta_nom = 'SavemySQL';
 admindroits($aid, $f_meta_nom);
 //<== controle droit
 
-   include("lib/archive.php");
 
    function PrepareString($a_string = '') 
    {
@@ -178,7 +180,7 @@ admindroits($aid, $f_meta_nom);
          }
       }
 
-      send_file($data, $filename, "sql", $MSos);
+      sendfile::send_file($data, $filename, "sql", $MSos);
    }
 
    function dbSave_tofile($repertoire, $linebyline=0, $savemysql_size=256) 
@@ -251,7 +253,7 @@ admindroits($aid, $f_meta_nom);
                if ($linebyline == 1) {
                   if ( strlen($data1) > ($savemysql_size*1024))
                   {
-                     send_tofile($data0.$data1,$repertoire,$filename."-".sprintf("%03d", $ifile),"sql",$MSos);
+                     sendfile::send_tofile($data0.$data1,$repertoire,$filename."-".sprintf("%03d", $ifile),"sql",$MSos);
                      $data1 = "";
                      $ifile++;
                   }
@@ -263,7 +265,7 @@ admindroits($aid, $f_meta_nom);
 
             if ($linebyline == 0) {
                if ( strlen($data1) > ($savemysql_size*1024)) {
-                  send_tofile($data0.$data1, $repertoire, $filename."-".sprintf("%03d", $ifile),"sql", $MSos);
+                  sendfile::send_tofile($data0.$data1, $repertoire, $filename."-".sprintf("%03d", $ifile),"sql", $MSos);
                   $data1 = "";
                   $ifile++;
                }
@@ -271,7 +273,7 @@ admindroits($aid, $f_meta_nom);
          }
 
          if ( strlen($data1) > 0) {
-            send_tofile($data0.$data1, $repertoire, $filename."-".sprintf("%03d", $ifile), "sql", $MSos);
+            sendfile::send_tofile($data0.$data1, $repertoire, $filename."-".sprintf("%03d", $ifile), "sql", $MSos);
             $data1 = "";
             $ifile++;
          }
@@ -321,4 +323,3 @@ admindroits($aid, $f_meta_nom);
          header("Location: index.php");
          break;
    }
-?>

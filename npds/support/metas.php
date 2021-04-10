@@ -46,5 +46,5 @@ function MM_img($ibid)
  */
 function SC_infos()
 {
-    cache::SC_infos();
+    echo cache::SC_infos();
 }

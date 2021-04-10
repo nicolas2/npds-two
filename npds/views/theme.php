@@ -76,8 +76,10 @@ class theme {
      */
     public static function getUsetOrDefaultThemeAndSkin()
     {
-        global $Default_Theme, $Default_Skin, $user;
+        global $Default_Theme, $Default_Skin;
            
+        $user = user();
+
         if (isset($user) and $user != '') 
         {
             global $cookie;

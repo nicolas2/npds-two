@@ -10,8 +10,8 @@
  */
 namespace npds\news;
 
-use npds\news\compresse\zipfile;
-use npds\news\compresse\gzfile;
+use npds\news\compress\zipfile;
+use npds\news\compress\gzfile;
 
 
 /*

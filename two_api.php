@@ -8,6 +8,9 @@
  * @version 1.0
  * @date 02/04/2021
  */
+use npds\messenger\messenger;
+use npds\cache\cache;
+use npds\utility\str;
 
 
 if (!function_exists('Mysql_Connexion'))
@@ -138,7 +141,7 @@ function api_getdownload()
     
     $res = sql_query("select * from ".$NPDS_Prefix."downloads ".$where);
     
-    while($ap_dow = sql_fetch_assoc($res)
+    while($ap_dow = sql_fetch_assoc($res))
     {
         $ap_dows[] = $ap_dow;
     }
@@ -200,6 +203,7 @@ function alerte_update()
     header('Location: '.$_SERVER['HTTP_REFERER']);
 }
 
+
 switch ($op) 
 {
     case "api_getusers":
@@ -224,5 +228,48 @@ switch ($op)
 
     case "alerte_update":
         alerte_update();
-    break;         
+    break;
+
+    // Instant Members Message
+    case 'instant_message':
+        messenger::Form_instant_message($to_userid);
+    break;
+
+    case 'write_instant_message':
+        settype($copie, 'string');
+        settype($messages, 'string');
+        
+        if ($user) 
+        {
+            $rowQ1 = cache::Q_Select("SELECT uid FROM ".$NPDS_Prefix."users WHERE uname='$cookie[1]'", 3600);
+            list(, $uid) = each($rowQ1); // Note : each
+
+            $from_userid = $uid['uid'];
+            
+            if (($subject != '') or ($message != '')) 
+            {
+                $subject = str::FixQuotes($subject).'';
+                $messages = str::FixQuotes($messages).'';
+               
+                messenger::writeDB_private_message($to_userid, '', $subject, $from_userid, $message, $copie);
+            }
+        }
+
+        Header("Location: index.php");
+    break;
+   
+    // Instant Members Message
+    // Purge Chat Box
+    case 'admin_chatbox_write':
+        if ($admin) 
+        {
+            if ($chatbox_clearDB == 'OK') 
+            {
+                sql_query("DELETE FROM ".$NPDS_Prefix."chatbox WHERE date <= ".(time()-(60*5))."");
+            }
+        }
+
+        Header("Location: index.php");
+    break;
+    // Purge Chat Box             
 }

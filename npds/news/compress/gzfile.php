@@ -10,11 +10,13 @@
  */
 namespace npds\news\compress;
 
+use npds\news\archive;
+
 
 /*
  * gzfile
  */
-class gzfile {
+class gzfile extends archive {
 
     /**
      * [$gzdata description]

@@ -1,15 +1,13 @@
 <?php
-/************************************************************************/
-/* DUNE by NPDS                                                         */
-/* ===========================                                          */
-/*                                                                      */
-/* DYNAMIC THEME engine for NPDS                                        */
-/* NPDS Copyright (c) 2002-2020 by Philippe Brunier                     */
-/*                                                                      */
-/* This program is free software. You can redistribute it and/or modify */
-/* it under the terms of the GNU General Public License as published by */
-/* the Free Software Foundation; either version 2 of the License.       */
-/************************************************************************/
+/**
+ * Npds Two
+ *
+ * Based on NPDS Copyright (c) 2002-2020 by Philippe Brunier
+ * 
+ * @author Nicolas2
+ * @version 1.0
+ * @date 02/04/2021
+ */
 use npds\language\metalang;
 use npds\language\language;
 use npds\time\time;
@@ -302,7 +300,7 @@ function userpopover($who,$dim)
          $useroutils .= '<a class="list-group-item text-primary text-center text-md-left" href="user.php?op=userinfo&amp;uname='.$temp_user['uname'].'" target="_blank" title="'.translate("Profil").'" ><i class="fa fa-2x fa-user align-middle fa-fw"></i><span class="ml-2 d-none d-md-inline">'.translate("Profil").'</span></a>';
       
       if ($temp_user['uid']!= 1 and $temp_user['uid']!='')
-         $useroutils .= '<a class="list-group-item text-primary text-center text-md-left" href="powerpack.php?op=instant_message&amp;to_userid='.urlencode($temp_user['uname']).'" title="'.translate("Envoyer un message interne").'" ><i class="far fa-2x fa-envelope align-middle fa-fw"></i><span class="ml-2 d-none d-md-inline">'.translate("Message").'</span></a>';
+         $useroutils .= '<a class="list-group-item text-primary text-center text-md-left" href="two_api.php?op=instant_message&amp;to_userid='.urlencode($temp_user['uname']).'" title="'.translate("Envoyer un message interne").'" ><i class="far fa-2x fa-envelope align-middle fa-fw"></i><span class="ml-2 d-none d-md-inline">'.translate("Message").'</span></a>';
       
       if ($temp_user['femail']!='')
          $useroutils .= '<a class="list-group-item text-primary text-center text-md-left" href="mailto:'.spam::anti_spam($temp_user['femail'],1).'" target="_blank" title="'.translate("Email").'" ><i class="fa fa-at fa-2x align-middle fa-fw"></i><span class="ml-2 d-none d-md-inline">'.translate("Email").'</span></a>';

@@ -152,7 +152,7 @@ if ($mycount) {
             if ($posterdata['uid']!= 1 and $posterdata['uid']!='')
                $useroutils .= '<a class="list-group-item text-primary text-center text-md-left" href="user.php?op=userinfo&amp;uname='.$posterdata['uname'].'" target="_blank" title="'.translate("Profil").'" data-toggle="tooltip"><i class="fa fa-user fa-2x align-middle"></i><span class="ml-3 d-none d-md-inline">'.translate("Profil").'</span></a>';
             if ($posterdata['uid']!= 1 and $posterdata['uid']!='')
-               $useroutils .= '<a class="list-group-item text-primary text-center text-md-left" href="powerpack.php?op=instant_message&amp;to_userid='.$posterdata["uname"].'" title="'.translate("Envoyer un message interne").'" data-toggle="tooltip"><i class="far fa-envelope fa-2x align-middle"></i><span class="ml-3 d-none d-md-inline">'.translate("Message").'</span></a>';
+               $useroutils .= '<a class="list-group-item text-primary text-center text-md-left" href="two_api.php?op=instant_message&amp;to_userid='.$posterdata["uname"].'" title="'.translate("Envoyer un message interne").'" data-toggle="tooltip"><i class="far fa-envelope fa-2x align-middle"></i><span class="ml-3 d-none d-md-inline">'.translate("Message").'</span></a>';
             if ($posterdata['femail']!='')
                $useroutils .= '<a class="list-group-item text-primary text-center text-md-left" href="mailto:'.spam::anti_spam($posterdata['femail'],1).'" target="_blank" title="'.translate("Email").'" data-toggle="tooltip"><i class="fa fa-at fa-2x align-middle"></i><span class="ml-3 d-none d-md-inline">'.translate("Email").'</span></a>';
             if ($myrow['poster_id']!=1 and array_key_exists($ch_lat, $posterdata_extend)) {

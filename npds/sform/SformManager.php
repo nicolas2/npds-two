@@ -17,8 +17,8 @@ use npds\language\language;
 /**
  * SformManager
  */
-class SformManager 
-{
+class SformManager {
+
 
     /**
      * form fields
@@ -109,7 +109,7 @@ class SformManager
      * @var integer
      */
     public $field_size = 50;
-  
+
 
     /**
      * Interrogate the object for identify the position of an item
@@ -119,7 +119,7 @@ class SformManager
     public function interro_fields($ibid) 
     {
         $number = "no";
-        for(Reset($this->form_fields), $node=0; $node<count($this->form_fields);Next($this->form_fields), $node++) 
+        for(Reset($this->form_fields), $node = 0; $node < count($this->form_fields); Next($this->form_fields), $node++) 
         {
             if (array_key_exists('name', $this->form_fields[$node])) 
             {
@@ -130,17 +130,17 @@ class SformManager
                 }
             }
         }
-        
+
         return $number;
     }
 
     /**
-     * 
+     * [interro_array description]
      * @param  [type] $ibid0 [description]
      * @param  [type] $ibid1 [description]
      * @return [type]        [description]
      */
-    public function interro_array($ibid0, $ibid1) 
+    public function interro_array($ibid0,$ibid1) 
     {
         $number = 'no';
         foreach($ibid0 as $key => $val) 
@@ -151,10 +151,10 @@ class SformManager
                 break;
             }
         }
-        
+
         return $number;
     }
-   
+
     /**
      * Change the default (50) value for the html attribute SIZE of form-field
      * @param [type] $en [description]
@@ -174,14 +174,14 @@ class SformManager
     }
 
     /**
-     * add id of <form> // Jireck add
+     * add id of <form> 
      * @param [type] $en [description]
      */
     public function add_form_id($en) 
     {
         $this->form_id = $en;
     }
-
+      
     /**
      * add method of <form action=> Get or Post
      * @param [type] $en [description]
@@ -213,7 +213,7 @@ class SformManager
      * designate a specfific field off the form as key in the DB
      * @param [type] $en [description]
      */
-    public function add_key($en) 
+    public function add_key($en)
     {
         $this->form_key = $en;
     }
@@ -234,15 +234,15 @@ class SformManager
      */
     public function key_lock($en) 
     {
-        if ($en == 'open') 
+        if ($en == 'open')
         {
             $this->form_key_status = 'open';
-        } 
-        else 
+        }
+        else
         {
             $this->form_key_status = 'close';
         }
-    } 
+    }
 
     /**
      * add mess
@@ -264,10 +264,10 @@ class SformManager
      * @param string  $diviseur   [description]
      * @param string  $ctrl       [description]
      */
-    public function add_field($name, $en, $value='', $type='text', $obligation=false, $size='50', $diviseur='5', $ctrl='') 
+    public function add_field($name,$en, $value='', $type='text', $obligation=false, $size='50', $diviseur='5', $ctrl='') 
     {
         if ($type == 'submit') 
-        { 
+        {
             $name = $this->submit_value;
         }
         
@@ -294,13 +294,13 @@ class SformManager
     public function add_checkbox($name, $en, $value='', $obligation=false, $checked=false) 
     {
         $this->form_fields[count($this->form_fields)] = array(
-            'name'        => $name,
-            'en'          => $en,
-            'value'       => $value,
-            'type'        => "checkbox",
-            'checked'     => $checked,
-            'obligation'  => $obligation
-       );
+            'name'       => $name,
+            'en'         => $en,
+            'value'      => $value,
+            'type'       => "checkbox",
+            'checked'    => $checked,
+            'obligation' => $obligation
+        );
     }
 
     /**
@@ -315,13 +315,13 @@ class SformManager
     public function add_select($name, $en, $values, $obligation=false, $size=1, $multiple=false) 
     {
         $this->form_fields[count($this->form_fields)] = array(
-            'name'        => $name,
-            'en'          => $en,
-            'type'        => "select",
-            'value'       => $values,
-            'size'        => $size,
-            'multiple'    => $multiple,
-            'obligation'  => $obligation
+            'name'       => $name,
+            'en'         => $en,
+            'type'       => "select",
+            'value'      => $values,
+            'size'       => $size,
+            'multiple'   => $multiple,
+            'obligation' => $obligation
         );
     }
 
@@ -335,13 +335,13 @@ class SformManager
     public function add_radio($name, $en, $values, $obligation=false) 
     {
         $this->form_fields[count($this->form_fields)] = array(
-            'name'         => $name,
-            'en'           => $en,
-            'type'         => "radio",
-            'value'        => $values,
-            'obligation'   => $obligation
+            'name'       => $name,
+            'en'         => $en,
+            'type'       => "radio",
+            'value'      => $values,
+            'obligation' => $obligation
         );
-    } 
+    }
 
     /**
      * add fields date or stamp : date field of type date, stamp hidden field value timestamp
@@ -374,17 +374,17 @@ class SformManager
     public function add_title($en) 
     {
         $this->title = $en;
-    } 
+    }
 
     /**
      * add comment into HTML tab
      * @param [type] $en [description]
      */
-    public function add_comment($en)
+    public function add_comment($en) 
     {
         $this->form_fields[count($this->form_fields)] = array(
-            'en'     => $en,
-            'type'   => "comment"
+            'en'    => $en,
+            'type'  => "comment"
         );
     }
 
@@ -395,11 +395,11 @@ class SformManager
     public function add_extra($en) 
     {
         $this->form_fields[count($this->form_fields)] = array(
-            'en'     => $en,
-            'type'   => "extra"
+            'en'    => $en,
+            'type'  => "extra"
         );
-    } 
-
+    }
+      
     /**
      * add extra into HTML tab (link html tags ...) print in form but not in response
      * @param [type] $en [description]
@@ -407,8 +407,8 @@ class SformManager
     public function add_extra_hidden($en) 
     {
         $this->form_fields[count($this->form_fields)] = array(
-            'en'     => $en,
-            'type'   => "extra-hidden"
+            'en'    => $en,
+            'type'  => "extra-hidden"
         );
     }
 
@@ -418,8 +418,8 @@ class SformManager
     public function add_Qspam() 
     {
         $this->form_fields[count($this->form_fields)] = array(
-            'en'     => "",
-            'type'   => "Qspam"
+            'en'    => "",
+            'type'  => "Qspam"
         );
     }
 
@@ -432,9 +432,9 @@ class SformManager
     public function add_extender($name, $javas, $html) 
     {
         $this->form_fields[count($this->form_fields)] = array(
-            'name'    => $name."extender",
-            'javas'   => $javas,
-            'html'    => $html
+            'name'   => $name."extender",
+            'javas'  => $javas,
+            'html'   => $html
         );
     }
 
@@ -448,28 +448,29 @@ class SformManager
     public function add_upload($name, $en, $size='50', $file_size) 
     {
         $this->form_fields[count($this->form_fields)] = array(
-            'name'        => $name,
-            'en'          => $en,
-            'value'       => "",
-            'type'        => "upload",
-            'size'        => $size,
-            'file_size'   => $file_size
+            'name'      => $name,
+            'en'        => $en,
+            'value'     => "",
+            'type'      => "upload",
+            'size'      => $size,
+            'file_size' => $file_size
         );
     }
 
     /**
-     * print <form> into html output / IF no method (form_method) is affected : 
-     * the <form>  </form> is not write (useful to insert SFORM in existing form)
+     * print <form> into html output 
+     * IF no method (form_method) is affected : the <form>  </form> 
+     * is not write (useful to insert SFORM in existing form)
      * @param  [type] $bg [description]
      * @return [type]     [description]
      */
     public function print_form($bg) 
     {
-        if (isset($this->form_id)) 
+        if (isset($this->form_id))
         {
             $id_form = 'id="'.$this->form_id.'"';
-        } 
-        else 
+        }
+        else
         {
             $id_form = '';
         }
@@ -478,13 +479,13 @@ class SformManager
        
         if ($this->form_method != '') 
         {
-            $str .= "\n<form action=\"".$this->url."\" ".$id_form."  method=\"".$this->form_method."\" name=\"".$this->form_title."\" enctype=\"multipart/form-data\"";
-          
-            if ($this->form_check == 'true') 
+            $str.="\n<form action=\"".$this->url."\" ".$id_form."  method=\"".$this->form_method."\" name=\"".$this->form_title."\" enctype=\"multipart/form-data\"";
+            
+            if ($this->form_check == 'true')
             {
                 $str .= ' onsubmit="return check();">';
-            } 
-            else 
+            }
+            else
             {
                 $str .= '>';
             }
@@ -495,67 +496,61 @@ class SformManager
             <fieldset>
                 <legend class="mb-4">'.$this->title.'</legend>';
 
-        for($i=0; $i<count($this->form_fields); $i++) 
+        for($i=0; $i<count($this->form_fields); $i++)
         {
             if (array_key_exists('size', $this->form_fields[$i])) 
             {
                 if ($this->form_fields[$i]['size'] >= $this->field_size) 
                 {
-                    $csize = $this->field_size;
-                } 
-                else 
-                {
-                    $csize = (integer)$this->form_fields[$i]['size']+1;
+                    $csize = $this->field_size;} else {$csize = (integer)$this->form_fields[$i]['size']+1;
                 }
             }
 
-            if (array_key_exists('name', $this->form_fields[$i])) 
+            if (array_key_exists('name', $this->form_fields[$i]))
             {
                 $num_extender = $this->interro_fields($this->form_fields[$i]['name'].'extender');
-            } 
-            else 
+            }
+            else
             {
                 $num_extender = 'no';
             }
 
             if (array_key_exists('type', $this->form_fields[$i])) 
             {
-                switch($this->form_fields[$i]['type']) 
+                switch($this->form_fields[$i]['type'])
                 {
                     case 'text':
                     case 'email':
                     case 'url':
                     case 'number':
-                        $str.='
+                        $str .= '
                             <div class="form-group row">
-                                <label class="col-form-label col-sm-4" for="'.$this->form_fields[$i]['name'].'">'.$this->form_fields[$i]['en'];
-                   
+                            <label class="col-form-label col-sm-4" for="'.$this->form_fields[$i]['name'].'">'.$this->form_fields[$i]['en'];
+                           
                         $this->form_fields[$i]['value'] = str_replace('\'', '&#039;', $this->form_fields[$i]['value']);
                         
                         $requi = '';
-                   
-                        if ($this->form_fields[$i]['obligation']) 
+                           
+                        if ($this->form_fields[$i]['obligation'])
                         {
-                            $requi =  'required="required"';
-                        
-                            $this->form_check.=" && (f.elements['".$this->form_fields[$i]['name']."'].value!='')";
-                        
+                            $requi = 'required="required"';
+                            $this->form_check .= " && (f.elements['".$this->form_fields[$i]['name']."'].value!='')";
                             $str .= '<span class="text-danger ml-2">*</span>';
                         }
 
                         $str .= '</label>
                             <div class="col-sm-8">';
-                   
+                           
                         // Charge la valeur et analyse la clef
                         if ($this->form_fields[$i]['name'] == $this->form_key) 
                         {
                             $this->form_key_value = $this->form_fields[$i]['value'];
-                        
-                            if ($this->form_key_status == 'close') 
+                            
+                            if ($this->form_key_status == 'close')
                             {
                                 $str .= '
                                     <input class="form-control" readonly="readonly" type="'.$this->form_fields[$i]['type'].'" id="'.$this->form_fields[$i]['name'].'" name="'.$this->form_fields[$i]['name'].'" value="'.$this->form_fields[$i]['value'].'" size="'.$csize.'" maxlength="'.$this->form_fields[$i]['size'].'" ';
-                            } 
+                            }
                             else 
                             {
                                 $str .= '
@@ -567,7 +562,7 @@ class SformManager
                             $str .= '
                                 <input class="form-control" type="'.$this->form_fields[$i]['type'].'" id="'.$this->form_fields[$i]['name'].'" name="'.$this->form_fields[$i]['name'].'" value="'.$this->form_fields[$i]['value'].'" size="'.$csize.'" maxlength="'.$this->form_fields[$i]['size'].'" '.$requi;
                         }
-                       
+
                         if ($num_extender != 'no') 
                         {
                             $str .= ' '.$this->form_fields[$num_extender]['javas'].'>';
@@ -577,148 +572,139 @@ class SformManager
                         {
                             $str .= ' /> ';
                         }
-                     
+                        
                         $str .= '
-                                </div>
-                            </div>';
+                            </div>
+                        </div>';
                     break;
 
                     case 'password-access':
-                        $this->form_fields[$i]['value']=$this->form_password_access;
-                    break;
-
+                        $this->form_fields[$i]['value'] = $this->form_password_access;
                     case 'password':
                         $str .= '
                             <div class="form-group row">
-                                <label class="col-form-label col-sm-4" for="'.$this->form_fields[$i]['name'].'">'    .$this->form_fields[$i]['en'];
-                    
+                                <label class="col-form-label col-sm-4" for="'.$this->form_fields[$i]['name'].'">'.$this->form_fields[$i]['en'];
+                        
                         $this->form_fields[$i]['value'] = str_replace('\'', '&#039;', $this->form_fields[$i]['value']);
-                    
+                        
                         $requi = '';
-                    
-                        if ($this->form_fields[$i]['obligation']) 
-                        {
+                           
+                        if ($this->form_fields[$i]['obligation']){
                             $requi = 'required="required"';
-                            
                             $this->form_check .= " && (f.elements['".$this->form_fields[$i]['name']."'].value!='')";
-
                             $str .= '&nbsp;<span class="text-danger">*</span></label>';
                         } 
                         else 
-                        {
+                        { 
                             $str .= '</label>';
                         }
-                    
+                           
                         $str .= '
                             <div class="col-sm-8">
-                                <input class="form-control" type="'.$this->form_fields[$i]['type'].'" id="'.$this    ->form_fields[$i]['name'].'" name="'.$this->form_fields[$i]['name'].'"     value="'.$this->form_fields[$i]['value'].'" size="'.$csize.'" maxlength="'.$this->form_fields[$i]['size'].'" '.$requi.' />';
-                   
-                        if ($num_extender != 'no') 
+                                <input class="form-control" type="'.$this->form_fields[$i]['type'].'" id="'.$this->form_fields[$i]['name'].'" name="'.$this->form_fields[$i]['name'].'" value="'.$this->form_fields[$i]['value'].'" size="'.$csize.'" maxlength="'.$this->form_fields[$i]['size'].'" '.$requi.' />';
+                           
+                        if ($num_extender != 'no')
                         {
                             $str .= $this->form_fields[$num_extender]['html'];
                         }
-                   
+                        
                         $str .= '
-                                </div>
-                            </div>';
+                            </div>
+                        </div>';
                     break;
 
                     case 'checkbox':
                         $requi = '';
-                        
-                        if ($this->form_fields[$i]['obligation']) 
+                        if ($this->form_fields[$i]['obligation'])
                         {
                             $requi = 'required="required"';
                         }
-                       
+                        
                         $str .= '
                             <div class="form-group row">
                                 <div class="col-sm-8 ml-sm-auto">
                                     <div class="custom-control custom-checkbox">
                                         <input class="custom-control-input" type="checkbox" id="'.$this->form_fields[$i]['name'].'" name="'.$this->form_fields[$i]['name'].'" value="'.$this->form_fields[$i]['value'].'" '.$requi;
-                    
+                        
                         $str .= ($this->form_fields[$i]['checked'])? ' checked="checked" />' : ' />';
-                    
+                           
                         $str .= '
                             <label class="custom-control-label" for="'.$this->form_fields[$i]['name'].'">'.$this->form_fields[$i]['en'];
-                   
-                        if ($this->form_fields[$i]['obligation']) 
+                        
+                        if ($this->form_fields[$i]['obligation'])
                         {
                             $str .= '<span class="text-danger"> *</span>';
                         }
-                   
+                           
                         $str .= '</label>
                             </div>';
-                   
-                        if ($num_extender != 'no') 
+                           
+                        if ($num_extender != 'no')
                         {
                             $str .= $this->form_fields[$num_extender]['html'];
                         }
-                    
+                        
                         $str .= '
-                                </div>
-                            </div>';
+                            </div>
+                        </div>';
                     break;
 
                     case 'textarea':
                         $requi = '';
-                   
+                           
                         if ($this->form_fields[$i]['obligation']) 
                         {
-                            $requi = 'required="required"';
+                            $requi =  'required="required"';
                         }
 
                         $str .= '
                             <div class="form-group row">
-                                <label class="col-form-label col-sm-4" for="'.$this->form_fields[$i]['name'].'">'    .$this->form_fields[$i]['en'];
-                   
+                            <label class="col-form-label col-sm-4" for="'.$this->form_fields[$i]['name'].'">'.$this->form_fields[$i]['en'];
+                        
                         $this->form_fields[$i]['value'] = str_replace('\'', '&#039;', $this->form_fields[$i]['value']);
-                   
-                        if ($this->form_fields[$i]['obligation']) 
-                        {
+                        
+                        if ($this->form_fields[$i]['obligation']){
                             $this->form_check .= " && (f.elements['".$this->form_fields[$i]['name']."'].value!='')";
                             $str .= '&nbsp;<span class="text-danger">*</span>';
                         }
-
+                           
                         $str .= '</label>';
                         $txt_row = $this->form_fields[$i]['diviseur'];
-                   
                         //$txt_col = ( ($this->form_fields[$i]['size'] - ($this->form_fields[$i]['size'] % $txt_row)) / $txt_row);
-                   
+                           
                         $str .= '
                             <div class="col-sm-8">
                                 <textarea class="form-control" name="'.$this->form_fields[$i]['name'].'" id="'.$this->form_fields[$i]['name'].'" rows="'.$txt_row.'" '.$requi.'>'.$this->form_fields[$i]['value'].'</textarea>';
-                   
-                        if ($num_extender != 'no') 
+                        
+                        if ($num_extender != 'no')
                         {
                             $str .= $this->form_fields[$num_extender]['html'];
                         }
-                   
+                        
                         $str .= '
-                                </div>
-                            </div>';
+                            </div>
+                        </div>';
                     break;
-
+                    
                     //not sure to check if ok on all case
                     case 'show-hidden':
                         $str .= '
                             <div class="form-group row">
                                 <label class="col-form-label col-sm-4">'.$this->form_fields[$i]['en'].'</label>
                                 <div class="col-sm-8">';
-                
+                        
                         if ($num_extender != "no") 
                         {
                             $str .= $this->form_fields[$num_extender]['html'];
                         }
-                
+                        
                         $str .= '
-                                </div>
-                            </div>';
-                    break;
+                            </div>
+                        </div>';
 
                     case 'hidden':
                         $this->form_fields[$i]['value'] = str_replace('\'', '&#039;', $this->form_fields[$i]['value']);
-                    
+                        
                         $str .= '
                             <input type="hidden" name="'.$this->form_fields[$i]['name'].'" value="'.$this->form_fields[$i]['value'].'" />';
                     break;
@@ -729,61 +715,62 @@ class SformManager
                                 <label class="col-form-label col-sm-4" for="'.$this->form_fields[$i]['name'].'">'.$this->form_fields[$i]['en'].'</label>
                                 <div class="col-sm-8">
                                     <select class="'; 
-                    
+                            
                         $str .= ($this->form_fields[$i]['multiple'])? 'form-control' : 'custom-select form-control';
+                        
                         $str .= '" id="'.$this->form_fields[$i]['name'].'" name="'.$this->form_fields[$i]['name'];
+                        
                         $str .= ($this->form_fields[$i]['multiple'])? '[]" multiple="multiple"' : "\"";
-                    
+                            
                         if ($num_extender != 'no') 
                         {
-                            $str .= ' '.$this->form_fields[$num_extender]['javas'].' ';
+                            $str.=' '.$this->form_fields[$num_extender]['javas'].' ';
                         }
-                    
+                        
                         $str .= ($this->form_fields[$i]['size'] > 1)? " size=\"".$this->form_fields[$i]['size']."\">" : '>';
-                    
+                            
                         foreach($this->form_fields[$i]['value'] as $key => $val) 
                         {
                             $str .= '
                                 <option value="'.$key.'"';
-    
-                            if(array_key_exists('selected', $val) and $val['selected']) 
-                            {
+                              
+                            if(array_key_exists('selected', $val) and $val['selected'])
+                            { 
                                 $str .= ' selected="selected" >';
-                            } 
+                            }
                             else 
                             {
                                 $str .= ' >';
                             }
-                          
+                              
                             $str .= str_replace('\'', '&#039;', $val['en']).'</option>';
                         }
-
+                            
                         $str .= '
                             </select>';
-                    
-                        if ($num_extender != 'no') 
+                            
+                        if ($num_extender != 'no')
                         {
                             $str .= $this->form_fields[$num_extender]['html'];
                         }
-                    
+                        
                         $str .= '
-                                </div>
-                            </div>';
+                            </div>
+                        </div>';
                     break;
 
                     case 'radio':
                         $first_radio = true;
-                    
                         $str .= '
                             <div class="form-group row">
                                 <label class="col-form-label col-sm-4" for="'.$this->form_fields[$i]['name'].'">'.$this->form_fields[$i]['en'].'</label>
-                                <div class="col-sm-8">';
-                   
+                                 <div class="col-sm-8">';
+                           
                         foreach($this->form_fields[$i]['value'] as $key => $val) 
                         {
                             $str .= '
-                                <input class="" type="radio" ';
-                           
+                            <input class="" type="radio" ';
+                              
                             if ($first_radio) 
                             {
                                 $str .= 'id="'.$this->form_fields[$i]['name'].'" ';
@@ -792,25 +779,25 @@ class SformManager
 
                             $str .= 'name="'.$this->form_fields[$i]['name'].'" value="'.$key.'"';
                             $str .= ($val['checked'])? ' checked="checked" />&nbsp;' : ' />&nbsp;';
-                           
+                              
                             $str .= $val['en'].'&nbsp;&nbsp;';
                         }
-
-                        if ($num_extender != 'no') 
+                           
+                        if ($num_extender != 'no')
                         {
-                            $str .= $this->form_fields[$num_extender]['html'];
+                            $str.=$this->form_fields[$num_extender]['html'];
                         }
-                   
+                        
                         $str .= '
-                                </div>
-                            </div>';
+                            </div>
+                        </div>';
                     break;
 
                     case 'comment':
                         $str .= '
-                            <div class="col-sm-12">
-                                <p>'.$this->form_fields[$i]['en'].'</p>
-                            </div>';
+                        <div class="col-sm-12">
+                            <p>'.$this->form_fields[$i]['en'].'</p>
+                        </div>';
                     break;
 
                     case 'Qspam':
@@ -820,18 +807,18 @@ class SformManager
 
                     case 'extra':
                     case 'extra-hidden':
-                        $str.=$this->form_fields[$i]['en'];
+                        $str .= $this->form_fields[$i]['en'];
                     break;
 
                     case 'submit':
                         $this->form_fields[$i]['value'] = str_replace('\'', '&#039;', $this->form_fields[$i]['value']);
-                    
+                        
                         $str .= '<button class="btn btn-primary" id="'.$this->form_fields[$i]['name'].'" type="submit" name="'.$this->form_fields[$i]['name'].'" >'.$this->form_fields[$i]['value'].'</button>';
                     break;
 
                     case 'reset':
                         $this->form_fields[$i]['value'] = str_replace('\'', '&#039;', $this->form_fields[$i]['value']);
-                   
+                       
                         $str .= $this->form_fields[$i]['en'];
                         $str .= '<input class="btn btn-secondary" id="'.$this->form_fields[$i]['name'].'" type="reset" name="'.$this->form_fields[$i]['name'].'" value="'.$this->form_fields[$i]['value'].'" />';
                     break;
@@ -841,27 +828,27 @@ class SformManager
                         {
                             $this->form_fields[$i]['value'] = strtotime("now");
                         }
-
-                        if ($this->form_fields[$i]['name'] == $this->form_key) 
+                        
+                        if ($this->form_fields[$i]['name'] == $this->form_key)
                         {
                             $this->form_key_value = $this->form_fields[$i]['value'];
                         }
-                    
+                        
                         $str .= '
                             <input type="hidden" name="'.$this->form_fields[$i]['name'].'" value="'.$this->form_fields[$i]['value'].'" />';
                     break;
 
                     case 'date':
                         if ($this->form_fields[$i]['value'] == '') 
-                        { 
+                        {
                             $this->form_fields[$i]['value'] = date($this->form_fields[$i]['model']);
                         }
-                   
+                        
                         $str .= '
                             <div class="form-group row">
-                                <label class="col-form-label col-sm-4" for="'.$this->form_fields[$i]['name'].'">'.$this->form_fields[$i]['en'];
-                   
-                        if ($this->form_fields[$i]['obligation']) 
+                            <label class="col-form-label col-sm-4" for="'.$this->form_fields[$i]['name'].'">'.$this->form_fields[$i]['en'];
+                           
+                        if ($this->form_fields[$i]['obligation'])
                         {
                             $this->form_check .= " && (f.elements['".$this->form_fields[$i]['name']."'].value!='')";
                             $str .= '&nbsp;<span class="text-danger">*</span></label>';
@@ -870,85 +857,84 @@ class SformManager
                         {
                             $str .= '</label>';
                         }
-                   
+  
                         if ($this->form_fields[$i]['name'] == $this->form_key) 
                         {
                             $this->form_key_value = $this->form_fields[$i]['value'];
-                        
-                            if ($this->form_key_status == 'close') 
+                            
+                            if ($this->form_key_status == 'close')
                             {
                                 $str .= '
-                                    <input type="hidden" id="'.$this->form_fields[$i]['name'].'" name="'.$this->form_fields[$i]['name'].'" value="'.$this->form_fields[$i]['value'].'" />
-                                               <b>'.$this->form_fields[$i]['value'].'</b>';
-                            } 
-                            else 
-                            {
-                                $str .= '
-                                    <div class="col-sm-8">
-                                        <input class="form-control" id="'.$this->form_fields[$i]['name'].'" type="text" name="'.$this->form_fields[$i]['name'].'" value="'.$this->form_fields[$i]['value'].'" size="'.$csize.'" maxlength="'.$this->form_fields[$i]['size'].'" />';
+                                <input type="hidden" id="'.$this->form_fields[$i]['name'].'" name="'.$this->form_fields[$i]['name'].'" value="'.$this->form_fields[$i]['value'].'" />
+                                <b>'.$this->form_fields[$i]['value'].'</b>';
                             }
-                        } 
-                        else 
-                        {
-                            $str .= '
+                            else
+                            {
+                                $str .= '
                                 <div class="col-sm-8">
                                     <input class="form-control" id="'.$this->form_fields[$i]['name'].'" type="text" name="'.$this->form_fields[$i]['name'].'" value="'.$this->form_fields[$i]['value'].'" size="'.$csize.'" maxlength="'.$this->form_fields[$i]['size'].'" />';
-                        }
-                    
-                        if ($num_extender != 'no') 
+                            }
+                        } 
+                        else
+                        {
+                            $str .= '
+                            <div class="col-sm-8">
+                                <input class="form-control" id="'.$this->form_fields[$i]['name'].'" type="text" name="'.$this->form_fields[$i]['name'].'" value="'.$this->form_fields[$i]['value'].'" size="'.$csize.'" maxlength="'.$this->form_fields[$i]['size'].'" />';
+                        } 
+
+                        if ($num_extender != 'no')
                         {
                             $str .= $this->form_fields[$num_extender]['html'];
                         }
-
+                           
                         $str .= '
-                                </div>
-                            </div>';
+                            </div>
+                        </div>';
                     break;
 
                     case 'upload':
                         $str .= '
-                            <div id="avava" class="form-group row" lang="'.Language::language_iso(1,'','').'">
-                                <label class="col-form-label col-sm-4" for="'.$this->form_fields[$i]['name'].'">'.$this->form_fields[$i]['en'].'</label>
-                                <div class="col-sm-8">
-                                    <div class="input-group mb-2 mr-sm-2">
-                                        <div class="input-group-prepend" onclick="reset2($(\'#'.$this->form_fields[$i]['name'].'\'),\'\');">
-                                            <div class="input-group-text"><i class="fas fa-sync"></i></div>
-                                        </div>
+                        <div id="avava" class="form-group row" lang="'.language::language_iso(1, '', '').'">
+                            <label class="col-form-label col-sm-4" for="'.$this->form_fields[$i]['name'].'">'.$this->form_fields[$i]['en'].'</label>
+                            <div class="col-sm-8">
+                                <div class="input-group mb-2 mr-sm-2">
+                                    <div class="input-group-prepend" onclick="reset2($(\'#'.$this->form_fields[$i]['name'].'\'),\'\');">
+                                        <div class="input-group-text"><i class="fas fa-sync"></i></div>
+                                    </div>
                                     <div class="custom-file">
                                         <input type="file" class="custom-file-input" id="'.$this->form_fields[$i]['name'].'"  name="'.$this->form_fields[$i]['name'].'" size="'.$csize.'" maxlength="'.$this->form_fields[$i]['size'].'" />
                                         <label id="lab" class="custom-file-label" for="'.$this->form_fields[$i]['name'].'">Selectionner votre fichier</label>
                                     </div>
                                 </div>
                             <input type="hidden" name="MAX_FILE_SIZE" value="'.$this->form_fields[$i]['file_size'].'" />';
-
-                        if ($num_extender != 'no') 
-                        {
-                            $str .= $this->form_fields[$num_extender]['html'];
-                        }
-
-                        $str .= '
+                            
+                            if ($num_extender != 'no')
+                            {
+                                $str .= $this->form_fields[$num_extender]['html'];
+                            }
+                            
+                            $str .= '
                                 </div>
                             </div>';
                     break;
-                
                     default:
                     break;
-               }
+                }
             }
         }
-       
+
         $str .= '
             </fieldset>';
-       
-        if ($this->form_method != '') 
+        
+        if ($this->form_method != '')
         {
             $str .= '
-              </form>';
+            </form>';
         }
 
-        // cette condition n'est pas fonctionnelle
         if ($this->form_check != 'false') 
         { 
+            // cette condition n'est pas fonctionnelle
             $str .= "<script type=\"text/javascript\">//<![CDATA[".CRLF;
             $str .= "var f=document.forms['".$this->form_title."'];".CRLF;
             $str .= "function check(){".CRLF;
@@ -977,16 +963,14 @@ class SformManager
             if (array_key_exists('name', $this->form_fields[$i])) 
             {
                 $str .= '<input type="hidden" name="'.$this->form_fields[$i]['name'].'" value="';
-            
-                if(array_key_exists('value', $this->form_fields[$i])) 
+                if(array_key_exists('value', $this->form_fields[$i]))
                 {
-                    $str .= stripslashes(str_replace('\'', '&#039;', $this->form_fields[$i]['value'])).'"';
-                } 
+                    $str .=  stripslashes(str_replace('\'', '&#039;', $this->form_fields[$i]['value'])).'"';
+                }
                 else 
                 {
                     $str .= '"';
                 }
-            
                 $str .= ' />';
             }
         }
@@ -995,20 +979,18 @@ class SformManager
     }
 
     /**
-     * make the answer array
+     *  make the answer array
      * @return [type] [description]
      */
-    private function make_response()
+    public function make_response()
     {
         for($i=0; $i<count($this->form_fields); $i++) 
         {
             $this->answer[$i] = '';
-          
             if(array_key_exists('type', $this->form_fields[$i])) 
             {
-                switch($this->form_fields[$i]['type']) 
+                switch($this->form_fields[$i]['type'])
                 {
-               
                     case 'text': 
                     case 'email': 
                     case 'url': 
@@ -1018,12 +1000,10 @@ class SformManager
                         {
                             $this->form_key_value = $GLOBALS[$this->form_fields[$i]['name']];
                         }
-                    break;
-               
                     case 'password':
                         if ($this->form_fields[$i]['ctrl'] != "") 
                         {
-                            $this->control($this->form_fields[$i]['name'], $this->form_fields[$i]['en'], $GLOBALS[$this->form_fields[$i]['name']], $this->form_fields[$i]['ctrl']);
+                            $this->control($this->form_fields[$i]['name'], $this->form_fields[$i]['en'],$GLOBALS[$this->form_fields[$i]['name']], $this->form_fields[$i]['ctrl']);
                         }
 
                         $this->answer[$i] .= "<TEXT>\n";
@@ -1034,7 +1014,7 @@ class SformManager
                     case 'password-access':
                         if ($this->form_fields[$i]['ctrl'] != "") 
                         {
-                            $this->control($this->form_fields[$i]['name'], $this->form_fields[$i]['en'], $GLOBALS[$this->form_fields[$i]['name']], $this->form_fields[$i]['ctrl']);
+                            $this->control($this->form_fields[$i]['name'], $this->form_fields[$i]['en'],$GLOBALS[$this->form_fields[$i]['name']], $this->form_fields[$i]['ctrl']);
                         }
 
                         $this->form_password_access = $GLOBALS[$this->form_fields[$i]['name']];
@@ -1043,21 +1023,23 @@ class SformManager
                     case 'textarea':
                     case 'textarea_no_mceEditor':
                         $this->answer[$i] .= "<TEXT>\n";
+                       
                         $this->answer[$i] .= "<".$this->form_fields[$i]['name'].">".str_replace(chr(13).chr(10), "&lt;br /&gt;", $GLOBALS[$this->form_fields[$i]['name']])."</".$this->form_fields[$i]['name'].">\n";
+                        
                         $this->answer[$i] .= "</TEXT>";
                     break;
 
                     case 'select':
                         $this->answer[$i] .= "<SELECT>\n";
-                    
-                        if(is_array($GLOBALS[$this->form_fields[$i]['name']])) 
+                        
+                        if(is_array($GLOBALS[$this->form_fields[$i]['name']]))
                         {
-                            for($j=0; $j<count($GLOBALS[$this->form_fields[$i]['name']]); $j++) 
+                            for($j=0; $j<count($GLOBALS[$this->form_fields[$i]['name']]); $j++)
                             {
                                 $this->answer[$i] .= "<".$this->form_fields[$i]['name'].">".$this->form_fields[$i]['value'][ $GLOBALS[$this->form_fields[$i]['name']][$j] ]['en']."</".$this->form_fields[$i]['name'].">\n";
                             }
-                        } 
-                        else 
+                        }
+                        else
                         {
                             $this->answer[$i] .= "<".$this->form_fields[$i]['name'].">".$this->form_fields[$i]['value'][ $GLOBALS[$this->form_fields[$i]['name']] ]['en']."</".$this->form_fields[$i]['name'].">";
                         }
@@ -1067,14 +1049,16 @@ class SformManager
 
                     case 'radio':
                         $this->answer[$i] .= "<RADIO>\n";
+                        
                         $this->answer[$i] .= "<".$this->form_fields[$i]['name'].">".$this->form_fields[$i]['value'][ $GLOBALS[$this->form_fields[$i]['name']] ]['en']."</".$this->form_fields[$i]['name'].">\n";
+                        
                         $this->answer[$i] .= "</RADIO>";
                     break;
 
                     case 'checkbox':
                         $this->answer[$i] .= "<CHECK>\n";
-                 
-                        if($GLOBALS[$this->form_fields[$i]['name']] != "") 
+
+                        if($GLOBALS[$this->form_fields[$i]['name']] != "")
                         {
                             $this->answer[$i] .= "<".$this->form_fields[$i]['name'].">".$this->form_fields[$i]['value']."</".$this->form_fields[$i]['name'].">\n";
                         } 
@@ -1107,7 +1091,7 @@ class SformManager
                         {
                             $this->form_key_value = $GLOBALS[$this->form_fields[$i]['name']];
                         }
-
+                    
                         $this->answer[$i] .= "<TIMESTAMP>\n";
                         $this->answer[$i] .= "<".$this->form_fields[$i]['name'].">".$GLOBALS[$this->form_fields[$i]['name']]."</".$this->form_fields[$i]['name'].">\n";
                         $this->answer[$i] .= "</TIMESTAMP>";
@@ -1123,7 +1107,7 @@ class SformManager
             }
         }
     }
-   
+ 
     /**
      * Read Data structure and build a plain-text response
      * @param  [type] $response [description]
@@ -1133,7 +1117,7 @@ class SformManager
     {
         $content = "<CONTENTS>\n";
         
-        for(Reset($response), $node=0;$node<count($response);Next($response), $node++) 
+        for(Reset($response), $node=0; $node<count($response); Next($response), $node++) 
         {
             if ($response[$node] != "no_reg") 
             {
@@ -1143,9 +1127,9 @@ class SformManager
 
         $content .= "</CONTENTS>";
         
-        return addslashes($content);
+        return (addslashes($content));
     }
-
+ 
     /**
      * Read Data structure and build the Internal Data Structure
      * @param  [type] $line [description]
@@ -1154,33 +1138,33 @@ class SformManager
      */
     public function read_load_sform_data($line, $op) 
     {
-        if ((!stristr($line, "<CONTENTS>")) and (!stristr($line, "</CONTENTS>"))) 
+        if ((!stristr($line,"<CONTENTS>")) and (!stristr($line,"</CONTENTS>"))) 
         {
             // Premier tag
             $nom = substr($line, 1, strpos($line, ">")-1);
-            // jusqu'a </xxx
             
-            $valeur = substr($line, strpos($line, ">")+1,(strpos($line, "<", 1)-strlen($nom)-2));
+            // jusqu'a </xxx
+            $valeur = substr($line, strpos($line, ">")+1, (strpos($line, "<", 1)-strlen($nom)-2));
             
             if ($valeur == "") 
             {
                 $op = $nom;
             }
             
-            switch($op) 
+            switch ($op) 
             {
                 case "TEXT":
                     $op = "TEXT_S";
                 break;
-                
+
                 case "TEXT_S":
                     $num = $this->interro_fields($nom);
+
                     if ($num != "no" or $num == "0") 
                     {
-                        $valeur = str_replace("&lt;BR /&gt;", chr(13).chr(10), $valeur);
-                        $valeur = str_replace("&lt;br /&gt;", chr(13).chr(10), $valeur);
-                        
-                        $this->form_fields[$num]['value'] = $valeur;
+                       $valeur = str_replace("&lt;BR /&gt;", chr(13).chr(10), $valeur);
+                       $valeur = str_replace("&lt;br /&gt;", chr(13).chr(10), $valeur);
+                       $this->form_fields[$num]['value'] = $valeur;
                     }
                 break;
 
@@ -1190,20 +1174,19 @@ class SformManager
                 case "SELECT":
                     $op = "SELECT_S";
                 break;
-
                 case "SELECT_S":
                     $num = $this->interro_fields($nom);
 
                     if ($num != "no" or $num == "0") 
                     {
-                        $tmp = $this->interro_array($this->form_fields[$num]['value'], $valeur);
-                        $this->form_fields[$num]['value'][$tmp]['selected'] = true;
+                       $tmp = $this->interro_array($this->form_fields[$num]['value'], $valeur);
+                       $this->form_fields[$num]['value'][$tmp]['selected'] = true;
                     }
                 break;
 
                 case "/SELECT":
                 break;
-   
+
                 case "RADIO":
                     $op = "RADIO_S";
                 break;
@@ -1213,36 +1196,34 @@ class SformManager
                     
                     if ($num != "no" or $num == "0") 
                     {
-                        $tmp = $this->interro_array($this->form_fields[$num]['value'], $valeur);
-                        $this->form_fields[$num]['value'][$tmp]['checked'] = true;
+                       $tmp = $this->interro_array($this->form_fields[$num]['value'], $valeur);
+                       $this->form_fields[$num]['value'][$tmp]['checked'] = true;
                     }
-                 break;
-             
+                break;
+
                 case "/RADIO":
                 break;
 
                 case "CHECK":
                     $op = "CHECK_S";
                 break;
-             
+
                 case "CHECK_S":
                     $num = $this->interro_fields($nom);
-                    
                     if ($num != "no" or $num == "0") 
                     {
                         if ($valeur) 
                         {
                             $valeur = true;
-                        } 
-                        else 
+                        }
+                        else
                         {
                             $valeur = false;
                         }
-
                         $this->form_fields[$num]['checked'] = $valeur;
                     }
                 break;
-             
+
                 case "/CHECK":
                 break;
 
@@ -1250,16 +1231,15 @@ class SformManager
                 case "DATUM":
                     $op = "DATUM_S";
                 break;
-                
+
                 case "DATUM_S":
                     $num = $this->interro_fields($nom);
-                    
                     if ($num != "no" or $num == "0") 
                     {
-                        $this->form_fields[$num]['value'] = $valeur;
+                       $this->form_fields[$num]['value'] = $valeur;
                     }
                 break;
-                
+
                 case "/DATUM":
                 break;
 
@@ -1267,12 +1247,16 @@ class SformManager
                 break;
             }
         }
-       
+
         return $op;
     }
 
     /**
      * print html response
+     * $bg      => Class for TR or TD
+     * $retour  => Comment for the link at the end of the page OR ="not_echo" 
+     *             for not 'echo' the reply but return in a string !
+     * $action  => url to go
      * @param  [type] $bg     [description]
      * @param  string $retour [description]
      * @param  string $action [description]
@@ -1282,33 +1266,31 @@ class SformManager
     {
         // modif Field en lieu et place des $GLOBALS ....
         settype($str, 'string');
-        
+            
         for($i=0; $i<count($this->form_fields); $i++) 
         {
             if (array_key_exists('name', $this->form_fields[$i])) 
             {
                 $num_extender = $this->interro_fields($this->form_fields[$i]['name']."extender");
-             
-                if (array_key_exists($this->form_fields[$i]['name'], $GLOBALS)) 
+                
+                if (array_key_exists($this->form_fields[$i]['name'], $GLOBALS))
                 {
                     $field = $GLOBALS[$this->form_fields[$i]['name']];
-                } 
-                else 
+                }
+                else
                 {
                     $field = '';
                 }
-          
             } 
-            else 
+            else
             {
                 $num_extender = 'no';
             }
-          
+              
             if (array_key_exists('type', $this->form_fields[$i])) 
             {
                 switch($this->form_fields[$i]['type']) 
                 {
-                
                     case 'text': 
                     case 'email': 
                     case 'url': 
@@ -1316,35 +1298,32 @@ class SformManager
                         $str .= '<p class="mb-1">'.$this->form_fields[$i]['en'];
                         $str .= '<br />';
                         $str .= '<strong>'.stripslashes($field).'&nbsp;</strong>';
-                       
-                        if ($num_extender != 'no') 
+                        
+                        if ($num_extender != 'no')
                         {
                             $str .= ' '.$this->form_fields[$num_extender]['html'];
                         }
-                       
+
                         $str .= '</p>';
                     break;
 
                     case 'password':
                         $str .= '<br />'.$this->form_fields[$i]['en'];
                         $str .= '&nbsp;<strong>'.str_repeat("*", strlen($field)).'&nbsp;</strong>';
-                     
                         if ($num_extender != 'no') 
                         {
                             $str .= ' '.$this->form_fields[$num_extender]['html'];
                         }
-
                     break;
 
                     case 'checkbox':
                         $str .= '<br />'.$this->form_fields[$i]['en'];
-                       
-                        if ($field != '') 
+                        if ($field != '')
                         {
                             $str .= '&nbsp;<strong>'.$this->form_fields[$i]['value'].'&nbsp;</strong>';
                         }
                        
-                        if ($num_extender != 'no') 
+                        if ($num_extender != 'no')
                         {
                             $str .= ' '.$this->form_fields[$num_extender]['html'];
                         }
@@ -1352,9 +1331,9 @@ class SformManager
 
                     case 'textarea':
                         $str .= '<br />'.$this->form_fields[$i]['en'];
-                        $str .= '<br /><strong>'.stripslashes(str_replace(chr(13).chr(10), '<br />', $field)).'&nbsp;</strong>';
-              
-                        if ($num_extender != 'no') 
+                        $str .= '<br /><strong>'.stripslashes(str_replace(chr(13).chr(10),'<br />', $field)).'&nbsp;</strong>';
+                        
+                        if ($num_extender != 'no')
                         {
                             $str .= ' '.$this->form_fields[$num_extender]['html'];
                         }
@@ -1362,20 +1341,20 @@ class SformManager
 
                     case 'select':
                         $str .= '<br />'.$this->form_fields[$i]['en'];
-              
-                        if (is_array($field)) 
+                        
+                        if ( is_array($field) ) 
                         {
-                            for ($j=0; $j<count($field); $j++) 
+                            for ($j=0; $j<count($field); $j++)
                             {
                                 $str .= '<strong>'.$this->form_fields[$i]['value'][ $field[$j] ]['en'].'&nbsp;</strong><br />';
                             }
                         } 
-                        else 
+                        else
                         {
                             $str .= '&nbsp;<strong>'.$this->form_fields[$i]['value'][ $field ]['en'].'&nbsp;</strong>';
                         }
-              
-                        if ($num_extender != 'no') 
+
+                        if ($num_extender != 'no')
                         {
                             $str .= ' '.$this->form_fields[$num_extender]['html'];
                         }
@@ -1385,9 +1364,9 @@ class SformManager
                         $str .= '<br />'.$this->form_fields[$i]['en'];
                         $str .= '&nbsp;<strong>'.$this->form_fields[$i]['value'][ $field ]['en'].'&nbsp;</strong>';
                         
-                        if ($num_extender != 'no') 
+                        if ($num_extender != 'no')
                         {
-                            $str .= ' '.$this->form_fields[$num_extender]['html'];
+                            $str.=' '.$this->form_fields[$num_extender]['html'];
                         }
                     break;
 
@@ -1403,36 +1382,36 @@ class SformManager
                     case 'date':
                         $str .= '<br />'.$this->form_fields[$i]['en'];
                         $str .= '&nbsp;<strong>'.$field.'&nbsp;</strong>';
-                    
+                        
                         if ($num_extender != 'no') 
                         {
                             $str .= ' '.$this->form_fields[$num_extender]['html'];
-                        }
+                    }
                     break;
 
                     default:
-                    break;  
+                    break;
                 }
             }
+        }
 
-            if (($retour != '') and ($retour != 'not_echo')) 
-            {
-                $str .= '<a href="'.$action.'" class="btn btn-secondary">[ '.$retour.' ]</a>';
-            }
+        if (($retour != '') and ($retour != 'not_echo')) 
+        {
+            $str .= '<a href="'.$action.'" class="btn btn-secondary">[ '.$retour.' ]</a>';
+        }
+        
+        $str .= '';
 
-            $str .= '';
-
-            if ($retour != 'not_echo') 
-            {
-                echo $str;
-            } 
-            else 
-            {
-                return $str;
-            }
+        if ($retour != 'not_echo')
+        {
+            echo $str;
+        }
+        else
+        {
+            return $str;
         }
     }
- 
+
     /**
      * Control the respect of Data Type
      * @param  [type] $name     [description]
@@ -1444,30 +1423,29 @@ class SformManager
     public function control($name, $nom, $valeur, $controle) 
     {
         $i = $this->interro_fields($name);
-        
-        if (($this->form_fields[$i]['obligation'] != true) and ($valeur == "")) 
+        if (($this->form_fields[$i]['obligation'] != true) and ($valeur == ""))
         {
-           $controle = '';
+            $controle = '';
         }
 
         switch ($controle) {
             case 'a-9':
-                if (preg_match_all("/([^a-zA-Z0-9 ])/i", $valeur, $trouve)) 
+                if (preg_match_all("/([^a-zA-Z0-9 ])/i", $valeur,$trouve)) 
                 {
                     $this->error($nom, implode(" ", $trouve[0]));
                     exit();
                 }
             break;
-
+                
             case 'A-9':
                 if (preg_match_all("([^A-Z0-9 ])", $valeur, $trouve)) 
                 {
-                    return false;
+                    return(false);
                     exit();
                 }
-             break;
+            break;
 
-             case 'email':
+            case 'email':
                 $valeur = strtolower($valeur);
                 if (preg_match_all("/([^a-z0-9_@.-])/i", $valeur, $trouve)) 
                 {
@@ -1488,8 +1466,8 @@ class SformManager
                     $this->error($nom, implode(' ', $trouve[0]));
                     exit();
                 }
-              break;
-
+            break;
+                
             case '0-9extend':
                 if (preg_match_all("/([^0-9_\+\-\*\/\)\]\(\[\& ])/i", $valeur, $trouve)) 
                 {
@@ -1497,7 +1475,7 @@ class SformManager
                     exit();
                 }
             break;
-
+                
             case '0-9number':
                 if (preg_match_all("/([^0-9+-., ])/i", $valeur, $trouve)) 
                 {
@@ -1507,23 +1485,22 @@ class SformManager
             break;
 
             case 'date':
-                $date = explode('/',$valeur);
-              
+                $date = explode('/', $valeur);
                 if (count($date) == 3) 
                 {
                     settype($date[0], 'integer');
                     settype($date[1], 'integer');
                     settype($date[2], 'integer');
-
+                    
                     if (!checkdate($date[1], $date[0], $date[2])) 
                     {
-                        $this->error($nom,'Date non valide');
+                        $this->error($nom, 'Date non valide');
                         exit();
                     }
                 } 
                 else 
                 {
-                    $this->error($nom,'Date non valide');
+                    $this->error($nom, 'Date non valide');
                     exit();
                 }
             break;
@@ -1534,30 +1511,29 @@ class SformManager
     }
 
     /**
-     * 
+     * [error description]
      * @param  [type] $ibid [description]
      * @param  [type] $car  [description]
      * @return [type]       [description]
      */
     public function error($ibid, $car) 
     {
-        echo '<div class="alert alert-danger">'.Language::aff_langue($ibid).' =&#62; <span>'.stripslashes($car).'</span></div>';
-        
+        echo '<div class="alert alert-danger">'.language::aff_langue($ibid).' =&#62; <span>'.stripslashes($car).'</span></div>';
+            
         if ($this->form_method == '') 
         {
             $this->form_method = "post";
         }
-        
+            
         echo "<form action=\"".$this->url."\" method=\"".$this->form_method."\" name=\"".$this->form_title."\" enctype=\"multipart/form-data\">";
         echo $this->print_form_hidden();
         echo '<input class="btn btn-secondary" type="submit" name="sformret" value="Retour" />
-        </form>';
+            </form>';
         
-        include "footer.php";
-      }
- 
+        include ("footer.php");
+    }
+
     /**
-     * Mysql Interface
      * If the first char of $mess_ok is : ! => the button is hidden
      * @param  [type] $pas          [description]
      * @param  [type] $mess_passwd  [description]
@@ -1567,14 +1543,14 @@ class SformManager
      */
     public function sform_browse_mysql($pas, $mess_passwd, $mess_ok, $presentation='') 
     {
-        global $NPDS_Prefix; 
+        global $NPDS_Prefix;
 
         $result = sql_query("SELECT key_value, passwd FROM ".$NPDS_Prefix."sform WHERE id_form='".$this->form_title."' AND id_key='".$this->form_key."' ORDER BY key_value ASC");
-
+             
         echo "<form action=\"".$this->url."\" method=\"post\" name=\"browse\" enctype=\"multipart/form-data\">";
         echo "<table width=\"100%\" border=\"0\" cellspacing=\"1\" cellpadding=\"1\" class=\"ligna\"><tr><td>";
         echo "<table width=\"100%\" border=\"0\" cellspacing=\"1\" cellpadding=\"1\" class=\"lignb\">";
-        
+             
         $hidden = false;
         if (substr($mess_ok, 0, 1) == "!") 
         {
@@ -1587,20 +1563,20 @@ class SformManager
         {
             if ($ibid == 0) 
             {
-               echo "<tr class=\"ligna\">";
+                echo "<tr class=\"ligna\">";
             }
-
+                
             $ibid++;
-            
+                
             if ($passwd != "") 
             {
                 $red = "<span class=\"text-danger\">$key_value (v)</span>";
-            } 
-            else 
+            }
+            else
             {
                 $red = "$key_value";
             }
-
+            
             if ($presentation == "liste") 
             {
                 echo "<td><a href=\"".$this->url."&amp;".$this->submit_value."=$mess_ok&amp;browse_key=".urlencode($key_value)."\" class=\"noir\">$key_value</a></td>";
@@ -1618,49 +1594,48 @@ class SformManager
         }
 
         echo "</table><br />";
-         
+
         if ($this->form_password_access != "") 
         {
             echo "$mess_passwd : <input class=\"textbox_standard\" type=\"password\" name=\"password\" value=\"\"> - ";
         }
-         
-        if (!$hidden)  
+
+        if (!$hidden) 
         {
             echo "<input class=\"bouton_standard\" type=\"submit\" name=\"".$this->submit_value."\" value=\"$mess_ok\">";
         }
+
         echo "</td></tr></table></form>";
     }
 
-     /**
-      * 
-      * @param  [type] $clef [description]
-      * @return [type]       [description]
-      */
+    /**
+     * [sform_read_mysql description]
+     * @param  [type] $clef [description]
+     * @return [type]       [description]
+     */
     public function sform_read_mysql($clef) 
-    {   
+    {
         global $NPDS_Prefix;
-        
+
         if ($clef != '') 
         {
             $clef = urldecode($clef);
             
             $result = sql_query("SELECT content FROM ".$NPDS_Prefix."sform WHERE id_form='".$this->form_title."' AND id_key='".$this->form_key."' AND key_value='".addslashes($clef)."' AND passwd='".$this->form_password_access."' ORDER BY key_value ASC");
             $tmp = sql_fetch_assoc($result);
-
+            
             if ($tmp) 
             {
                 $ibid = explode("\n", $tmp['content']);
-                
                 settype($op, 'string');
-                
+
                 foreach($ibid as $num => $line) 
                 {
                     $op = $this->read_load_sform_data(stripslashes($line), $op);
                 }
-                
                 return true;
             } 
-            else 
+            else
             {
                 return false;
             }
@@ -1668,73 +1643,73 @@ class SformManager
     }
 
     /**
-     * 
+     * [sform_insert_mysql description]
      * @param  [type] $response [description]
      * @return [type]           [description]
      */
     public function sform_insert_mysql($response) 
     {
         global $NPDS_Prefix;
-        
+
         $content = $this->write_sform_data($response);
-         
         $sql = "INSERT INTO ".$NPDS_Prefix."sform (id_form, id_key, key_value, passwd, content) ";
         $sql .= "VALUES ('".$this->form_title."', '".$this->form_key."', '".$this->form_key_value."', '".$this->form_password_access."', '$content')";
         
-        if (!$result = sql_query($sql)) 
-        {   
-            return ("Error Sform : Insert DB");
+        if (!$result = sql_query($sql))
+        {
+            return "Error Sform : Insert DB";
         }
     }
 
     /**
-     * 
+     * [sform_delete_mysql description]
      * @return [type] [description]
      */
     public function sform_delete_mysql() 
     {
         global $NPDS_Prefix;
-
+             
         $sql = "DELETE FROM ".$NPDS_Prefix."sform WHERE id_form='".$this->form_title."' AND id_key='".$this->form_key."' AND key_value='".$this->form_key_value."'";
-        
+             
         if (!$result = sql_query($sql)) 
         {
-            return ("Error Sform : Delete DB");
+            return "Error Sform : Delete DB";
         }
     }
 
     /**
-     * 
+     * [sform_modify_mysql description]
      * @param  [type] $response [description]
      * @return [type]           [description]
      */
     public function sform_modify_mysql($response) 
     {
         global $NPDS_Prefix;
-
+             
         $content = $this->write_sform_data($response);
-        
         $sql = "UPDATE ".$NPDS_Prefix."sform SET passwd='".$this->form_password_access."', content='$content' WHERE (id_form='".$this->form_title."' AND id_key='".$this->form_key."' AND key_value='".$this->form_key_value."')";
         
         if (!$result = sql_query($sql)) 
         {
-            return ("Error Sform : Update DB");
+            return "Error Sform : Update DB";
         }
     }
 
     /**
-     * 
+     * [sform_read_mysql_XML description]
      * @param  [type] $clef [description]
      * @return [type]       [description]
      */
     public function sform_read_mysql_XML($clef) 
-    {   global $NPDS_Prefix;
+    {
+        global $NPDS_Prefix;
 
         if ($clef != "") 
         {
             $clef = urldecode($clef);
             
             $result = sql_query("SELECT content FROM ".$NPDS_Prefix."sform WHERE id_form='".$this->form_title."' AND id_key='".$this->form_key."' AND key_value='$clef' AND passwd='".$this->form_password_access."' ORDER BY key_value ASC");
+            
             $tmp = sql_fetch_assoc($result);
 
             $analyseur_xml = xml_parser_create();
@@ -1755,7 +1730,7 @@ class SformManager
     }
       
     /**
-     * 
+     * [sform_XML_tag description]
      * @param  [type] $value [description]
      * @return [type]        [description]
      */
@@ -1765,10 +1740,11 @@ class SformManager
         {
             // open, complete, close
             if ($val['type'] == 'complete') 
-            { 
+            {   
                 // Le nom du tag
-                $nom    = $val['tag'];       
-                // La valeur du champs
+                $nom    = $val['tag']; 
+
+                // La valeur du champs      
                 $valeur = $val['value'];     
                 $idchamp = $this->interro_fields($nom);
 
@@ -1777,16 +1753,19 @@ class SformManager
                     case "TEXT":
                         $valeur = str_replace("&lt;BR /&gt;", chr(13).chr(10), $valeur);
                         $valeur = str_replace("&lt;br /&gt;", chr(13).chr(10), $valeur);
+                        
                         $this->form_fields[$idchamp]['value'] = $valeur;
                     break;
 
                     case "SELECT":
                         $tmp = $this->interro_array($this->form_fields[$idchamp]['value'], $valeur);
+                           
                         $this->form_fields[$idchamp]['value'][$tmp]['selected'] = true;
                     break;
 
                     case "RADIO":
                         $tmp = $this->interro_array($this->form_fields[$idchamp]['value'], $valeur);
+                        
                         $this->form_fields[$idchamp]['value'][$tmp]['checked'] = true;
                     break;
 
@@ -1794,11 +1773,12 @@ class SformManager
                         if ($valeur) 
                         {
                             $valeur = true;
-                        } 
-                        else 
+                        }
+                        else
                         {
                             $valeur = false;
                         }
+                        
                         $this->form_fields[$idchamp]['checked'] = $valeur;
                     break;
 

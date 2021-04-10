@@ -10,11 +10,13 @@
  */
 namespace npds\news\compress;
 
+use npds\news\archive;
+
 
 /*
  * zipfile
  */
-class zipfile {
+class zipfile extends archive {
 
     /**
      * [$cwd description]
@@ -105,7 +107,7 @@ class zipfile {
             $this->comment = $flags['comment']; 
         }
         
-        $this->archive($flags);
+        parent::__construct($flags);
     }
        
     /**

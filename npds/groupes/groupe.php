@@ -261,7 +261,7 @@ class groupe {
             
             if ($uid != 1)
             {
-                $useroutils .= '<a class="list-group-item text-primary" href="powerpack.php?op=instant_message&amp;to_userid='.$uname.'" title="'.translate("Envoyer un message interne").'" data-toggle="tooltip"><i class="far fa-2x fa-envelope align-middle fa-fw"></i><span class="ml-2 d-none d-sm-inline">'.translate("Message").'</span></a>';
+                $useroutils .= '<a class="list-group-item text-primary" href="two_api.php?op=instant_message&amp;to_userid='.$uname.'" title="'.translate("Envoyer un message interne").'" data-toggle="tooltip"><i class="far fa-2x fa-envelope align-middle fa-fw"></i><span class="ml-2 d-none d-sm-inline">'.translate("Message").'</span></a>';
             }
               
             if ($femail != '')

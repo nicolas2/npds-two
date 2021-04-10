@@ -1,14 +1,13 @@
 <?php
-/************************************************************************/
-/* DUNE by NPDS                                                         */
-/* ===========================                                          */
-/*                                                                      */
-/* NPDS Copyright (c) 2002-2019 by Philippe Brunier                     */
-/*                                                                      */
-/* This program is free software. You can redistribute it and/or modify */
-/* it under the terms of the GNU General Public License as published by */
-/* the Free Software Foundation; either version 2 of the License.       */
-/************************************************************************/
+/**
+ * Npds Two
+ *
+ * Based on NPDS Copyright (c) 2002-2020 by Philippe Brunier
+ * 
+ * @author Nicolas2
+ * @version 1.0
+ * @date 02/04/2021
+ */
 
 //------------
 // SYNTAXE 1 :
@@ -103,6 +102,9 @@
 
 // Attention cette faculté n'est pas aussi parfaite que l'intégration de la gestion des droits de NPDS mais rend bien des services
 // ---------------
+use npds\views\theme;
+
+list($theme, $skin, $tmp_theme) = theme::getUsetOrDefaultThemeAndSkin();
 
 // DEFINITION et CAST VARIABLES
 settype($title,'string');
@@ -290,8 +292,10 @@ $PAGES['modules.php?ModPath=f-manager&ModStart=pic-manager*']['blocs']="0";
 
 // CSS sur fichiers particuliers car n'utilisant pas header.php
 global $nuke_url;
-$PAGES['chatrafraich.php']['css']=array($nuke_url."/assets/shared/bootstrap/dist/css/bootstrap.min.css+","chat.css+");
-$PAGES['chatinput.php']['css']=array($nuke_url."/assets/shared/bootstrap/dist/css/bootstrap.min.css+","chat.css+");
+
+
+$PAGES['chatrafraich.php']['css']=array($nuke_url."/assets/shared/bootstrap/dist/css/extra.css+","themes/_skins/".$skin."/extra.css","chat.css+");
+$PAGES['chatinput.php']['css']=array($nuke_url."/assets/shared/bootstrap/dist/css/extra.css+","themes/_skins/".$skin."/extra.css","chat.css+");
 
 $PAGES['modules.php?ModPath=reseaux-sociaux&ModStart=reseaux-sociaux*']['title']="[french]R&eacute;seaux Sociaux[/french][english]Social Networks[/english]";
 $PAGES['modules.php?ModPath=reseaux-sociaux&ModStart=reseaux-sociaux*']['run']="yes";

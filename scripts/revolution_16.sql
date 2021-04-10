@@ -225,12 +225,12 @@ CREATE TABLE fonctions (
   fid mediumint(8) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id unique auto incrémenté',
   fnom varchar(40) COLLATE utf8mb4_unicode_ci NOT NULL,
   fdroits1 tinyint(3) unsigned NOT NULL,
-  fdroits1_descr text COLLATE utf8mb4_unicode_ci NOT NULL,
+  fdroits1_descr varchar(40) COLLATE utf8mb4_unicode_ci NOT NULL,
   finterface tinyint(1) unsigned NOT NULL COMMENT '1 ou 0 : la fonction dispose ou non d''une interface',
   fetat tinyint(1) NOT NULL COMMENT '0 ou 1  9 : non active ou installé, installé',
   fretour varchar(500) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'utiliser par les fonctions de categorie Alerte : nombre, ou ',
   fretour_h varchar(500) COLLATE utf8mb4_unicode_ci NOT NULL,
-  fnom_affich text COLLATE utf8mb4_unicode_ci NOT NULL,
+  fnom_affich varchar(200) COLLATE utf8mb4_unicode_ci NOT NULL,
   ficone varchar(40) COLLATE utf8mb4_unicode_ci NOT NULL,
   furlscript varchar(4000) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'attribut et contenu  de balise A : href="xxx", onclick="xxx"  etc',
   fcategorie tinyint(3) unsigned NOT NULL,
@@ -1045,7 +1045,7 @@ CREATE TABLE users (
   PRIMARY KEY (uid)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-INSERT INTO users VALUES (1, '', 'Anonyme', '', '', '', 'blank.gif', '989445600', '', '', '', '', 0, 0, '', '',0, 10, '', 0,0, 0, '', 0, '', '', 4096, 0, 0, 1, 0, NULL, NULL, 1);
+INSERT INTO users VALUES (1, '', 'Anonyme', '', '', '', 'blank.gif', '989445600', '', '', '', '', 0, 0, '', '', 10, '', 0, 0, 0, '', 0, '', '', 4096, 0, 0, 1, 0, NULL, NULL, 1);
 INSERT INTO users VALUES (2, 'user', 'user', 'user@user.land', '', 'http://www.userland.com', '014.gif', '989445600', '', '', '', 'User of the Land', 0, 0, '', 'd.q1Wcp0KUqsk', 0, 10, '', 0, 0, 0, '', 1, '<ul><li><a href=http://www.npds.org target=_blank>NPDS.ORG</a></li></ul>', 'npds-boost_sk', 4096, 4, 0, 1, 1, 'french', '1384102103', 1);
 
 CREATE TABLE users_extend (

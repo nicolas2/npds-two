@@ -8,9 +8,12 @@
  * @version 1.0
  * @date 02/04/2021
  */
+use npds\error\access;
+use npds\assets\css;
+
 
 if (!stristr($_SERVER['PHP_SELF'], 'admin.php')) 
-  Access_Error();
+    access::error();
 
 $f_meta_nom = 'modules';
 $f_titre = adm_translate("Gestion, Installation Modules");
@@ -99,5 +102,4 @@ global $language, $adminimg, $admf_ext;
       </tbody>
    </table>';
    
-   adminfoot('', '', '', '');
-?>
+   css::adminfoot('', '', '', '');

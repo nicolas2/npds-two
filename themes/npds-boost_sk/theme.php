@@ -1,19 +1,19 @@
 <?php
-/************************************************************************/
-/* Theme for NPDS / Net Portal Dynamic System                           */
-/*======================================================================*/
-/* This theme use the NPDS theme-dynamic engine (Meta-Lang)             */
-/*                                                                      */
-/* Theme : npds-boost_sk 2015 by jpb                                    */
-/*                                                                      */
-/* This program is free software. You can redistribute it and/or modify */
-/* it under the terms of the GNU General Public License as published by */
-/* the Free Software Foundation; either version 2 of the License.       */
-/************************************************************************/
+/**
+ * Npds Two
+ *
+ * Based on NPDS Copyright (c) 2002-2020 by Philippe Brunier
+ * 
+ * @author Nicolas2
+ * @version 1.0
+ * @date 02/04/2021
+ */
+
 $theme = 'npds-boost_sk';
-$long_chain = '34'; // Nombre de caractères affichés avant troncature pour certains blocs
+
+// Nombre de caractères affichés avant troncature pour certains blocs
+$long_chain = '34'; 
 
 // ne pas supprimer cette ligne / Don't remove this line
 require_once('themes/default/theme.php');
 // ne pas supprimer cette ligne / Don't remove this line
-?>

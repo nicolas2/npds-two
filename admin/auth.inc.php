@@ -8,40 +8,10 @@
  * @version 1.0
  * @date 02/04/2021
  */
-use npds\logs\logs;
+use npds\error\alert;
 use npds\auth\auth;
 use npds\cookie\cookie;
 
-
-/**
- * [Admin_alert description]
- * @param [type] $motif [description]
- */
-function Admin_alert($motif) 
-{
-    global $admin;
-
-    cookie::destroy('admin');
-    unset($admin);
-
-    logs::Ecr_Log('security', 'admin/auth.inc.php/Admin_alert : '.$motif, '');
-   
-    $Titlesitename = 'NPDS';
-   
-    if (file_exists("config/meta.php"))
-    {
-        include("config/meta.php");
-    }
-   
-    echo '
-        </head>
-        <body>
-            <br /><br /><br />
-            <p style="font-size: 24px; font-family: Tahoma, Arial; color: red; text-align:center;"><strong>.: '.translate("Votre adresse Ip est enregistrée").' :.</strong></p>
-        </body>
-        </html>';
-    die();
-}
 
 if ((isset($aid)) 
     and (isset($pwd)) 
@@ -93,7 +63,7 @@ if ((isset($aid))
             }
             else 
             {
-                Admin_Alert("Passwd not in DB#1 : $aid");
+                alert::admin("Passwd not in DB#1 : $aid");
             }
 
             $admin = base64_encode("$aid:".md5($CryptpPWD));
@@ -123,14 +93,14 @@ if (isset($admin) and ($admin != ''))
    
     if ($aid == '' or $AIpwd == '')
     {
-        Admin_Alert('Null Aid or Passwd');
+        alert::admin('Null Aid or Passwd');
     }
    
     $result = sql_query("SELECT pwd, radminsuper FROM ".$NPDS_Prefix."authors WHERE aid = '$aid'");
    
     if (!$result)
     {
-        Admin_Alert("DB not ready #2 : $aid / $AIpwd");
+        alert::admin("DB not ready #2 : $aid / $AIpwd");
     }
     else 
     {
@@ -143,7 +113,7 @@ if (isset($admin) and ($admin != ''))
         } 
         else
         {
-            Admin_Alert("Password in Cookies not Good #1 : $aid / $AIpwd");
+            alert::admin("Password in Cookies not Good #1 : $aid / $AIpwd");
         }
     }
    

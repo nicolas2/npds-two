@@ -10,6 +10,7 @@
  */
 use npds\utility\str;
 use npds\views\theme;
+use npds\NpdsTwo;
 
 
 if (!function_exists('Mysql_Connexion'))
@@ -894,11 +895,11 @@ else
    
 echo '
     <li class="list-group-item d-flex justify-content-start align-items-center"><img src="'.$imgtmp.'"  alt="" />&nbsp;'.translate("Article en attente d'édition : ").' <span class="badge badge-secondary ml-auto">'.str::wrh($subnum).' </span></li>
-    <li class="list-group-item d-flex justify-content-start align-items-center"><i class="fa fa-cogs fa-2x text-muted"></i>&nbsp;Version Num <span class="badge badge-danger ml-auto">'.$Version_Num.'</span></li>
-    <li class="list-group-item d-flex justify-content-start align-items-center"><i class="fa fa-cogs fa-2x text-muted"></i>&nbsp;Version Id <span class="badge badge-danger ml-auto">'.$Version_Id.'</span></li>
-    <li class="list-group-item d-flex justify-content-start align-items-center"><i class="fa fa-cogs fa-2x text-muted"></i>&nbsp;Version Sub <span class="badge badge-danger ml-auto">'.$Version_Sub.'</span></li>
+    <li class="list-group-item d-flex justify-content-start align-items-center"><i class="fa fa-cogs fa-2x text-muted"></i>&nbsp;Version Num <span class="badge badge-danger ml-auto">'.NpdsTwo::VERSION_NUM.'</span></li>
+    <li class="list-group-item d-flex justify-content-start align-items-center"><i class="fa fa-cogs fa-2x text-muted"></i>&nbsp;Version Id <span class="badge badge-danger ml-auto">'.NpdsTwo::VERSION_ID.'</span></li>
+    <li class="list-group-item d-flex justify-content-start align-items-center"><i class="fa fa-cogs fa-2x text-muted"></i>&nbsp;Version Sub <span class="badge badge-danger ml-auto">'.NpdsTwo::VERSION_SUB.'</span></li>
 </ul>
 <br />
-<p class="text-center"><a href="http://www.npds.org" >http://www.npds.org</a> - French Portal Generator Gnu/Gpl Licence</p><br />';
+<p class="text-center"><a href="https://two-cms.airteck.fr">Npds Two Cms</a> - French Portal Generator Gnu/Gpl Licence</p><br />';
 
 include("footer.php");

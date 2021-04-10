@@ -76,8 +76,17 @@ class css {
         // Chargeur CSS spécifique
         if ($css_pages_ref) 
         {
-            include ("themes/pages.php");
-            
+            //include ("themes/pages.php");
+            // import pages.php specif values from theme
+            if (file_exists("themes/".$tmp_theme."/pages.php"))
+            {
+                include ("themes/".$tmp_theme."/pages.php");
+            }
+            else
+            {
+                include ("config/pages.php");
+            }
+
             if (is_array($PAGES[$css_pages_ref]['css'])) 
             {
                 foreach ($PAGES[$css_pages_ref]['css'] as $tab_css) 

@@ -26,4 +26,13 @@ class access {
         include('admin/die.php');
     }
 
+    /**
+     * [error description]
+     * @return [type] [description]
+     */
+    public static function error() 
+    {
+        include('admin/die.php');
+    }
+
 }

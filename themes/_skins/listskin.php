@@ -76,7 +76,7 @@
    </head>
    <body>
       <nav class="<?php echo $headerclasses; ?>">
-        <a class="navbar-brand" href="#">NPDS skins</a>
+        <a class="navbar-brand" href="#">Npds Two skins</a>
          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#barnav" aria-controls="barnav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -114,7 +114,7 @@
                   <div class="col-md-4 mb-3">
                      <h1><?php echo ucfirst($skinametitre); ?></h1>
                      <p class="lead">Nice skin for NPDS Cms</p>
-                      <img class="img-fluid" src="../../../../themes/npds-boost_sk/images/header.png" alt="npds" />
+                      <img class="img-fluid" src="../../../../themes/npds-boost_sk/assets/images/header.png" alt="npds" />
                   </div>
                   <div class="col-md-4 mb-3"></div>
                   <div class="col-md-4">
@@ -1508,6 +1508,7 @@
             </ul>
             <p>Made by <a href="http://thomaspark.co" rel="nofollow">Thomas Park</a>. Contact him at <a href="mailto:thomas@bootswatch.com">thomas@bootswatch.com</a>.</p>
             <p>Npds fork by <a href="#" rel="nofollow">Jpb</a>. Contact him at <a href="mailto:jpb@npds.org">jpb@npds.org</a>.</p>
+            <p>Npds Two by <a href="#" rel="nofollow">Nicolas2</a>. Contact him at <a href="mailto:two-cms@airteck.fr">two-cms@airteck.fr</a>.</p>            
             <p>Code released under the <a href="https://github.com/thomaspark/bootswatch/blob/gh-pages/LICENSE">MIT License</a>.</p>
             <p>Based on <a href="http://getbootstrap.com" rel="nofollow">Bootstrap 4</a>. Icons from <a href="http://fortawesome.github.io/Font-Awesome/" rel="nofollow">Font Awesome</a>. Web fonts from <a href="http://www.google.com/webfonts" rel="nofollow">Google</a>.</p>
           </div>

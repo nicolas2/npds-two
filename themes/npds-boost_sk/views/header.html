@@ -39,8 +39,6 @@ use npds\views\theme;
       break;
    }
 
-   if (!isset($powerpack)) include_once ("powerpack.php");
-
    if (auth::autorisation(-1)) {
       $con = '!nb_online! - <a href="user.php">Se connecter</a>';
       $btn_con = '<a class="dropdown-item" href="user.php"><i class="fas fa-sign-in-alt fa-lg"></i>&nbsp;'.translate("Connexion").'</a>';

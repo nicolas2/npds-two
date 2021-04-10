@@ -781,7 +781,7 @@ function userinfo($uname)
        
     if (($user) and ($uid != 1))
     {
-        $useroutils .= '<a class=" text-primary mr-3" href="powerpack.php?op=instant_message&amp;to_userid='.$posterdata["uname"].'" ><i class="far fa-envelope fa-2x" title="'.translate("Envoyer un message interne").'" data-toggle="tooltip"></i></a>&nbsp;';
+        $useroutils .= '<a class=" text-primary mr-3" href="two_api.php?op=instant_message&amp;to_userid='.$posterdata["uname"].'" ><i class="far fa-envelope fa-2x" title="'.translate("Envoyer un message interne").'" data-toggle="tooltip"></i></a>&nbsp;';
     }
        
     if ($posterdata['femail'] != '')
