@@ -188,7 +188,7 @@ class metafunc {
 		global $NPDS_Prefix;
 
 		$MT_search_topics = "<form action=\"search.php\" method=\"post\"><label class=\"col-form-label\">".translate("Sujets")." </label>";
-		$MT_search_topics .= "<select class=\"custom-select\" name=\"topic\"onChange=''submit()''>" ;
+		$MT_search_topics .= "<select class=\"custom-select\" name=\"topic\"onChange='submit()'>" ;
 		$MT_search_topics .= "<option value=\"\">".translate("Tous les sujets")."</option>";
 		
 		$rowQ = cache::Q_select("select topicid, topictext from ".$NPDS_Prefix."topics order by topictext", 86400);
@@ -266,7 +266,7 @@ class metafunc {
 			$uname = metalang::arg_filter($cookie[1]);   
 			$MT_name = "";   
 			
-			$rowQ = cache::Q_select("SELECT name FROM ".$NPDS_Prefix."users WHERE uname=''$uname''", 3600);   
+			$rowQ = cache::Q_select("SELECT name FROM ".$NPDS_Prefix."users WHERE uname='$uname", 3600);   
 			$myrow = $rowQ[0];   
 			$MT_name = $myrow['name'];   
 			
@@ -337,7 +337,7 @@ class metafunc {
 		global $NPDS_Prefix, $nuke_url;
 		
 		$arg = metalang::arg_filter($arg);
-		$rowQ = cache::Q_select("SELECT title FROM ".$NPDS_Prefix."stories WHERE sid=''$arg''", 3600);
+		$rowQ = cache::Q_select("SELECT title FROM ".$NPDS_Prefix."stories WHERE sid='$arg'", 3600);
 		$myrow = $rowQ[0];
 		
 		return "<a href=\"$nuke_url/article.php?sid=$arg\">".$myrow['title']."</a>";
@@ -629,7 +629,7 @@ class metafunc {
 		
 		foreach($bid_tab as $cat) 
 		{   
-			$sql .= "cat_id=''$cat'' OR ";
+			$sql .= "cat_id='$cat' OR ";
 		}
 
 		$sql = substr($sql,0,-4);
@@ -655,7 +655,7 @@ class metafunc {
 
 		if (($subscribe) and ($user)) 
 		{   
-			$ibid = translate("Cochez un forum et cliquez sur le bouton pour recevoir un Email lors d''une nouvelle soumission dans celui-ci.");
+			$ibid = translate("Cochez un forum et cliquez sur le bouton pour recevoir un Email lors d'une nouvelle soumission dans celui-ci.");
 		}
 
 		return $ibid;
@@ -947,9 +947,9 @@ class metafunc {
 		global $NPDS_Prefix, $anonpost, $moderate, $admin, $user;
 		
 		ob_start();
-		    if (file_exists("modules/comments/$file_name.conf.php")) 
+		    if (file_exists("modules/comments/config/$file_name.php")) 
 		    {
-			    include ("modules/comments/$file_name.conf.php");
+			    include ("modules/comments/config/$file_name.php");
 			    include ("modules/comments/comments.php");
 		    }
 		    $output = ob_get_contents();
@@ -1182,7 +1182,7 @@ class metafunc {
 			    $aff .= '      <h4 class="card-title">'.language::aff_langue($topicname).'</h4>'; 
 			}  
 			    
-			$aff .= '      <p class="card-text">'.language::aff_langue($topictext).'</p>      <p class="card-text text-right"><span class="small">'.translate("Nb. d''articles").'</span> <span class="badge badge-secondary">'.$total_news['total'].'</span></p>     </div>';  
+			$aff .= '      <p class="card-text">'.language::aff_langue($topictext).'</p>      <p class="card-text text-right"><span class="small">'.translate("Nb. d'articles").'</span> <span class="badge badge-secondary">'.$total_news['total'].'</span></p>     </div>';  
 			$aff .= '     </div>';
 		}
 		$aff .= '  </div>';

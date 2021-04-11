@@ -40,7 +40,7 @@ function readnews ($blog_dir, $op, $perpage, $startpage, $action, $adminblog)
 
     $xnews = file($blog_file);
     $xnews = array_reverse($xnews);
-    $startpage- = 1;
+    $startpage -= 1;
     $ubound = count($xnews);
    
     if ($startpage<0 || $startpage >= $ubound/$perpage) 
@@ -58,7 +58,7 @@ function readnews ($blog_dir, $op, $perpage, $startpage, $action, $adminblog)
         {
             if ($j == $startpage+1) 
             {
-                $content T.= '
+                $contentT.= '
                 <li class=" page-item active"><a class="page-link" href="#">'.$j.'</a></li>';
             }
             else

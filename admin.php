@@ -979,14 +979,14 @@ if ($admintest)
         case 'FileManager':
             if ($admintest and $filemanager)
             {
-                header("location: ".module_url('f-manager&FmaRep='.$aid, 'f-manager'));
+                header("location: ".module_url('f-manager&FmaRep='.$aid, 'fmanager'));
             }
         break;
 
         case 'FileManagerDisplay':
             if ($admintest and $filemanager)
             {
-                header("location: ".module_url('f-manager&FmaRep=download', 'f-manager'));
+                header("location: ".module_url('f-manager&FmaRep=download', 'fmanager'));
             }
         break;
           

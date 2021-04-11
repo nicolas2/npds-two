@@ -150,9 +150,9 @@ function pollMain($pollID, $pollClose)
         
     if ($pollcomm) 
     {
-        if (file_exists("modules/comments/pollBoth.conf.php")) 
+        if (file_exists("modules/comments/config/pollBoth.php")) 
         {
-            include ("modules/comments/pollBoth.conf.php");
+            include ("modules/comments/config/pollBoth.php");
         }
 
         list($numcom) = sql_fetch_row(sql_query("select count(*) from ".$NPDS_Prefix."posts where forum_id='$forum' and topic_id='$pollID' and post_aff='1'"));

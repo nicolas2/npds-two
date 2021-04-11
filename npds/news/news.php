@@ -565,9 +565,9 @@ class news {
                     {
                         sql_query("DELETE FROM ".$NPDS_Prefix."stories WHERE sid='$sid'");
                         
-                        if (file_exists("modules/comments/article.conf.php")) 
+                        if (file_exists("modules/comments/config/article.php")) 
                         {
-                            include ("modules/comments/article.conf.php");
+                            include ("modules/comments/config/article.php");
                         
                             sql_query("DELETE FROM ".$NPDS_Prefix."posts WHERE forum_id='$forum' AND topic_id='$topic'");
                         }
