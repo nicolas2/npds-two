@@ -11,8 +11,12 @@
 /* it under the terms of the GNU General Public License as published by */
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
+use npds\error\access;
+use npds\mailler\mailler;
+use npds\assets\css;
 
-if (!stristr($_SERVER['PHP_SELF'],'admin.php')) Access_Error();
+
+if (!stristr($_SERVER['PHP_SELF'],'admin.php')) access::error();
 $f_meta_nom ='session_log';
 //==> controle droit
 admindroits($aid,$f_meta_nom);
@@ -160,7 +164,7 @@ echo '
          if (file_exists($FileUpload))
             $Mylog=$FileUpload;
       $subject = SessionLog_translate("Fichier de Log de").' '.$sitename;
-      send_email($adminmail, $subject, $Mylog, '', true, 'mixed');
+      mailler::send_email($adminmail, $subject, $Mylog, '', true, 'mixed');
    }
 
    // Vider le répertoire temporaire
@@ -260,5 +264,4 @@ echo '
          action_log($ThisFile,"upload");
       }
    }
-adminfoot('','','','');
-?>
+css::adminfoot('','','','');

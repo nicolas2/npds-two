@@ -14,6 +14,8 @@
 /* module geoloc version 4.0                                            */
 /* geoloc_locip.php file 2008-2020 by Jean Pierre Barbary (jpb)         */
 /************************************************************************/
+use npds\language\language;
+
 
 #autodoc localiser_ip() : construit la carte pour l'ip géoréférencée ($iptoshow) à localiser
 function localiser_ip($iptoshow) {
@@ -26,7 +28,7 @@ function localiser_ip($iptoshow) {
          $row = sql_fetch_assoc($ip_location);
          $aff_location .= '
       <div class="col-md-5">
-         <div id="map_ip" style=" min-height:240px;" lang="'.language_iso(1,0,0).'"></div>
+         <div id="map_ip" style=" min-height:240px;" lang="'.language::language_iso(1,0,0).'"></div>
       </div>
       <script type="module">
       //<![CDATA[

@@ -14,18 +14,33 @@
 /*                                                                      */
 /* version 1.0 17/02/2016                                               */
 /************************************************************************/
+use npds\auth\auth;
+use npds\utility\str;
+use npds\security\hack;
+use npds\assets\css;
 
-if (strstr($ModPath,'..') || strstr($ModStart,'..') || stristr($ModPath, 'script') || stristr($ModPath, 'cookie') || stristr($ModPath, 'iframe') || stristr($ModPath, 'applet') || stristr($ModPath, 'object') || stristr($ModPath, 'meta') || stristr($ModStart, 'script') || stristr($ModStart, 'cookie') || stristr($ModStart, 'iframe') || stristr($ModStart, 'applet') || stristr($ModStart, 'object') || stristr($ModStart, 'meta'))
+
+if (strstr($ModPath,'..') 
+   || strstr($ModStart,'..') 
+   || stristr($ModPath, 'script') 
+   || stristr($ModPath, 'cookie') 
+   || stristr($ModPath, 'iframe') 
+   || stristr($ModPath, 'applet') 
+   || stristr($ModPath, 'object') 
+   || stristr($ModPath, 'meta') 
+   || stristr($ModStart, 'script') 
+   || stristr($ModStart, 'cookie') 
+   || stristr($ModStart, 'iframe') 
+   || stristr($ModStart, 'applet') 
+   || stristr($ModStart, 'object') 
+   || stristr($ModStart, 'meta'))
    die();
 
-if (!function_exists("Mysql_Connexion"))
-   include ("mainfile.php");
 
-include ('functions.php');
 if (!$user) header('location:index.php');
 
 global $cookie, $language;
-$userdata = get_userdata_from_id($cookie[0]);
+$userdata = auth::get_userdata_from_id($cookie[0]);
 
 $ModStart='reseaux-sociaux';
 include ("modules/$ModPath/lang/rs-$language.php");
@@ -81,10 +96,10 @@ function EditReseaux($ModPath, $ModStart) {
    global $userdata;
    if (file_exists("modules/$ModPath/reseaux-sociaux.conf.php"))
       include ("modules/$ModPath/reseaux-sociaux.conf.php");
-   include_once ("functions.php");
+
    include("header.php");
    global $cookie;
-   $posterdata_extend = get_userdata_extend_from_id($cookie[0]);
+   $posterdata_extend = auth::get_userdata_extend_from_id($cookie[0]);
       if ($posterdata_extend['M2']!='') {
          $i=0;
          $socialnetworks= explode(';',$posterdata_extend['M2']);
@@ -164,7 +179,7 @@ echo '
          </div>
       </div>
    </form>';
-   adminfoot('','','','');
+   css::adminfoot('','','','');
 }
 
 function SaveSetReseaux($ModPath, $ModStart) {
@@ -175,11 +190,13 @@ function SaveSetReseaux($ModPath, $ModStart) {
          $li_rs.=$v1['id'].'|'.$v1['uid'].';';
    }
    $li_rs=rtrim($li_rs,';');
-   $li_rs=removeHack(stripslashes(FixQuotes($li_rs)));
+   $li_rs=hack::remove(stripslashes(str::FixQuotes($li_rs)));
    sql_query("UPDATE ".$NPDS_Prefix."users_extend SET M2='$li_rs' WHERE uid='$cookie[0]'");
    Header("Location: modules.php?&ModPath=$ModPath&ModStart=$ModStart");
 
 }
+
+
 settype($op,'string');
 switch ($op) {
    case 'SaveSetReseaux':
@@ -192,4 +209,3 @@ switch ($op) {
       ListReseaux($ModPath, $ModStart);
    break;
 }
-?>

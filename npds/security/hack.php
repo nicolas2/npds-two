@@ -12,6 +12,8 @@
 
 namespace npds\security;
 
+use npds\editeur\tiny;
+
 
 /*
  * hack
@@ -266,7 +268,7 @@ class hack
         if ($tiny_mce) {
             if (!$blog_editor) {
                 $tiny_mce_theme = 'full';
-                $blog_editor = aff_editeur('tiny_mce', 'begin') . aff_editeur('story', 'false') . aff_editeur('tiny_mce', 'end');
+                $blog_editor = tiny::aff_editeur('tiny_mce', 'begin') . tiny::aff_editeur('story', 'false') . tiny::aff_editeur('tiny_mce', 'end');
             }
         }
 

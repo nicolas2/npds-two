@@ -26,4 +26,3 @@ $rs = [
 ['linkedin','https://www.linkedin.com/in/','linkedin'],
 ['github','https://github.com/','github']
 ];
-?>

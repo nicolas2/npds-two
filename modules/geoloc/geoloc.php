@@ -14,7 +14,9 @@
 /* module geoloc version 4.0                                            */
 /* geoloc_geoloc.php file 2008-2020 by Jean Pierre Barbary (jpb)        */
 /************************************************************************/
-
+use npds\auth\auth;
+use npds\security\hack;
+use npds\language\language
 /*
 le géoréférencement des anonymes est basé sur un décodage des adresse ip
 le géoréférencement des membres sur une géolocalisation exacte réalisé par l'utilisateur
@@ -45,7 +47,7 @@ settype($ipnb,'integer');
 $date_jour = date('Y-m-d');
 
 // admin tools
-if(autorisation(-127)) {
+if(auth::autorisation(-127)) {
 $mess_adm ='<p class="text-danger">'.geoloc_translate('Rappel : vous êtes en mode administrateur !').'</p>';
 $lkadm = '<a href="admin.php?op=Extend-Admin-SubModule&amp;ModPath=geoloc&amp;ModStart=admin/geoloc_set" title="'.geoloc_translate("Admin").'" data-toggle="tooltip"><i id="cogs" class="fa fa-cogs fa-lg"></i></a>';
 $infooo = geoloc_translate('Modification administrateur');
@@ -95,8 +97,10 @@ $username = $cookie[1];//recupere le username
 
 if (array_key_exists('lat',$_GET)) $f_new_lat = floatval ($_GET['lat']);// lat du form de géoreferencement
 if (array_key_exists('lng',$_GET)) $f_new_long = floatval ($_GET['lng']);// long du form de géoreferencement
-if (array_key_exists('mod',$_GET)) $f_geomod = removeHack($_GET['mod']);
-if (array_key_exists('uid',$_GET)) $f_uid = removeHack($_GET['uid']);
+if (array_key_exists('mod',$_GET)) $f_geomod = hack::remove($_GET['mod']);
+if (array_key_exists('uid',$_GET)) $f_uid = hack::remove($_GET['uid']);
+
+
 
 $av_ch = '';//chemin pour l'avatar
 
@@ -845,7 +849,7 @@ switch ($cartyp) {
       sba +=\'</div></div>\';
       var sbi="";
 ';
-   if(autorisation(-127) and $geo_ip==1)
+   if(auth::autorisation(-127) and $geo_ip==1)
       $ecr_scr .='
       var i_feat = src_ip.getFeatures(),i=0;
       sbi+=\'<div id="sb_ip" class="list-group mb-3"><div class="list-group-item bg-light text-dark font-weight-light px-2"><a class="link" data-toggle="collapse" href="#l_sb_ip"><i class="fa fa-caret-down fa-lg mr-2" style="font-size:1.6rem;"></i></a><div class="custom-control custom-switch d-inline"><input class="custom-control-input" type="checkbox" data-toggle="tooltip" title="'.geoloc_translate('Voir ou masquer les IP').'" id="ipbox" /><label class="custom-control-label" for="ipbox"><span class="fa fa-desktop fa-lg text-muted"></span> IP</label></div><span class="h5"><span class="badge badge-secondary badge-pill float-right">'.$ipnb.'</span></span></div><div class="collapse" id="l_sb_ip">\';
@@ -1455,7 +1459,7 @@ $affi .= '
    <h3 class="mt-4 mb-3">'.geoloc_translate("Géolocalisation des membres du site").'<span class="float-right"><span class="badge badge-secondary mr-2" title ="'.geoloc_translate('Membres du site').'" data-toggle="tooltip" data-placement="left">'.$total_membre.'</span><span class="badge badge-danger" data-toggle="tooltip" title="'.geoloc_translate("En ligne").'">'.$total_connect.'</span></span></h3>
    <div class=" mb-4">
       <div id="map-wrapper" class="ol-fullscreen my-3">
-         <div id="map" lang="'.language_iso(1,0,0).'" class="map" tabindex="20">
+         <div id="map" lang="'.language::language_iso(1,0,0).'" class="map" tabindex="20">
             <div id="ol_popup" class="ol-popup"></div>
             <div style="display: none;">
                <div id="georefpopup"></div>
@@ -1534,7 +1538,7 @@ $affi .= '
       <ul class="nav nav-tabs mt-4">
          <li class="nav-item"><a id="messinfo-tab" class="nav-link active" href="#infocart" data-toggle="tab_ajax"><span class="d-sm-none"><i class=" fa fa-globe fa-lg mr-2"></i><i class=" fa fa-info fa-lg"></i></span><span class="d-none d-sm-inline">'.geoloc_translate("Infos carte").'</span></a></li>
          <li class="nav-item"><a id="aide-tab" class="nav-link" href="modules/geoloc/doc/aide_geo.html" data-target="#aide" data-toggle="tab_ajax"><span class="d-sm-none"><i class=" fa fa-globe fa-lg mr-2"></i><i class=" fa fa-question fa-lg"></i></span><span class="d-none d-sm-inline">'.geoloc_translate("Aide").'</span></a></li>';
-if(autorisation(-127) and $geo_ip==1)
+if(auth::autorisation(-127) and $geo_ip==1)
    $affi .= '
          <li class="nav-item"><a id="iplist-tab" class="nav-link " href="#ipgeolocalisation" data-toggle="tab_ajax"><span class="d-sm-none"><i class=" fa fa-globe fa-lg mr-2"></i><i class=" fa fa-tv fa-lg"></i></span><span class="d-none d-sm-inline">'.geoloc_translate("Ip liste").'</span></a></li>';
 $affi .= '

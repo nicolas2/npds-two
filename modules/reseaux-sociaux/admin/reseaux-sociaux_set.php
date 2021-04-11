@@ -14,8 +14,13 @@
 /*                                                                      */
 /* version 1.0 17/02/2016                                               */
 /************************************************************************/
+use npds\access\error;
+use npds\assets\css;
+
+
+
 // For More security
-if (!stristr($_SERVER['PHP_SELF'],'admin.php')) Access_Error();
+if (!stristr($_SERVER['PHP_SELF'],'admin.php')) access::error();
 if (strstr($ModPath,'..') || strstr($ModStart,'..') || stristr($ModPath, 'script') || stristr($ModPath, 'cookie') || stristr($ModPath, 'iframe') || stristr($ModPath, 'applet') || stristr($ModPath, 'object') || stristr($ModPath, 'meta') || stristr($ModStart, 'script') || stristr($ModStart, 'cookie') || stristr($ModStart, 'iframe') || stristr($ModStart, 'applet') || stristr($ModStart, 'object') || stristr($ModStart, 'meta'))
    die();
 // For More security
@@ -115,7 +120,7 @@ function EditReseaux($ModPath, $ModStart, $f_meta_nom, $f_titre, $adminimg, $rs_
       inpandfieldlen("rs_id",50);
       inpandfieldlen("rs_url",100);
       inpandfieldlen("rs_ico",40);';
-   adminfoot('fv','',$arg1,'');
+   css::adminfoot('fv','',$arg1,'');
 }
 
 function SaveSetReseaux($ModPath, $ModStart, $rs_id, $rs_url, $rs_ico, $subop, $old_id) {

@@ -71,10 +71,14 @@ function adminhead($f_meta_nom, $f_titre, $adminimg)
     }
     elseif (stristr($_SERVER['QUERY_STRING'],"Extend-Admin-SubModule") || $adm_img_mod == 1) 
     {
-        if (file_exists('modules/'.$ModPath.'/'.$ModPath.'.'.$admf_ext)) 
+        if (file_exists('modules/'.$ModPath.'/assets/images/'.$ModPath.'.'.$admf_ext)) 
+        {
+            $img_adm = '<img src="modules/'.$ModPath.'/assets/images/'.$ModPath.'.'.$admf_ext.'" class="vam" alt="'.$f_titre.'" />';
+        } 
+        elseif (file_exists('modules/'.$ModPath.'/'.$ModPath.'.'.$admf_ext)) 
         {
             $img_adm = '<img src="modules/'.$ModPath.'/'.$ModPath.'.'.$admf_ext.'" class="vam" alt="'.$f_titre.'" />';
-        } 
+        }        
         else 
         {
             $img_adm = '';

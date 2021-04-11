@@ -14,6 +14,8 @@
 /* module geoloc version 4.0                                            */
 /* geoloc_bloc.php file 2008-2020 by Jean Pierre Barbary (jpb)          */
 /************************************************************************/
+use npds\language\language;
+
 
 $ModPath='geoloc';
 $content = '';
@@ -39,7 +41,7 @@ switch ($cartyp_b) {
    $source_fond='new ol.source.OSM()';
 }
 $content .='
-<div class="mb-2" id="map_bloc_ol" tabindex="200" style=" min-height:'.$h_b.'px;" lang="'.language_iso(1,0,0).'"></div>
+<div class="mb-2" id="map_bloc_ol" tabindex="200" style=" min-height:'.$h_b.'px;" lang="'.language::language_iso(1,0,0).'"></div>
 <script type="text/javascript">
 //<![CDATA[
       if (!$("link[href=\'/assets/shared/ol/ol.css\']").length)
@@ -117,5 +119,5 @@ $content .='<div class="mt-1"><a href="modules.php?ModPath='.$ModPath.'&amp;ModS
 if($admin)
    $content .= '<a href="admin.php?op=Extend-Admin-SubModule&amp;ModPath=geoloc&amp;ModStart=admin/geoloc_set"><i class="fa fa-cogs fa-lg ml-1"></i>&nbsp;[french]Admin[/french][english]Admin[/english][chinese]Admin[/chinese][spanish]Admin[/spanish][german]Admin[/german]</a>';
 $content .= '</div>';
-$content = aff_langue($content);
+$content = language::aff_langue($content);
 ?>

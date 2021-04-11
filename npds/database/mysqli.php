@@ -267,3 +267,22 @@ function sql_close($dblink)
 {
     return @mysqli_close($dblink);
 }
+
+/**
+ * [prefix description]
+ * @param  string $tablename [description]
+ * @return [type]            [description]
+ */
+function prefix($tablename="") 
+{   
+    global $NPDS_Prefix;
+    
+    if( !empty($tablename)) 
+    { 
+        return $NPDS_Prefix . $tablename;
+    } 
+    else 
+    { 
+        return $NPDS_Prefix;
+    }
+}

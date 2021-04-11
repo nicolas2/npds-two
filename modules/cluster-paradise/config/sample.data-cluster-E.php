@@ -9,8 +9,12 @@
  * @date 02/04/2021
  */
 
-include ("header.php");
 
-include_once('modules/'.$ModPath.'/sform/contact/contact.php');
-
-include ("footer.php");
+// Maitre N°1
+$part[0] = array(
+  	"WWW"		=> "www.npds.org",
+  	"KEY"		=> "la_clef_de_npds.org",
+  	"SUBSCRIBE"	=> "NEWS",
+  	"OP"		=> "IMPORT"
+);
+	

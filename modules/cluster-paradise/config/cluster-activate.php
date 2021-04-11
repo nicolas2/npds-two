@@ -9,8 +9,5 @@
  * @date 02/04/2021
  */
 
-include ("header.php");
-
-include_once('modules/'.$ModPath.'/sform/contact/contact.php');
-
-include ("footer.php");
+// to activate the Master Cluster (yes) or false
+$cluster_activate = false;
