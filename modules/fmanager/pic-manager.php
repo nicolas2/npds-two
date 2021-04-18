@@ -405,11 +405,11 @@ if ($inclusion)
         settype($PAGES, 'array');
       
         list($theme, $skin, $tmp_theme) = theme::getUsetOrDefaultThemeAndSkin();
-
+        
         require_once("themes/".$tmp_theme."/pages.php");
       
-        $Titlesitename = language::aff_langue($PAGES["modules.php?ModPath=$ModPath&ModStart=$ModStart*"]['title']);
-      
+        $Titlesitename = language::aff_langue($PAGES["modules.php?ModPath=$ModPath&amp;ModStart=$ModStart*"]['title']);
+
         include("config/meta.php");
       
         echo '
