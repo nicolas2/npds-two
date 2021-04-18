@@ -820,7 +820,7 @@ if ($inclusion)
     // l'insertion de la FORM d'édition doit intervenir à la fin du calcul de l'interface ... sinon on modifie le contenu
     // Meta_lang n'est pas chargé car trop lent pour une utilisation sur de gros répertoires
     $Xcontent = language::aff_langue($Xcontent);
-    $Xconten = str_replace('_edt_file', $edit_file, $Xcontent);
+    $Xcontent = str_replace('_edt_file', $edit_file, $Xcontent);
     echo $Xcontent;
 
     // Foot banner de présentation fmanager
