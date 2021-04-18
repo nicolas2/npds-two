@@ -8,7 +8,15 @@
  * @version 1.0
  * @date 02/04/2021
  */
-namespace npds\error;
+namespace modules\links\support;
+
+use npds\auth\auth;
+use npds\editeur\tiny;
+use npds\utility\spam;
+use npds\assets\css;
+use npds\logs\logs;
+use npds\utility\str;
+use npds\security\hack;
 
 
 /*
@@ -60,7 +68,7 @@ class links {
        
         mainheader();
        
-        if (autorisation($links_anonaddlinklock)) 
+        if (auth::autorisation($links_anonaddlinklock)) 
         {
             echo '
             <div class="card card-body mb-3">
@@ -104,13 +112,13 @@ class links {
             
             while (list($cid, $title) = sql_fetch_row($result)) 
             {
-                echo '<option value="'.$cid.'">'.aff_langue($title).'</option>';
+                echo '<option value="'.$cid.'">'.language::aff_langue($title).'</option>';
                
                 $result2 = sql_query("select sid, title from ".$links_DB."links_subcategories WHERE cid='$cid' ORDER BY title");
                
                 while (list($sid, $stitle) = sql_fetch_row($result2)) 
                 {
-                    echo '<option value="'.$cid.'-'.$sid.'">'.aff_langue($title.'/'. $stitle).'</option>';
+                    echo '<option value="'.$cid.'-'.$sid.'">'.language::aff_langue($title.'/'. $stitle).'</option>';
                 }
             }
 
@@ -150,8 +158,8 @@ class links {
                         <textarea class="tin form-control" name="xtext" id="xtext" rows="10"></textarea>
                     </div>
                 </div>';
-           
-            echo aff_editeur('xtext', '');
+
+            echo tiny::aff_editeur('xtext', '');
             
             global $cookie;
             echo '
@@ -169,7 +177,7 @@ class links {
                     </div>
                 </div>';
 
-            echo Q_spambot();
+            echo spam::Q_spambot();
             
             echo '
                         <div class="form-group row">
@@ -191,7 +199,7 @@ class links {
 
             SearchForm();
           
-            adminfoot('fv', '', $arg1, '1');
+            css::adminfoot('fv', '', $arg1, '1');
           
             include("footer.php");
        } 
@@ -226,9 +234,9 @@ class links {
         if (!$user and !$admin) 
         {
             //anti_spambot
-            if (!R_spambot($asb_question, $asb_reponse, '')) 
+            if (!spam::R_spambot($asb_question, $asb_reponse, '')) 
             {
-                Ecr_Log('security', 'Links Anti-Spam : url='.$url, '');
+                logs::Ecr_Log('security', 'Links Anti-Spam : url='.$url, '');
                 redirect_url("index.php");
                 die();
             }
@@ -239,9 +247,9 @@ class links {
        
         if ($numrows >= $troll_limit) 
         {
-            error_head("alert-danger");
+            static::error_head("alert-danger");
             echo translate("Erreur : cette url est déjà présente dans la base de données").'<br />';
-            error_foot();
+            static::error_foot();
             exit();
         }
 
@@ -258,34 +266,34 @@ class links {
        
         if ($title == '')
         {
-            error_head('alert-danger');
+            static::error_head('alert-danger');
             echo translate("Erreur : vous devez saisir un titre pour votre lien").'<br />';
-            error_foot();
+            static::error_foot();
             exit();
         }
 
         if ($email == '') 
         {
-            error_head('alert-danger');
+            static::error_head('alert-danger');
             echo translate("Erreur : Email invalide").'<br />';
-            error_foot();
+            static::error_foot();
             exit();
         }
 
         global $links_url;
         if (($url == '') and ($links_url == 1)) 
         {
-            error_head('alert-danger');
+            static::error_head('alert-danger');
             echo translate("Erreur : vous devez saisir une url pour votre lien").'<br />';
-            error_foot();
+            static::error_foot();
             exit();
         }
 
         if ($description == '') 
         {
-            error_head('alert-danger');
+            static::error_head('alert-danger');
             echo translate("Erreur : vous devez saisir une description pour votre lien").'<br />';
-            error_foot();
+            static::error_foot();
             exit();
         }
 
@@ -296,20 +304,20 @@ class links {
             $cat[1] = 0;
         }
 
-        $title = removeHack(stripslashes(FixQuotes($title)));
-        $url = removeHack(stripslashes(FixQuotes($url)));
-        $description = removeHack(stripslashes(FixQuotes($description)));
-        $name = removeHack(stripslashes(FixQuotes($name)));
-        $email = removeHack(stripslashes(FixQuotes($email)));
+        $title = hack::remove(stripslashes(str::FixQuotes($title)));
+        $url = hack::remove(stripslashes(str::FixQuotes($url)));
+        $description = hack::remove(stripslashes(str::FixQuotes($description)));
+        $name = hack::remove(stripslashes(str::FixQuotes($name)));
+        $email = hack::remove(stripslashes(str::FixQuotes($email)));
        
         sql_query("INSERT INTO ".$links_DB."links_newlink VALUES (NULL, '$cat[0]', '$cat[1]', '$title', '$url', '$description', '$name', '$email', '$submitter', '$topicL')");
        
-        error_head('alert-success');
+        static::error_head('alert-success');
        
         echo translate("Nous avons bien reçu votre demande de lien, merci").'<br />';
         echo translate("Vous recevrez un mèl quand elle sera approuvée.").'<br />';
        
-        error_foot();
+        static::error_foot();
     }
 
     /**
@@ -336,7 +344,7 @@ class links {
             include($filen);
         }
 
-        $query = removeHack(stripslashes(htmlspecialchars($query, ENT_QUOTES, cur_charset))); // Romano et NoSP
+        $query = hack::remove(stripslashes(htmlspecialchars($query, ENT_QUOTES, cur_charset))); // Romano et NoSP
 
         if ($topicL != '')
         {
@@ -566,7 +574,7 @@ class links {
                     $sel = 'selected';
                 }
             
-                echo '<option value="'.$ccid.'" '.$sel.'>'.aff_langue($ctitle).'</option>';
+                echo '<option value="'.$ccid.'" '.$sel.'>'.language::aff_langue($ctitle).'</option>';
             
                 $result3 = sql_query("SELECT sid, title FROM ".$links_DB."links_subcategories WHERE cid='$ccid' ORDER BY title");
             
@@ -578,7 +586,7 @@ class links {
                         $sel = 'selected="selected"';
                     }
                     
-                    echo '<option value="'.$ccid.'-'.$ssid.'" '.$sel.'>'.aff_langue($ctitle.' / '.$stitle).'</option>';
+                    echo '<option value="'.$ccid.'-'.$ssid.'" '.$sel.'>'.language::aff_langue($ctitle.' / '.$stitle).'</option>';
                 }
             }
 
@@ -625,7 +633,7 @@ class links {
                 </div>
             </div>';
          
-            aff_editeur('xtext','');
+            tiny::aff_editeur('xtext','');
          
             echo '
                 <div class="form-group row">
@@ -642,7 +650,7 @@ class links {
          
             include ("modules/$ModPath/sform/link_maj.php");
          
-            adminfoot('fv', '', '', 'nodiv');
+            css::adminfoot('fv', '', '', 'nodiv');
          
             include("footer.php");
         } 
@@ -677,9 +685,9 @@ class links {
                 $cat[1] = 0;
             }
          
-            $title = stripslashes(FixQuotes($title));
-            $url = stripslashes(FixQuotes($url));
-            $description = stripslashes(FixQuotes($description));
+            $title = stripslashes(str::FixQuotes($title));
+            $url = stripslashes(str::FixQuotes($url));
+            $description = stripslashes(str::FixQuotes($description));
          
             if ($modifysubmitter == -9) 
             {

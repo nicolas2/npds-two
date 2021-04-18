@@ -8,8 +8,15 @@
  * @version 1.0
  * @date 02/04/2021
  */
+use npds\auth\auth;
+use npds\cache\cacheManager;
+use npds\cache\cacheEmpty;
+use npds\language\language; 
+use npds\pagination\pagination;
+use npds\time\time;
+use modules\links\support\links;
 
-  
+
 if (strstr($ModPath, '..') 
     || strstr($ModStart, '..') 
     || stristr($ModPath, 'script') 
@@ -76,8 +83,8 @@ function menu()
     echo '
     <ul class="nav nav-tabs mb-3">
         <li class="nav-item"><a class="nav-link '.$in_l.'" href="modules.php?ModStart='.$ModStart.'&amp;ModPath='.$ModPath.'" >'.translate("Index").'</a></li>';
-       
-    if (autorisation($links_anonaddlinklock))
+
+    if (auth::autorisation($links_anonaddlinklock))
     {
         echo '
         <li class="nav-item" ><a class="nav-link '.$ad_l.'" href="modules.php?ModStart='.$ModStart.'&amp;ModPath='.$ModPath.'&amp;op=AddLink" >'.translate("Ajouter").'</a></li>';
@@ -210,7 +217,7 @@ function index()
     } 
     else 
     {
-        $cache_obj = new SuperCacheEmpty();
+        $cache_obj = new cacheEmpty();
     }
        
     if (($cache_obj->genereting_output == 1) 
@@ -241,15 +248,15 @@ function index()
                 echo '
                 <tr>
                     <td>
-                        <h4><a href="modules.php?ModStart='.$ModStart.'&amp;ModPath='.$ModPath.'&amp;op=viewlink&amp;cid='.$cid.'">'.aff_langue($title).'</a> <span class="badge badge-secondary float-right">'.$cnumrows.'</span></h4>';
+                        <h4><a href="modules.php?ModStart='.$ModStart.'&amp;ModPath='.$ModPath.'&amp;op=viewlink&amp;cid='.$cid.'">'.language::aff_langue($title).'</a> <span class="badge badge-secondary float-right">'.$cnumrows.'</span></h4>';
                 
                 categorynewlinkgraphic($cid);
                 
                 if ($cdescription)
                 {
-                    echo '<p>'.aff_langue($cdescription).'</p>';
+                    echo '<p>'.language::aff_langue($cdescription).'</p>';
                 }
-                
+               
                 $result2 = sql_query("SELECT sid, title FROM ".$links_DB."links_subcategories WHERE cid='$cid' ORDER BY title $subcat_limit");
                 
                 while (list($sid, $stitle) = sql_fetch_row($result2)) 
@@ -258,7 +265,7 @@ function index()
                     $cnumrows = sql_num_rows($cresult3);
                    
                     echo '
-                    <h5 class="ml-4"><a href="modules.php?ModStart='.$ModStart.'&amp;ModPath='.$ModPath.'&amp;op=viewslink&amp;sid='.$sid.'">'.aff_langue($stitle).'</a> <span class="badge badge-secondary float-right">'.$cnumrows.'</span></h5>';
+                    <h5 class="ml-4"><a href="modules.php?ModStart='.$ModStart.'&amp;ModPath='.$ModPath.'&amp;op=viewslink&amp;sid='.$sid.'">'.language::aff_langue($stitle).'</a> <span class="badge badge-secondary float-right">'.$cnumrows.'</span></h5>';
                 }
 
                 echo '
@@ -364,7 +371,7 @@ function viewlink($cid, $min, $orderby, $show)
     } 
     else
     {
-        $cache_obj = new SuperCacheEmpty();
+        $cache_obj = new cacheEmpty();
     }
        
     if (($cache_obj->genereting_output == 1) 
@@ -390,7 +397,7 @@ function viewlink($cid, $min, $orderby, $show)
         list($title) = sql_fetch_row($result);
           
         echo '
-        <h3 class="mb-3">'.aff_langue($title).'</h3>';
+        <h3 class="mb-3">'.language::aff_langue($title).'</h3>';
 
         $subresult = sql_query("SELECT sid, title FROM ".$links_DB."links_subcategories WHERE cid='$cid' ORDER BY title");
         $numrows = sql_num_rows($subresult);
@@ -407,7 +414,7 @@ function viewlink($cid, $min, $orderby, $show)
             $numrows_lst = sql_num_rows($result2);
             
             $affsouscat .= '
-            <li class="list-group-item list-group-item-action justify-content-between align-self-start"><a href="modules.php?ModStart='.$ModStart.'&amp;ModPath='.$ModPath.'&amp;op=viewslink&amp;sid='.$sid.'">'.aff_langue($title).'</a></li>';
+            <li class="list-group-item list-group-item-action justify-content-between align-self-start"><a href="modules.php?ModStart='.$ModStart.'&amp;ModPath='.$ModPath.'&amp;op=viewslink&amp;sid='.$sid.'">'.language::aff_langue($title).'</a></li>';
         }
 
         $affsouscat .= '
@@ -469,7 +476,7 @@ function viewlink($cid, $min, $orderby, $show)
 
         $start = ($current*$perpage);
 
-        echo paginate('modules.php?ModStart='.$ModStart.'&amp;ModPath='.$ModPath.'&amp;op=viewlink&amp;cid='.$cid.'&amp;min=', '&amp;orderby='.$orderby.'&amp;show='.$perpage, $nbPages, $current, $adj=3, $perpage, $start);
+        echo pagination::paginate('modules.php?ModStart='.$ModStart.'&amp;ModPath='.$ModPath.'&amp;op=viewlink&amp;cid='.$cid.'&amp;min=', '&amp;orderby='.$orderby.'&amp;show='.$perpage, $nbPages, $current, $adj=3, $perpage, $start);
 
         if (isset($sid)) 
         {
@@ -501,7 +508,7 @@ function viewslink($sid, $min, $orderby, $show)
     }
     else 
     {
-        $cache_obj = new SuperCacheEmpty();
+        $cache_obj = new cacheEmpty();
     }
        
     if (($cache_obj->genereting_output == 1) 
@@ -528,7 +535,7 @@ function viewslink($sid, $min, $orderby, $show)
         list($cid, $title) = sql_fetch_row($result2);
 
         echo "<table class=\"table table-bordered\"><tr><td class=\"header\">\n";
-        echo "<a href=\"modules.php?ModStart=$ModStart&amp;ModPath=$ModPath\" class=\"box\">".translate("Index")."</a> / <a href=\"modules.php?ModStart=$ModStart&amp;ModPath=$ModPath&amp;op=viewlink&amp;cid=$cid\" class=\"box\">".aff_langue($title)."</a> / ".aff_langue($stitle);
+        echo "<a href=\"modules.php?ModStart=$ModStart&amp;ModPath=$ModPath\" class=\"box\">".translate("Index")."</a> / <a href=\"modules.php?ModStart=$ModStart&amp;ModPath=$ModPath&amp;op=viewlink&amp;cid=$cid\" class=\"box\">".language::aff_langue($title)."</a> / ".language::aff_langue($stitle);
         
         echo "</td></tr></table>";
 
@@ -621,7 +628,7 @@ function fiche_detail ($Xlid)
     }
     else
     {
-        $cache_obj = new SuperCacheEmpty();
+        $cache_obj = new cacheEmpty();
     }
        
     if (($cache_obj->genereting_output == 1) 
@@ -657,7 +664,7 @@ function categorynewlinkgraphic($cat)
         
         if (isset($ime)) 
         {
-            setlocale (LC_TIME, aff_langue($locale));
+            setlocale(LC_TIME, language::aff_langue($locale));
             
             preg_match('#^(\d{4})-(\d{1,2})-(\d{1,2}) (\d{1,2}):(\d{1,2}):(\d{1,2})$#', $time, $datetime);
             $count = round((time()- mktime($datetime[4], $datetime[5], $datetime[6], $datetime[2], $datetime[3], $datetime[1]))/86400, 0);
@@ -691,7 +698,7 @@ function newlinkgraphic($datetime, $time)
 {
     global $locale;
     
-    setlocale (LC_TIME, aff_langue($locale));
+    setlocale(LC_TIME, language::aff_langue($locale));
     
     preg_match('#^(\d{4})-(\d{1,2})-(\d{1,2}) (\d{1,2}):(\d{1,2}):(\d{1,2})$#', $time, $datetime);
     
@@ -829,7 +836,7 @@ function viewlinkeditorial($lid, $ttitle)
     echo '
     <div class="card card-body">
     <h3>'.translate("EDITO").' : 
-        <span class="text-muted">'.aff_langue($displaytitle).'</span>';
+        <span class="text-muted">'.language::aff_langue($displaytitle).'</span>';
        
     if ($url != '') 
     {
@@ -845,12 +852,12 @@ function viewlinkeditorial($lid, $ttitle)
         while (list($adminid, $editorialtimestamp, $editorialtext, $editorialtitle) = sql_fetch_row($result))
         {
             $editorialtitle = stripslashes($editorialtitle); $editorialtext = stripslashes($editorialtext);
-            $formatted_date = formatTimestamp($editorialtimestamp);
+            $formatted_date = time::formatTimestamp($editorialtimestamp);
             
             echo '
-            <h4>'.aff_langue($editorialtitle).'</h4>
+            <h4>'.language::aff_langue($editorialtitle).'</h4>
             <p><span class="text-muted small">'.translate("Editorial par").' '.$adminid.' - '.$formatted_date.'</span></p>
-            <hr/>'.aff_langue($editorialtext);
+            <hr/>'.language::aff_langue($editorialtext);
         }
     }
     else
@@ -870,7 +877,7 @@ function formatTimestampShort($time)
 {
     global $datetime, $locale, $gmt;
 
-    setlocale (LC_TIME, aff_langue($locale));
+    setlocale(LC_TIME, lnguage::aff_langue($locale));
     
     preg_match('#^(\d{4})-(\d{1,2})-(\d{1,2}) (\d{1,2}):(\d{1,2}):(\d{1,2})$#', $time, $datetime);
     
@@ -893,14 +900,14 @@ switch ($op) {
     break;
 
     case 'AddLink':
-        AddLink();
+        links::AddLink();
     break;
 
     case 'Add':
         settype($asb_question, 'string');
         settype($asb_reponse, 'string');
 
-        Add($title, $url, $name, $cat, $xtext, $email, $topicL, $asb_question, $asb_reponse);
+        links::Add($title, $url, $name, $cat, $xtext, $email, $topicL, $asb_question, $asb_reponse);
     break;
 
     case 'NewLinks':
@@ -908,11 +915,11 @@ switch ($op) {
         {
             $newlinkshowdays = 7;
         }
-        NewLinks($newlinkshowdays);
+        links::NewLinks($newlinkshowdays);
     break;
 
     case 'NewLinksDate':
-        NewLinksDate($selectdate);
+        links::NewLinksDate($selectdate);
     break;
 
     case 'viewlink':
@@ -963,20 +970,20 @@ switch ($op) {
     break;
 
     case 'brokenlink':
-        brokenlink($lid);
+        links::brokenlink($lid);
     break;
 
     case 'brokenlinkS':
-        brokenlinkS($lid, $modifysubmitter);
+        links::brokenlinkS($lid, $modifysubmitter);
     break;
 
     case 'modifylinkrequest':
         settype($modifylinkrequest_adv_infos, 'string');
-        modifylinkrequest($lid, $modifylinkrequest_adv_infos, $author);
+        links::modifylinkrequest($lid, $modifylinkrequest_adv_infos, $author);
     break;
 
     case 'modifylinkrequestS':
-        modifylinkrequestS($lid, $cat, $title, $url, $xtext, $modifysubmitter, $topicL);
+        links::modifylinkrequestS($lid, $cat, $title, $url, $xtext, $modifysubmitter, $topicL);
     break;
 
     case 'visit':
@@ -996,7 +1003,7 @@ switch ($op) {
             $max = $min+$offset;
         }
         
-        links_search($query, $topicL, $min, $max, $offset);
+        links::links_search($query, $topicL, $min, $max, $offset);
     break;
 
     case 'viewlinkeditorial':
