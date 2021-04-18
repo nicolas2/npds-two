@@ -938,7 +938,7 @@ function userinfo($uname)
                                     var graticule = new ol.layer.Graticule();
                                     graticule.setMap(map);';
 
-            $content .= file_get_contents('modules/geoloc/include/ol-dico.js');
+            $content .= file_get_contents('modules/geoloc/assets/js/ol-dico.js');
             $content .='
                         const targ = map.getTarget();
                         const lang = targ.lang;
@@ -990,10 +990,10 @@ function userinfo($uname)
        
         while (false !== ($file = readdir($handle))) 
         {
-            //if (!preg_match('#\.conf\.php$#i', $file))
-            //{ 
-            //    continue;
-            //}
+            if (!preg_match('#\.php$#i', $file))
+            { 
+                continue;
+            }
           
             $topic = "#topic#";
          
