@@ -762,7 +762,7 @@ if ($inclusion)
         <link rel="stylesheet" href="assets/shared/bootstrap-table/dist/bootstrap-table.css" />
         <link rel="stylesheet" id="fw_css_extra" href="themes/_skins/'.$skin.'/extra.css" />
         <link rel="stylesheet" href="'.$css_fma.'" title="default" type="text/css" media="all" />';
-
+var_dump($PAGES);
         global $tiny_mce;
         if ($tiny_mce)
         {
