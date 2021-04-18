@@ -276,7 +276,7 @@ function Only_NewUser()
     if (!$user) 
     {
         global $smilies, $short_user, $memberpass;
-        global $uname, $name, $email, $user_avatar, $user_occ, $user_from, $user_intrest, $user_sig, $user_viewemail, $pass, $vpass, $C1,$C2,$C3,$C4,$C5,$C6,$C7,$C8,$M1,$M2,$T1,$T2,$B1;
+        global $uname, $name, $email, $user_avatar, $user_occ, $user_from, $user_intrest, $user_sig, $user_viewemail, $pass, $vpass, $C1, $C2, $C3, $C4, $C5, $C6, $C7, $C8, $M1, $M2, $T1, $T2, $B1;
       
         include("header.php");
       
@@ -495,7 +495,7 @@ function confirmNewUser($uname, $name, $email, $user_avatar, $user_occ, $user_fr
  */
 function finishNewUser($uname, $name, $email, $user_avatar, $user_occ, $user_from, $user_intrest, $user_sig, $user_viewemail, $pass,$user_lnl, $C1, $C2, $C3, $C4, $C5, $C6, $C7, $C8, $M1, $M2, $T1, $T2, $B1) 
 {
-    global $NPDS_Prefix, $makepass, $adminmail, $sitename, $AutoRegUser, $memberpass, $gmt, $NPDS_Key, $nuke_url;
+    global $NPDS_Prefix, $makepass, $adminmail, $sitename, $AutoRegUser, $memberpass, $gmt, $NPDS_Key, $nuke_url, $Default_Theme, $Default_Skin;
 
     if(!isset($_SERVER['HTTP_REFERER'])) 
     {
@@ -828,7 +828,7 @@ function userinfo($uname)
         nav($mns);
     }
 
-    include('modules/geoloc/geoloc_conf.php'); 
+    include('modules/geoloc/config/geoloc.php'); 
        
     echo '
     <div class="card card-body">
@@ -862,7 +862,7 @@ function userinfo($uname)
                     <script type="module">
                         //<![CDATA[
                             if (typeof ol=="undefined")
-                                $("head").append($("<script />").attr({"type":"text/javascript","src":"/assets/shared/ol/ol.js"}));
+                                $("head").append($("<script />").attr({"type":"text/javascript","src":"assets/shared/ol/ol.js"}));
                             $(function(){
                                 var 
                                     iconFeature = new ol.Feature({
@@ -986,18 +986,18 @@ function userinfo($uname)
         }
 
         $file = '';
-        $handle = opendir('modules/comments');
+        $handle = opendir('modules/comments/config');
        
         while (false !== ($file = readdir($handle))) 
         {
-            if (!preg_match('#\.conf\.php$#i', $file))
-            { 
-                continue;
-            }
+            //if (!preg_match('#\.conf\.php$#i', $file))
+            //{ 
+            //    continue;
+            //}
           
             $topic = "#topic#";
          
-            include("modules/comments/$file");
+            include("modules/comments/config/$file");
           
             $filelist[$forum] = $url_ret;
         }
@@ -1506,7 +1506,7 @@ function login($uname, $pass)
 {
     global $NPDS_Prefix, $setinfo;
 
-    $result = sql_query("SELECT pass, uid, uname, storynum, umode, uorder, thold, noscore, ublockon, theme, commentmax, user_langue FROM ".$NPDS_Prefix."users WHERE uname = '$uname'");
+    $result = sql_query("SELECT pass, hashkey, uid, uname, storynum, umode, uorder, thold, noscore, ublockon, theme, commentmax, user_langue FROM ".$NPDS_Prefix."users WHERE uname = '$uname'");
        
     if (sql_num_rows($result) == 1) 
     {

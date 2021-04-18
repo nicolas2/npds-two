@@ -10,3 +10,9 @@
 04/10/2021 18:30:29 admin.php=>CreateGroupe(3, my two) by AID : Root             IP=>::1   
 04/10/2021 18:30:45 admin.php=>AddMemberToGroup(3, user) by AID : Root           IP=>::1   
 04/10/2021 18:58:03 admin.php=>SaveConfigFile(cache.config) by AID : Root        IP=>::1   
+04/10/2021 21:32:21 admin.php=>AddForumCat(test) by AID : Root                   IP=>::1   
+04/10/2021 21:33:01 admin.php=>AddForum(two cms) by AID : Root                   IP=>::1   
+04/11/2021 19:11:31 modules.php=>Upload File                                     /assets/images/admin/nicolas2.jpg IP=>::1
+04/11/2021 19:12:19 modules.php=>Delete File                                     /assets/images/admin/nicolas2.jpg IP=>::1
+04/12/2021 15:36:32 admin.php=>ChangeLeftBlock([french]Carte[/french][english]Map[/english][chinese]地图[/chinese] - 12) by AID : Root IP=>::1   
+04/13/2021 08:38:33 admin.php=>ChangeLeftBlock([french]Carte[/french][english]Map[/english][chinese]地图[/chinese] - 12) by AID : Root IP=>::1   

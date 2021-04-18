@@ -103,7 +103,7 @@ $m->add_date('T1', language::aff_langue('[french]Date de naissance[/french][engl
 $m->add_extender('T1', '', '<span class="help-block">JJ/MM/AAAA</span>');
 $m->add_field('M2', "R&#x00E9;seaux sociaux", $M2, 'hidden', false);
 
-include('modules/geoloc/geoloc_conf.php');
+include('modules/geoloc/config/geoloc.php');
 
 $m->add_comment(language::aff_langue('<div class="row"><p class="lead"><a href="modules.php?ModPath=geoloc&amp;ModStart=geoloc"><i class="fas fa-map-marker-alt fa-2x" title="[french]Modifier ou d&#xE9;finir votre position[/french][english]Define or change your geolocation[/english][chinese]Define or change your geolocation[/chinese][spanish]Definir o cambiar la geolocalizaci&#243;n[/spanish][german]Definieren oder &#xE4;ndern Sie Ihre Geolokalisierung[/german]" data-toggle="tooltip" data-placement="right"></i></a>&nbsp;[french]G&#xE9;olocalisation[/french][english]Geolocation[/english][chinese]&#x5730;&#x7406;&#x5B9A;&#x4F4D;[/chinese][spanish]Geolocalizaci&#243;n[/spanish][german]Geolokalisierung[/german]</p></div>'));
 

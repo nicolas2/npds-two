@@ -561,8 +561,6 @@ function updateadmin($chng_aid, $chng_name, $chng_email, $chng_url, $chng_radmin
     {
         Header("Location: admin.php?op=mod_authors");
     }   
-
-    include_once('functions.php');
        
     if(mailler::checkdnsmail($chng_email) === false) 
     {
@@ -719,8 +717,6 @@ switch ($op) {
             include("footer.php");
             return;
         }
-
-        include_once('functions.php');
       
         if(mailler::checkdnsmail($add_email) === false) 
         {

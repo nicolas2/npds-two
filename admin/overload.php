@@ -10,7 +10,7 @@
  */
 use npds\error\access;
 use npds\assets\css;
-use npds\cache\cahce;
+use npds\cache\cache;
 use npds\logs\logs;
 
 
@@ -312,12 +312,12 @@ switch ($op) {
        break;
        
        case 'supercache_empty':
-          chache::SC_clean();
+          cache::SC_clean();
           
           global $aid; 
-          Ecr_Log('security', "EmptySuperCache() by AID : $aid", '');
+          logs::Ecr_Log('security', "EmptySuperCache() by AID : $aid", '');
           
-          logs::Header("Location: admin.php?op=supercache");
+          header("Location: admin.php?op=supercache");
        break;
        
        default:

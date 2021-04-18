@@ -761,8 +761,8 @@ function rubriquemake($rubname, $introc)
 {
        global $NPDS_Prefix;
 
-       $rubname = stripslashes(FixQuotes($rubname));
-       $introc = stripslashes(FixQuotes($introc));
+       $rubname = stripslashes(str::FixQuotes($rubname));
+       $introc = stripslashes(str::FixQuotes($introc));
        
        sql_query("INSERT INTO ".$NPDS_Prefix."rubriques VALUES (NULL,'$rubname','$introc','0','0')");
 
@@ -1396,7 +1396,7 @@ function secartdelete2($artid, $ok=0)
           sql_query("DELETE FROM ".$NPDS_Prefix."seccont_tempo WHERE artid='$artid'");
           
           global $aid; 
-          logs::Ecr_Log('security', "DeleteArticlesSectionsTempo($rubid) by AID : $aid", '');
+          logs::Ecr_Log('security', "DeleteArticlesSectionsTempo($artid) by AID : $aid", '');
           
           Header("Location: admin.php?op=sections");
        } else {

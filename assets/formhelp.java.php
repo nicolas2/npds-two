@@ -29,8 +29,8 @@ function addText(instextD, instextF) {
       var endPos = mess.selectionEnd;
       var chaine = mess.value;
       mess.value = chaine.substring(0, startPos) + instextD + chaine.substring(startPos, endPos) + instextF  + chaine.substring(endPos, chaine.length);
-      mess.selectionStart=startPos + instextD.length;
-      mess.selectionEnd=startPos + instextD.length;
+      mess.selectionStart = startPos + instextD.length;
+      mess.selectionEnd = startPos + instextD.length;
       mess.focus();
    }
 }
@@ -52,8 +52,8 @@ function DoAdd(externe, champ, text) {
       var endPos = mess.selectionEnd;
       var chaine = mess.value;
       mess.value = chaine.substring(0, startPos) + text + chaine.substring(startPos, endPos) + chaine.substring(endPos, chaine.length);
-      mess.selectionStart=startPos + text.length;
-      mess.selectionEnd=startPos + text.length;
+      mess.selectionStart = startPos + text.length;
+      mess.selectionEnd = startPos + text.length;
       mess.focus();
    }
 }

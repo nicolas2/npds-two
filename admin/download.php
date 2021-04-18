@@ -11,7 +11,7 @@
 use npds\error\access;
 use npds\groupes\groupe;
 use npds\language\language; 
-use npds\file\filemanager;
+use npds\files\filemanager;
 use npds\editeur\tiny; 
 use npds\assets\css;
 

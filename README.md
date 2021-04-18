@@ -24,7 +24,7 @@ Suivre l'installation automatique ...
 
 # Communauté
 
-- Besoin d'aide le [forum Npds Two Cms](https://two-cms.airteck.fr/forum.php)
+- Besoin d'aide le [forum Npds Two Cms](https://npds-two.airteck.fr/forum.php)
 
 
 # Style de code :

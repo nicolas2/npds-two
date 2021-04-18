@@ -18,6 +18,8 @@ use npds\session\session;
 use npds\cookie\cookie;
 use npds\language\language;
 use npds\language\metalang;
+use npds\security\ip;
+use modules\geoloc\support\geosession;
 
 
 defined('DS') || define('DS', DIRECTORY_SEPARATOR);
@@ -139,3 +141,6 @@ if (function_exists("date_default_timezone_set"))
 {
    date_default_timezone_set("Europe/Paris");
 }
+
+// geoloc session 
+geosession::init(ip::get());

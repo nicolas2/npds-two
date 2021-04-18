@@ -14,6 +14,7 @@
 use npds\error\access;
 use npds\mailler\mailler;
 use npds\assets\css;
+use modules\geoloc\support\geolocalise;
 
 
 if (!stristr($_SERVER['PHP_SELF'],'admin.php')) access::error();
@@ -132,7 +133,7 @@ echo '
               <span class="text-muted">'.SessionLog_translate("@ IP résolue").'</span> : <span>'.$hostname.'</span><br />
               <span class="text-muted">'.SessionLog_translate("Fournisseur").'</span> : <span>'.$provider.'</span><br />
             </div>';
-      echo localiser_ip($iptoshow=$theip);
+      echo geolocalise::ip($iptoshow=$theip);
       echo '
          </div>
       </div>';

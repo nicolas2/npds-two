@@ -426,7 +426,7 @@ else
     $m->add_field('add_avatar', '', 'blank.gif', 'hidden', false);
 }
 
-include_once('modules/geoloc/geoloc_conf.php');
+include_once('modules/geoloc/config/geoloc.php');
 
 $m->add_extra('
     <div class="form-group row">

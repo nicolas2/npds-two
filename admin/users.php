@@ -130,7 +130,7 @@ function extractUserCSV()
           $line .= $crlf;
        }
 
-       sendile::send_file($line, "annuaire", "csv", $MSos);
+       sendfile::send_file($line, "annuaire", "csv", $MSos);
        
        global $aid; 
        logs::Ecr_Log('security', "ExtractUserCSV() by AID : $aid", '');
@@ -282,8 +282,6 @@ function updateUser($chng_uid, $chng_uname, $chng_name, $chng_url, $chng_email, 
           }
           $tmp = 1;
        }
-
-       include_once('functions.php');
        
        if(mailler::checkdnsmail($chng_email) === false) { 
           global $hlpfile, $f_meta_nom, $f_titre, $adminimg;
@@ -436,7 +434,6 @@ function checkdnsmailusers()
        global $hlpfile, $admf_ext, $f_meta_nom, $f_titre, $adminimg, $NPDS_Prefix, $gmt, $adminmail, $page, $end, $autocont;
        
        include("header.php");
-       include_once('functions.php');
        
        GraphicAdmin($hlpfile);
        adminhead($f_meta_nom, $f_titre, $adminimg);
@@ -804,9 +801,7 @@ switch ($op) {
              
              css::adminfoot('', '', '', '');
              return;
-          }
-
-          include_once('functions.php');
+          };
           
           if(mailler::checkdnsmail($add_email) === false) { 
              global $hlpfile, $f_meta_nom, $f_titre, $adminimg;

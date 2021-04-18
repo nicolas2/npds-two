@@ -61,7 +61,8 @@ function blocnotes ($typeBlocNote='shared', $nomBlocNote='', $largeur='', $nblBl
             }
         }
 
-        if (stristr($REQUEST_URI, "article.php")){
+        if (stristr($REQUEST_URI, "article.php"))
+        {
             $bnid = md5($nomBlocNote.substr($REQUEST_URI, 0, strpos($REQUEST_URI, "&")));
         }
         else

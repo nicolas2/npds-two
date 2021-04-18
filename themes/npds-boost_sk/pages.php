@@ -125,7 +125,7 @@ $PAGES['user.php']['blocs']="0";
 $PAGES['user.php']['run']="yes";
 $PAGES['user.php']['TinyMce']=1;
 $PAGES['user.php']['TinyMce-theme']="short";
-$PAGES['user.php']['css']=array($nuke_url."assets/shared/ol/ol.css+");
+$PAGES['user.php']['css']=array($nuke_url."/assets/shared/ol/ol.css+");
 
 
 $PAGES['memberslist.php']['title']="[french]Liste des membres[/french][english]Members list[/english][spanish]Lista de Miembros[/spanish][german]Mitglieder[/german][chinese]&#x4F1A;&#x5458;&#x5217;&#x8868;[/chinese]+";
@@ -188,7 +188,7 @@ $PAGES['admin.php']['blocs']="0";
 $PAGES['admin.php']['run']="yes";
 $PAGES['admin.php']['TinyMce']=1;
 $PAGES['admin.php']['TinyMce-theme']="full";
-$PAGES['admin.php']['css']=array("admin.css+",$nuke_url."assets/shared/bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css+",$nuke_url."assets/shared/ol/ol.css+");
+$PAGES['admin.php']['css']=array("admin.css+",$nuke_url."/assets/shared/bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css+",$nuke_url."/assets/shared/ol/ol.css+");
 $PAGES['admin.php']['TinyMceRelurl']="false";
 
 $PAGES['forum.php']['title']="[french]Les forums de discussion[/french][english]Forums[/english][spanish]Foros de discusi&oacute;n[/spanish][german]Diskussionsforen[/german][chinese]&#x7248;&#x9762;&#x7BA1;&#x7406;[/chinese]+";
@@ -319,6 +319,6 @@ $PAGES['modules.php?ModPath='.$ModPath.'&ModStart=geoloc*']['js']=array($nuke_ur
 $PAGES['modules.php?ModPath='.$ModPath.'&ModStart=geoloc*']['title']="[french]Localisation[/french][english]Geolocation[/english][spanish]Geolocalizaci&oacute;n[/spanish][german]Geolocation[/german][chinese]&#22320;&#29702;&#20301;&#32622;[/chinese]+|$title+";
 $PAGES['modules.php?ModPath='.$ModPath.'&ModStart=geoloc*']['run']="yes";
 $PAGES['modules.php?ModPath=geoloc&ModStart=geoloc*']['blocs']="-1";
-$PAGES['modules.php?ModPath=geoloc&ModStart=geoloc*']['css']=array($nuke_url.'/assets/shared/ol/ol.css+',$nuke_url.'/modules/geoloc/include/css/geoloc_style.css+');
+$PAGES['modules.php?ModPath=geoloc&ModStart=geoloc*']['css']=array($nuke_url.'/assets/shared/ol/ol.css+',$nuke_url.'/modules/geoloc/assets/css/geoloc_style.css+');
 
 ?>

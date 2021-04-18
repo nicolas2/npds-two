@@ -190,9 +190,9 @@ if (($cache_obj->genereting_output == 1)
     // theme sans le système de commentaire en meta-mot !
     if (!function_exists('Caff_pub')) 
     {
-        if (file_exists('modules/comments/article.conf.php')) 
+        if (file_exists('modules/comments/config/article.php')) 
         {
-            include ('modules/comments/article.conf.php');
+            include ('modules/comments/config/article.php');
             include ('modules/comments/comments.php');
         }
     }

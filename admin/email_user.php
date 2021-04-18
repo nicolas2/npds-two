@@ -18,7 +18,7 @@ use npds\logs\logs;
 
 
 if (!stristr($_SERVER['PHP_SELF'], "admin.php")) 
-    acces::error();
+    access::error();
 
 $f_meta_nom = 'email_user';
 $f_titre = adm_translate("Diffusion d'un Message Interne");

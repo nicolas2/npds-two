@@ -15,7 +15,7 @@ use npds\cache\cache;
 
 if (!stristr($_SERVER['PHP_SELF'], 'admin.php')) 
 {
-   access::error();
+    access::error();
 }
 
 $f_meta_nom = 'setban';
@@ -46,7 +46,7 @@ function ConfigureBan($ModPath, $ModStart)
         $fd = fopen ('storage/logs/spam.log', 'r');
         while (!feof($fd)) 
         {
-            $ip_ban.= fgets($fd, 4096);
+            $ip_ban .= fgets($fd, 4096);
         }
         fclose ($fd);
     }

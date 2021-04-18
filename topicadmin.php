@@ -15,6 +15,7 @@ use npds\error\error;
 use npds\forum\forumauth;
 use npds\forum\forumupload;
 use npds\utility\spam;
+use modules\geoloc\support\geolocalise;
 
 
 if (!function_exists('Mysql_Connexion'))
@@ -309,7 +310,7 @@ else
                                 <span class="text-muted">GeoTool : </span><span class=""><a href="http://www.ip-tracker.org/?ip='.$m['poster_ip'].'" target="_blank" >IP tracker</a><br />
                             </div>';
 
-                echo localiser_ip($iptoshow=$m['poster_ip']);
+                echo geolocalise::ip($iptoshow=$m['poster_ip']);
                            
                 echo '
                         </div>

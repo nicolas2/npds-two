@@ -78,8 +78,6 @@ else
 if ($browse != '') 
 {
     $ibid = rawurldecode(crypt::decrypt($browse));
-  
-var_dump($ibid);
 
     if (substr(@php_uname(), 0, 7) == "Windows")
     {
@@ -215,7 +213,6 @@ if ($refresh == 0)
 $rep_cache = $racine_fma.'/storage/cache/';
 $rep_cache_encrypt = rawurlencode(crypt::encrypt($rep_cache));
 $cache_prefix = $cookie[1].md5(str_replace('/', '.', str_replace($racine_fma.'/', '', $cur_nav)));
-
 
 
 if ($Max_thumb > 0) 

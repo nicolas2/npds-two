@@ -16,7 +16,7 @@ use npds\views\theme;
 
 
 if (!stristr($_SERVER['PHP_SELF'], 'admin.php')) 
-    Aaccess::error();
+    access::error();
 
 $f_meta_nom = 'create';
 $f_titre = adm_translate("Les sondages");
@@ -146,7 +146,7 @@ function poll_createPosted()
        
        for ($i = 1; $i <= sizeof($optionText); $i++) {
           if ($optionText[$i] != '')
-             $optionText[$i] = FixQuotes($optionText[$i]);
+             $optionText[$i] = str::FixQuotes($optionText[$i]);
           
           $result = sql_query("INSERT INTO ".$NPDS_Prefix."poll_data (pollID, optionText, optionCount, voteID, pollType) VALUES ('$id', '$optionText[$i]', 0, '$i', '$poll_type')");
        }
@@ -224,7 +224,7 @@ function poll_removePosted()
        sql_query("DELETE FROM ".$NPDS_Prefix."poll_desc WHERE pollID='$id'");
        sql_query("DELETE FROM ".$NPDS_Prefix."poll_data WHERE pollID='$id'");
        
-       include ('modules/comments/pollBoth.conf.php');
+       include ('modules/comments/config/pollBoth.php');
        
        sql_query("DELETE FROM ".$NPDS_Prefix."posts WHERE topic_id='$id' AND forum_id='$forum'");
        
@@ -276,7 +276,7 @@ function poll_editPoll()
           </div>
        </form>';
 
-    //   adminfoot('','','','');
+    //   css::adminfoot('','','','');
        include ('footer.php');
 }
 

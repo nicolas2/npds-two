@@ -242,8 +242,9 @@ switch ($op)
         if ($user) 
         {
             $rowQ1 = cache::Q_Select("SELECT uid FROM ".$NPDS_Prefix."users WHERE uname='$cookie[1]'", 3600);
-            list(, $uid) = each($rowQ1); // Note : each
-
+            //list(, $uid) = each($rowQ1); // Note : each
+            $uid = $rowQ1[0];
+            
             $from_userid = $uid['uid'];
             
             if (($subject != '') or ($message != '')) 

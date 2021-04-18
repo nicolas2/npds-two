@@ -773,9 +773,9 @@ function showcontent($id)
     sql_free_result($result);
 
     global $anonpost, $moderate, $user;
-    if (file_exists("modules/comments/reviews.conf.php")) 
+    if (file_exists("modules/comments/config/reviews.php")) 
     {
-        include ("modules/comments/reviews.conf.php");
+        include ("modules/comments/config/reviews.php");
         include ("modules/comments/comments.php");
     }
 
@@ -982,9 +982,9 @@ function del_review($id_del)
         sql_query("DELETE FROM ".$NPDS_Prefix."reviews WHERE id='$id_del'");
       
         // commentaires
-        if (file_exists("modules/comments/reviews.conf.php")) 
+        if (file_exists("modules/comments/config/reviews.php")) 
         {
-            include ("modules/comments/reviews.conf.php");
+            include ("modules/comments/config/reviews.php");
             sql_query("DELETE FROM ".$NPDS_Prefix."posts WHERE forum_id='$forum' AND topic_id='$id_del'");
         }
     }

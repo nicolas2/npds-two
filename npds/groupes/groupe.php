@@ -11,7 +11,6 @@
 namespace npds\groupes;
 
 use npds\language\language;
-use npds\groupes\groupe;
 use npds\utility\spam;
 use npds\utility\str;
 use npds\utility\crypt;
@@ -83,7 +82,7 @@ class groupe {
      */
     public static function groupe_forum($forum_groupeX, $tab_groupeX) 
     {
-        $ok_affich = groupe::groupe_autorisation($forum_groupeX, $tab_groupeX);
+        $ok_affich = static::groupe_autorisation($forum_groupeX, $tab_groupeX);
         
         return $ok_affich;
     }
@@ -142,7 +141,7 @@ class groupe {
                 //==> chargement css
                 if (!document.getElementById(\'bloc_ws_css\')) {
                     var l_css = document.createElement(\'link\');
-                    l_css.href = "modules/groupe/bloc_ws.css";
+                    l_css.href = "modules/groupe/assets/css/bloc_ws.css";
                     l_css.rel = "stylesheet";
                     l_css.id = "bloc_ws_css";
                     l_css.type = "text/css";
@@ -190,9 +189,7 @@ class groupe {
             $my_rs = '';
             
             if (!$short_user) 
-            {
-                include_once('functions.php');
-                
+            {       
                 $posterdata_extend = auth::get_userdata_extend_from_id($uid);
                 
                 include('modules/reseaux-sociaux/reseaux-sociaux.conf.php');
@@ -248,7 +245,7 @@ class groupe {
            
             list($uname, $user_avatar, $mns, $url, $femail) = sql_fetch_row(sql_query("SELECT uname, user_avatar, mns, url, femail FROM ".$NPDS_Prefix."users WHERE uid='$uid'"));
 
-            include('modules/geoloc/geoloc_conf.php');
+            include('modules/geoloc/config/geoloc.php');
             
             settype($ch_lat, 'string');
             

@@ -15,7 +15,7 @@ use npds\assets\css;
 
 
 if (!stristr($_SERVER['PHP_SELF'], 'admin.php')) 
-    Access_Error();
+    access::error();
 
 $f_meta_nom = 'reviews';
 $f_titre = adm_translate("Critiques");

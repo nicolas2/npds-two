@@ -125,7 +125,7 @@ if ($Mmod)
                 </div>
             </div>';
 
-            include('modules/geoloc/geoloc_conf.php');
+            include('modules/geoloc/config/geoloc.php');
 
             if($geo_ip == 1)
             {

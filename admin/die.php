@@ -30,7 +30,7 @@
          <br />
          <br />
          <span style="font-size: 18px; font-family: Courier New, Courier, Liberation Mono, monospace; font-weight: bold; color: black;">
-            NPDS - Portal System
+            Npds Two - Portal System
          </span>
       </p>
    </body>

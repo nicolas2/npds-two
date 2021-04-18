@@ -70,7 +70,7 @@ class sendfile {
     }
 
     #autodoc send_tofile($line,$repertoire,$filename,$extension,$MSos) : compresse et enregistre un fichier / $line : le flux, $repertoire $filename et $extension le fichier, $MSos (voir fonction get_os)
-    function send_tofile($line, $repertoire, $filename, $extension, $MSos) 
+    public static function send_tofile($line, $repertoire, $filename, $extension, $MSos) 
     {
         $compressed = false;
         

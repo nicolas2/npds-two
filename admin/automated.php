@@ -16,6 +16,8 @@ use npds\assets\css;
 use npds\views\theme;
 use npds\editeur\tiny;
 use npds\utility\str;
+use npds\language\language;
+use npds\news\news;
 
 
 if (!stristr($_SERVER['PHP_SELF'], 'admin.php')) {
@@ -202,7 +204,7 @@ function autoStory()
                 echo '
              <tr>
                 <td><a href="admin.php?op=autoEdit&amp;anid='.$anid.'">'.language::aff_langue($title).'</a></td>
-                <td>'.formatTimestamp("nogmt".$time).'</td>
+                <td>'.time::formatTimestamp("nogmt".$time).'</td>
                 <td><a href="admin.php?op=autoEdit&amp;anid='.$anid.'"><i class="fa fa-edit fa-lg" title="'.adm_translate("Afficher l'article").'" data-toggle="tooltip"></i></a><a href="admin.php?op=autoDelete&amp;anid='.$anid.'">&nbsp;<i class="far fa-trash-alt fa-lg text-danger" title="'.adm_translate("Effacer l'Article").'" data-toggle="tooltip" ></i></a></td>
              </tr>';
              } else {
@@ -433,7 +435,7 @@ function autoSaveEdit($anid, $title, $hometext, $bodytext, $topic, $notes, $cati
        $result = sql_query("UPDATE ".$NPDS_Prefix."autonews SET catid='$catid', title='$title', time=now(), hometext='$hometext', bodytext='$bodytext', topic='$topic', notes='$notes', ihome='$ihome', date_debval='$date_debval', date_finval='$date_finval', auto_epur='$epur' WHERE anid='$anid'");
 
        if ($ultramode)
-          ultramode();
+          news::ultramode();
 
        Header("Location: admin.php?op=autoEdit&anid=$anid");
 }

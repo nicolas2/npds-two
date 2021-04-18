@@ -119,12 +119,13 @@ class metalang {
      */
     public static function charg_metalang() 
     {
-        global $SuperCache, $CACHE_TIMINGS, $REQUEST_URI, $NPDS_Prefix;
+        global $SuperCache, $CACHE_TIMINGS, $REQUEST_URI, $NPDS_Prefix, $nuke_url;
 
         if ($SuperCache) 
         {
-            $racine = parse_url(basename($REQUEST_URI));
-            $cache_clef = "[metalang]==>".$racine['path'].".common";
+            //$racine = parse_url(basename($REQUEST_URI));
+            //$cache_clef = "[metalang]==>".$racine['path'].".common";
+            $cache_clef = "[metalang]==>".$nuke_url.".common";
             $CACHE_TIMINGS[$cache_clef] = 86400;
             $cache_obj = new cacheManager();
             $glossaire = $cache_obj->startCachingObjet($cache_clef);

@@ -22,7 +22,8 @@
     },
     "autoload": {        
         "psr-4": {
-            "npds\\": "npds"           
+            "npds\\": "npds",          
+            "modules\\": "modules"          
         },
         "files": [
             "npds/support/helpers.php",

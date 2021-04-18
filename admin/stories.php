@@ -18,7 +18,8 @@ use npds\logs\logs;
 use npds\views\theme;
 use npds\editeur\tiny;
 use npds\utility\str;
-use npds\subscribe\subscibe;
+use npds\subscribe\subscribe;
+use npds\news\news;
 
 
 if (!stristr($_SERVER['PHP_SELF'], 'admin.php')) 
@@ -432,8 +433,8 @@ function YesDelCategory($catid)
             sql_query("DELETE FROM ".$NPDS_Prefix."stories WHERE catid='$catid'");
             
             // commentaires
-            if (file_exists("modules/comments/article.conf.php")) {
-                include ("modules/comments/article.conf.php");
+            if (file_exists("modules/comments/config/article.php")) {
+                include ("modules/comments/config/article.php");
                 sql_query("DELETE FROM ".$NPDS_Prefix."posts WHERE forum_id='$forum' AND topic_id='$topic'");
             }
         }
@@ -907,7 +908,7 @@ function postStory($type_pub, $qid, $uid, $author, $subject, $hometext, $bodytex
 
         sql_query("UPDATE ".$NPDS_Prefix."authors SET counter=counter+1 WHERE aid='$aid'");
         if ($ultramode) {
-           ultramode();
+           news::ultramode();
         }
 
         deleteStory($qid);
@@ -916,7 +917,7 @@ function postStory($type_pub, $qid, $uid, $author, $subject, $hometext, $bodytex
            global $subscribe;
            
            if ($subscribe) {
-              subscribe::subscribe_mail("topic", $topic, '', $subject, '');
+            subscribe::subscribe_mail("topic", $topic, '', $subject, '');
            }
 
            // Cluster Paradise
@@ -1196,8 +1197,8 @@ function removeStory ($sid, $ok=0)
            sql_query("DELETE FROM ".$NPDS_Prefix."stories WHERE sid='$sid'");
            
            // commentaires
-           if (file_exists("modules/comments/article.conf.php")) {
-               include ("modules/comments/article.conf.php");
+           if (file_exists("modules/comments/config/article.php")) {
+               include ("modules/comments/config/article.php");
                
                sql_query("DELETE FROM ".$NPDS_Prefix."posts WHERE forum_id='$forum' AND topic_id='$topic'");
            }
@@ -1206,7 +1207,7 @@ function removeStory ($sid, $ok=0)
            logs::Ecr_Log('security', "removeStory ($sid, $ok) by AID : $aid", '');
            
            if ($ultramode) {
-              ultramode();
+              news::ultramode();
            }
 
            Header("Location: admin.php");
@@ -1257,8 +1258,8 @@ function changeStory($sid, $subject, $hometext, $bodytext, $topic, $notes, $cati
            sql_query("UPDATE ".$NPDS_Prefix."stories SET sid='$Lsid' WHERE sid='$sid'");
           
           // commentaires
-          if (file_exists("modules/comments/article.conf.php")) {
-              include ("modules/comments/article.conf.php");
+          if (file_exists("modules/comments/config/article.php")) {
+              include ("modules/comments/config/article.php");
               
               sql_query("UPDATE ".$NPDS_Prefix."posts SET topic_id='$Lsid' WHERE forum_id='$forum' AND topic_id='$topic'");
           }
@@ -1269,7 +1270,7 @@ function changeStory($sid, $subject, $hometext, $bodytext, $topic, $notes, $cati
         logs::Ecr_Log('security', "changeStory($sid, $subject, hometext..., bodytext..., $topic, notes..., $catid, $ihome, $members, $Mmembers, $Cdate, $Csid, $date_finval,$epur,$theme) by AID : $aid", '');
         
         if ($ultramode) {
-           ultramode();
+           news::ultramode();
         }
         // Cluster Paradise
         if (file_exists("modules/cluster-paradise/cluster-activate.php")) {

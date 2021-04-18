@@ -233,7 +233,7 @@ function makebranch($parcat, $table, $level, $maxlevel, $max_post_id, $clas, $id
                 $posterdata_extend = auth::get_userdata_extend_from_id($myrow['poster_id']);
             
                 include('modules/reseaux-sociaux/reseaux-sociaux.conf.php');
-                include('modules/geoloc/geoloc_conf.php');
+                include('modules/geoloc/config/geoloc.php');
             
                 if($user or auth::autorisation(-127)) 
                 {

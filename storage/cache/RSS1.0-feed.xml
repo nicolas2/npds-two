@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- generator="FeedCreator 2.0 for Npds Two" -->
+<rdf:RDF
+    xmlns="http://purl.org/rss/1.0/"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
+    xmlns:dc="http://purl.org/dc/elements/1.1/">
+    <channel rdf:about="http://www.two.local/backend.php?op=RSS1.0">
+        <title>Npds Two</title>
+        <description>two c'est good</description>
+        <link>http://www.two.local</link>
+        <image rdf:resource="" />
+       <dc:date>2021-04-09T20:04:39+00:00</dc:date>
+        <items>
+            <rdf:Seq>
+                <rdf:li rdf:resource="http://www.two.local/article.php?sid=4"/>
+                <rdf:li rdf:resource="http://www.two.local/article.php?sid=3"/>
+                <rdf:li rdf:resource="http://www.two.local/article.php?sid=2"/>
+                <rdf:li rdf:resource="http://www.two.local/article.php?sid=1"/>
+            </rdf:Seq>
+        </items>
+    </channel>
+    <image rdf:about="">
+        <title>Npds Two</title>
+        <link>http://www.two.local</link>
+        <url></url>
+    </image>
+    <item rdf:about="http://www.two.local/article.php?sid=4">
+        <dc:format>text/html</dc:format>
+        <dc:date>2021-02-28T17:59:36+00:00</dc:date>
+        <dc:source>http://www.two.local</dc:source>
+        <dc:creator>Root</dc:creator>
+        <title>Les th&amp;egrave;mes de NPDS</title>
+        <link>http://www.two.local/article.php?sid=4</link>
+        <description>&lt;p style=&quot;text-align: left;&quot;&gt;&lt;a href=&quot;http://www.npds.org&quot; target=&quot;_blank&quot; title=&quot;www.npds.org&quot;&gt;NPDS&lt;/a&gt; 16.2 dispose de 8 th&amp;egrave;mes graphiques dont 3 skinable (22 skins disponibles *)&amp;nbsp;ce qui donne donc 74 visualisations diff&amp;eacute;rentes du portail (et bien plus encore en utilisant les possibilit&amp;eacute;s de configuration du fichier pages.php) !&lt;/p&gt;&lt;br /&gt;&lt;p style=&quot;text-align: left;&quot;&gt;* Vous pouvez visualiser ces diff&amp;eacute;rents skins ici &amp;nbsp;&lt;a href=&quot;https://labo.infocapagde.com/themes/_skins/default&quot;&gt;&lt;span class=&quot;fa fa-paint-brush fa-2x&quot;&gt;&amp;nbsp;&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;br /&gt;&lt;p&gt;Vous pouvez aussi visiter &lt;a title=&quot;Tous les THEMES pour NPDS&quot; href=&quot;http://styles.npds.org/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;http://styles.npds.org&lt;/a&gt;, bien que non &amp;agrave; jour ce site avec plus de 100 th&amp;egrave;mes disponibles pour les versions inf&amp;eacute;rieures &amp;agrave; 16 vous permettra certainement de trouver des id&amp;eacute;es, conseils et tutoriels encore utiles pour cr&amp;eacute;er votre propre th&amp;egrave;me.&lt;/p&gt;</description>
+    </item>
+    <item rdf:about="http://www.two.local/article.php?sid=3">
+        <dc:format>text/html</dc:format>
+        <dc:date>2021-02-28T14:11:32+00:00</dc:date>
+        <dc:source>http://www.two.local</dc:source>
+        <dc:creator>Root</dc:creator>
+        <title>Les modules de NPDS</title>
+        <link>http://www.two.local/article.php?sid=3</link>
+        <description>&lt;div style=&quot;text-align: left;&quot;&gt;&lt;br /&gt;&lt;p&gt;&lt;a href=&quot;http://www.npds.org&quot; target=&quot;_blank&quot; title=&quot;www.npds.org&quot;&gt;NPDS&lt;/a&gt; dispose de nombreux &lt;strong&gt;modules&lt;/strong&gt; ajoutant des fonctionnalit&amp;eacute;s tr&amp;egrave;s diverses &amp;agrave; votre site.&lt;/p&gt;&lt;br /&gt;&lt;p&gt;Certain sont embarqu&amp;eacute;s avec l'archive : les &lt;strong&gt;modules du core&amp;nbsp;&lt;/strong&gt;(pr&amp;ecirc;t &amp;agrave; l'emploi et non d&amp;eacute;sinstallables car ils sont directement utilis&amp;eacute;s par le core ) ; les &lt;strong&gt;modules externes&amp;nbsp;&lt;/strong&gt;installables et d&amp;eacute;sinstallables &amp;agrave; tout moment...&lt;/p&gt;&lt;br /&gt;&lt;p&gt;&lt;strong&gt;- Les modules core&lt;/strong&gt;&lt;/p&gt;&lt;br /&gt;&lt;ul&gt;&lt;li&gt;module contact&lt;/li&gt;&lt;li&gt;module upload&lt;/li&gt;&lt;li&gt;module de g&amp;eacute;olocalisation&lt;/li&gt;&lt;li&gt;module de liens&lt;/li&gt;&lt;li&gt;module twitter&lt;/li&gt;&lt;li&gt;etc ...&lt;/li&gt;&lt;/ul&gt;&lt;br /&gt;&lt;p&gt;&lt;strong&gt;- Les modules externes disponibles dans l'archive&lt;/strong&gt;&lt;/p&gt;&lt;br /&gt;&lt;ul&gt;&lt;li&gt;module d'archive d'article&lt;/li&gt;&lt;li&gt;module de marque page&lt;/li&gt;&lt;li&gt;module de bloc note&lt;/li&gt;&lt;li&gt;etc ...&lt;/li&gt;&lt;/ul&gt;&lt;br /&gt;&lt;strong&gt;- Les modules externes non disponible dans l'archive &lt;/strong&gt;&lt;/div&gt;&lt;br /&gt;&lt;div style=&quot;text-align: left;&quot;&gt;&lt;br /&gt;Actuellement seulement 5 modules ont &amp;eacute;t&amp;eacute; mis &amp;agrave; niveau (responsive design et compatibilit&amp;eacute; 16.2) ils b&amp;eacute;n&amp;eacute;ficient tous d'une installation automatique facile ...&lt;br /&gt;&lt;ul&gt;&lt;li&gt;npds_galerie&lt;/li&gt;&lt;li&gt;npds_glossaire&lt;/li&gt;&lt;li&gt;npds_annonce&lt;/li&gt;&lt;li&gt;npds_agenda&lt;/li&gt;&lt;li&gt;quizz&lt;/li&gt;&lt;/ul&gt;&lt;br /&gt;&lt;p&gt;Vous pouvez les trouver en t&amp;eacute;l&amp;eacute;chargement ici &lt;a href=&quot;https://github.com/npds&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://github.com/npds&lt;/a&gt;&lt;/p&gt;&lt;br /&gt;&lt;p&gt;Beaucoup d'autre modules (compatible avec la version 13) restent &amp;agrave; mettre &amp;agrave; jour pour qu'ils fonctionnent avec les versions =&amp;gt; 16.2 &amp;nbsp;de &lt;a href=&quot;http://www.npds.org&quot; target=&quot;_blank&quot; title=&quot;www.npds.org&quot;&gt;NPDS&lt;/a&gt;. Ils sont disponibles ici &lt;a href=&quot;http://modules.npds.org/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;http://modules.npds.org&lt;/a&gt;&lt;/p&gt;&lt;br /&gt;&lt;/div&gt;</description>
+    </item>
+    <item rdf:about="http://www.two.local/article.php?sid=2">
+        <dc:format>text/html</dc:format>
+        <dc:date>2021-02-28T00:08:39+00:00</dc:date>
+        <dc:source>http://www.two.local</dc:source>
+        <dc:creator>Root</dc:creator>
+        <title>NPDS embarque un excellent &amp;eacute;diteur HTML !</title>
+        <link>http://www.two.local/article.php?sid=2</link>
+        <description>&lt;div class=&quot;mceTmpl&quot;&gt;&lt;br /&gt;&lt;div class=&quot;row my-2&quot;&gt;&lt;br /&gt;&lt;div class=&quot;col-sm-6&quot;&gt;&lt;br /&gt;&lt;p&gt;L'&lt;span style=&quot;font-weight: bold;&quot;&gt;&amp;eacute;diteur HTML&lt;/span&gt; int&amp;eacute;gr&amp;eacute; dans &lt;span style=&quot;font-weight: bold;&quot;&gt;NPDS&lt;/span&gt; est vraiment &lt;span style=&quot;font-style: italic;&quot;&gt;tr&amp;egrave;s puissant&lt;/span&gt; ! &lt;a href=&quot;https://www.tiny.cloud&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;TinyMCE&lt;/a&gt;, c'est son nom, vous permet de saisir et de mettre en forme le texte directement depuis votre navigateur.&lt;/p&gt;&lt;br /&gt;&lt;/div&gt;&lt;br /&gt;&lt;div class=&quot;col-sm-6&quot;&gt;&lt;br /&gt;&lt;p&gt;&lt;span style=&quot;font-weight: bold;&quot;&gt;L'envoi d'images&lt;/span&gt; sur votre site est &lt;span style=&quot;font-style: italic;&quot;&gt;tr&amp;egrave;s simple&lt;/span&gt; si vous souhaitez illustrer vos textes, et vous pouvez aussi faire des &lt;span style=&quot;font-weight: bold;&quot;&gt;copier/coller&lt;/span&gt; depuis nimporte quel logiciel de &lt;span style=&quot;font-weight: bold;&quot;&gt;traitement de texte&lt;/span&gt; !&lt;/p&gt;&lt;br /&gt;&lt;/div&gt;&lt;br /&gt;&lt;div class=&quot;col-sm-12&quot;&gt;&lt;br /&gt;&lt;p style=&quot;text-align: justify;&quot;&gt;Combin&amp;eacute; au fonctions sp&amp;eacute;cifique de &lt;a href=&quot;http://www.npds.org&quot; target=&quot;_blank&quot; title=&quot;www.npds.org&quot;&gt;NPDS&lt;/a&gt; : mod&amp;egrave;les de pages, banques d'images, metalang, &amp;nbsp;upload ... etc &amp;nbsp;cet &lt;span style=&quot;font-weight: bold;&quot;&gt;&amp;eacute;diteur HTML&lt;/span&gt; vous permettra vraiment de publier un contenu richement mis en forme que ce soit depuis votre ordinateur ou votre smartphone !&lt;/p&gt;&lt;br /&gt;&lt;/div&gt;&lt;br /&gt;&lt;/div&gt;&lt;br /&gt;&lt;/div&gt;</description>
+    </item>
+    <item rdf:about="http://www.two.local/article.php?sid=1">
+        <dc:format>text/html</dc:format>
+        <dc:date>2021-02-28T04:01:52+00:00</dc:date>
+        <dc:source>http://www.two.local</dc:source>
+        <dc:creator>Root</dc:creator>
+        <title>Comment modifier et / ou supprimer EDITO</title>
+        <link>http://www.two.local/article.php?sid=1</link>
+        <description>&lt;b&gt;L'EDITO &lt;/b&gt;est la &lt;b&gt;premi&amp;egrave;re chose que les visiteurs visualiseront&lt;/b&gt; en arrivant sur votre nouveau &lt;b&gt;site NPDS&lt;/b&gt;.&lt;br /&gt;&lt;br /&gt;Vous pouvez l'&lt;b&gt;&amp;eacute;diter&lt;/b&gt; pour le personnaliser, ainsi que choisir de l'afficher ou non. &lt;br /&gt;Pour toute modification, l'&lt;b&gt;&amp;eacute;diteur int&amp;eacute;gr&amp;eacute; &amp;agrave; NPDS&lt;/b&gt; vous simplifiera &amp;eacute;norm&amp;eacute;ment la t&amp;acirc;che !&lt;br /&gt;&lt;br /&gt;Enfin, vous pouvez d&amp;eacute;cider dans les &lt;i&gt;pr&amp;eacute;f&amp;eacute;rences administrateur&lt;/i&gt; de la page que vous souhaitez utiliser &lt;b&gt;comme index de votre site&lt;/b&gt;:
+ce n'est donc pas forc&amp;eacute;ment l'EDITO, et votre imagination laissera entrevoir bien d'autres possibilit&amp;eacute;s !&lt;br /&gt;</description>
+    </item>
+</rdf:RDF>

@@ -547,8 +547,8 @@ function topicdelete($topicid, $ok=0)
           logs::Ecr_Log("security", "topicDelete (related, $topicid) by AID : $aid", '');
          
          // commentaires
-          if (file_exists("modules/comments/article.conf.php")) {
-             include ("modules/comments/article.conf.php");
+          if (file_exists("modules/comments/config/article.php")) {
+             include ("modules/comments/config/article.php");
              
              sql_query("DELETE FROM ".$NPDS_Prefix."posts WHERE forum_id='$forum' and topic_id='$topic'");
              logs::Ecr_Log("security", "topicDelete (comments, $topicid) by AID : $aid", "");

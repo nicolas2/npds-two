@@ -24,7 +24,7 @@ class alert {
      * [Admin_alert description]
      * @param [type] $motif [description]
      */
-    function admin($motif) 
+    public static function admin($motif) 
     {
         global $admin;
 

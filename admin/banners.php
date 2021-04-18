@@ -70,7 +70,7 @@ function BannersAdmin()
           else
              $left = $imptotal-$impmade;
           
-          //  | <span class="small"><a href="#" class="tooltip">'.basename(aff_langue($imageurl)).'<em><img src="'.$imageurl.'" /></em></a></span>
+          //  | <span class="small"><a href="#" class="tooltip">'.basename(language::aff_langue($imageurl)).'<em><img src="'.$imageurl.'" /></em></a></span>
           echo '
              <tr>
                 <td>'.$bid.'</td>

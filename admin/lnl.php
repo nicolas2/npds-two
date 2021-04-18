@@ -362,8 +362,8 @@ Function Add_Header_Footer($ibid)
        GraphicAdmin($hlpfile);
        adminhead($f_meta_nom, $f_titre, $adminimg);
 
-       $t = '';
-       $v = '';
+       $ti = '';
+       $va = '';
 
        if ($ibid == 'HED') {
           $ti = "message d'entête";

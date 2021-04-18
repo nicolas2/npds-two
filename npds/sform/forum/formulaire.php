@@ -35,7 +35,7 @@ $tmp = array(
     "b2" => array('en' => "-: WAMP ", 'selected' => false),
     "b3" => array('en' => "-: XAMP ", 'selected' => false),
     "b4" => array('en' => "-: Apache + Php + MySql ", 'selected' => false),
-    "b5" => array('en' = >"-: Autres ", 'selected' => false),
+    "b5" => array('en' => "-: Autres ", 'selected' => false),
     "b6" => array('en' => "-: Je ne sais pas ! ", 'selected' => false),
 );
 $m->add_select('t2', "Votre Package Web", $tmp, false, 2, false);
