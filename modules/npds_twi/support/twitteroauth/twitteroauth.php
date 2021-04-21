@@ -1,10 +1,17 @@
 <?php
-
-/*
- * Abraham Williams (abraham@abrah.am) http://abrah.am
+/**
+ * Npds Two
  *
+ * Based on NPDS Copyright (c) 2002-2020 by Philippe Brunier
+ * 
+ * Abraham Williams (abraham@abrah.am) http://abrah.am
  * The first PHP Library to support OAuth for Twitter's REST API.
+ * 
+ * @author Nicolas2
+ * @version 1.0
+ * @date 02/04/2021
  */
+
 
 /* Load OAuth lib. You can find it at http://oauth.net */
 require_once('OAuth.php');

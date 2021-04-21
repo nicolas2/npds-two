@@ -1,51 +1,46 @@
 <?php
-/************************************************************************/
-/* DUNE by NPDS                                                         */
-/* ===========================                                          */
-/*                                                                      */
-/* NPDS Copyright (c) 2002-2019 by Philippe Brunier                     */
-/*                                                                      */
-/* This program is free software. You can redistribute it and/or modify */
-/* it under the terms of the GNU General Public License as published by */
-/* the Free Software Foundation; either version 2 of the License.       */
-/*                                                                      */
-/* module npds_twi version v.1.0                                        */
-/* npds-twi_set.php file 2015 by Jean Pierre Barbary (jpb)              */
-/* dev team :                                                           */
-/************************************************************************/
+/**
+ * Npds Two
+ *
+ * Based on NPDS Copyright (c) 2002-2020 by Philippe Brunier
+ * 
+ * @author Nicolas2
+ * @version 1.0
+ * @date 02/04/2021
+ */
 if (!function_exists("Access_Error")) 
 {
   die();
 }
 
-if (!strstr($_SERVER['PHP_SELF'],'admin.php')) 
+if (!strstr($_SERVER['PHP_SELF'], 'admin.php')) 
 {
   die();
 }
 
 include ('modules/'.$ModPath.'/lang/twi.lang-'.$language.'.php');
 
-$f_meta_nom ='npds_twi';
-$f_titre='npds_twi';
+$f_meta_nom = 'npds_twi';
+$f_titre = 'npds_twi';
 
-admindroits($aid,$f_meta_nom);
+admindroits($aid, $f_meta_nom);
 
 global $adminimg;
    
    //en attente implémentation pour notice php généré
-   settype($tbox_width,'integer');
-   settype($tbox_height,'integer');
-   settype($class_sty_2,'string');
-   settype($class_sty_1,'integer');
-   settype($npds_twi_post,'integer');
+   settype($tbox_width, 'integer');
+   settype($tbox_height, 'integer');
+   settype($class_sty_2, 'string');
+   settype($class_sty_1, 'integer');
+   settype($npds_twi_post, 'integer');
    
    //
-   settype($npds_twi_urshort,'integer');
-   settype($npds_twi_arti,'integer');
-   settype($consumer_key,'string');
-   settype($consumer_secret,'string');
-   settype($oauth_token_secret,'string');
-   settype($oauth_token,'string');
+   settype($npds_twi_urshort, 'integer');
+   settype($npds_twi_arti, 'integer');
+   settype($consumer_key, 'string');
+   settype($consumer_secret, 'string');
+   settype($oauth_token_secret, 'string');
+   settype($oauth_token, 'string');
 
 
 function Configuretwi($subop, $ModPath, $ModStart, $class_sty_2, $npds_twi_arti, $npds_twi_urshort, $npds_twi_post, $consumer_key, $consumer_secret, $oauth_token, $oauth_token_secret, $tbox_width, $tbox_height) 
@@ -60,60 +55,60 @@ function Configuretwi($subop, $ModPath, $ModStart, $class_sty_2, $npds_twi_arti,
 
    global $f_meta_nom, $f_titre, $adminimg, $npds_twi;
    
-   $checkarti_y='';
-   $checkarti_n='';
-   $checkpost_y='';
-   $checkpost_n='';
-   $urshort_mr='';
-   $urshort_ft='';
-   $urshort_c='';
+   $checkarti_y = '';
+   $checkarti_n = '';
+   $checkpost_y = '';
+   $checkpost_n = '';
+   $urshort_mr = '';
+   $urshort_ft = '';
+   $urshort_c = '';
    
-   if ($npds_twi_arti===1) 
+   if ($npds_twi_arti === 1) 
    {
-       $checkarti_y='checked="checked"';
+       $checkarti_y = 'checked="checked"';
      } 
   else 
   {
-      $checkarti_n='checked="checked"';
+      $checkarti_n = 'checked="checked"';
     }
    
-   if ($npds_twi_post===1) 
+   if ($npds_twi_post === 1) 
    {
-       $checkpost_y='checked="checked"'; 
+       $checkpost_y = 'checked="checked"'; 
      }
   else 
   {
-      $checkpost_n='checked="checked"';
+      $checkpost_n = 'checked="checked"';
     }
    
-   if ($npds_twi_urshort===1) 
+   if ($npds_twi_urshort === 1) 
    {
-       $urshort_mr='checked="checked"';
+       $urshort_mr = 'checked="checked"';
      }
    
-   if ($npds_twi_urshort===2) 
+   if ($npds_twi_urshort === 2) 
    {
-       $urshort_ft='checked="checked"';
+       $urshort_ft = 'checked="checked"';
      }
    
-   if ($npds_twi_urshort===3) 
+   if ($npds_twi_urshort === 3) 
    {
-    $urshort_c='checked="checked"';
+    $urshort_c = 'checked="checked"';
   }
    else 
    {
-    $checkpost_n='checked="checked"';
+    $checkpost_n = 'checked="checked"';
   }
    
    //en attente implémentation pour notice
-   settype($tbox_width,'integer');
-   settype($tbox_height,'integer');
+   settype($tbox_width, 'integer');
+   settype($tbox_height, 'integer');
 
    GraphicAdmin($hlpfile);
-   adminhead ($f_meta_nom, $f_titre, $adminimg);
+   adminhead($f_meta_nom, $f_titre, $adminimg);
    echo '<hr />';
    
-   if ($npds_twi!==1) 
+   if ($npds_twi !== 1) 
    {
       echo "
    
@@ -239,17 +234,17 @@ function Configuretwi($subop, $ModPath, $ModStart, $class_sty_2, $npds_twi_arti,
    </form>
    <div class="text-right">Version : '.$npds_twi_versus.'</div>';
     
-    $arg1='
+    $arg1 = '
       var formulid = ["twitterset"];';
    
-   adminfoot('fv','',$arg1,'');
+   adminfoot('fv', '', $arg1, '');
 }
 
 function SaveSettwi($npds_twi_arti, $npds_twi_urshort, $npds_twi_post, $consumer_key, $consumer_secret, $oauth_token, $oauth_token_secret, $tbox_width, $tbox_height, $class_sty_1, $class_sty_2, $ModPath, $ModStart) 
 {
 
    //==> modifie le fichier de configuration
-   $file_conf = fopen("modules/$ModPath/twi_conf.php", "w+");
+   $file_conf = fopen("modules/$ModPath/config/twi.php", "w+");
    $content = "<?php \n";
    $content .= "/************************************************************************/\n";
    $content .= "/* DUNE by NPDS                                                         */\n";
@@ -268,19 +263,19 @@ function SaveSettwi($npds_twi_arti, $npds_twi_urshort, $npds_twi_post, $consumer
    
    if (!$npds_twi_arti) 
    {
-    $npds_twi_arti=0;
+    $npds_twi_arti = 0;
    }
    $content .= "\$npds_twi_arti = $npds_twi_arti; // activation publication auto des news sur twitter\n";
    
    if (!$npds_twi_post) 
    {
-    $npds_twi_post=0;
+    $npds_twi_post = 0;
    }
    $content .= "\$npds_twi_post = $npds_twi_post; // activation publication auto des posts sur twitter\n";
    
    if (!$npds_twi_urshort) 
    {
-    $npds_twi_urshort=0;
+    $npds_twi_urshort = 0;
 }
    $content .= "\$npds_twi_urshort = $npds_twi_urshort; // activation du raccourciceur d'url\n";
    $content .= "\$consumer_key = \"$consumer_key\"; //\n";
@@ -300,10 +295,8 @@ function SaveSettwi($npds_twi_arti, $npds_twi_urshort, $npds_twi_post, $consumer
    //<== modifie le fichier de configuration
 
   //==> modifie le fichier controleur
-  $file_controleur='';
-  //     if (file_exists('modules/'.$ModPath.'/twi_conf.php'))
-  //   include ('modules/'.$ModPath.'/twi_conf.php');
-  if ($npds_twi_urshort<>1) 
+  $file_controleur = '';
+  if ($npds_twi_urshort <> 1) 
   {
      $file_controleur = fopen("s.php", "w+");
      $content = "<?php \n";
@@ -356,7 +349,7 @@ function SaveSettwi($npds_twi_arti, $npds_twi_urshort, $npds_twi_post, $consumer
   //<== modifie le fichier controleur
 }
 
-settype($subop,'string');
+settype($subop, 'string');
 
 if ($admin) 
 {
